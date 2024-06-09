@@ -4,17 +4,22 @@ import styled from "styled-components";
 
 export default function Search() {
   const [searchKeyword, setSearchKeyword] = useState('');
+  const maxLengthOfSearchKeyword = parseInt(import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD);
   const navigate = useNavigate();
-  const maxLengthSearchKeyword = import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD;
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    navigate(`/search?keyword=${encodeURIComponent(searchKeyword)}`);
+    const trimmedSearchKeyword = searchKeyword.trim();
+    if (trimmedSearchKeyword.length > 0) {
+      navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
+    } else {
+      setSearchKeyword('');
+    }
   };
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    if (value.length <= maxLengthSearchKeyword) {
+    if (value.length <= maxLengthOfSearchKeyword) {
       setSearchKeyword(value);
     }
   };
@@ -25,13 +30,13 @@ export default function Search() {
         type="text"
         placeholder="Search.."
         value={searchKeyword}
-        maxLength={maxLengthSearchKeyword} // 검색 키워드 최대 20글자
+        maxLength={maxLengthOfSearchKeyword} // 검색 키워드 최대 20글자
         required
         autoFocus
         onChange={onChange}
       />
       <button type="submit">검색</button>
-      <p>{searchKeyword.length} / {maxLengthSearchKeyword}</p>
+      <p>{searchKeyword.length} / {maxLengthOfSearchKeyword}</p>
     </StyledContainer>
   );
 }
