@@ -1,10 +1,17 @@
+
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 
-export default function XNavbar() {
+export default function AppHeader() {
+  
   return (
     <StyledContainer>
-      <h1>네비게이션 바</h1>
+      <nav>
+        <ul>
+         <li><Link to='/'>Home</Link></li>
+        </ul>
+      </nav>
     </StyledContainer>
   );
 }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Search from "../components/Search";
 
-export default function XHome() {
+export default function Home() {
   return (
     <StyledContainer>
       <h1>Home pages</h1>

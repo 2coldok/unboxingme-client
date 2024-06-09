@@ -2,15 +2,15 @@
 // import viteLogo from '/vite.svg'
 
 import { Outlet } from "react-router-dom"
-import XNavbar from "./components/XNavbar"
-import XFooter from "./components/XFooter"
+import AppHeader from "./components/AppHeader"
+import AppFooter from "./components/AppFooter"
 
 function App() {  
   return (
     <>
-      <XNavbar />
+      <AppHeader />
       <Outlet />
-      <XFooter />
+      <AppFooter />
     </>
   )
 }

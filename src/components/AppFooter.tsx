@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function XFooter() {
+export default function AppFooter() {
   return (
     <StyledContainer>
       <h1>footer</h1>
