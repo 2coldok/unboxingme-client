@@ -1,3 +1,4 @@
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 interface IOptions {
   method: string;
@@ -5,44 +6,43 @@ interface IOptions {
   headers?: Record<string, string>;
 }
 
-interface IHttpClient {
+export interface IHttpClient {
   fetch<T>(url: string, options: IOptions): Promise<T>;
 }
 
 export default class HttpClient implements IHttpClient {
-  constructor(private baseURL: string) {}
+  private client: AxiosInstance;
+
+  constructor(baseURL: string) {
+    this.client = axios.create({
+      baseURL: baseURL,
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true
+    });
+  }
 
   async fetch<T>(url: string, options: IOptions): Promise<T> {
-    const response = await fetch(`${this.baseURL}${url}`, {
-      ...options,
+    const { method, body, headers } = options;
+    const request = {
+      url,
+      method,
       headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
-    });
-
-    let data;
+        ...headers,
+      },
+      data: body
+    };
+    
     try {
-      data = await response.json();
+      const response: AxiosResponse<T> = await this.client(request);
+      return response.data;
     } catch (error) {
-      console.log('서버 응답 메세지의 body가 비어있음.');
+      if (axios.isAxiosError(error)) {
+        const data = error.response?.data;
+        const message = 
+          data && data.message ? data.message : '서버에서 메세지 처리하지 않은 error0';
+        throw new Error(message);
+      }
+      throw new Error('네트워크 에러 발생');
     }
-    
-    // 패널티 기간 todo
-    // if (response.status === 403) {
-
-    // }
-
-    if (response.status > 299 || response.status < 200) {
-      const message = data && data.message ? data.message : '서버에서 message 처리하지 않은 오류';
-      const error = new Error(message);
-
-      
-      throw error;
-    }
-
-    // todo 40
-    
-    return data;
   }
 }

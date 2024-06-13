@@ -15,6 +15,15 @@ import XGreenroom from './pages/XGreenroom.tsx'
 import XElpis from './pages/XElpis.tsx'
 import NotFound from './pages/NotFound.tsx'
 
+//
+import AuthService from './service/AuthService.ts'
+import HttpClient from './network/HttpClient.ts'
+import { AuthProvider } from './context/AuthContext.tsx'
+
+const baseURL = 'http://localhost:8080';
+const httpClient = new HttpClient(baseURL);
+const authService = new AuthService(httpClient);
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -35,7 +44,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <GlobalStyle />
-    <RouterProvider router={router} />
+    <AuthProvider authService={authService}>
+      <GlobalStyle />
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>,
 )
