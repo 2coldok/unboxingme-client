@@ -19,10 +19,12 @@ import NotFound from './pages/NotFound.tsx'
 import AuthService from './service/AuthService.ts'
 import HttpClient from './network/HttpClient.ts'
 import { AuthProvider } from './context/AuthContext.tsx'
+import { env } from './config/env.ts'
+import { SearchService } from './service/SearchService.ts'
 
-const baseURL = 'http://localhost:8080';
-const httpClient = new HttpClient(baseURL);
+const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
+const searchService = new SearchService(httpClient);
 
 const router = createBrowserRouter([
   {
@@ -30,7 +32,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'search', element: <SearchResult /> },
+      { path: 'search', element: <SearchResult searchService={searchService} /> },
       { path: 'pandora/:id', element: <PandoraCover /> },
       { path: 'pandora/greenroom', element: <XGreenroom /> },
       { path: 'pandora/elpis', element: <XElpis /> }

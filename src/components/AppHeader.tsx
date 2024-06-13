@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
+import { env } from "../config/env";
 
 export default function AppHeader() {
   const { profile, signOut } = useAuth();
@@ -10,7 +11,7 @@ export default function AppHeader() {
       <nav>
         <ListContainer>
           <li><Link to='/'>Home</Link></li>
-          <li><a href="http://localhost:8080/auth/google">구글로그인</a></li>
+          <li><a href={env.url.GoogleSignIn}>구글로그인</a></li>
         </ListContainer>
       </nav>
 
