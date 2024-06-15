@@ -2,8 +2,7 @@ import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ISearchService } from "../service/SearchService";
-import { Ipandora } from "../service/SearchService";
-import { format } from "date-fns";
+import { ISearchedPandoraByKeyword } from "../types/pandora";
 
 interface ISearchResultProps {
   searchService: ISearchService;
@@ -13,7 +12,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
   const navigate = useNavigate();
-  const [pandoras, setPandoras] = useState<Ipandora[]>([]);
+  const [pandoras, setPandoras] = useState<ISearchedPandoraByKeyword[]>([]);
   
   useEffect(() => {
     if (keyword && keyword.length > import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD) {
@@ -26,7 +25,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
       return;
     }
 
-    searchService.getPandorasByKeyword(keyword)
+    searchService.getSearchedPandorasByKeyword(keyword)
       .then((pandoras) => setPandoras(pandoras))
       .catch((error) => {
         if (error instanceof Error) {
@@ -36,19 +35,21 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
       })
   }, [keyword, navigate, searchService]);
 
+  const handleClick = (pandoraId: string) => {
+    navigate(`/pandora/${pandoraId}`);
+  }
+
   return (
     <StyledContainer>
       <h1>"{keyword}" 으(로) 검색된 판도라 리스트들</h1>
       <ul>
         {pandoras.map((pandora) => (
-          <li key={pandora.id}>
-            <h3>{pandora.title}</h3>
-            <p>{pandora.description}</p>
-            <p>{pandora.firstQuestion}</p>
-            <p>{pandora.firstHint}</p>
-            <p>{pandora.maxOpen}</p>
-            <p>{pandora.openCount}</p>
-            <p>{format(pandora.createdAt, 'yyyy-MM-dd')}</p>
+          <li key={pandora.id} onClick={() => handleClick(pandora.id)}>
+            <h3>제목: {pandora.title}</h3>
+            <p>설명: {pandora.description}</p>
+            <p>생성일: {pandora.createdAt}</p>
+            <p>수정일: {pandora.updatedAt}</p>
+            <p>조회수: {pandora.viewCount}</p>
           </li>
         ))}
       </ul>

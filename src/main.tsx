@@ -11,8 +11,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import SearchResult from './pages/SearchResult.tsx'
 import PandoraCover from './pages/PandoraCover.tsx'
-import XGreenroom from './pages/XGreenroom.tsx'
-import XElpis from './pages/XElpis.tsx'
+import Greenroom from './pages/Greenroom.tsx'
+import Elpis from './pages/Elpis.tsx'
 import NotFound from './pages/NotFound.tsx'
 
 //
@@ -21,10 +21,12 @@ import HttpClient from './network/HttpClient.ts'
 import { AuthProvider } from './context/AuthContext.tsx'
 import { env } from './config/env.ts'
 import { SearchService } from './service/SearchService.ts'
+import { PandoraService } from './service/PandoraService.ts'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
 const searchService = new SearchService(httpClient);
+const pandoraService = new PandoraService(httpClient);
 
 const router = createBrowserRouter([
   {
@@ -33,9 +35,9 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: 'search', element: <SearchResult searchService={searchService} /> },
-      { path: 'pandora/:id', element: <PandoraCover /> },
-      { path: 'pandora/greenroom', element: <XGreenroom /> },
-      { path: 'pandora/elpis', element: <XElpis /> }
+      { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
+      { path: 'pandora/greenroom', element: <Greenroom /> },
+      { path: 'pandora/elpis', element: <Elpis /> }
     ]
   },
   {

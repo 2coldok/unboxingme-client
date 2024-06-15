@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
-export default function XGreenroom() {
+export default function Greenroom() {
+  
   return (
     <StyledContainer>
-      <h1>Problem</h1>
+      greenroom
     </StyledContainer>
   );
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function XElpis() {
+export default function Elpis() {
   return (
     <StyledContainer>
       <h1>Inside</h1>
