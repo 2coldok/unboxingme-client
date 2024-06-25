@@ -24,16 +24,24 @@ export default function Search() {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      onSubmit(event as unknown as React.FormEvent<HTMLFormElement>)
+    }
+  }
+
   return (
     <StyledContainer onSubmit={onSubmit}>
       <input
         type="text"
         placeholder="Search.."
+        name="searchKeyword"
         value={searchKeyword}
         maxLength={maxLengthOfSearchKeyword} // 검색 키워드 최대 20글자
         required
         autoFocus
         onChange={onChange}
+        onKeyDown={handleKeyDown}
       />
       <button type="submit">검색</button>
       <p>{searchKeyword.length} / {maxLengthOfSearchKeyword}</p>

@@ -50,7 +50,14 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
 }
 
 const StyledContainer = styled.main`
+  background-color: #6a5a3c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border: 1px solid white;
   width: 80%;
   height: 800px;
 `;
+
+

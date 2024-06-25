@@ -2,9 +2,33 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
 import { env } from "../config/env";
+import React, { useEffect, useState } from "react";
+import { IProfile } from "../types/profile";
 
 export default function AppHeader() {
   const { profile, signOut } = useAuth();
+  const [profileState, setProfileState] = useState<IProfile | undefined>(undefined);
+
+
+  useEffect(() => {
+    if (profile) {
+      setProfileState(profile);
+    }
+    
+  }, [profile]);
+  
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (!profile) {
+      event.preventDefault();
+      alert("로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.");
+      window.location.href = env.url.GoogleSignIn;
+    }
+  }
+
+  const handleSignOut = () => {
+    signOut();
+    setProfileState(undefined);
+  }
   
   return (
     <StyledContainer>
@@ -12,13 +36,14 @@ export default function AppHeader() {
         <ListContainer>
           <li><Link to='/'>Home</Link></li>
           <li><a href={env.url.GoogleSignIn}>구글로그인</a></li>
+          <li><Link to='/pandora/new' onClick={handleClick}>문제 만들기</Link></li>
         </ListContainer>
       </nav>
 
       <ProfileContainer>
-        { profile && `${profile.displayName}` }
-        { profile  &&  <ProfileAvatar src={profile.photo} alt="avatar" />}
-        { profile && <button onClick={signOut}>로그아웃</button> }
+        { profileState && `${profileState.displayName}` }
+        { profileState  &&  <ProfileAvatar src={profileState.photo} alt="avatar" />}
+        { profileState && <button onClick={handleSignOut}>로그아웃</button> }
       </ProfileContainer>
 
     </StyledContainer>

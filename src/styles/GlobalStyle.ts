@@ -45,7 +45,7 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
-  ul {
+  ul, li {
     list-style: none;
     padding: 0;
   }

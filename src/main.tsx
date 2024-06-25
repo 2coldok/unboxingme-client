@@ -22,6 +22,7 @@ import { AuthProvider } from './context/AuthContext.tsx'
 import { env } from './config/env.ts'
 import { SearchService } from './service/SearchService.ts'
 import { PandoraService } from './service/PandoraService.ts'
+import NewPandoraForm from './pages/NewPandoraForm.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -36,6 +37,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'search', element: <SearchResult searchService={searchService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
+      { path: 'pandora/new', element: <NewPandoraForm pandoraService={pandoraService} /> },
       { path: 'pandora/greenroom', element: <Greenroom /> },
       { path: 'pandora/elpis', element: <Elpis /> }
     ]
@@ -47,10 +49,17 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <AuthProvider authService={authService}>
-      <GlobalStyle />
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </React.StrictMode>,
+  <AuthProvider authService={authService}>
+    <GlobalStyle />
+    <RouterProvider router={router} />
+  </AuthProvider>
 )
+
+// ReactDOM.createRoot(document.getElementById('root')!).render(
+//   <React.StrictMode>
+//     <AuthProvider authService={authService}>
+//       <GlobalStyle />
+//       <RouterProvider router={router} />
+//     </AuthProvider>
+//   </React.StrictMode>,
+// )

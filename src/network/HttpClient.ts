@@ -1,13 +1,13 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-interface IOptions {
-  method: string;
-  body?: string;
+interface IOptions<B = unknown> {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  body?: B;
   headers?: Record<string, string>;
 }
 
 export interface IHttpClient {
-  fetch<T>(url: string, options: IOptions): Promise<T>;
+  fetch<T, B = unknown>(url: string, options: IOptions<B>): Promise<T>;
 }
 
 export default class HttpClient implements IHttpClient {
@@ -21,7 +21,7 @@ export default class HttpClient implements IHttpClient {
     });
   }
 
-  async fetch<T>(url: string, options: IOptions): Promise<T> {
+  async fetch<T, B>(url: string, options: IOptions<B>): Promise<T> {
     const { method, body, headers } = options;
     const request = {
       url,

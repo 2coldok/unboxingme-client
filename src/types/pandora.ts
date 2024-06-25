@@ -19,6 +19,15 @@ export interface IPandoraCover {
   viewCount: number;
 }
 
+export interface INewPandoraForm {
+  title: string;
+  description: string;
+  keyword: string[];
+  maxOpen: number;
+  problems: { question: string, hint: string, answer: string }[];
+  cat: string;
+}
+
 export interface ICreatedPandora {
   id: string;
   title: string;

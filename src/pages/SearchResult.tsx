@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ISearchService } from "../service/SearchService";
 import { ISearchedPandoraByKeyword } from "../types/pandora";
+import Search from "../components/Search";
 
 interface ISearchResultProps {
   searchService: ISearchService;
@@ -41,6 +42,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
 
   return (
     <StyledContainer>
+      <Search />
       <h1>"{keyword}" 으(로) 검색된 판도라 리스트들</h1>
       <ul>
         {pandoras.map((pandora) => (
