@@ -20,9 +20,10 @@ export interface IPandoraCover {
 }
 
 export interface INewPandoraForm {
+  writer: string;
   title: string;
   description: string;
-  keyword: string[];
+  keywords: string[];
   maxOpen: number;
   problems: { question: string, hint: string, answer: string }[];
   cat: string;
@@ -30,11 +31,12 @@ export interface INewPandoraForm {
 
 export interface ICreatedPandora {
   id: string;
+  writer: string;
   title: string;
   description: string;
-  keyword: [string];
+  keywords: string[];
   maxOpen: number;
-  problems: [{ question: string, hint: string, answer: string }];
+  problems: { question: string, hint: string, answer: string }[];
   cat: string;
   active: boolean;
   openCount: number;

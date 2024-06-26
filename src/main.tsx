@@ -23,6 +23,7 @@ import { env } from './config/env.ts'
 import { SearchService } from './service/SearchService.ts'
 import { PandoraService } from './service/PandoraService.ts'
 import NewPandoraForm from './pages/NewPandoraForm.tsx'
+import NewPandoraReview from './pages/NewPandoraReview.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -39,7 +40,8 @@ const router = createBrowserRouter([
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
       { path: 'pandora/new', element: <NewPandoraForm pandoraService={pandoraService} /> },
       { path: 'pandora/greenroom', element: <Greenroom /> },
-      { path: 'pandora/elpis', element: <Elpis /> }
+      { path: 'pandora/elpis', element: <Elpis /> },
+      { path: 'pandora/new/review', element: <NewPandoraReview /> },
     ]
   },
   {

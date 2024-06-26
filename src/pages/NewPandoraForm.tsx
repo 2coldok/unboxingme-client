@@ -104,6 +104,7 @@ export default function NewPandoraForm({ pandoraService }: INewPandoraFormProps)
           queries={queries}
           message={message}
           maxOpen={maxOpen}
+          pandoraService={pandoraService}
         />}
       </FormContainer>
     </StyledContainer>

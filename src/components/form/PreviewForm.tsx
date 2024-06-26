@@ -5,6 +5,8 @@ import { IQuery } from "./QueryForm";
 import { HiPencilSquare } from "react-icons/hi2";
 import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
+import { IPandoraService } from "../../service/PandoraService";
+import { useNavigate } from "react-router-dom";
 
 interface IPreviewFormProps {
   setFormSubject: Dispatch<React.SetStateAction<TFormSubject>>;
@@ -16,10 +18,32 @@ interface IPreviewFormProps {
   queries: IQuery[];
   message: string;
   maxOpen: number | '';
+
+  pandoraService: IPandoraService;
 }
 
-export default function PreviewForm({ setFormSubject, writer, title, description, keywords, queries, message, maxOpen }: IPreviewFormProps) {
-  
+export default function PreviewForm({ setFormSubject, writer, title, description, keywords, queries, message, maxOpen, pandoraService }: IPreviewFormProps) {
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+    // form 유효성 검 사 TODO
+
+    const newPandoraForm = {
+      writer: writer,
+      title: title,
+      description: description,
+      keywords: keywords,
+      maxOpen: maxOpen as number,
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      problems: queries.map(({ id, ...rest }) => rest),
+      /* eslint-enable @typescript-eslint/no-unused-vars */
+      cat: message,
+    };
+
+    const result = await pandoraService.createPandora(newPandoraForm);
+    navigate('/pandora/new/review', { state: { newPandora: result } });
+  }
+
   return (
     <>
       <HiPencilSquare onClick={() => setFormSubject('cover')} />
@@ -57,7 +81,7 @@ export default function PreviewForm({ setFormSubject, writer, title, description
       <p>최대 오픈 횟수: {maxOpen}</p>
       <Divider />
 
-      <button>완료</button>
+      <button onClick={handleSubmit}>완료</button>
     </>
   );  
 }
