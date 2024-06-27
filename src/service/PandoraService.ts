@@ -1,9 +1,10 @@
 import { IHttpClient } from './../network/HttpClient';
-import { ICreatedPandora, INewPandoraForm, IPandoraCover } from '../types/pandora';
+import { ICreatedPandora, IMyPandora, INewPandoraForm, IPandoraCover } from '../types/pandora';
 
 export interface IPandoraService {
   getPandoraCoverById(id: string): Promise<IPandoraCover>;
   createPandora(newPandoraForm: INewPandoraForm): Promise<ICreatedPandora>;
+  getMyPandoras(): Promise<IMyPandora[]>;
 }
 
 export class PandoraService implements IPandoraService{
@@ -21,6 +22,14 @@ export class PandoraService implements IPandoraService{
     const data = await this.httpClient.fetch<ICreatedPandora, INewPandoraForm>('/pandora/create', {
       method: 'POST',
       body: newPandoraForm
+    });
+
+    return data;
+  }
+
+  async getMyPandoras() {
+    const data = await this.httpClient.fetch<IMyPandora[], void>('/pandora/issuer/details', {
+      method: 'GET',
     });
 
     return data;

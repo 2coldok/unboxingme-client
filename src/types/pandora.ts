@@ -45,3 +45,20 @@ export interface ICreatedPandora {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IMyPandora {
+  id: string;
+  writer: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  maxOpen: number;
+  problems: { question: string, hint: string, answer: string }[];
+  cat: string;
+  active: boolean;
+  openCount: number;
+  viewCount: number;
+  totalProblems: number;
+  createdAt: string;
+  updatedAt: string;
+}

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
 import { env } from "../config/env";
@@ -8,6 +8,7 @@ import { IProfile } from "../types/profile";
 export default function AppHeader() {
   const { profile, signOut } = useAuth();
   const [profileState, setProfileState] = useState<IProfile | undefined>(undefined);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -28,7 +29,11 @@ export default function AppHeader() {
   const handleSignOut = () => {
     signOut();
     setProfileState(undefined);
-  }
+  };
+
+  const handleMyPandora = () => {
+    navigate('/issuer');
+  };
   
   return (
     <StyledContainer>
@@ -44,6 +49,7 @@ export default function AppHeader() {
         { profileState && `${profileState.displayName}` }
         { profileState  &&  <ProfileAvatar src={profileState.photo} alt="avatar" />}
         { profileState && <button onClick={handleSignOut}>로그아웃</button> }
+        { profileState && <button onClick={handleMyPandora}>나의 판도라</button> }
       </ProfileContainer>
 
     </StyledContainer>
