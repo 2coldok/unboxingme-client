@@ -34,17 +34,26 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
     return <div>해당 판도라의 데이터가 존재하지 않음</div>
   }
 
+  const handleClick = () => {
+    navigate('/pandora/greenroom', { state: { pandoraId: id, firstQuestion: pandoraCover.firstQuestion, firstHint: pandoraCover.firstHint } });
+  }
+  
   return (
     <StyledContainer>
       <p>판도라 id: {pandoraCover.id}</p>
-      <h1>제목: {pandoraCover.title}</h1>
+      <p>작성자 : {pandoraCover.writer}</p>
+      <p>제목: {pandoraCover.title}</p>
       <p>설명: {pandoraCover.description}</p>
       <p>최대 열람 제한: {pandoraCover.maxOpen}</p>
       <p>열람 횟수: {pandoraCover.openCount}</p>
       <p>조회수: {pandoraCover.viewCount}</p>
       <p>총 문제수: {pandoraCover.totalProblems}</p>
+      <p>첫번째 질문: {pandoraCover.firstQuestion}</p>
+      <p>첫번쨰 힌트: {pandoraCover.firstHint}</p>
       <p>생성일: {pandoraCover.createdAt}</p>
       <p>업데이트일: {pandoraCover.updatedAt}</p>
+
+      <button onClick={handleClick}>도전하기</button>
     </StyledContainer>
   );
 }

@@ -9,14 +9,17 @@ export interface ISearchedPandoraByKeyword {
 
 export interface IPandoraCover {
   id: string;
+  writer: string; //
   title: string;
   description: string;
   totalProblems: number;
   maxOpen: number;
   openCount: number;
+  viewCount: number;
+  firstQuestion: string; //
+  firstHint: string; //
   createdAt: string;
   updatedAt: string;
-  viewCount: number;
 }
 
 export interface INewPandoraForm {

@@ -26,11 +26,13 @@ import NewPandoraForm from './pages/NewPandoraForm.tsx'
 import NewPandoraReview from './pages/NewPandoraReview.tsx'
 import MyPandoras from './pages/MyPandoras.tsx'
 import MyPandoraDashboard from './pages/MyPandoraDashboard.tsx'
+import { UnboxingService } from './service/UnboxingService.ts'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
 const searchService = new SearchService(httpClient);
 const pandoraService = new PandoraService(httpClient);
+const unboxingService = new UnboxingService(httpClient);
 
 const router = createBrowserRouter([
   {
@@ -41,7 +43,7 @@ const router = createBrowserRouter([
       { path: 'search', element: <SearchResult searchService={searchService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
       { path: 'pandora/new', element: <NewPandoraForm pandoraService={pandoraService} /> },
-      { path: 'pandora/greenroom', element: <Greenroom /> },
+      { path: 'pandora/greenroom', element: <Greenroom unboxingmeService={unboxingService} /> },
       { path: 'pandora/elpis', element: <Elpis /> },
       { path: 'pandora/new/review', element: <NewPandoraReview /> },
       { path: 'issuer', element: <MyPandoras pandoraService={pandoraService} /> },
