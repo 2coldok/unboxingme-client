@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { IPandoraService } from "../service/PandoraService";
 import { useEffect, useState } from "react";
 import { IPandoraCover } from "../types/pandora";
+import { useAuth } from "../hook/AuthHook";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -11,6 +12,7 @@ interface IPandoraCoverProps {
 export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   const { id } = useParams<{ id: string }>(); 
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | undefined>(undefined);
+  const { status, signIn } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,8 +37,20 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   }
 
   const handleClick = () => {
-    navigate('/pandora/greenroom', { state: { pandoraId: id, firstQuestion: pandoraCover.firstQuestion, firstHint: pandoraCover.firstHint } });
-  }
+    status().then((status) => {
+      if (!status) {
+        alert('구글 로그인이 필요한 서비스입니다. 로그인 창으로 이동합니다.');
+        const currentUrl = window.location.href;
+        signIn(currentUrl);
+      }
+      if (status) {
+        navigate(
+          '/pandora/greenroom',
+          { state: { pandoraId: id, firstQuestion: pandoraCover.firstQuestion, firstHint: pandoraCover.firstHint } }
+        );
+      }
+    });
+  };
   
   return (
     <StyledContainer>

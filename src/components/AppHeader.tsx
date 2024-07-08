@@ -1,90 +1,81 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
-import { env } from "../config/env";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IProfile } from "../types/profile";
+import { FcGoogle } from "react-icons/fc";
+import Profile from "./Profile";
 
 export default function AppHeader() {
-  const { profile, signOut } = useAuth();
-  const [profileState, setProfileState] = useState<IProfile | undefined>(undefined);
+  const { profile, status, signOut, signIn } = useAuth();
+  const [myProfile, setMyProfile] = useState<IProfile | undefined>(undefined);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (profile) {
-      setProfileState(profile);
+      setMyProfile(profile);
+    } else {
+      setMyProfile(undefined);
     }
-    
   }, [profile]);
-  
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (!profile) {
-      event.preventDefault();
-      alert("로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다.");
-      window.location.href = env.url.GoogleSignIn;
-    }
-  }
 
-  const handleSignOut = () => {
-    signOut();
-    setProfileState(undefined);
+  const handleLogoClick = () => {
+    navigate('/');
   };
-
-  const handleMyPandora = () => {
-    navigate('/issuer');
+  
+  const handleGoogleSignInClick = () => {
+    const currentUrl = window.location.href;
+    signIn(currentUrl);
   };
   
   return (
     <StyledContainer>
-      <nav>
-        <ListContainer>
-          <li><Link to='/'>Home</Link></li>
-          <li><a href={env.url.GoogleSignIn}>구글로그인</a></li>
-          <li><Link to='/pandora/new' onClick={handleClick}>문제 만들기</Link></li>
-        </ListContainer>
-      </nav>
+      <LogoWrapper onClick={handleLogoClick}>
+        <h1>츄츄판도라</h1>
+      </LogoWrapper>
 
-      <ProfileContainer>
-        { profileState && `${profileState.displayName}` }
-        { profileState  &&  <ProfileAvatar src={profileState.photo} alt="avatar" />}
-        { profileState && <button onClick={handleSignOut}>로그아웃</button> }
-        { profileState && <button onClick={handleMyPandora}>나의 판도라</button> }
-      </ProfileContainer>
-
+      {!myProfile && (
+        <LoginWrapper onClick={handleGoogleSignInClick}>
+          <FcGoogle />
+          <span>Google 로그인</span>
+        </LoginWrapper>
+      )}
+      
+      {myProfile && <Profile profile={profile} status={status} signOut={signOut} myProfile={myProfile} setMyProfile={setMyProfile} />}
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.header`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
+
   width: 100%;
   height: 70px;
   border: 1px solid #99C3FF;
 `;
 
-const ListContainer = styled.ul`
+const LogoWrapper = styled.nav`
+  background-color: black;
+  &:hover {
+    cursor: pointer;
+  }    
+`;
+
+const LoginWrapper = styled.nav`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0;
-  height: 70px;
+  padding: 0.5em 0.7em;
+  border: 1px solid white;
+  border-radius: 1.5em;
+  color: white;
+  font-weight: bold;
 
-  & > li {
-    margin-right: 27px;
+  & > svg {
+    margin-right: 0.3em;
+    font-size: 1.5em;
   }
-`;
-
-const ProfileContainer = styled.div`
-  background-color: gray;
-`;
-
-const ProfileAvatar = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-left: 10px;
 `;

@@ -4,7 +4,7 @@ import Search from "../components/Search";
 export default function Home() {
   return (
     <StyledContainer>
-      <h1>Home pages</h1>
+      <h1>ChewChew Pandora</h1>
       <Search />
     </StyledContainer>
   );

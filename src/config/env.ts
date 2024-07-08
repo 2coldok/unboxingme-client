@@ -12,6 +12,7 @@ export const env = {
   url: {
     serverBaseURL: required('SERVER_BASE_URL'),
     GoogleSignIn: required('GOOGLE_SIGN_IN'),
+    clientBaseURL: required('CLIENT_BASE_URL'),
   },
   restriction: {
     maxSearchLength: parseInt(required('MAX_SEARCH_LENGTH')),
