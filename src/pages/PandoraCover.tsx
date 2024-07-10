@@ -37,10 +37,10 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   }
 
   const handleClick = () => {
+    const currentUrl = window.location.href;
     status().then((status) => {
       if (!status) {
         alert('구글 로그인이 필요한 서비스입니다. 로그인 창으로 이동합니다.');
-        const currentUrl = window.location.href;
         signIn(currentUrl);
       }
       if (status) {

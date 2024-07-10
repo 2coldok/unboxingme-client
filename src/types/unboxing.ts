@@ -7,8 +7,8 @@ export interface IChallenge {
 export interface IUnboxing {
   question: string | null;
   hint: string | null;
-  isCorrect: boolean | null;
-  unsealedQuestionIndex: number;
+  isCorrect: boolean;
+  unsealedQuestionIndex: number | null;
   failCount: number;
   restrictedUntil: string;
   unboxing: boolean;
