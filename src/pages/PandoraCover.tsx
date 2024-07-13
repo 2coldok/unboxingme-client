@@ -4,6 +4,7 @@ import { IPandoraService } from "../service/PandoraService";
 import { useEffect, useState } from "react";
 import { IPandoraCover } from "../types/pandora";
 import { useAuth } from "../hook/AuthHook";
+import PageLoading from "../loading/PageLoading";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -14,8 +15,11 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | undefined>(undefined);
   const { status, signIn } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (id) {
       pandoraService.getPandoraCoverById(id)
         .then((pandora) => setPandoraCover(pandora))
@@ -26,6 +30,7 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
             console.log(error);
           }
         })
+        .finally(() =>  setIsLoading(false));
     } else {
       navigate('/404', { state: { message: '잘못된 접근: pandoraId가 정의되지 않음' } });
     }
@@ -33,7 +38,11 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   }, [id, pandoraService, navigate]);
 
   if (!pandoraCover) {
-    return <div>해당 판도라의 데이터가 존재하지 않음</div>
+    return (
+      <>
+        <PageLoading />
+      </>
+    )
   }
 
   const handleClick = () => {
@@ -54,20 +63,27 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   
   return (
     <StyledContainer>
-      <p>판도라 id: {pandoraCover.id}</p>
-      <p>작성자 : {pandoraCover.writer}</p>
-      <p>제목: {pandoraCover.title}</p>
-      <p>설명: {pandoraCover.description}</p>
-      <p>최대 열람 제한: {pandoraCover.maxOpen}</p>
-      <p>열람 횟수: {pandoraCover.openCount}</p>
-      <p>조회수: {pandoraCover.viewCount}</p>
-      <p>총 문제수: {pandoraCover.totalProblems}</p>
-      <p>첫번째 질문: {pandoraCover.firstQuestion}</p>
-      <p>첫번쨰 힌트: {pandoraCover.firstHint}</p>
-      <p>생성일: {pandoraCover.createdAt}</p>
-      <p>업데이트일: {pandoraCover.updatedAt}</p>
-
-      <button onClick={handleClick}>도전하기</button>
+      {isLoading ? (
+        <PageLoading />
+      ) : (
+      <>
+        <p>판도라 id: {pandoraCover.id}</p>
+        <p>작성자 : {pandoraCover.writer}</p>
+        <p>제목: {pandoraCover.title}</p>
+        <p>설명: {pandoraCover.description}</p>
+        <p>최대 열람 제한: {pandoraCover.maxOpen}</p>
+        <p>열람 횟수: {pandoraCover.openCount}</p>
+        <p>조회수: {pandoraCover.viewCount}</p>
+        <p>총 문제수: {pandoraCover.totalProblems}</p>
+        <p>첫번째 질문: {pandoraCover.firstQuestion}</p>
+        <p>첫번쨰 힌트: {pandoraCover.firstHint}</p>
+        <p>생성일: {pandoraCover.createdAt}</p>
+        <p>업데이트일: {pandoraCover.updatedAt}</p>
+  
+        <button onClick={handleClick}>도전하기</button>  
+      </>
+      )}
+      
     </StyledContainer>
   );
 }

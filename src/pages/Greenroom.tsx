@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
+import GreenroomLoading from "../loading/GreenroomLoading";
 
 interface IGreenroomProps {
   unboxingmeService: IUnboxingService;
@@ -18,9 +19,12 @@ export default function Greenroom({ unboxingmeService }: IGreenroomProps) {
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
   const [message, setMessage] = useState<string | undefined>(undefined);
+
+  const [unboxingLoading, setUnboxingLoading] = useState(false);
   
   // location.state 가 null일 경우 + pandoraId 속성이 없을 경우 대비
   useEffect(() => {
+
     if (!state?.pandoraId || !state?.firstHint || !state?.firstQuestion) {
       navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
@@ -49,37 +53,49 @@ export default function Greenroom({ unboxingmeService }: IGreenroomProps) {
       submitAnswer: submitAnswer
     };
 
+    setUnboxingLoading(true);
+
     unboxingmeService.getGateWay(challenge)
       .then((result) => {
         if (result.isCorrect && !result.unboxing) {
           setCurrentProblemIndex(prev => prev + 1);
           setQuestion(result.question as string);
           setHint(result.hint as string);
+          setMessage(`실패횟수: ${String(result.failCount)}, 현재 패널티: ${String(result.restrictedUntil)}, 상자 최종 열람여부: ${String(result.unboxing)}, unsealedQuestionIndex: ${result.unsealedQuestionIndex}`);
         } else if (!result.isCorrect) {
-          setMessage(`실패 횟수 : ${result.failCount}번 제한 패널티 : ${result.restrictedUntil}까지, 해결하지 못한 문제 index : ${result.unsealedQuestionIndex}`);
+          setMessage(`실패횟수: ${String(result.failCount)}, 현재 패널티: ${String(result.restrictedUntil)}, 상자 최종 열람여부: ${String(result.unboxing)}, unsealedQuestionIndex: ${result.unsealedQuestionIndex}`);
         } else if (result.isCorrect && result.unboxing) {
           setCurrentProblemIndex(prev => prev + 1);
-          setMessage(`비밀 메세지 : ${result.cat} 판도라 상자 열린 여부 : ${result.unboxing}`)
+          setMessage(`실패횟수: ${String(result.failCount)}, 현재 패널티: ${String(result.restrictedUntil)}, 상자 최종 열람여부: ${String(result.unboxing)}, unsealedQuestionIndex: ${result.unsealedQuestionIndex} cat: ${result.cat}`);
         }
-      }).catch((error) => setMessage(error.toString()));    
+      })
+      .catch((error) => setMessage(error.toString()))
+      .finally(() => setUnboxingLoading(false)); 
   };
 
   return (
     <StyledContainer>
-      <p>문제 : {question}</p>
-      <p>힌트 : {hint}</p>
-      <span>정답 : </span>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          name='answer'
-          placeholder='정답을 입력하세여'
-          value={submitAnswer}
-          onChange={handleChange}
-        />
-        <button type="submit">정답 제출</button>
-     </form>
-     <p>결과 : {message}</p>
+      {unboxingLoading ? (
+        <GreenroomLoading />
+      ) : (
+        <>
+          <p>문제 : {question}</p>
+          <p>힌트 : {hint}</p>
+          <span>정답 : </span>
+          <form onSubmit={handleSubmit}>
+            <input
+              type='text'
+              name='answer'
+              placeholder='정답을 입력하세여'
+              value={submitAnswer}
+              onChange={handleChange}
+            />
+            <button type="submit">정답 제출</button>
+          </form>
+          <p>결과 : {message}</p>
+        </>
+      )}
+      
     </StyledContainer>
   );
 }

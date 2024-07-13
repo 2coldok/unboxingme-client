@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ISearchService } from "../service/SearchService";
 import { ISearchedPandoraByKeyword } from "../types/pandora";
 import Search from "../components/Search";
+import PageLoading from "../loading/PageLoading";
 
 interface ISearchResultProps {
   searchService: ISearchService;
@@ -14,6 +15,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
   const keyword = searchParams.get('keyword');
   const navigate = useNavigate();
   const [pandoras, setPandoras] = useState<ISearchedPandoraByKeyword[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
     if (keyword && keyword.length > import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD) {
@@ -26,6 +28,8 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
       return;
     }
 
+    setIsLoading(true);
+
     searchService.getSearchedPandorasByKeyword(keyword)
       .then((pandoras) => setPandoras(pandoras))
       .catch((error) => {
@@ -34,6 +38,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
         }
         console.log(error);
       })
+      .finally(() => setIsLoading(false));
   }, [keyword, navigate, searchService]);
 
   const handleClick = (pandoraId: string) => {
@@ -43,24 +48,35 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
   return (
     <StyledContainer>
       <Search />
-      <h1>"{keyword}" 으(로) 검색된 판도라 리스트들</h1>
-      <ul>
-        {pandoras.map((pandora) => (
-          <li key={pandora.id} onClick={() => handleClick(pandora.id)}>
-            <h3>제목: {pandora.title}</h3>
-            <p>설명: {pandora.description}</p>
-            <p>생성일: {pandora.createdAt}</p>
-            <p>수정일: {pandora.updatedAt}</p>
-            <p>조회수: {pandora.viewCount}</p>
-          </li>
-        ))}
-      </ul>
+
+      {isLoading ? (
+        <PageLoading />
+      ) : (
+      <>
+        <h1>"{keyword}" 으(로) 검색된 판도라 리스트들</h1>
+        <ul>
+          {pandoras.map((pandora) => (
+            <li key={pandora.id} onClick={() => handleClick(pandora.id)}>
+              <h3>제목: {pandora.title}</h3>
+              <p>설명: {pandora.description}</p>
+              <p>생성일: {pandora.createdAt}</p>
+              <p>수정일: {pandora.updatedAt}</p>
+              <p>조회수: {pandora.viewCount}</p>
+            </li>
+          ))}
+        </ul>
+      </>
+      )}
+      
     </StyledContainer>
   );
 }
+
+
 
 const StyledContainer = styled.main`
   border: 1px solid white;
   width: 80%;
   height: 800px;
 `;
+
