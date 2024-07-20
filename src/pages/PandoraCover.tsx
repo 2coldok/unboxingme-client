@@ -53,10 +53,7 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
         signIn(currentUrl);
       }
       if (status) {
-        navigate(
-          '/pandora/greenroom',
-          { state: { pandoraId: id, firstQuestion: pandoraCover.firstQuestion, firstHint: pandoraCover.firstHint } }
-        );
+        navigate(`/pandora/${id}/greenroom`);
       }
     });
   };

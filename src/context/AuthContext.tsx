@@ -32,11 +32,13 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
   const [profile, setProfile] = useState<IProfile | undefined>(undefined);
   
   useEffect(() => {
-    authService.getProfile().then((profile) => setProfile(profile)).catch((error) => {
-      if (error instanceof Error) return console.log(error.message);
-      setProfile(undefined);
-      console.log(error);
-    });
+    authService.getProfile()
+      .then((profile) => setProfile(profile))
+      .catch((error) => {
+        if (error instanceof Error) return console.log(error.message);
+        setProfile(undefined);
+        console.log(error);
+      });
   }, [authService]);
 
   const signOut = useCallback(

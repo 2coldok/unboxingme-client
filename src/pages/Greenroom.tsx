@@ -1,76 +1,114 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
 
 interface IGreenroomProps {
-  unboxingmeService: IUnboxingService;
+  unboxingService: IUnboxingService;
 }
 
-export default function Greenroom({ unboxingmeService }: IGreenroomProps) {
-  const location = useLocation();
-  const state = location.state as { pandoraId?: string, firstQuestion?: string, firstHint?: string} | null;
+interface IProblem {
+  question: string;
+  hint: string;
+  totalProblems: number;
+}
+
+interface IPenaltyStatus {
+  failCount: number;
+  isPenaltyPeriod: boolean;
+  restrictedUntil: string | null;
+}
+
+export default function Greenroom({ unboxingService }: IGreenroomProps) {
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
-  const [question, setQuestion] = useState<string | undefined>(undefined);
-  const [hint, setHint] = useState<string | undefined>(undefined);
-
+  const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0);
+  const [problem, setProblem] = useState<IProblem | undefined>(undefined);
+  const [penaltyStatus, setPenaltyStatus] = useState<IPenaltyStatus | undefined>(undefined);
   const [submitAnswer, setSubmitAnswer] = useState('');
-  const [currentProblemIndex, setCurrentProblemIndex] = useState(0);
-  const [message, setMessage] = useState<string | undefined>(undefined);
-
   const [unboxingLoading, setUnboxingLoading] = useState(false);
-  
-  // location.state 가 null일 경우 + pandoraId 속성이 없을 경우 대비
-  useEffect(() => {
+  const [message, setMessage] = useState('');
 
-    if (!state?.pandoraId || !state?.firstHint || !state?.firstQuestion) {
-      navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
+  useEffect(() => {
+    if (!id) {
+      return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
-    setQuestion(state?.firstQuestion);
-    setHint(state?.firstHint);
-  }, [state, navigate]);
+    unboxingService.setupInitialGateWay(id)
+      .then((initialGate) => {
+        const { 
+          unsealedQuestionIndex, 
+          unboxing, 
+          currentQuestion, 
+          currentHint,
+          totalProblems,
+          failCount,
+          isPenaltyPeriod,
+          restrictedUntil 
+        } = initialGate;
+        
+        if (
+          unsealedQuestionIndex !== null && 
+          unboxing !== true && 
+          currentQuestion !== null && 
+          currentHint !== null
+        ) {
+          setCurrentProblemIndex(unsealedQuestionIndex);
+          setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
+          setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
+        } else {
+          return navigate(`/pandora/${id}/elpis`);
+        }        
+      })
+      .catch((error) => setMessage(error.toString()));
+  }, [id, navigate, unboxingService]);
 
-  // useEffect훅이 실행되기 전 컴포넌트가 렌더링되기 때문에,
-  // pandoraId 가 없을 때 useEffect 훅이 실행되기 전 렌더링 과정의 오류를 방지
-  if (!state?.pandoraId || !state?.firstHint || !state?.firstQuestion) {
-    return null;
-  }
-
-// const { pandoraId } = state;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubmitAnswer(event.target.value);
   };
   
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // todo
     event.preventDefault();
+    if (!id) {
+      return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
+    }
     const challenge = {
-      pandoraId: state.pandoraId as string,
       currentProblemIndex: currentProblemIndex,
       submitAnswer: submitAnswer
     };
 
     setUnboxingLoading(true);
 
-    unboxingmeService.getGateWay(challenge)
+    unboxingService.getGateWay(id, challenge)
       .then((result) => {
-        if (result.isCorrect && !result.unboxing) {
+        const { 
+          isCorrect,
+          unsealedQuestionIndex, // 어디 쓸까..?
+          question,
+          hint,
+          failCount,
+          isPenaltyPeriod,
+          restrictedUntil,
+          unboxing
+         } = result;
+         
+        if (isCorrect && !unboxing) {
           setCurrentProblemIndex(prev => prev + 1);
-          setQuestion(result.question as string);
-          setHint(result.hint as string);
-          setMessage(`실패횟수: ${String(result.failCount)}, 현재 패널티: ${String(result.restrictedUntil)}, 상자 최종 열람여부: ${String(result.unboxing)}, unsealedQuestionIndex: ${result.unsealedQuestionIndex}`);
-        } else if (!result.isCorrect) {
-          setMessage(`실패횟수: ${String(result.failCount)}, 현재 패널티: ${String(result.restrictedUntil)}, 상자 최종 열람여부: ${String(result.unboxing)}, unsealedQuestionIndex: ${result.unsealedQuestionIndex}`);
-        } else if (result.isCorrect && result.unboxing) {
-          setCurrentProblemIndex(prev => prev + 1);
-          setMessage(`실패횟수: ${String(result.failCount)}, 현재 패널티: ${String(result.restrictedUntil)}, 상자 최종 열람여부: ${String(result.unboxing)}, unsealedQuestionIndex: ${result.unsealedQuestionIndex} cat: ${result.cat}`);
+          setProblem((prev) => ({ ...prev, question: question, hint: hint } as IProblem));
+        } else if (!isCorrect) {
+          setPenaltyStatus((prev) => ({ ...prev,  failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil}));
+        } else if (isCorrect && unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod && question === null && hint === null) {
+          return navigate(`/pandora/${id}/elpis`);
+        } else {
+          throw new Error('unboxingmeService.gateWay : 고려하지 않은 부분 발생');
         }
       })
       .catch((error) => setMessage(error.toString()))
-      .finally(() => setUnboxingLoading(false)); 
+      .finally(() => {
+        setUnboxingLoading(false);
+        setSubmitAnswer('');
+      }); 
   };
 
   return (
@@ -78,9 +116,11 @@ export default function Greenroom({ unboxingmeService }: IGreenroomProps) {
       {unboxingLoading ? (
         <GreenroomLoading />
       ) : (
-        <>
-          <p>문제 : {question}</p>
-          <p>힌트 : {hint}</p>
+        <GreenroomWrapper>
+          <p>{currentProblemIndex + 1} / {problem?.totalProblems}</p>
+          <h1>문제 {currentProblemIndex + 1}</h1>
+          <p>문제 : {problem?.question}</p>
+          <p>힌트 : {problem?.hint}</p>
           <span>정답 : </span>
           <form onSubmit={handleSubmit}>
             <input
@@ -89,11 +129,15 @@ export default function Greenroom({ unboxingmeService }: IGreenroomProps) {
               placeholder='정답을 입력하세여'
               value={submitAnswer}
               onChange={handleChange}
+              autoFocus
             />
-            <button type="submit">정답 제출</button>
+            { !penaltyStatus?.isPenaltyPeriod && <button type="submit">정답 제출</button> }
           </form>
-          <p>결과 : {message}</p>
-        </>
+          <p>총 실패 횟수 : {String(penaltyStatus?.failCount)}</p>
+          <p>패널티 여부 : {String(penaltyStatus?.isPenaltyPeriod)}</p>
+          <p>언제까지 패널티? : {String(penaltyStatus?.restrictedUntil)}</p>
+          <p>메세지 : {message}</p>
+        </GreenroomWrapper>
       )}
       
     </StyledContainer>
@@ -101,8 +145,18 @@ export default function Greenroom({ unboxingmeService }: IGreenroomProps) {
 }
 
 const StyledContainer = styled.main`
-  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #ECECEC;
   border: 1px solid #54ce7d;
   width: 80%;
   height: 800px;
+`;
+
+const GreenroomWrapper = styled.section`
+  border: 2px solid #995fc5;
+  border-radius: 1rem;
+  padding: 0.8rem;
 `;
