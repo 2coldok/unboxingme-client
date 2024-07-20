@@ -19,7 +19,7 @@ export class UnboxingService implements IUnboxingService {
 
   async getGateWay(pandoraId: string, challenge: IChallenge) {
     const data = await this.httpClient.fetch<IGateWay, IChallenge>(`/unboxing/${pandoraId}`, {
-      method: 'PUT',
+      method: 'PATCH',
       body: challenge
     });
 
