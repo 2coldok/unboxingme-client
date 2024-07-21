@@ -35,7 +35,7 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
-    unboxingService.setupInitialGateWay(id)
+    unboxingService.getInitialGateWay(id)
       .then((initialGate) => {
         const { 
           unsealedQuestionIndex, 
