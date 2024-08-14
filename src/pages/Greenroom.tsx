@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
 import AccessRestriction from "../components/AccessRestriction";
+import OpenPandora from "../components/OpenPandora";
 
 interface IGreenroomProps {
   unboxingService: IUnboxingService;
@@ -30,6 +31,7 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [unboxingLoading, setUnboxingLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [isOpenPandora, setIsOpenPandora] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -48,6 +50,10 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
           isPenaltyPeriod,
           restrictedUntil 
         } = initialGate;
+
+        if (unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod) {
+          return setIsOpenPandora(true);
+        }
         
         if (
           unsealedQuestionIndex !== null && 
@@ -58,9 +64,8 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
           setCurrentProblemIndex(unsealedQuestionIndex);
           setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
           setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
-        } else {
-          return navigate(`/pandora/${id}/elpis`);
-        }        
+        }
+        
       })
       .catch((error) => setMessage(error.toString()));
   }, [id, navigate, unboxingService]);
@@ -100,7 +105,7 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
         } else if (!isCorrect) {
           setPenaltyStatus((prev) => ({ ...prev,  failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil}));
         } else if (isCorrect && unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod && question === null && hint === null) {
-          return navigate(`/pandora/${id}/elpis`);
+          setIsOpenPandora(true);
         } else {
           throw new Error('unboxingmeService.gateWay : 고려하지 않은 부분 발생');
         }
@@ -112,11 +117,17 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
       }); 
   };
  
-  // Todo 패널티 기간인데 restrictedUntil 값이 null일 경우를 고려해야할까?
+  // Todo 패널티 기간인데 restrictedUntil 값이 null일 경우를 고려해야할까? (서버에선 이를 허용하진 앟는다만..)
   if (penaltyStatus?.isPenaltyPeriod) {
     const restrcitedUntil = penaltyStatus.restrictedUntil;
     return (
       <AccessRestriction restrictedUntil={restrcitedUntil} />
+    );
+  }
+
+  if (isOpenPandora) {
+    return (
+      <OpenPandora id={id} />
     );
   }
 
