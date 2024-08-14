@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
+import AccessRestriction from "../components/AccessRestriction";
 
 interface IGreenroomProps {
   unboxingService: IUnboxingService;
@@ -110,6 +111,14 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
         setSubmitAnswer('');
       }); 
   };
+ 
+  // Todo 패널티 기간인데 restrictedUntil 값이 null일 경우를 고려해야할까?
+  if (penaltyStatus?.isPenaltyPeriod) {
+    const restrcitedUntil = penaltyStatus.restrictedUntil;
+    return (
+      <AccessRestriction restrictedUntil={restrcitedUntil} />
+    );
+  }
 
   return (
     <StyledContainer>
