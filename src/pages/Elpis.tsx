@@ -40,9 +40,15 @@ export default function Elpis({ elpisService }: EplisProps) {
 }
 
 const StyledContainer = styled.main`
-  background-color: black;
-  color: white;
+  background-color: #1c2028;
+  color:  #d1d1d1;
   border: 1px solid white;
   width: 80%;
   height: 800px;
+  font-family: 'DungGeunMo', sans-serif;
+  font-size: 24px;
+
+  & > pre {
+    font-family: 'DungGeunMo', sans-serif;
+  }
 `;

@@ -37,14 +37,6 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
     
   }, [id, pandoraService, navigate]);
 
-  if (!pandoraCover) {
-    return (
-      <>
-        <PageLoading />
-      </>
-    )
-  }
-
   const handleClick = () => {
     const currentUrl = window.location.href;
     status().then((status) => {
@@ -57,6 +49,14 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
       }
     });
   };
+
+  if (!pandoraCover) {
+    return (
+      <>
+        <PageLoading />
+      </>
+    )
+  }
   
   return (
     <StyledContainer>
