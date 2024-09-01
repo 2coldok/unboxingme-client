@@ -63,7 +63,6 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
         <PageLoading />
       ) : (
       <>
-        <h1>판도라 DB ID: {pandoraCover.id}</h1>
         <h1>판도라 uuid : {pandoraCover.uuid}</h1>
         <p>작성자 : {pandoraCover.writer}</p>
         <h2>제목: {pandoraCover.title}</h2>

@@ -56,7 +56,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
         <h1>"{keyword}" 으(로) 검색된 판도라 리스트들</h1>
         <ul>
           {pandoras.map((pandora) => (
-            <li key={pandora.id} onClick={() => handleClick(pandora.uuid)}>
+            <li key={pandora.uuid} onClick={() => handleClick(pandora.uuid)}>
               <h1>uuid: {pandora.uuid}</h1>
               <h3>제목: {pandora.title}</h3>
               <h2>작성자: {pandora.writer}</h2>

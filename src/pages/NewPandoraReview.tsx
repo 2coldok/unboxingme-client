@@ -30,7 +30,6 @@ export default function NewPandoraReview() {
   
   return (
     <StyledContainer>
-      <p>판도라 아이디 : {newPandora.id}</p>
       <p>pandoraUuid: {newPandora.uuid}</p>
       <p>작성자 :{newPandora.writer}</p>
       <p>제목 : {newPandora.title}</p>

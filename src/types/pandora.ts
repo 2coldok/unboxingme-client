@@ -1,7 +1,6 @@
 // viewCount
 
 export interface ISearchedPandoraByKeyword {
-  id: string;
   uuid: string;
   writer: string;
   title: string;
@@ -12,7 +11,6 @@ export interface ISearchedPandoraByKeyword {
 }
 
 export interface IPandoraCover {
-  id: string;
   uuid: string;
   writer: string;
   title: string;
@@ -36,7 +34,6 @@ export interface INewPandoraForm {
 }
 
 export interface ICreatedPandora {
-  id: string;
   uuid: string;
   writer: string;
   title: string;
@@ -63,7 +60,6 @@ export interface IElpis {
 }
 
 export interface IMyPandora {
-  id: string;
   uuid: string;
   writer: string;
   title: string;
