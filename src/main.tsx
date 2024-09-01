@@ -19,21 +19,17 @@ import AuthService from './service/AuthService.ts'
 import HttpClient from './network/HttpClient.ts'
 import { AuthProvider } from './context/AuthContext.tsx'
 import { env } from './config/env.ts'
-import { SearchService } from './service/SearchService.ts'
 import { PandoraService } from './service/PandoraService.ts'
 import NewPandoraForm from './pages/NewPandoraForm.tsx'
 import NewPandoraReview from './pages/NewPandoraReview.tsx'
 import MyPandoras from './pages/MyPandoras.tsx'
 import MyPandoraDashboard from './pages/MyPandoraDashboard.tsx'
 import { UnboxingService } from './service/UnboxingService.ts'
-import { ElpisService } from './service/ElpisService.ts'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
-const searchService = new SearchService(httpClient);
 const pandoraService = new PandoraService(httpClient);
 const unboxingService = new UnboxingService(httpClient);
-const elpisService = new ElpisService(httpClient);
 
 const router = createBrowserRouter([
   {
@@ -41,11 +37,11 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'search', element: <SearchResult searchService={searchService} /> },
+      { path: 'search', element: <SearchResult pandoraService={pandoraService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
       { path: 'pandora/new', element: <NewPandoraForm pandoraService={pandoraService} /> },
       { path: 'pandora/:id/greenroom', element: <Greenroom unboxingService={unboxingService} /> },
-      { path: 'pandora/:id/elpis', element: <Elpis elpisService={elpisService} /> },
+      { path: 'pandora/:id/elpis', element: <Elpis pandoraService={pandoraService} /> },
       { path: 'pandora/new/review', element: <NewPandoraReview /> },
       { path: 'issuer', element: <MyPandoras pandoraService={pandoraService} /> },
       { path: 'issuer/dashboard', element: <MyPandoraDashboard /> }

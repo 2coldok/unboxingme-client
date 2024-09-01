@@ -41,31 +41,18 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
     unboxingService.getInitialGateWay(id)
       .then((initialGate) => {
         const { 
-          unsealedQuestionIndex, 
-          unboxing, 
+          totalProblems, 
           currentQuestion, 
           currentHint,
-          totalProblems,
+          unsealedQuestionIndex,
           failCount,
-          isPenaltyPeriod,
-          restrictedUntil 
+          restrictedUntil,
+          isPenaltyPeriod
         } = initialGate;
 
-        if (unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod) {
-          return setIsOpenPandora(true);
-        }
-        
-        if (
-          unsealedQuestionIndex !== null && 
-          unboxing !== true && 
-          currentQuestion !== null && 
-          currentHint !== null
-        ) {
-          setCurrentProblemIndex(unsealedQuestionIndex);
-          setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
-          setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
-        }
-        
+        setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
+        setCurrentProblemIndex(unsealedQuestionIndex);
+        setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
       })
       .catch((error) => setMessage(error.toString()));
   }, [id, navigate, unboxingService]);
@@ -162,6 +149,8 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
       
     </StyledContainer>
   );
+
+  
 }
 
 const StyledContainer = styled.main`

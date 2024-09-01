@@ -59,6 +59,7 @@ const StyledContainer = styled.header`
 
 const LogoWrapper = styled.nav`
   background-color: black;
+
   &:hover {
     cursor: pointer;
   }    

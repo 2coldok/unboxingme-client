@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { IElpisService } from "../service/ElpisService";
+import { IPandoraService } from "../service/PandoraService";
 
 interface EplisProps {
-  elpisService: IElpisService;
+  pandoraService: IPandoraService;
 }
 
-export default function Elpis({ elpisService }: EplisProps) {
+export default function Elpis({ pandoraService }: EplisProps) {
   const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
   const location = useLocation();
@@ -23,12 +23,18 @@ export default function Elpis({ elpisService }: EplisProps) {
       return navigate('/404', { state: { message: '잘못된 접근: allowed 상태를 찾을 수 없음' } });
     }
 
-    elpisService.getElpis(id)
+    if (!location.state.solverAlias) {
+      return navigate('/404', { state: { message: '잘못된 접근: solverAlias 상태를 찾을 수 없음' } });
+    }
+
+    const solverAlias = { solverAlias: location.state.solverAlias };
+
+    pandoraService.getElpis(id, solverAlias)
       .then((result) => {
         setElpis(result.elpis);
       })
       .catch((error) => setMessage(error.toString()));
-  }, [id, navigate, elpisService, location.state]);
+  }, [id, navigate, pandoraService, location.state]);
 
   return (
     <StyledContainer>

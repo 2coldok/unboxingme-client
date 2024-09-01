@@ -34,7 +34,6 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
     } else {
       navigate('/404', { state: { message: '잘못된 접근: pandoraId가 정의되지 않음' } });
     }
-    
   }, [id, pandoraService, navigate]);
 
   const handleClick = () => {
@@ -64,13 +63,13 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
         <PageLoading />
       ) : (
       <>
-        <p>판도라 id: {pandoraCover.id}</p>
+        <h1>판도라 DB ID: {pandoraCover.id}</h1>
+        <h1>판도라 uuid : {pandoraCover.uuid}</h1>
         <p>작성자 : {pandoraCover.writer}</p>
-        <p>제목: {pandoraCover.title}</p>
+        <h2>제목: {pandoraCover.title}</h2>
         <p>설명: {pandoraCover.description}</p>
-        <p>최대 열람 제한: {pandoraCover.maxOpen}</p>
-        <p>열람 횟수: {pandoraCover.openCount}</p>
-        <p>조회수: {pandoraCover.viewCount}</p>
+        <p>조회수: {pandoraCover.coverViewCount}</p>
+        
         <p>총 문제수: {pandoraCover.totalProblems}</p>
         <p>첫번째 질문: {pandoraCover.firstQuestion}</p>
         <p>첫번쨰 힌트: {pandoraCover.firstHint}</p>

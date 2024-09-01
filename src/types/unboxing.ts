@@ -5,13 +5,12 @@ export interface IChallenge {
 
 export interface IInitialGateWay {
   totalProblems: number;
-  currentQuestion: string | null;
-  currentHint: string | null;
-  unsealedQuestionIndex: number | null;
+  currentQuestion: string;
+  currentHint: string;
+  unsealedQuestionIndex: number;
   failCount: number;
   restrictedUntil: string | null;
   isPenaltyPeriod: boolean;
-  unboxing: boolean;
 }
 
 export interface IGateWay {

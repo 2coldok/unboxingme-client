@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ISearchService } from "../service/SearchService";
 import { ISearchedPandoraByKeyword } from "../types/pandora";
 import Search from "../components/Search";
 import PageLoading from "../loading/PageLoading";
+import { IPandoraService } from "../service/PandoraService";
 
 interface ISearchResultProps {
-  searchService: ISearchService;
+  pandoraService: IPandoraService;
 }
 
-export default function SearchResult({ searchService }: ISearchResultProps) {
+export default function SearchResult({ pandoraService }: ISearchResultProps) {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
 
     setIsLoading(true);
 
-    searchService.getSearchedPandorasByKeyword(keyword)
+    pandoraService.getSearchedPandorasByKeyword(keyword)
       .then((pandoras) => setPandoras(pandoras))
       .catch((error) => {
         if (error instanceof Error) {
@@ -39,7 +39,7 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
         console.log(error);
       })
       .finally(() => setIsLoading(false));
-  }, [keyword, navigate, searchService]);
+  }, [keyword, navigate, pandoraService]);
 
   const handleClick = (pandoraId: string) => {
     navigate(`/pandora/${pandoraId}`);
@@ -56,12 +56,14 @@ export default function SearchResult({ searchService }: ISearchResultProps) {
         <h1>"{keyword}" 으(로) 검색된 판도라 리스트들</h1>
         <ul>
           {pandoras.map((pandora) => (
-            <li key={pandora.id} onClick={() => handleClick(pandora.id)}>
+            <li key={pandora.id} onClick={() => handleClick(pandora.uuid)}>
+              <h1>uuid: {pandora.uuid}</h1>
               <h3>제목: {pandora.title}</h3>
+              <h2>작성자: {pandora.writer}</h2>
               <p>설명: {pandora.description}</p>
               <p>생성일: {pandora.createdAt}</p>
               <p>수정일: {pandora.updatedAt}</p>
-              <p>조회수: {pandora.viewCount}</p>
+              <p>조회수: {pandora.coverViewCount}</p>
             </li>
           ))}
         </ul>

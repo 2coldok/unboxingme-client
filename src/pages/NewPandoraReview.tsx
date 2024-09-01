@@ -30,8 +30,9 @@ export default function NewPandoraReview() {
   
   return (
     <StyledContainer>
-      <p>아이디 : {newPandora.id}</p>
-      <p>저자 :{newPandora.writer}</p>
+      <p>판도라 아이디 : {newPandora.id}</p>
+      <p>pandoraUuid: {newPandora.uuid}</p>
+      <p>작성자 :{newPandora.writer}</p>
       <p>제목 : {newPandora.title}</p>
       <p>설명 : {newPandora.description}</p>
       <h1>키워드</h1>
@@ -48,13 +49,14 @@ export default function NewPandoraReview() {
       ))}
       <p>총 문제 수 : {newPandora.totalProblems}</p>
       <p>비밀 메세지 : {newPandora.cat}</p>
-      <p>열람 제한 : {newPandora.maxOpen}</p>
-      <p>활성 상태 : {newPandora.active}</p>
-      <p>업데이트 : {newPandora.updatedAt}</p>
+      <p>조회수: {newPandora.coverViewCount}</p>
+      <p>문제를 모두 푼 사람 별명: {String(newPandora.solverAlias)}</p>
+      <p>문제 풀이를 완료한 시점: {String(newPandora.solvedAt)}</p>
+      <p>최종 메세지 열람 여부: {String(newPandora.isCatUncovered)}</p>
+      <p>활성 상태 : {String(newPandora.active)}</p>
       <p>생성일 : {newPandora.createdAt}</p>
-      <p>최종 열람 횟수 : {newPandora.openCount}</p>
-      <p>조회수 : {newPandora.viewCount}</p>
-
+      <p>업데이트일: {String(newPandora.updatedAt)}</p>
+      <h2>About Solver</h2>
       <button onClick={handleClick}>홈으로</button>
     </StyledContainer>
   );
