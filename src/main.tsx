@@ -25,11 +25,14 @@ import NewPandoraReview from './pages/NewPandoraReview.tsx'
 import MyPandoras from './pages/MyPandoras.tsx'
 import MyPandoraDashboard from './pages/MyPandoraDashboard.tsx'
 import { UnboxingService } from './service/UnboxingService.ts'
+import MyPandoraLog from './pages/MyPandoraLog.tsx'
+import { DashboardService } from './service/DashboardService.ts'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
 const pandoraService = new PandoraService(httpClient);
 const unboxingService = new UnboxingService(httpClient);
+const dashboardService = new DashboardService(httpClient);
 
 const router = createBrowserRouter([
   {
@@ -44,7 +47,8 @@ const router = createBrowserRouter([
       { path: 'pandora/:id/elpis', element: <Elpis pandoraService={pandoraService} /> },
       { path: 'pandora/new/review', element: <NewPandoraReview /> },
       { path: 'issuer', element: <MyPandoras pandoraService={pandoraService} /> },
-      { path: 'issuer/dashboard', element: <MyPandoraDashboard /> }
+      { path: 'issuer/dashboard', element: <MyPandoraDashboard /> },
+      { path: 'dashboard/mine/:id/log', element: <MyPandoraLog dashboardService={dashboardService} /> }
     ]
   },
   {

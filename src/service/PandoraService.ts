@@ -10,7 +10,7 @@ export interface IPandoraService {
   getMyPandoras(): Promise<IMyPandora[]>;
 }
 
-export class PandoraService implements IPandoraService{
+export class PandoraService implements IPandoraService {
   constructor(private httpClient: IHttpClient) {}
 
   async getSearchedPandorasByKeyword(keyword: string) {

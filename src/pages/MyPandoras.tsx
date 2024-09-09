@@ -29,12 +29,16 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
       navigate('/404', { state: { message: '인증 실패: 인증 정보가 없음(profile)' } });
     }
   }, [pandoraService, navigate, profile]);
+
+  const handleClick = (pandoraId: string) => {
+    navigate(`/dashboard/mine/${pandoraId}/log`);
+  }
   
   return (
     <StyledContainer>
       {pandoras?.length === 0 && <h1>텅~</h1>}
       {pandoras?.map((pandora) => (
-        <MyPandora>
+        <MyPandora onClick={() => handleClick(pandora.uuid)}>
           <h1>판도라 정보</h1>
           <h3>고유 라벨: {pandora.label}</h3>
           <p>uuid : {pandora.uuid}</p>
@@ -72,5 +76,5 @@ const StyledContainer = styled.div`
 const MyPandora = styled.div`
   padding: 10px;
   border: 1px solid blue;
-  margin: 2rem;
+  margin: 3rem;
 `;
