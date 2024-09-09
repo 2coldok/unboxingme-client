@@ -36,6 +36,7 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
       {pandoras?.map((pandora) => (
         <MyPandora>
           <h1>판도라 정보</h1>
+          <h3>고유 라벨: {pandora.label}</h3>
           <p>uuid : {pandora.uuid}</p>
           <p>작성자 : {pandora.writer}</p>
           <p>제목 : {pandora.title}</p>

@@ -12,6 +12,7 @@ export interface ISearchedPandoraByKeyword {
 
 export interface IPandoraCover {
   uuid: string;
+  label: string;
   writer: string;
   title: string;
   description: string;
@@ -35,6 +36,7 @@ export interface INewPandoraForm {
 
 export interface ICreatedPandora {
   uuid: string;
+  label: string;
   writer: string;
   title: string;
   description: string;
@@ -43,9 +45,6 @@ export interface ICreatedPandora {
   totalProblems: number;
   cat: string;
   coverViewCount: number;
-  solverAlias: string;
-  solvedAt: string;
-  isCatUncovered: boolean;
   active: boolean;
   createdAt: string;
   updatedAt: string;
@@ -61,6 +60,7 @@ export interface IElpis {
 
 export interface IMyPandora {
   uuid: string;
+  label: string;
   writer: string;
   title: string;
   description: string;
@@ -69,8 +69,8 @@ export interface IMyPandora {
   totalProblems: number;
   cat: string;
   coverViewCount: number;
-  solverAlias: string;
-  solvedAt: string;
+  solverAlias: string | null;
+  solvedAt: string | null;
   isCatUncovered: boolean;
   active: boolean;
   createdAt: string;

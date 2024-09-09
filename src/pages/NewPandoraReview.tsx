@@ -30,6 +30,7 @@ export default function NewPandoraReview() {
   
   return (
     <StyledContainer>
+      <h1>고유 라벨: {newPandora.label}</h1>
       <p>pandoraUuid: {newPandora.uuid}</p>
       <p>작성자 :{newPandora.writer}</p>
       <p>제목 : {newPandora.title}</p>
@@ -49,9 +50,6 @@ export default function NewPandoraReview() {
       <p>총 문제 수 : {newPandora.totalProblems}</p>
       <p>비밀 메세지 : {newPandora.cat}</p>
       <p>조회수: {newPandora.coverViewCount}</p>
-      <p>문제를 모두 푼 사람 별명: {String(newPandora.solverAlias)}</p>
-      <p>문제 풀이를 완료한 시점: {String(newPandora.solvedAt)}</p>
-      <p>최종 메세지 열람 여부: {String(newPandora.isCatUncovered)}</p>
       <p>활성 상태 : {String(newPandora.active)}</p>
       <p>생성일 : {newPandora.createdAt}</p>
       <p>업데이트일: {String(newPandora.updatedAt)}</p>

@@ -40,6 +40,9 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
 
     unboxingService.getInitialGateWay(id)
       .then((initialGate) => {
+        if (initialGate.type === 'mine' ) {
+          return setMessage('내가 만든 수수께끼는 마이페이지에서 확인할 수 있습니다.');
+        }
         const { 
           totalProblems, 
           currentQuestion, 
@@ -77,18 +80,19 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
       .then((result) => {
         const { 
           isCorrect,
+          failCount,
+          restrictedUntil,
+          isPenaltyPeriod,
+          unboxing,
+          totalProblems,
           unsealedQuestionIndex, // 어디 쓸까..?
           question,
           hint,
-          failCount,
-          isPenaltyPeriod,
-          restrictedUntil,
-          unboxing
          } = result;
          
         if (isCorrect && !unboxing) {
           setCurrentProblemIndex(prev => prev + 1);
-          setProblem((prev) => ({ ...prev, question: question, hint: hint } as IProblem));
+          setProblem((prev) => ({ ...prev, question: question, hint: hint, totalProblems: totalProblems } as IProblem));
         } else if (!isCorrect) {
           setPenaltyStatus((prev) => ({ ...prev,  failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil}));
         } else if (isCorrect && unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod && question === null && hint === null) {

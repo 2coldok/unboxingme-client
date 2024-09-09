@@ -2,7 +2,7 @@ import { IChallenge, IGateWay, IInitialGateWay } from './../types/unboxing';
 import { HttpError, IHttpClient } from "../network/HttpClient";
 
 export interface IUnboxingService {
-  getInitialGateWay(pandoraId: string): Promise<IInitialGateWay>
+  getInitialGateWay(pandoraId: string): Promise<IInitialGateWay>;
   setupInitialGateWay(pandoraId: string): Promise<IInitialGateWay>;
   getGateWay(pandoraId: string, challenge: IChallenge): Promise<IGateWay>;
 }

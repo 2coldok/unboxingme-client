@@ -64,8 +64,9 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
       ) : (
       <>
         <h1>판도라 uuid : {pandoraCover.uuid}</h1>
+        <h3>고유 라벨: {pandoraCover.label}</h3>
         <p>작성자 : {pandoraCover.writer}</p>
-        <h2>제목: {pandoraCover.title}</h2>
+        <p>제목: {pandoraCover.title}</p>
         <p>설명: {pandoraCover.description}</p>
         <p>조회수: {pandoraCover.coverViewCount}</p>
         
