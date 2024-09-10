@@ -20,13 +20,10 @@ import HttpClient from './network/HttpClient.ts'
 import { AuthProvider } from './context/AuthContext.tsx'
 import { env } from './config/env.ts'
 import { PandoraService } from './service/PandoraService.ts'
-import NewPandoraForm from './pages/NewPandoraForm.tsx'
-import NewPandoraReview from './pages/NewPandoraReview.tsx'
-import MyPandoras from './pages/MyPandoras.tsx'
-import MyPandoraDashboard from './pages/MyPandoraDashboard.tsx'
 import { UnboxingService } from './service/UnboxingService.ts'
-import MyPandoraLog from './pages/MyPandoraLog.tsx'
 import { DashboardService } from './service/DashboardService.ts'
+import MyPage from './pages/MyPage.tsx'
+import PandoraLog from './pages/PandoraLog.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -42,13 +39,10 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'search', element: <SearchResult pandoraService={pandoraService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
-      { path: 'pandora/new', element: <NewPandoraForm pandoraService={pandoraService} /> },
       { path: 'pandora/:id/greenroom', element: <Greenroom unboxingService={unboxingService} /> },
       { path: 'pandora/:id/elpis', element: <Elpis pandoraService={pandoraService} /> },
-      { path: 'pandora/new/review', element: <NewPandoraReview /> },
-      { path: 'issuer', element: <MyPandoras pandoraService={pandoraService} /> },
-      { path: 'issuer/dashboard', element: <MyPandoraDashboard /> },
-      { path: 'dashboard/mine/:id/log', element: <MyPandoraLog dashboardService={dashboardService} /> }
+      { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
+      { path: 'dashboard/:id/log', element: <PandoraLog dashboardService={dashboardService} /> }
     ]
   },
   {

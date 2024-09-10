@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { GrAddCircle } from "react-icons/gr";
 import { IoClose } from "react-icons/io5";
 import './QueryFormAnimation.css'
-import { NextButton, PreviousButton, TFormSubject } from "../../pages/NewPandoraForm";
+import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
 
 export interface IQuery {
   id: string;

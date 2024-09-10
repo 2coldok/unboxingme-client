@@ -31,19 +31,7 @@ export default function Profile({ profile, status, signOut, myProfile, setMyProf
         navigate('/');
       }
       if (status) {
-        navigate('/issuer');
-      }
-    });
-  };
-
-  const handleMakePandoraMessageClick = () => {
-    status().then((status) => {
-      if (!status) {
-        alert('세션이 만료되었습니다.');
-        navigate('/');
-      }
-      if (status) {
-        navigate('/pandora/new');
+        navigate('/dashboard');
       }
     });
   };
@@ -65,7 +53,6 @@ export default function Profile({ profile, status, signOut, myProfile, setMyProf
       {showPopper && (
         <Popper>
           <button onClick={handleMyPageClick}>마이페이지</button>
-          <button onClick={handleMakePandoraMessageClick}>판도라메세지 만들기</button>
           <button onClick={handleSignOutClick}>로그아웃</button>
         </Popper>
       )}

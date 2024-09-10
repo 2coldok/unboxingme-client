@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { TFormSubject } from "../../pages/NewPandoraForm";
+import { TFormSubject } from '../mypage/NewPandora';
 import { Dispatch } from "react";
 import { IQuery } from "./QueryForm";
 import { HiPencilSquare } from "react-icons/hi2";
@@ -39,9 +39,12 @@ export default function PreviewForm({ setFormSubject, writer, title, description
       /* eslint-enable @typescript-eslint/no-unused-vars */
       cat: message,
     };
+    
+    // 반환값이 있지만 pandora review 페이지를 제거해서 반환값 필요없음
+    // 생성하면 바로 대시보드로 이동
+    await pandoraService.createPandora(newPandoraForm);
 
-    const result = await pandoraService.createPandora(newPandoraForm);
-    navigate('/pandora/new/review', { state: { newPandora: result } });
+    navigate('/dashboard');
   }
 
   return (

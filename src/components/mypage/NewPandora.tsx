@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
-import CoverForm from "../components/form/CoverForm";
-import KeywordsForm from "../components/form/KeywordsForm";
-import MessageForm from "../components/form/MessageForm";
-import QueryForm from "../components/form/QueryForm";
-import UnsealLimitForm from "../components/form/UnsealLimitForm";
-import { IPandoraService } from "../service/PandoraService";
-import PreviewForm from "../components/form/PreviewForm";
+import CoverForm from "../form/CoverForm";
+import KeywordsForm from "../form/KeywordsForm";
+import MessageForm from "../form/MessageForm";
+import QueryForm from "../form/QueryForm";
+import UnsealLimitForm from "../form/UnsealLimitForm";
+import { IPandoraService } from "../../service/PandoraService";
+import PreviewForm from "../form/PreviewForm";
 import styled from "styled-components";
 
 import { BsBoxSeam } from "react-icons/bs"; // cover

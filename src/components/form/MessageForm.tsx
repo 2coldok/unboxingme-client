@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { NextButton, PreviousButton, TFormSubject } from '../../pages/NewPandoraForm';
+import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
 import styled from 'styled-components';
 
 export interface IMessageFormProps {

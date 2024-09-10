@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
-import { NextButton, TFormSubject } from "../../pages/NewPandoraForm";
+import { NextButton, TFormSubject } from '../mypage/NewPandora';
 
 export interface ICoverFormProps {
   setFormSubject: Dispatch<React.SetStateAction<TFormSubject>>;

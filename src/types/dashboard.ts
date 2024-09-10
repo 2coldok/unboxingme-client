@@ -20,8 +20,8 @@ export interface IMyPandora {
 export interface ILog {
   pandora: string;
   failCount: number;
-  restrictedUntil: string;
-  unsealedQuestionIndex: number;
+  restrictedUntil: string | null;
+  unsealedQuestionIndex: number | null;
   unboxing: boolean;
   createdAt: string;
   updatedAt: string;

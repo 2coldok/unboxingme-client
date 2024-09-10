@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { useAuth } from "../hook/AuthHook";
 import { useEffect, useState } from "react";
-import { IPandoraService } from "../service/PandoraService";
-import { IMyPandora } from "../types/pandora";
+import { IPandoraService } from "../../service/PandoraService";
+import { IMyPandora } from "../../types/dashboard";
 import { useNavigate } from "react-router-dom";
 
 interface IMyPandorasProps {
@@ -11,27 +10,24 @@ interface IMyPandorasProps {
 
 export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
   const [pandoras, setPandoras] = useState<IMyPandora[] | undefined>(undefined);
-  const { profile } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (profile) {
-      pandoraService.getMyPandoras()
-        .then((pandoras) => setPandoras(pandoras))
-        .catch((error) => {
-          if (error instanceof Error) {
-            console.log(error.message);
-          } else {
-            console.log(error);
-          }
-        })
-    } else {
-      navigate('/404', { state: { message: '인증 실패: 인증 정보가 없음(profile)' } });
-    }
-  }, [pandoraService, navigate, profile]);
+    pandoraService.getMyPandoras()
+      .then((pandoras) => setPandoras(pandoras))
+      .catch((error) => {
+        if (error instanceof Error) {
+          console.log(error.message);
+          navigate('/404', { state: { message: `${error.message}` } });
+        } else {
+          console.log(error);
+        }
+      })
+  }, [pandoraService, navigate]);
 
   const handleClick = (pandoraId: string) => {
-    navigate(`/dashboard/mine/${pandoraId}/log`);
+    // 경로와 쿼리파라미터는 별도로 관리해야 함.
+    navigate(`/dashboard/${pandoraId}/log`);
   }
   
   return (

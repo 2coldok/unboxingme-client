@@ -2,7 +2,7 @@ import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
-import { NextButton, PreviousButton, TFormSubject } from '../../pages/NewPandoraForm';
+import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
 import { v4 as uuidv4 } from "uuid";
 
 export interface IKeywordsFormProps {

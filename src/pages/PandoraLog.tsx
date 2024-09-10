@@ -9,7 +9,7 @@ interface IMyPandoraLogProps {
   dashboardService: IDashboardService;
 }
 
-export default function MyPandoraLog({ dashboardService }: IMyPandoraLogProps) {
+export default function PandoraLog({ dashboardService }: IMyPandoraLogProps) {
   const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
   const [myPandora, setMyPandora] = useState<IMyPandora | undefined>(undefined);
@@ -49,7 +49,7 @@ export default function MyPandoraLog({ dashboardService }: IMyPandoraLogProps) {
           <p>최근 도전 시간: {log.updatedAt}</p>
           <p>실패 횟수: {log.failCount}</p>
           <p>제한이 걸린 시간:{log.restrictedUntil} 까지</p>
-          <p>진행상황: {myPandora.totalProblems} 문제중 {log.unsealedQuestionIndex + 1}번 풀이중</p>
+          <p>진행상황: {myPandora.totalProblems} 문제중 {log.unsealedQuestionIndex ? log.unsealedQuestionIndex + 1 : '모든 문제 해결 완료'}</p>
           <p>성공 여부: {String(log.unboxing)}</p>
         </LogWrapper>
 
