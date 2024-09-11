@@ -5,7 +5,7 @@ export default function PreCreationGuidelines() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/pandora/create');
+    navigate('/pandora/form');
   };
 
   return (

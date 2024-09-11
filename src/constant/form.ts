@@ -4,5 +4,5 @@ export const NEW_PANDORA_FORM = Object.freeze({
   query: '질문',
   message: '메세지',
   unsealLimit: '열람횟수',
-  preview: '미리보기'
+  submit: '미리보기 및 제출하기'
 });

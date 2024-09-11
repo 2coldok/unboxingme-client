@@ -29,7 +29,6 @@ export interface INewPandoraForm {
   title: string;
   description: string;
   keywords: string[];
-  maxOpen: number;
   problems: { question: string, hint: string, answer: string }[];
   cat: string;
 }
@@ -75,4 +74,13 @@ export interface IMyPandora {
   active: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IMyPandoraForEdit {
+  writer: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  problems: { question: string, hint: string, answer: string }[];
+  cat: string;
 }

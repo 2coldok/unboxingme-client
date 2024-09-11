@@ -1,3 +1,7 @@
+/********
+ * Later
+ */
+
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { TPandoraFormSubject } from '../../types/form';
@@ -54,7 +58,7 @@ export default function UnsealLimitForm({ setFormSubject, maxOpen, setMaxOpen }:
 
   const handleNextButton = () => {
     if (validForm && !formErrorMessage) {
-      setFormSubject('preview');
+      setFormSubject('submit');
     } else {
       return;
     }

@@ -1,37 +1,55 @@
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CoverForm from "../components/form/CoverForm";
 import KeywordsForm from "../components/form/KeywordsForm";
 import MessageForm from "../components/form/MessageForm";
 import QueryForm from "../components/form/QueryForm";
-import UnsealLimitForm from "../components/form/UnsealLimitForm";
+// import UnsealLimitForm from "../components/form/UnsealLimitForm";
 import { IPandoraService } from "../service/PandoraService";
-import PreviewForm from "../components/form/PreviewForm";
 import styled from "styled-components";
 
 import { BsBoxSeam } from "react-icons/bs"; // cover
 import { LuPackageSearch } from "react-icons/lu"; // search
 import { GiThreeKeys } from "react-icons/gi"; // query
 import { TfiDropboxAlt } from "react-icons/tfi"; // message2
-import { GiBoxUnpacking } from "react-icons/gi"; // unsealLimit
 import { GiLockedBox } from "react-icons/gi"; // safe box
 import { TPandoraFormSubject } from "../types/form";
 import { NEW_PANDORA_FORM } from "../constant/form";
+import CreatePandora from "../components/form/CreatePandora";
+import { useParams } from "react-router-dom";
 
-interface INewPandoraFormProps {
+interface IPandoraFormProps {
   pandoraService: IPandoraService;
 }
 
-export default function NewPandora({ pandoraService }: INewPandoraFormProps) {
+export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
+  const { id } = useParams<{ id: string }>();
+  // 새로운 판도라 만들기 또는 수정하기
+  const [mode, setMode] = useState<{ id: string | null, type: 'new' | 'edit' }>({ id: null, type: 'new' });
+
   const [formSubject, setFormSubject] = useState<TPandoraFormSubject>('cover');
-  
   const [writer, setWriter] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [keywords, setKeywords] = useState<string[]>([]);
   const [queries, setQueries] = useState([{ id: uuidv4(), question: '', hint: '', answer: '' }]);
   const [message, setMessage] = useState('');
-  const [maxOpen, setMaxOpen] = useState<number | ''>(1); // 나중에 form 제출때는 maxOpen이 '' 일 경우 배제하기
+
+  useEffect(() => {
+    if (id) {
+      setMode({ id: id, type: 'edit' });
+      pandoraService.getMyPandoraForEdit(id).then((pandora) => {
+        setWriter(pandora.writer);
+        setTitle(pandora.title);
+        setDescription(pandora.description);
+        setKeywords(pandora.keywords);
+        setQueries(pandora.problems.map((problem) => ({ ...problem, id: uuidv4() })));
+        setMessage(pandora.cat);
+      });
+    } else {
+      setMode({ id: null, type: 'new' });
+    }
+  }, [id, pandoraService]);
 
   return (
     <StyledContainer>
@@ -44,9 +62,7 @@ export default function NewPandora({ pandoraService }: INewPandoraFormProps) {
         <Road></Road>
         <IconWrapper $active={formSubject === 'message'}><TfiDropboxAlt /></IconWrapper>
         <Road></Road>
-        <IconWrapper $active={formSubject === 'unsealLimit'}><GiBoxUnpacking /></IconWrapper>
-        <Road></Road>
-        <IconWrapper $active={formSubject === 'preview'}><GiLockedBox /></IconWrapper>
+        <IconWrapper $active={formSubject === 'submit'}><GiLockedBox /></IconWrapper>
       </IconContainer>
 
       <FormSubject>{NEW_PANDORA_FORM[formSubject]}</FormSubject>
@@ -80,13 +96,8 @@ export default function NewPandora({ pandoraService }: INewPandoraFormProps) {
           setMessage={setMessage}
         />}
   
-        {formSubject === 'unsealLimit' &&<UnsealLimitForm 
-          setFormSubject={setFormSubject} 
-          maxOpen={maxOpen}
-          setMaxOpen={setMaxOpen}
-        />}
-  
-        {formSubject === 'preview' && <PreviewForm
+        {formSubject === 'submit' && <CreatePandora
+          mode={mode}
           setFormSubject={setFormSubject}
           writer={writer}
           title={title}
@@ -94,7 +105,6 @@ export default function NewPandora({ pandoraService }: INewPandoraFormProps) {
           keywords={keywords}
           queries={queries}
           message={message}
-          maxOpen={maxOpen}
           pandoraService={pandoraService}
         />}
       </FormContainer>

@@ -8,21 +8,19 @@ import { IPandoraService } from "../../service/PandoraService";
 import { useNavigate } from "react-router-dom";
 import { TPandoraFormSubject } from "../../types/form";
 
-interface IPreviewFormProps {
+interface ICreatePandoraProps {
+  mode: { id: string | null, type: 'new' | 'edit' };
   setFormSubject: Dispatch<React.SetStateAction<TPandoraFormSubject>>;
-
   writer: string;
   title: string;
   description: string;
   keywords: string[];
   queries: IQuery[];
   message: string;
-  maxOpen: number | '';
-
   pandoraService: IPandoraService;
 }
 
-export default function PreviewForm({ setFormSubject, writer, title, description, keywords, queries, message, maxOpen, pandoraService }: IPreviewFormProps) {
+export default function CreatePandora({ mode, setFormSubject, writer, title, description, keywords, queries, message, pandoraService }: ICreatePandoraProps) {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -33,16 +31,21 @@ export default function PreviewForm({ setFormSubject, writer, title, description
       title: title,
       description: description,
       keywords: keywords,
-      maxOpen: maxOpen as number,
       /* eslint-disable @typescript-eslint/no-unused-vars */
       problems: queries.map(({ id, ...rest }) => rest),
       /* eslint-enable @typescript-eslint/no-unused-vars */
       cat: message,
     };
-    
-    // 반환값이 있지만 pandora review 페이지를 제거해서 반환값 필요없음
-    // 생성하면 바로 대시보드로 이동
-    await pandoraService.createPandora(newPandoraForm);
+
+    if (mode.id && mode.type === 'edit') {
+      await pandoraService.replaceMyPandora(mode.id, newPandoraForm)
+    }
+
+    if (!mode.id && mode.type === 'new') {
+      // 반환값이 있지만 pandora review 페이지를 제거해서 반환값 필요없음
+      // 생성하면 바로 대시보드로 이동
+      await pandoraService.createPandora(newPandoraForm);
+    }
 
     navigate('/dashboard');
   }
@@ -79,12 +82,8 @@ export default function PreviewForm({ setFormSubject, writer, title, description
       <HiPencilSquare onClick={() => setFormSubject('message')} />
       <p>메세지: {message}</p>
       <Divider />
-      
-      <HiPencilSquare onClick={() => setFormSubject('unsealLimit')} />
-      <p>최대 오픈 횟수: {maxOpen}</p>
-      <Divider />
 
-      <button onClick={handleSubmit}>완료</button>
+      <button onClick={handleSubmit}>{mode.type === 'edit' ? '수정 완료하기' : '판도라 만들기'}</button>
     </>
   );  
 }

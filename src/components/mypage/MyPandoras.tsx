@@ -35,7 +35,11 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
     if (isConfirmed) {
       pandoraService.deleteMyPandora(pandoraId).then(() => window.location.reload());
     }
-  }
+  };
+
+  const handleEditClick = (pandoraId: string) => {
+    navigate(`/pandora/form/${pandoraId}`);
+  };
   
   return (
     <StyledContainer>
@@ -69,7 +73,7 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
           </MyPandoraWrapper>
           <OptionWrapper>
             <button onClick={() => handleLogClick(pandora.uuid)}>도전 현황 보기</button>
-            <button>수정</button>
+            <button onClick={() => handleEditClick(pandora.uuid)}>수정</button>
             <button onClick={() => handleDeleteClick(pandora.uuid, pandora.label)}>삭제</button>
             <button>비공개</button>
           </OptionWrapper>

@@ -1,5 +1,5 @@
 import { IHttpClient } from './../network/HttpClient';
-import { ICreatedPandora, IMyPandora, INewPandoraForm, IPandoraCover, ISearchedPandoraByKeyword, IElpis, ISolverAlias } from '../types/pandora';
+import { ICreatedPandora, IMyPandora, INewPandoraForm, IPandoraCover, ISearchedPandoraByKeyword, IElpis, ISolverAlias, IMyPandoraForEdit } from '../types/pandora';
 // import { IElpis } from '../types/elpis';
 
 export interface IPandoraService {
@@ -9,6 +9,8 @@ export interface IPandoraService {
   getElpis(pandoraId: string, solverAlias: ISolverAlias): Promise<IElpis>;
   getMyPandoras(): Promise<IMyPandora[]>;
   deleteMyPandora(id: string): Promise<void>;
+  replaceMyPandora(id: string, newPandoraForm: INewPandoraForm): Promise<void>;
+  getMyPandoraForEdit(id: string): Promise<IMyPandoraForEdit>;
 }
 
 export class PandoraService implements IPandoraService {
@@ -60,5 +62,20 @@ export class PandoraService implements IPandoraService {
     await this.httpClient.fetch<void, void>(`/pandora/delete/${id}`, {
       method: 'DELETE'
     });
-  }  
+  }
+  
+  async replaceMyPandora(id: string, newPandoraForm: INewPandoraForm) {
+    await this.httpClient.fetch<void, INewPandoraForm>(`/pandora/replace/${id}`, {
+      method: 'PUT',
+      body: newPandoraForm
+    });
+  }
+
+  async getMyPandoraForEdit(id: string) {
+    const data = await this.httpClient.fetch<IMyPandoraForEdit, void>(`/pandora/edit/${id}`, {
+      method: 'GET'
+    })
+
+    return data;
+  }
 }

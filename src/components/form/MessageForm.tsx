@@ -28,7 +28,7 @@ export default function MessageForm({ setFormSubject, message, setMessage }: IMe
 
   const handleNextButton = () => {
     if (validForm && !formErrorMessage) {
-      setFormSubject('unsealLimit');
+      setFormSubject('submit');
     } else {
       return;
     }  
