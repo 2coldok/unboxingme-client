@@ -2,11 +2,11 @@ import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import styled from 'styled-components';
 import { AiOutlineSearch } from "react-icons/ai";
 import { IoClose } from "react-icons/io5";
-import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
 import { v4 as uuidv4 } from "uuid";
+import { TPandoraFormSubject } from '../../types/form';
 
 export interface IKeywordsFormProps {
-  setFormSubject: Dispatch<SetStateAction<TFormSubject>>;
+  setFormSubject: Dispatch<SetStateAction<TPandoraFormSubject>>;
   keywords: string[];
   setKeywords: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -89,8 +89,8 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
           <IoClose onClick={() => handleDeleteKeyword(keyword)} />
         </ShowKeyword>
       ))}
-      <PreviousButton type='button' onClick={() => setFormSubject('cover')}>이전</PreviousButton>
-      <NextButton type='button' onClick={handleNextButton}>다음</NextButton>
+      <button type='button' onClick={() => setFormSubject('cover')}>이전</button>
+      <button type='button' onClick={handleNextButton}>다음</button>
     </>
   );
 }

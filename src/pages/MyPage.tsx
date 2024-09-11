@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { IPandoraService } from "../service/PandoraService";
 import { IDashboardService } from "../service/DashboardService";
 import MyPandoras from "../components/mypage/MyPandoras";
-import NewPandoraForm from "../components/mypage/NewPandora";
 import MyChallenges from "../components/mypage/MyChallenges";
 import MyConquered from "../components/mypage/MyConquered";
+import PreCreationGuidelines from "../components/form/PreCreationGuidelines";
 
 interface IMypageProps {
   pandoraService: IPandoraService;
@@ -33,7 +33,7 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
         { currentTab === 'mine' && <MyPandoras pandoraService={pandoraService} /> }
         { currentTab === 'challenges' && <MyChallenges /> }
         { currentTab === 'conquered' && <MyConquered />}
-        { currentTab === 'make' && <NewPandoraForm pandoraService={pandoraService} /> }
+        { currentTab === 'make' && <PreCreationGuidelines /> }
       </ContentWrapper>
       
     </StyledContainer>

@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
 import styled from 'styled-components';
+import { TPandoraFormSubject } from '../../types/form';
 
 export interface IUnsealLimitFormProps {
-  setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
+  setFormSubject: React.Dispatch<React.SetStateAction<TPandoraFormSubject>>;
   maxOpen: number | '';
   setMaxOpen: Dispatch<SetStateAction<number | ''>>;
 }
@@ -82,8 +82,8 @@ export default function UnsealLimitForm({ setFormSubject, maxOpen, setMaxOpen }:
       <button type='button' onClick={() => handleButtonClick(-1)}>제한없음</button>
       <button type='button' onClick={() => handleButtonClick('custom')}>직접입력</button>
       <FormErrorMessage>{formErrorMessage}</FormErrorMessage>
-      <PreviousButton type='button' onClick={() => setFormSubject('message')}>이전</PreviousButton>
-      <NextButton type='button' onClick={handleNextButton}>다음(미리보기)</NextButton>
+      <button type='button' onClick={() => setFormSubject('message')}>이전</button>
+      <button type='button' onClick={handleNextButton}>다음(미리보기)</button>
     </>
   );
 }

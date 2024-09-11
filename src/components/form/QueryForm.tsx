@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { GrAddCircle } from "react-icons/gr";
 import { IoClose } from "react-icons/io5";
 import './QueryFormAnimation.css'
-import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
+import { TPandoraFormSubject } from "../../types/form";
 
 export interface IQuery {
   id: string;
@@ -15,7 +15,7 @@ export interface IQuery {
 }
 
 export interface IQueryFormProps {
-  setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
+  setFormSubject: React.Dispatch<React.SetStateAction<TPandoraFormSubject>>;
   queries: IQuery[];
   setQueries: Dispatch<SetStateAction<IQuery[]>>;
 }
@@ -108,8 +108,8 @@ export default function QueryForm({ setFormSubject, queries, setQueries }: IQuer
         <GrAddCircle />
       </AddQuery>
       <FormErrorMessage>{formErrorMessage}</FormErrorMessage>
-      <PreviousButton type="button" onClick={() => setFormSubject('keywords')}>이전</PreviousButton>
-      <NextButton type="button" onClick={handleNextButton}>다음</NextButton>
+      <button type="button" onClick={() => setFormSubject('keywords')}>이전</button>
+      <button type="button" onClick={handleNextButton}>다음</button>
     </>
   );  
 }

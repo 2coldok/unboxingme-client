@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
-import CoverForm from "../form/CoverForm";
-import KeywordsForm from "../form/KeywordsForm";
-import MessageForm from "../form/MessageForm";
-import QueryForm from "../form/QueryForm";
-import UnsealLimitForm from "../form/UnsealLimitForm";
-import { IPandoraService } from "../../service/PandoraService";
-import PreviewForm from "../form/PreviewForm";
+import CoverForm from "../components/form/CoverForm";
+import KeywordsForm from "../components/form/KeywordsForm";
+import MessageForm from "../components/form/MessageForm";
+import QueryForm from "../components/form/QueryForm";
+import UnsealLimitForm from "../components/form/UnsealLimitForm";
+import { IPandoraService } from "../service/PandoraService";
+import PreviewForm from "../components/form/PreviewForm";
 import styled from "styled-components";
 
 import { BsBoxSeam } from "react-icons/bs"; // cover
@@ -15,24 +15,15 @@ import { GiThreeKeys } from "react-icons/gi"; // query
 import { TfiDropboxAlt } from "react-icons/tfi"; // message2
 import { GiBoxUnpacking } from "react-icons/gi"; // unsealLimit
 import { GiLockedBox } from "react-icons/gi"; // safe box
+import { TPandoraFormSubject } from "../types/form";
+import { NEW_PANDORA_FORM } from "../constant/form";
 
 interface INewPandoraFormProps {
   pandoraService: IPandoraService;
 }
 
-export type TFormSubject = 'cover' | 'keywords' | 'query' | 'message' | 'unsealLimit' | 'preview';
-
-const FORM_SUBJECTS = {
-  cover: '표지',
-  keywords: '키워드',
-  query: '질문',
-  message: '메세지',
-  unsealLimit: '열람 횟수',
-  preview: '미리보기'
-};
-
-export default function NewPandoraForm({ pandoraService }: INewPandoraFormProps) {
-  const [formSubject, setFormSubject] = useState<TFormSubject>('cover');
+export default function NewPandora({ pandoraService }: INewPandoraFormProps) {
+  const [formSubject, setFormSubject] = useState<TPandoraFormSubject>('cover');
   
   const [writer, setWriter] = useState('');
   const [title, setTitle] = useState('');
@@ -58,7 +49,7 @@ export default function NewPandoraForm({ pandoraService }: INewPandoraFormProps)
         <IconWrapper $active={formSubject === 'preview'}><GiLockedBox /></IconWrapper>
       </IconContainer>
 
-      <FormSubject>{FORM_SUBJECTS[formSubject]}</FormSubject>
+      <FormSubject>{NEW_PANDORA_FORM[formSubject]}</FormSubject>
 
       <FormContainer>
         {formSubject === 'cover' && <CoverForm  

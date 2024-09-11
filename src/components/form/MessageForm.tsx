@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { NextButton, PreviousButton, TFormSubject } from '../mypage/NewPandora';
 import styled from 'styled-components';
+import { TPandoraFormSubject } from '../../types/form';
 
 export interface IMessageFormProps {
-  setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
+  setFormSubject: React.Dispatch<React.SetStateAction<TPandoraFormSubject>>;
   message: string;
   setMessage: Dispatch<SetStateAction<string>>;
 }
@@ -47,8 +47,8 @@ export default function MessageForm({ setFormSubject, message, setMessage }: IMe
         />
       </label>
       <FormErrorMessage>{formErrorMessage}</FormErrorMessage>
-      <PreviousButton type='button' onClick={() => setFormSubject('query')}>이전</PreviousButton>
-      <NextButton type='button' onClick={handleNextButton}>다음</NextButton>
+      <button type='button' onClick={() => setFormSubject('query')}>이전</button>
+      <button type='button' onClick={handleNextButton}>다음</button>
     </>
   );
 }

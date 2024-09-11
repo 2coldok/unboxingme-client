@@ -1,0 +1,1 @@
+export type TPandoraFormSubject = 'cover' | 'keywords' | 'query' | 'message' | 'unsealLimit' | 'preview';

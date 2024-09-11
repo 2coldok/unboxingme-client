@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { TFormSubject } from '../mypage/NewPandora';
 import { Dispatch } from "react";
 import { IQuery } from "./QueryForm";
 import { HiPencilSquare } from "react-icons/hi2";
@@ -7,9 +6,10 @@ import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IPandoraService } from "../../service/PandoraService";
 import { useNavigate } from "react-router-dom";
+import { TPandoraFormSubject } from "../../types/form";
 
 interface IPreviewFormProps {
-  setFormSubject: Dispatch<React.SetStateAction<TFormSubject>>;
+  setFormSubject: Dispatch<React.SetStateAction<TPandoraFormSubject>>;
 
   writer: string;
   title: string;

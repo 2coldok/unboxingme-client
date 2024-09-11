@@ -8,6 +8,7 @@ export interface IPandoraService {
   createPandora(newPandoraForm: INewPandoraForm): Promise<ICreatedPandora>;
   getElpis(pandoraId: string, solverAlias: ISolverAlias): Promise<IElpis>;
   getMyPandoras(): Promise<IMyPandora[]>;
+  deleteMyPandora(id: string): Promise<void>;
 }
 
 export class PandoraService implements IPandoraService {
@@ -55,5 +56,9 @@ export class PandoraService implements IPandoraService {
     return data;
   }
 
-  
+  async deleteMyPandora(id: string) {
+    await this.httpClient.fetch<void, void>(`/pandora/delete/${id}`, {
+      method: 'DELETE'
+    });
+  }  
 }

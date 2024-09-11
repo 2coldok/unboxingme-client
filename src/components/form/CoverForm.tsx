@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
-import { NextButton, TFormSubject } from '../mypage/NewPandora';
+import { TPandoraFormSubject } from "../../types/form";
 
 export interface ICoverFormProps {
-  setFormSubject: Dispatch<React.SetStateAction<TFormSubject>>;
+  setFormSubject: Dispatch<React.SetStateAction<TPandoraFormSubject>>;
 
   writer: string;
   setWriter: Dispatch<SetStateAction<string>>;
@@ -64,7 +64,7 @@ export default function CoverForm({ setFormSubject, writer, setWriter, title, se
           onChange={onChange}
         />
       </label>
-      <NextButton type="button" onClick={handleNextButton}>다음</NextButton>
+      <button type="button" onClick={handleNextButton}>다음</button>
     </>
   );
 }

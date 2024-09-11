@@ -24,6 +24,7 @@ import { UnboxingService } from './service/UnboxingService.ts'
 import { DashboardService } from './service/DashboardService.ts'
 import MyPage from './pages/MyPage.tsx'
 import PandoraLog from './pages/PandoraLog.tsx'
+import NewPandora from './pages/NewPandora.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -42,7 +43,9 @@ const router = createBrowserRouter([
       { path: 'pandora/:id/greenroom', element: <Greenroom unboxingService={unboxingService} /> },
       { path: 'pandora/:id/elpis', element: <Elpis pandoraService={pandoraService} /> },
       { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
-      { path: 'dashboard/:id/log', element: <PandoraLog dashboardService={dashboardService} /> }
+      { path: 'dashboard/pandora/:id/log', element: <PandoraLog dashboardService={dashboardService} /> },
+      { path: '/pandora/create', element: <NewPandora pandoraService={pandoraService} /> }
+
     ]
   },
   {
