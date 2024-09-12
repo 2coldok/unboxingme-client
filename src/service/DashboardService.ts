@@ -1,8 +1,9 @@
 import { IHttpClient } from './../network/HttpClient';
-import { IPandoraLog } from '../types/dashboard';
+import { IMyChallenge, IPandoraLog } from '../types/dashboard';
 
 export interface IDashboardService {
   getPandoraLog(id: string): Promise<IPandoraLog>;
+  getMyChallenges(): Promise<IMyChallenge[]>;
 }
 
 export class DashboardService implements IDashboardService {
@@ -15,6 +16,12 @@ export class DashboardService implements IDashboardService {
 
     return data;
   }
+
+  async getMyChallenges() {
+    const data = await this.httpClient.fetch<IMyChallenge[], void>('/dashboard/challenges', {
+      method: 'GET',
+    });
+
+    return data;
+  }
 }
-
-

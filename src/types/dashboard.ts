@@ -30,3 +30,17 @@ export interface ILog {
 export interface IPandoraLog extends IMyPandora {
   logs: ILog[];
 }
+
+export interface IMyChallenge {
+  uuid: string;
+  label: string;
+  writer: string;
+  title: string;
+  description: string;
+  firstQuestion: string; 
+  firstHint: string; 
+  totalProblems: number;
+  coverViewCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
