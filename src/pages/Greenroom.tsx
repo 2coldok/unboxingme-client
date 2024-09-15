@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
 import AccessRestriction from "../components/AccessRestriction";
-import OpenPandora from "../components/OpenPandora";
 
 interface IGreenroomProps {
   unboxingService: IUnboxingService;
@@ -31,7 +30,6 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [unboxingLoading, setUnboxingLoading] = useState(false);
   const [message, setMessage] = useState('');
-  const [isOpenPandora, setIsOpenPandora] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -96,7 +94,7 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
         } else if (!isCorrect) {
           setPenaltyStatus((prev) => ({ ...prev,  failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil}));
         } else if (isCorrect && unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod && question === null && hint === null) {
-          setIsOpenPandora(true);
+          navigate(`/pandora/${id}/solverAlias`);
         } else {
           throw new Error('unboxingmeService.gateWay : 고려하지 않은 부분 발생');
         }
@@ -113,12 +111,6 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
     const restrcitedUntil = penaltyStatus.restrictedUntil;
     return (
       <AccessRestriction restrictedUntil={restrcitedUntil} />
-    );
-  }
-
-  if (isOpenPandora) {
-    return (
-      <OpenPandora id={id} />
     );
   }
 

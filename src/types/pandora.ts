@@ -49,6 +49,10 @@ export interface ICreatedPandora {
   updatedAt: string;
 }
 
+export interface ISolverAliasStatus {
+  isSolverAlias: boolean;
+}
+
 export interface ISolverAlias {
   solverAlias: string;
 }

@@ -44,3 +44,16 @@ export interface IMyChallenge {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IMyConqueredPandora {
+  uuid: string;
+  label: string;
+  writer: string;
+  title: string;
+  description: string;
+  firstQuestion: string;
+  firstHint: string;
+  totalProblems: number;
+  solvedAt: string | null;
+  coverViewCount: number;
+}

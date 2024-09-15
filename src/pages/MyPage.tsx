@@ -32,7 +32,7 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
       <ContentWrapper>
         { currentTab === 'mine' && <MyPandoras pandoraService={pandoraService} /> }
         { currentTab === 'challenges' && <MyChallenges dashboardService={dashboardService} /> }
-        { currentTab === 'conquered' && <MyConquered />}
+        { currentTab === 'conquered' && <MyConquered dashboardService={dashboardService} />}
         { currentTab === 'make' && <PreCreationGuidelines /> }
       </ContentWrapper>
       

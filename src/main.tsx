@@ -25,6 +25,7 @@ import { DashboardService } from './service/DashboardService.ts'
 import MyPage from './pages/MyPage.tsx'
 import PandoraLog from './pages/PandoraLog.tsx'
 import PandoraForm from './pages/PandoraForm.tsx'
+import SolverAlias from './pages/SolverAlias.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -41,7 +42,9 @@ const router = createBrowserRouter([
       { path: 'search', element: <SearchResult pandoraService={pandoraService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
       { path: 'pandora/:id/greenroom', element: <Greenroom unboxingService={unboxingService} /> },
+      { path: 'pandora/:id/solverAlias', element: <SolverAlias pandoraService={pandoraService} /> },
       { path: 'pandora/:id/elpis', element: <Elpis pandoraService={pandoraService} /> },
+      
       { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
       { path: 'dashboard/pandora/:id/log', element: <PandoraLog dashboardService={dashboardService} /> },
       { path: '/pandora/form', element: <PandoraForm pandoraService={pandoraService} /> },

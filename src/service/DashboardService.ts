@@ -1,9 +1,10 @@
 import { IHttpClient } from './../network/HttpClient';
-import { IMyChallenge, IPandoraLog } from '../types/dashboard';
+import { IMyChallenge, IMyConqueredPandora, IPandoraLog } from '../types/dashboard';
 
 export interface IDashboardService {
   getPandoraLog(id: string): Promise<IPandoraLog>;
   getMyChallenges(): Promise<IMyChallenge[]>;
+  getMyConqueredPandoras(): Promise<IMyConqueredPandora[]>;
 }
 
 export class DashboardService implements IDashboardService {
@@ -19,6 +20,14 @@ export class DashboardService implements IDashboardService {
 
   async getMyChallenges() {
     const data = await this.httpClient.fetch<IMyChallenge[], void>('/dashboard/challenges', {
+      method: 'GET',
+    });
+
+    return data;
+  }
+
+  async getMyConqueredPandoras() {
+    const data = await this.httpClient.fetch<IMyConqueredPandora[], void>(`/dashboard/conquered`, {
       method: 'GET',
     });
 
