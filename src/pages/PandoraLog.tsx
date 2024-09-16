@@ -2,8 +2,9 @@ import styled from "styled-components";
 import { IDashboardService } from "../service/DashboardService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ILog, IMyPandora } from "../types/dashboard";
+import { ILog } from "../types/dashboard";
 import PageLoading from "../loading/PageLoading";
+import { IMyPandora } from "../types/pandora";
 
 interface IMyPandoraLogProps {
   dashboardService: IDashboardService;
@@ -18,7 +19,7 @@ export default function PandoraLog({ dashboardService }: IMyPandoraLogProps) {
 
   useEffect(() => {
     if (!id) {
-      return navigate('/404', { state: { message: '잘못된 접근: pandoraId가 정의되지 않음' } });
+      return navigate('fallback/404', { state: { message: '잘못된 접근: pandoraId가 정의되지 않음' } });
     }
 
     dashboardService.getPandoraLog(id)

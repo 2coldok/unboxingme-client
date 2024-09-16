@@ -12,7 +12,6 @@ import SearchResult from './pages/SearchResult.tsx'
 import PandoraCover from './pages/PandoraCover.tsx'
 import Greenroom from './pages/Greenroom.tsx'
 import Elpis from './pages/Elpis.tsx'
-import NotFound from './pages/NotFound.tsx'
 
 //
 import AuthService from './service/AuthService.ts'
@@ -26,6 +25,8 @@ import MyPage from './pages/MyPage.tsx'
 import PandoraLog from './pages/PandoraLog.tsx'
 import PandoraForm from './pages/PandoraForm.tsx'
 import SolverAlias from './pages/SolverAlias.tsx'
+import NotFoundFallback from './pages/fallback/NotFoundFallback.tsx'
+import ErrorFallback from './pages/fallback/ErrorFallback.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -52,8 +53,12 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: '/404',
-    element: <NotFound />
+    path: '/fallback/404',
+    element: <NotFoundFallback />
+  },
+  {
+    path: '/fallback/error',
+    element: <ErrorFallback />
   }  
 ]);
 

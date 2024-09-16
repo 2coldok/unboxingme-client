@@ -37,17 +37,24 @@ export default function CreatePandora({ mode, setFormSubject, writer, title, des
       cat: message,
     };
 
-    if (mode.id && mode.type === 'edit') {
-      await pandoraService.replaceMyPandora(mode.id, newPandoraForm)
+    try {
+      // 판도라 생성 성공
+      if (!mode.id && mode.type === 'new') {
+        const data = await pandoraService.createPandora(newPandoraForm);
+        if (data.success) {
+          return navigate('/dashboard');
+        }
+      }
+      // 판도라 수정 성공
+      if (mode.id && mode.type === 'edit') {
+        const data = await pandoraService.replaceMyPandora(mode.id, newPandoraForm);
+        if (data.success) {
+          return navigate('/dashboard');
+        }
+      }
+    } catch (error) {
+      return navigate('/fallback/error', { state: { error: error } });
     }
-
-    if (!mode.id && mode.type === 'new') {
-      // 반환값이 있지만 pandora review 페이지를 제거해서 반환값 필요없음
-      // 생성하면 바로 대시보드로 이동
-      await pandoraService.createPandora(newPandoraForm);
-    }
-
-    navigate('/dashboard');
   }
 
   return (

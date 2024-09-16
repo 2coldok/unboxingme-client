@@ -1,18 +1,18 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
+export class HttpError extends Error {
+  statusCode: number | undefined;
+  
+  constructor(statusCode: number | undefined, message: string) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
 interface IOptions<B = unknown> {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   body?: B;
   headers?: Record<string, string>;
-}
-
-export class HttpError extends Error {
-  statusCode: number | undefined;
-  
-  constructor(message: string, statusCode: number | undefined) {
-    super(message);
-    this.statusCode = statusCode;
-  }
 }
 
 export interface IHttpClient {
@@ -46,12 +46,23 @@ export default class HttpClient implements IHttpClient {
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const data = error.response?.data;
-        const message = 
-          data && data.message ? data.message : '서버에서 메세지 처리하지 않은 error';
-        throw new HttpError(message, error.response?.status);
+        // 서버에서 응답이 온 경우(2xx 이외의 status code)
+        if (error.response) {
+          const data = error.response.data;
+          const statusCode = error.response.status;
+          const message = (data && data.message) ? data.message : '서버에서 메세지 처리하지 않은 에러';
+          throw new HttpError(statusCode, message); 
+        }
+
+        // 서버에게 응답받지 못한 경우(네트워크 문제 또는 요청 설정 문제)
+        if (error.request) {
+          throw new HttpError(undefined, '서버로 부터 응답받지 못했습니다.');
+        }
+
+        throw new HttpError(undefined, `http 요청 설정에 문제가 있습니다: ${error.message}`);
       }
-      throw new HttpError('네트워크 에러 발생!', undefined);
+
+      throw new HttpError(undefined, '네트워크 에러 발생');
     }
   }
 }

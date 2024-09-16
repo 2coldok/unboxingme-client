@@ -1,21 +1,4 @@
-export interface IMyPandora {
-  uuid: string;
-  label: string;
-  writer: string;
-  title: string;
-  description: string;
-  keywords: string[];
-  problems: { question: string, hint: string, answer: string }[];
-  totalProblems: number;
-  cat: string;
-  coverViewCount: number;
-  solverAlias: string | null;
-  solvedAt: string | null;
-  isCatUncovered: boolean;
-  active: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import { IMyPandora } from "./pandora";
 
 export interface ILog {
   pandora: string;

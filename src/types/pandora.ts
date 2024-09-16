@@ -1,7 +1,5 @@
-// viewCount
-
-export interface ISearchedPandoraByKeyword {
-  uuid: string;
+export interface IPandoraSearchResult {
+  id: string;
   writer: string;
   title: string;
   description: string;
@@ -11,7 +9,7 @@ export interface ISearchedPandoraByKeyword {
 }
 
 export interface IPandoraCover {
-  uuid: string;
+  id: string;
   label: string;
   writer: string;
   title: string;
@@ -24,45 +22,8 @@ export interface IPandoraCover {
   updatedAt: string;
 }
 
-export interface INewPandoraForm {
-  writer: string;
-  title: string;
-  description: string;
-  keywords: string[];
-  problems: { question: string, hint: string, answer: string }[];
-  cat: string;
-}
-
-export interface ICreatedPandora {
-  uuid: string;
-  label: string;
-  writer: string;
-  title: string;
-  description: string;
-  keywords: string[];
-  problems: { question: string, hint: string, answer: string }[];
-  totalProblems: number;
-  cat: string;
-  coverViewCount: number;
-  active: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface ISolverAliasStatus {
-  isSolverAlias: boolean;
-}
-
-export interface ISolverAlias {
-  solverAlias: string;
-}
-
-export interface IElpis {
-  elpis: string;
-}
-
 export interface IMyPandora {
-  uuid: string;
+  id: string;
   label: string;
   writer: string;
   title: string;
@@ -80,7 +41,7 @@ export interface IMyPandora {
   updatedAt: string;
 }
 
-export interface IMyPandoraForEdit {
+export interface IMyPandoraEdit {
   writer: string;
   title: string;
   description: string;
@@ -88,3 +49,40 @@ export interface IMyPandoraForEdit {
   problems: { question: string, hint: string, answer: string }[];
   cat: string;
 }
+
+export interface INewPandoraForm {
+  writer: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  problems: { question: string, hint: string, answer: string }[];
+  cat: string;
+}
+
+export interface IEditPandoraForm {
+  writer: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  problems: { question: string, hint: string, answer: string }[];
+  cat: string;
+}
+
+
+
+
+
+
+export interface ISolverAliasStatus {
+  isSolverAlias: boolean;
+}
+
+export interface ISolverAlias {
+  solverAlias: string;
+}
+
+export interface IElpis {
+  elpis: string;
+}
+
+

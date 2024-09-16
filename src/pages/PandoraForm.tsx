@@ -16,7 +16,7 @@ import { GiLockedBox } from "react-icons/gi"; // safe box
 import { TPandoraFormSubject } from "../types/form";
 import { NEW_PANDORA_FORM } from "../constant/form";
 import CreatePandora from "../components/form/CreatePandora";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface IPandoraFormProps {
   pandoraService: IPandoraService;
@@ -24,10 +24,13 @@ interface IPandoraFormProps {
 
 export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   // 새로운 판도라 만들기 또는 수정하기
   const [mode, setMode] = useState<{ id: string | null, type: 'new' | 'edit' }>({ id: null, type: 'new' });
-
+  
   const [formSubject, setFormSubject] = useState<TPandoraFormSubject>('cover');
+
   const [writer, setWriter] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -36,20 +39,34 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
+    if (!id) {
+      return setMode({ id: null, type: 'new' });
+    }
+
     if (id) {
       setMode({ id: id, type: 'edit' });
-      pandoraService.getMyPandoraForEdit(id).then((pandora) => {
-        setWriter(pandora.writer);
-        setTitle(pandora.title);
-        setDescription(pandora.description);
-        setKeywords(pandora.keywords);
-        setQueries(pandora.problems.map((problem) => ({ ...problem, id: uuidv4() })));
-        setMessage(pandora.cat);
-      });
-    } else {
-      setMode({ id: null, type: 'new' });
+      const fetchMyPandoraEdit = async () => {
+        try {
+          const data = await pandoraService.getMyPandoraEdit(id);
+          if (data.success && data.payload) {
+            const pandora = data.payload;
+            setWriter(pandora.writer);
+            setTitle(pandora.title);
+            setDescription(pandora.description);
+            setKeywords(pandora.keywords);
+            setQueries(pandora.problems.map((problem) => ({ ...problem, id: uuidv4() })));
+            setMessage(pandora.cat);
+          }
+          if (data.success && data.payload === null) {
+            navigate('/fallback/404', { state: { message: '수정할 판도라를 찾을 수 없습니다.' } });
+          }
+        } catch (error) {
+          navigate('/fallback/error', { state: { error: error } });
+        }
+      };
+      fetchMyPandoraEdit();
     }
-  }, [id, pandoraService]);
+  }, [id, pandoraService, navigate]);
 
   return (
     <StyledContainer>
