@@ -32,6 +32,18 @@ export interface IGateWay {
   hint: string | null;// 모든 문제를 해결했을 경우에만 null을 반환
 }
 
+export interface ISolverAliasStatus {
+  isSolverAlias: boolean;
+}
+
+export interface INewSolverAliasForm {
+  solverAlias: string;
+}
+
+export interface IElpis {
+  elpis: string;
+}
+
 // 최종 문제 완료시 IUnboxing
 /**-
  * question: null

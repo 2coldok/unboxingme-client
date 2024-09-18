@@ -43,8 +43,8 @@ const router = createBrowserRouter([
       { path: 'search', element: <SearchResult pandoraService={pandoraService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
       { path: 'pandora/:id/greenroom', element: <Greenroom unboxingService={unboxingService} /> },
-      { path: 'pandora/:id/solverAlias', element: <SolverAlias pandoraService={pandoraService} /> },
-      { path: 'pandora/:id/elpis', element: <Elpis pandoraService={pandoraService} /> },
+      { path: 'pandora/:id/solverAlias', element: <SolverAlias unboxingService={unboxingService} /> },
+      { path: 'pandora/:id/elpis', element: <Elpis unboxingService={unboxingService} /> },
       
       { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
       { path: 'dashboard/pandora/:id/log', element: <PandoraLog dashboardService={dashboardService} /> },

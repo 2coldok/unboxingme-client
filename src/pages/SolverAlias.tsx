@@ -1,15 +1,16 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { IPandoraService } from "../service/PandoraService";
 import styled from "styled-components";
+import { IUnboxingService } from "../service/UnboxingService";
+import { HttpError } from "../network/HttpClient";
 
 interface ISolverAliasProps {
-  pandoraService: IPandoraService
+  unboxingService: IUnboxingService
 }
 
 const message = `판도라 메세지를 열람하기 위한 모든 질문을 해결하였습니다. 판도라 발행자는 열람자를 확인할 수 없으며, 열람 사실을 확인할 수 있습니다. etc..`;
 
-export default function SolverAlias({ pandoraService }: ISolverAliasProps) {
+export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const { id } = useParams<{ id: string }>();
   const [solverAlias, setSolverAlias] = useState<string>('익명');
   const navigate = useNavigate();
@@ -19,20 +20,36 @@ export default function SolverAlias({ pandoraService }: ISolverAliasProps) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
-    pandoraService.getSolverAliasStatus(id).then(({ isSolverAlias }) => {
-      // solverAlias가 존재하면 elpis 페이지로 이동
-      if (isSolverAlias) {
-        return navigate(`/pandora/${id}/elpis`);
+    const fetchSolverAliasStatus = async () => {
+      try {
+        const data = await unboxingService.getSolverAliasStatus(id);
+        if (data.isSolverAlias) {
+          return navigate(`/pandora/${id}/elpis`);
+        }
+        return;
+      } catch (error) {
+        if (error instanceof HttpError) {
+          navigate('/fallback/error', { state : { error: error }});
+        }
       }
-      // solverAlias가 존재하지 않으면 이 페이지에서 patch 요청을 진행할 수 있도록 함
-    });
-  }, [id, navigate, pandoraService]);
+    }
 
-  const handleClick = () => {
-    if (id) {
-      pandoraService.registerSolverAlias(id, solverAlias)
-        .then(() => navigate(`/pandora/${id}/elpis`));
-    }        
+    fetchSolverAliasStatus();
+  }, [id, navigate, unboxingService]);
+
+  const handleClick = async () => {
+    if (!id) {
+      return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
+    }
+
+    try {
+      unboxingService.registerSolverAlias(id, solverAlias);
+      navigate(`/pandora/${id}/elpis`);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        return navigate('/fallback/error', { state: { error: error } });
+      }
+    }
   };
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {

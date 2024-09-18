@@ -67,22 +67,3 @@ export interface IEditPandoraForm {
   problems: { question: string, hint: string, answer: string }[];
   cat: string;
 }
-
-
-
-
-
-
-export interface ISolverAliasStatus {
-  isSolverAlias: boolean;
-}
-
-export interface ISolverAlias {
-  solverAlias: string;
-}
-
-export interface IElpis {
-  elpis: string;
-}
-
-
