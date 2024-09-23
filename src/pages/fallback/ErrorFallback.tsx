@@ -4,6 +4,7 @@ import { HttpError } from "../../network/HttpClient";
 
 export default function ErrorFallback() {
   const location = useLocation();
+  // HttpError의 제네릭 타입을 캐치하기위해 payload 데이터가 필요함!
   const payload = location.state.payload;
   const error: HttpError<typeof payload> = location.state.error;
 

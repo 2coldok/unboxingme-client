@@ -1,14 +1,9 @@
-import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 export default function PenaltyFallback() {
-  const location = useLocation();
-  const restrictedUntil: string = location.state.restrictedUntil;
-  
   return (
     <StyledContainer>
       <h1>패널티 기간입니다</h1>
-      <p>{restrictedUntil} 까지</p>
     </StyledContainer>
   );
 }

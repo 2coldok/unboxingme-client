@@ -1,11 +1,11 @@
-import { INewChallengeForm, TInitialRiddle, INextRiddle, INewSolverAliasForm, ISolverAliasStatus, INote } from './../types/unboxing';
+import { TInitialRiddle, INextRiddle, INewSolverAliasForm, ISolverAliasStatus, INote, ISubmitAnswerForm } from './../types/unboxing';
 import { IHttpClient } from "../network/HttpClient";
 import { IApiResponse } from '../types/api';
 
 export interface IUnboxingService {
   getInitialRiddle(id: string): Promise<IApiResponse<TInitialRiddle>>;
   setupInitialRiddle(id: string): Promise<IApiResponse<TInitialRiddle>>;
-  getNextRiddle(id: string, challengeForm: INewChallengeForm): Promise<IApiResponse<INextRiddle>>;
+  getNextRiddle(id: string, submitAnswer: string): Promise<IApiResponse<INextRiddle>>;
   getSolverAliasStatus(id: string): Promise<IApiResponse<ISolverAliasStatus>>;
   registerSolverAlias(id: string, solverAlias: string): Promise<IApiResponse<null>>;
   getNote(id: string): Promise<IApiResponse<INote>>;
@@ -30,10 +30,10 @@ export class UnboxingService implements IUnboxingService {
     return data;
   }
 
-  async getNextRiddle(id: string, challengeForm: INewChallengeForm) {
-    const data = await this.httpClient.fetch<INextRiddle, INewChallengeForm>(`/unboxing/pandora/${id}/riddle`, {
+  async getNextRiddle(id: string, submitAnswer: string) {
+    const data = await this.httpClient.fetch<INextRiddle, ISubmitAnswerForm>(`/unboxing/pandora/${id}/riddle`, {
       method: 'PATCH',
-      body: challengeForm
+      body: { submitAnswer: submitAnswer }
     });
 
     return data;

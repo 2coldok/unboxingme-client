@@ -1,5 +1,4 @@
-export interface INewChallengeForm {
-  currentProblemIndex: number;
+export interface ISubmitAnswerForm {
   submitAnswer: string;
 }
 

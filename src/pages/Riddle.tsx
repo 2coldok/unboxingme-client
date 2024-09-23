@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
-// import AccessRestriction from "../components/AccessRestriction";
 import { HttpError } from "../network/HttpClient";
 import { IInitialRiddleFail } from "../types/unboxing";
+import PageLoading from "../loading/PageLoading";
 
 interface IRiddleProps {
   unboxingService: IUnboxingService;
@@ -15,20 +15,14 @@ interface IProblem {
   question: string;
   hint: string;
   totalProblems: number;
-}
-
-interface IPenaltyStatus {
-  failCount: number;
-  isPenaltyPeriod: boolean;
-  restrictedUntil: string | null;
+  unsealedQuestionIndex: number;
 }
 
 export default function Riddle({ unboxingService }: IRiddleProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0);
-  const [problem, setProblem] = useState<IProblem | undefined>(undefined);
-  const [penaltyStatus, setPenaltyStatus] = useState<IPenaltyStatus | undefined>(undefined);
+  const [problem, setProblem] = useState<IProblem | null>(null);
+  const [failCount, setFailCount] = useState<number | null>(null);
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [unboxingLoading, setUnboxingLoading] = useState(false);
 
@@ -41,29 +35,29 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
       try {
         const data = await unboxingService.getInitialRiddle(id);
         if (data.payload.type === 'success') {
-          const { 
-            totalProblems, 
-            currentQuestion, 
-            currentHint,
-            unsealedQuestionIndex,
-            failCount,
-            restrictedUntil,
-            isPenaltyPeriod
-          } = data.payload;
+          const initialRiddle = data.payload;
+          setProblem({ 
+            question: initialRiddle.currentQuestion, 
+            hint: initialRiddle.currentHint, 
+            totalProblems: initialRiddle.totalProblems, 
+            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex
+          });
 
-          setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
-          setCurrentProblemIndex(unsealedQuestionIndex);
-          setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
+          setFailCount(initialRiddle.failCount);
         }
       } catch (error) {
-        if (error instanceof HttpError && error.payload) {
-          const payload = error.payload as IInitialRiddleFail;
-          if (payload.type === 'fail' && payload.reason === 'NOT_FOUND_RECORD') {
-            return await setupInitialRiddle();
+        if (error instanceof HttpError) {
+          if (error.payload) {
+            const payload = error.payload as IInitialRiddleFail;
+            if (payload.type === 'fail' && payload.reason === 'NOT_FOUND_RECORD') {
+              return await setupInitialRiddle();
+            }
+            if (payload.type === 'fail' && payload.reason === 'PENELTY_PERIOD') {
+              return navigate('/fallback/penalty');
+            }
           }
-          navigate('/fallback/error', { state: { error: error, paylaod: error.payload } })
+          return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
         }
-        console.log('에러 캐치 실패')
       }
     }
 
@@ -71,23 +65,20 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
       try {
         const data = await unboxingService.setupInitialRiddle(id);
         if (data.payload.type === 'success') {
-          const { 
-            totalProblems, 
-            currentQuestion, 
-            currentHint,
-            unsealedQuestionIndex,
-            failCount,
-            restrictedUntil,
-            isPenaltyPeriod
-          } = data.payload;
+          const initialRiddle = data.payload;
 
-          setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
-          setCurrentProblemIndex(unsealedQuestionIndex);
-          setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
+          setProblem({ 
+            question: initialRiddle.currentQuestion, 
+            hint: initialRiddle.currentHint, 
+            totalProblems: initialRiddle.totalProblems, 
+            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex
+          });
+
+          setFailCount(initialRiddle.failCount);
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          navigate('/fallback/error', { state: { error: error, type: error.payload } });
+          return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
         }
       }
     }
@@ -105,41 +96,32 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     if (!id) {
       return navigate('/fallback/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
-    const challengeForm = {
-      currentProblemIndex: currentProblemIndex,
-      submitAnswer: submitAnswer
-    };
     
     const fetchNextRiddle = async () => {
       try {
-        const data = await unboxingService.getNextRiddle(id, challengeForm);
-        const { 
-          isCorrect,
-          failCount,
-          restrictedUntil,
-          isPenaltyPeriod,
-          unboxing,
-          totalProblems,
-          unsealedQuestionIndex, // 어디 쓸까..?
-          question,
-          hint,
-         } = data.payload;
-         
-        if (isCorrect && !unboxing) {
-          setCurrentProblemIndex(prev => prev + 1);
-          setProblem((prev) => ({ ...prev, question: question, hint: hint, totalProblems: totalProblems } as IProblem));
-        } else if (!isCorrect && isPenaltyPeriod) {
-          setPenaltyStatus((prev) => ({ ...prev,  failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil}));
-        } else if (isCorrect && unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod && question === null && hint === null) {
-          return navigate(`/pandora/${id}/solveralias`);
-        } else {
-          throw new Error('unboxingmeService.gateWay : 고려하지 않은 부분 발생');
+        const data = await unboxingService.getNextRiddle(id, submitAnswer);
+        const nextRiddle = data.payload;
+        const { isCorrect, unboxing, isPenaltyPeriod, question, hint, unsealedQuestionIndex } = nextRiddle;
+        
+        if (!isCorrect && isPenaltyPeriod) {
+          return navigate('/fallback/penalty');
         }
+        if (unboxing || question === null || hint === null || unsealedQuestionIndex === null) {
+          return navigate(`/pandora/${id}/solveralias`);
+        }
+
+        setProblem({ 
+          question: question, 
+          hint: hint, 
+          totalProblems: nextRiddle.totalProblems, 
+          unsealedQuestionIndex: unsealedQuestionIndex
+        });
+
+        setFailCount(nextRiddle.failCount);
       } catch (error) {
         if (error instanceof HttpError) {
-          navigate('/fallback/error', { state: { error: error, type: error.payload } });
+          return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
         }
-        
       } finally {
         setUnboxingLoading(false);
         setSubmitAnswer('');
@@ -148,14 +130,12 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
     fetchNextRiddle();
   };
- 
-  // Todo 패널티 기간인데 restrictedUntil 값이 null일 경우를 고려해야할까? (서버에선 이를 허용하진 앟는다만..)
-  // if (penaltyStatus?.isPenaltyPeriod) {
-  //   const restrcitedUntil = penaltyStatus.restrictedUntil;
-  //   return (
-  //     <AccessRestriction restrictedUntil={restrcitedUntil} />
-  //   );
-  // }
+
+  if (!problem || failCount === null) {
+    return (
+      <PageLoading />
+    );
+  }
 
   return (
     <StyledContainer>
@@ -163,10 +143,10 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         <GreenroomLoading />
       ) : (
         <GreenroomWrapper>
-          <p>{currentProblemIndex + 1} / {problem?.totalProblems}</p>
-          <h1>문제 {currentProblemIndex + 1}</h1>
-          <p>문제 : {problem?.question}</p>
-          <p>힌트 : {problem?.hint}</p>
+          <p>{problem.unsealedQuestionIndex + 1} / {problem.totalProblems}</p>
+          <h1>문제 {problem.unsealedQuestionIndex + 1}번</h1>
+          <p>문제 : {problem.question}</p>
+          <p>힌트 : {problem.hint}</p>
           <span>정답 : </span>
           <form onSubmit={handleSubmit}>
             <input
@@ -179,16 +159,11 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
             />
             <button type="submit">정답 제출</button>
           </form>
-          <p>총 실패 횟수 : {String(penaltyStatus?.failCount)}</p>
-          <p>패널티 여부 : {String(penaltyStatus?.isPenaltyPeriod)}</p>
-          <p>언제까지 패널티? : {String(penaltyStatus?.restrictedUntil)}</p>
+          <p>총 실패 횟수 : {failCount}번</p>
         </GreenroomWrapper>
       )}
-      
     </StyledContainer>
   );
-
-  
 }
 
 const StyledContainer = styled.main`
