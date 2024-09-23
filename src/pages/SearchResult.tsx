@@ -41,7 +41,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } })
+          navigate('/fallback/error', { state: { error: error, type: error.payload } });
         }
       } finally {
         setIsLoading(false);
@@ -52,7 +52,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
   }, [keyword, navigate, pandoraService]);
 
   const handleClick = (id: string) => {
-    navigate(`/pandora/${id}`);
+    return navigate(`/pandora/${id}`);
   }
 
   if (!pandoras) {

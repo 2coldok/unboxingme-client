@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
-import AccessRestriction from "../components/AccessRestriction";
+// import AccessRestriction from "../components/AccessRestriction";
+import { HttpError } from "../network/HttpClient";
+import { IInitialRiddleFail } from "../types/unboxing";
 
-interface IGreenroomProps {
+interface IRiddleProps {
   unboxingService: IUnboxingService;
 }
 
@@ -21,7 +23,7 @@ interface IPenaltyStatus {
   restrictedUntil: string | null;
 }
 
-export default function Greenroom({ unboxingService }: IGreenroomProps) {
+export default function Riddle({ unboxingService }: IRiddleProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [currentProblemIndex, setCurrentProblemIndex] = useState<number>(0);
@@ -29,33 +31,68 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
   const [penaltyStatus, setPenaltyStatus] = useState<IPenaltyStatus | undefined>(undefined);
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [unboxingLoading, setUnboxingLoading] = useState(false);
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (!id) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
-    unboxingService.getInitialGateWay(id)
-      .then((initialGate) => {
-        if (initialGate.type === 'mine' ) {
-          return setMessage('내가 만든 수수께끼는 마이페이지에서 확인할 수 있습니다.');
-        }
-        const { 
-          totalProblems, 
-          currentQuestion, 
-          currentHint,
-          unsealedQuestionIndex,
-          failCount,
-          restrictedUntil,
-          isPenaltyPeriod
-        } = initialGate;
+    const fetchInitialRiddle = async () => {
+      try {
+        const data = await unboxingService.getInitialRiddle(id);
+        if (data.payload.type === 'success') {
+          const { 
+            totalProblems, 
+            currentQuestion, 
+            currentHint,
+            unsealedQuestionIndex,
+            failCount,
+            restrictedUntil,
+            isPenaltyPeriod
+          } = data.payload;
 
-        setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
-        setCurrentProblemIndex(unsealedQuestionIndex);
-        setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
-      })
-      .catch((error) => setMessage(error.toString()));
+          setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
+          setCurrentProblemIndex(unsealedQuestionIndex);
+          setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
+        }
+      } catch (error) {
+        if (error instanceof HttpError && error.payload) {
+          const payload = error.payload as IInitialRiddleFail;
+          if (payload.type === 'fail' && payload.reason === 'NOT_FOUND_RECORD') {
+            return await setupInitialRiddle();
+          }
+          navigate('/fallback/error', { state: { error: error, paylaod: error.payload } })
+        }
+        console.log('에러 캐치 실패')
+      }
+    }
+
+    const setupInitialRiddle  = async () => {
+      try {
+        const data = await unboxingService.setupInitialRiddle(id);
+        if (data.payload.type === 'success') {
+          const { 
+            totalProblems, 
+            currentQuestion, 
+            currentHint,
+            unsealedQuestionIndex,
+            failCount,
+            restrictedUntil,
+            isPenaltyPeriod
+          } = data.payload;
+
+          setPenaltyStatus({ failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil });
+          setCurrentProblemIndex(unsealedQuestionIndex);
+          setProblem({ question: currentQuestion, hint: currentHint, totalProblems: totalProblems});
+        }
+      } catch (error) {
+        if (error instanceof HttpError) {
+          navigate('/fallback/error', { state: { error: error, type: error.payload } });
+        }
+      }
+    }
+
+    fetchInitialRiddle();
   }, [id, navigate, unboxingService]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,18 +101,18 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
   
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setUnboxingLoading(true);
     if (!id) {
-      return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
+      return navigate('/fallback/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
-    const challenge = {
+    const challengeForm = {
       currentProblemIndex: currentProblemIndex,
       submitAnswer: submitAnswer
     };
-
-    setUnboxingLoading(true);
-
-    unboxingService.getGateWay(id, challenge)
-      .then((result) => {
+    
+    const fetchNextRiddle = async () => {
+      try {
+        const data = await unboxingService.getNextRiddle(id, challengeForm);
         const { 
           isCorrect,
           failCount,
@@ -86,33 +123,39 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
           unsealedQuestionIndex, // 어디 쓸까..?
           question,
           hint,
-         } = result;
+         } = data.payload;
          
         if (isCorrect && !unboxing) {
           setCurrentProblemIndex(prev => prev + 1);
           setProblem((prev) => ({ ...prev, question: question, hint: hint, totalProblems: totalProblems } as IProblem));
-        } else if (!isCorrect) {
+        } else if (!isCorrect && isPenaltyPeriod) {
           setPenaltyStatus((prev) => ({ ...prev,  failCount: failCount, isPenaltyPeriod: isPenaltyPeriod, restrictedUntil: restrictedUntil}));
         } else if (isCorrect && unboxing && unsealedQuestionIndex === null && !isPenaltyPeriod && question === null && hint === null) {
-          navigate(`/pandora/${id}/solverAlias`);
+          return navigate(`/pandora/${id}/solveralias`);
         } else {
           throw new Error('unboxingmeService.gateWay : 고려하지 않은 부분 발생');
         }
-      })
-      .catch((error) => setMessage(error.toString()))
-      .finally(() => {
+      } catch (error) {
+        if (error instanceof HttpError) {
+          navigate('/fallback/error', { state: { error: error, type: error.payload } });
+        }
+        
+      } finally {
         setUnboxingLoading(false);
         setSubmitAnswer('');
-      }); 
+      }
+    }
+
+    fetchNextRiddle();
   };
  
   // Todo 패널티 기간인데 restrictedUntil 값이 null일 경우를 고려해야할까? (서버에선 이를 허용하진 앟는다만..)
-  if (penaltyStatus?.isPenaltyPeriod) {
-    const restrcitedUntil = penaltyStatus.restrictedUntil;
-    return (
-      <AccessRestriction restrictedUntil={restrcitedUntil} />
-    );
-  }
+  // if (penaltyStatus?.isPenaltyPeriod) {
+  //   const restrcitedUntil = penaltyStatus.restrictedUntil;
+  //   return (
+  //     <AccessRestriction restrictedUntil={restrcitedUntil} />
+  //   );
+  // }
 
   return (
     <StyledContainer>
@@ -134,12 +177,11 @@ export default function Greenroom({ unboxingService }: IGreenroomProps) {
               onChange={handleChange}
               autoFocus
             />
-            { !penaltyStatus?.isPenaltyPeriod && <button type="submit">정답 제출</button> }
+            <button type="submit">정답 제출</button>
           </form>
           <p>총 실패 횟수 : {String(penaltyStatus?.failCount)}</p>
           <p>패널티 여부 : {String(penaltyStatus?.isPenaltyPeriod)}</p>
           <p>언제까지 패널티? : {String(penaltyStatus?.restrictedUntil)}</p>
-          <p>메세지 : {message}</p>
         </GreenroomWrapper>
       )}
       

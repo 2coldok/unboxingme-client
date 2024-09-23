@@ -58,10 +58,10 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
             setMessage(pandora.cat);
           }
           if (data.success && data.payload === null) {
-            navigate('/fallback/404', { state: { message: '수정할 판도라를 찾을 수 없습니다.' } });
+            return navigate('/fallback/404', { state: { message: '수정할 판도라를 찾을 수 없습니다.' } });
           }
         } catch (error) {
-          navigate('/fallback/error', { state: { error: error } });
+          return navigate('/fallback/error', { state: { error: error } });
         }
       };
       fetchMyPandoraEdit();

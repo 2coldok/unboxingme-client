@@ -1,53 +1,46 @@
-import { IChallenge, IElpis, IGateWay, IInitialGateWay, INewSolverAliasForm, ISolverAliasStatus } from './../types/unboxing';
-import { HttpError, IHttpClient } from "../network/HttpClient";
+import { INewChallengeForm, TInitialRiddle, INextRiddle, INewSolverAliasForm, ISolverAliasStatus, INote } from './../types/unboxing';
+import { IHttpClient } from "../network/HttpClient";
+import { IApiResponse } from '../types/api';
 
 export interface IUnboxingService {
-  getInitialGateWay(pandoraId: string): Promise<IInitialGateWay>;
-  setupInitialGateWay(pandoraId: string): Promise<IInitialGateWay>;
-  getGateWay(pandoraId: string, challenge: IChallenge): Promise<IGateWay>;
-  getSolverAliasStatus(id: string): Promise<ISolverAliasStatus>;
-  registerSolverAlias(id: string, solverAlias: string): Promise<void>;
-  getElpis(id: string): Promise<IElpis>;
+  getInitialRiddle(id: string): Promise<IApiResponse<TInitialRiddle>>;
+  setupInitialRiddle(id: string): Promise<IApiResponse<TInitialRiddle>>;
+  getNextRiddle(id: string, challengeForm: INewChallengeForm): Promise<IApiResponse<INextRiddle>>;
+  getSolverAliasStatus(id: string): Promise<IApiResponse<ISolverAliasStatus>>;
+  registerSolverAlias(id: string, solverAlias: string): Promise<IApiResponse<null>>;
+  getNote(id: string): Promise<IApiResponse<INote>>;
 }
 
 export class UnboxingService implements IUnboxingService {
   constructor(private httpClient: IHttpClient) {}
 
-  async getInitialGateWay(pandoraId: string) {
-    try {
-      const data = await this.httpClient.fetch<IInitialGateWay, void>(`/unboxing/${pandoraId}`, {
-        method: 'GET',
-      });
-      return data;
-    } catch (error) {
-      if (error instanceof HttpError && error.statusCode === 404) {
-        return await this.setupInitialGateWay(pandoraId);
-      } else {
-        throw error;
-      }
-    }
+  async getInitialRiddle(id: string) {
+    const data = await this.httpClient.fetch<TInitialRiddle, void>(`/unboxing/pandora/${id}/riddle`, {
+      method: 'GET',
+    });
+
+    return data;
   }
 
-  async setupInitialGateWay(pandoraId: string) {
-    const data = await this.httpClient.fetch<IInitialGateWay, void>(`/unboxing/${pandoraId}`, {
+  async setupInitialRiddle(id: string) {
+    const data = await this.httpClient.fetch<TInitialRiddle, void>(`/unboxing/pandora/${id}/riddle`, {
       method: 'POST',
     });
 
     return data;
   }
 
-  async getGateWay(pandoraId: string, challenge: IChallenge) {
-    const data = await this.httpClient.fetch<IGateWay, IChallenge>(`/unboxing/${pandoraId}`, {
+  async getNextRiddle(id: string, challengeForm: INewChallengeForm) {
+    const data = await this.httpClient.fetch<INextRiddle, INewChallengeForm>(`/unboxing/pandora/${id}/riddle`, {
       method: 'PATCH',
-      body: challenge 
+      body: challengeForm
     });
 
     return data;
   }
 
   async getSolverAliasStatus(id: string) {
-
-    const data = await this.httpClient.fetch<ISolverAliasStatus, void>(`/unboxing/solveralias/${id}`, {
+    const data = await this.httpClient.fetch<ISolverAliasStatus, void>(`/unboxing/pandora/${id}/solveralias`, {
       method: 'GET'
     });
 
@@ -55,14 +48,16 @@ export class UnboxingService implements IUnboxingService {
   }
 
   async registerSolverAlias(id: string, solverAlias: string) {
-    await this.httpClient.fetch<void, INewSolverAliasForm>(`/unboxing/solverAlias/${id}`, {
+    const data = await this.httpClient.fetch<null, INewSolverAliasForm>(`/unboxing/pandora/${id}/solveralias`, {
       method: 'PATCH',
       body: { solverAlias: solverAlias }
     });
+
+    return data;
   }
 
-  async getElpis(id: string) {
-    const data = await this.httpClient.fetch<IElpis, void>(`/unboxing/elpis/${id}`, {
+  async getNote(id: string) {
+    const data = await this.httpClient.fetch<INote, void>(`/unboxing/pandora/${id}/note`, {
       method: 'PATCH'
     });
 

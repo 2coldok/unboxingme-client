@@ -3,6 +3,7 @@ import { IDashboardService } from "../../service/DashboardService";
 import { useEffect, useState } from "react";
 import { IMyChallenge } from "../../types/dashboard";
 import { useNavigate } from "react-router-dom";
+import { HttpError } from "../../network/HttpClient";
 
 interface IMyChallengesProps {
   dashboardService: IDashboardService;
@@ -10,36 +11,46 @@ interface IMyChallengesProps {
 
 export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   const navigate = useNavigate();
-  const [challenges, setChallenges] = useState<IMyChallenge[]>([]);
+  const [myChallenges, setMyChallenges] = useState<IMyChallenge[]>([]);
 
   useEffect(() => {
-    dashboardService.getMyChallenges()
-      .then((pandoras) => setChallenges(pandoras))
-      .catch((error) => console.log(error.toString()));      
-  }, [dashboardService]);
+    const fetchMyChallenges = async () => {
+      try {
+        const data = await dashboardService.getMyChallenges(1);
+        setMyChallenges(data.payload);
+      } catch (error) {
+        if (error instanceof HttpError) {
+          return navigate('/fallback/error', { state: { error: error } });
+        }
+      }
+    }
 
-  const handleClick = (uuid: string) => {
-    navigate(`/pandora/${uuid}`);
+    fetchMyChallenges();
+  }, [navigate, dashboardService]);
+
+  const handleClick = (id: string) => {
+    navigate(`/pandora/${id}`);
   };
 
   return (
     <StyledContainer>
-      {challenges.map((pandora) => (
-        <ChallengeWrapper onClick={() => handleClick(pandora.uuid)}>
-          <h1>{pandora.title}</h1>
-          <h2>{pandora.label}</h2>
-          <p>{pandora.writer}</p>
-          <p>{pandora.description}</p>
-          <p>{pandora.writer}</p>
-          <h4>{pandora.firstQuestion}</h4>
-          <h4>{pandora.firstHint}</h4>
-          <p>{pandora.totalProblems}</p>
-          <p>{pandora.coverViewCount}</p>
-          <p>{pandora.createdAt}</p>
-          <p>{pandora.updatedAt}</p>
+      {myChallenges.map((challenge) => (
+        <ChallengeWrapper onClick={() => handleClick(challenge.id)}>
+          <h1>라벨:{challenge.label}</h1>
+          <p>작성자: {challenge.writer}</p>
+          <p>제목: {challenge.title}</p>
+          <p>설명: {challenge.description}</p>
+          <p>현재 진행중인 문제: {challenge.currentQuestion}</p>
+          <p>현재 진행중인 문제의 힌트: {challenge.currentHint}</p>
+          <p>총 문제수: {challenge.totalProblems}</p>
+          <p>나의 총 실패 횟수: {challenge.failCount}</p>
+          <p>나의 패널티 기간: {challenge.restrictedUntil}</p>
+          <p>내가 풀이중인 문제 번호: {challenge.unsealedQuestionIndex ? `${challenge.unsealedQuestionIndex + 1}번` : '모든 문제 풀이 완료'}</p>
+          <p>패널티 기간인가요? {String(challenge.isPenaltyPeriod)}</p>
+          <p>나의 도전 시작시간: {challenge.createdAt}</p>
+          <p>나의 최근 도전시간: {challenge.updatedAt}</p>
         </ChallengeWrapper>
       ))}
-
     </StyledContainer>
   );
 }

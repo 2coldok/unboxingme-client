@@ -10,8 +10,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/Home.tsx'
 import SearchResult from './pages/SearchResult.tsx'
 import PandoraCover from './pages/PandoraCover.tsx'
-import Greenroom from './pages/Greenroom.tsx'
-import Elpis from './pages/Elpis.tsx'
 
 //
 import AuthService from './service/AuthService.ts'
@@ -27,6 +25,10 @@ import PandoraForm from './pages/PandoraForm.tsx'
 import SolverAlias from './pages/SolverAlias.tsx'
 import NotFoundFallback from './pages/fallback/NotFoundFallback.tsx'
 import ErrorFallback from './pages/fallback/ErrorFallback.tsx'
+import Note from './pages/Note.tsx'
+import LoginFailureFallback from './pages/fallback/LoginFailureFallback.tsx'
+import Riddle from './pages/Riddle.tsx'
+import PenaltyFallback from './pages/fallback/PenaltyFallback.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -42,14 +44,13 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'search', element: <SearchResult pandoraService={pandoraService} /> },
       { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
-      { path: 'pandora/:id/greenroom', element: <Greenroom unboxingService={unboxingService} /> },
-      { path: 'pandora/:id/solverAlias', element: <SolverAlias unboxingService={unboxingService} /> },
-      { path: 'pandora/:id/elpis', element: <Elpis unboxingService={unboxingService} /> },
-      
-      { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
-      { path: 'dashboard/pandora/:id/log', element: <PandoraLog dashboardService={dashboardService} /> },
+      { path: 'pandora/:id/riddle', element: <Riddle unboxingService={unboxingService} /> },
+      { path: 'pandora/:id/solveralias', element: <SolverAlias unboxingService={unboxingService} /> },
+      { path: 'pandora/:id/note', element: <Note unboxingService={unboxingService} /> },
       { path: '/pandora/form', element: <PandoraForm pandoraService={pandoraService} /> },
-      { path: '/pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> }
+      { path: '/pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
+      { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
+      { path: 'dashboard/pandora/:id/log', element: <PandoraLog dashboardService={dashboardService} /> }
     ]
   },
   {
@@ -59,6 +60,14 @@ const router = createBrowserRouter([
   {
     path: '/fallback/error',
     element: <ErrorFallback />
+  },
+  {
+    path: '/fallback/login-failed',
+    element: <LoginFailureFallback />
+  },
+  {
+    path: '/fallback/penalty',
+    element: <PenaltyFallback />
   }  
 ]);
 

@@ -1,4 +1,10 @@
+export interface IProfile {
+  displayName: string;
+  email: string;
+  photo: string;
+  nickname: string | null;
+}
 
-export interface IAuthStatus {
-  isAuthenticated: boolean;
+export interface IMe {
+  isTokenValid: boolean;
 }

@@ -7,18 +7,14 @@ import {
   useState 
 } from "react";
 import { IAuthService } from "../service/AuthService";
-
-interface IProfile {
-  displayName: string,
-  photo: string;
-}
+import { IProfile } from "../types/auth";
+import { HttpError } from "../network/HttpClient";
 
 export interface IAuthContext {
   profile: IProfile | undefined;
-  // getProfile(): Promise<IProfile>;
-  signIn: (redirectUri: string) => void;
-  signOut: () => Promise<void>;
-  status: () => Promise<boolean>;
+  login: (redirectUri: string) => void;
+  logout: () => Promise<void>;
+  me: () => Promise<boolean>;
 }
 
 interface IAuthProviderProps {
@@ -31,51 +27,63 @@ export const AuthContext = createContext<IAuthContext | undefined>(undefined);
 export function AuthProvider({ authService, children }: IAuthProviderProps) {
   const [profile, setProfile] = useState<IProfile | undefined>(undefined);
   
-  useEffect(() => {
-    authService.getProfile()
-      .then((profile) => setProfile(profile))
-      .catch((error) => {
-        if (error instanceof Error) return console.log(error.message);
-        setProfile(undefined);
-        console.log(error);
-      });
+  useEffect(() => { 
+    const fetchProfile = async () => {
+      try {
+        const data = await authService.getProfile();
+        if (data.success && data.payload) {
+          setProfile(data.payload);
+        }
+      } catch (error) {
+        if (error instanceof HttpError) {
+          alert(error.message);
+        }
+      }
+    }
+    
+    fetchProfile();
   }, [authService]);
 
-  const signOut = useCallback(
+  const logout = useCallback(
     async () => 
-      authService.signOut().then(() => setProfile(undefined)).catch((error) => {
-        if (error instanceof Error) return console.log(error.message);
-        console.log(error);
+      authService.logout().then((data) => {
+        if (data.success) {
+          return alert('로그아웃 되었습니다.');
+        }
+      }).catch((error) => {
+        if (error instanceof HttpError) {
+          return alert(error.message);
+        }
       }),
     [authService]  
   );
 
-  const signIn = useCallback(
+  const login = useCallback(
     (redirectUri: string) => {
-      authService.signIn(redirectUri);
+      authService.login(redirectUri);
     },
     [authService]
   );
 
-  const status = useCallback(
+  const me = useCallback(
     async () =>
-      authService.getStatus().then((status) => {
-        if (status.isAuthenticated) {
-          return status.isAuthenticated;
-        } else {
-          setProfile(undefined);
-          return status.isAuthenticated;
+      authService.me().then((data) => {
+        return data.payload.isTokenValid;
+      }).catch((error) => {
+        if (error instanceof HttpError) {
+          alert(error.message);
         }
+        return false;
       }),
     [authService]
   );
 
   const context = useMemo(() => ({
     profile,
-    signOut,
-    signIn,
-    status
-  }), [profile, signOut, signIn, status]);
+    login,
+    logout,
+    me
+  }), [profile, login, logout, me]);
 
   return (
     <AuthContext.Provider value={context}>

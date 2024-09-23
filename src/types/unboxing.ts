@@ -1,14 +1,15 @@
-export interface IChallenge {
+export interface INewChallengeForm {
   currentProblemIndex: number;
   submitAnswer: string;
 }
 
-export interface IInitialGateWayMine {
-  type: 'mine';
+export interface IInitialRiddleFail {
+  type: 'fail';
+  reason: 'INACTIVE' | 'NOT_FOUND_RECORD' | 'MINE' | 'PENELTY_PERIOD' | 'SOLVED';
 }
 
-export interface IInitialGateWayChallenger {
-  type: 'challenger';
+export interface IInitialRiddleSuccess {
+  type: 'success'
   totalProblems: number;
   currentQuestion: string;
   currentHint: string;
@@ -18,18 +19,18 @@ export interface IInitialGateWayChallenger {
   isPenaltyPeriod: boolean;
 }
 
-export type IInitialGateWay = IInitialGateWayMine | IInitialGateWayChallenger;
+export type TInitialRiddle = IInitialRiddleFail | IInitialRiddleSuccess;
 
-export interface IGateWay {
+export interface INextRiddle {
   isCorrect: boolean;
+  totalProblems: number;
+  question: string | null; // 모든 문제를 해결했을 경우에만 null을 반환
+  hint: string | null;// 모든 문제를 해결했을 경우에만 null을 반환
+  unsealedQuestionIndex: number | null; // 모든 문제를 해결했을 경우에만 null을 반환
   failCount: number;
   restrictedUntil: string | null; // restrictedUntil의 default값으로 패널티를 한번도 안받았을 경우 null을 반환
   isPenaltyPeriod: boolean;
   unboxing: boolean;
-  totalProblems: number;
-  unsealedQuestionIndex: number | null; // 모든 문제를 해결했을 경우에만 null을 반환
-  question: string | null; // 모든 문제를 해결했을 경우에만 null을 반환
-  hint: string | null;// 모든 문제를 해결했을 경우에만 null을 반환
 }
 
 export interface ISolverAliasStatus {
@@ -40,18 +41,6 @@ export interface INewSolverAliasForm {
   solverAlias: string;
 }
 
-export interface IElpis {
-  elpis: string;
+export interface INote {
+  note: string;
 }
-
-// 최종 문제 완료시 IUnboxing
-/**-
- * question: null
- * hint: null
- * isCorrect: true
- * unsealedQuestionIndex: null
- * failCount: number
- * restrictedUntil: string | null
- * isPenaltyPeriod: false
- * unbxoing: true
- */

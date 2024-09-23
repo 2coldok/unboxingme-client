@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { IDashboardService } from "../service/DashboardService";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ILog } from "../types/dashboard";
 import PageLoading from "../loading/PageLoading";
-import { IMyPandora } from "../types/pandora";
+import { IMyPandoraLog } from "../types/dashboard";
+import { HttpError } from "../network/HttpClient";
 
 interface IMyPandoraLogProps {
   dashboardService: IDashboardService;
@@ -13,49 +13,51 @@ interface IMyPandoraLogProps {
 export default function PandoraLog({ dashboardService }: IMyPandoraLogProps) {
   const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
-  const [myPandora, setMyPandora] = useState<IMyPandora | undefined>(undefined);
-  const [logs, setLogs] = useState<ILog[] | undefined>(undefined);
-  const [error, setError] = useState<string | null>(null);
+  const [myPandoraLog, setMyPandoraLog] = useState<IMyPandoraLog | null>(null);
 
   useEffect(() => {
     if (!id) {
-      return navigate('fallback/404', { state: { message: '잘못된 접근: pandoraId가 정의되지 않음' } });
+      return navigate('fallback/404', { state: { message: '판도라 id가 존재하지 않습니다.' } });
     }
 
-    dashboardService.getPandoraLog(id)
-      .then((pandoraLog) => {
-        const { logs, ...myPandora} = pandoraLog;
-        setMyPandora(myPandora);
-        setLogs(logs);
-      }).catch((error) => setError(error.toString()));
+    const fetchMyPandoraLog = async () => {
+      try {
+        const data = await dashboardService.getMyPandoraLog(id);
+        setMyPandoraLog(data.payload);
+      } catch (error) {
+        if (error instanceof HttpError) {
+          navigate('/fallback/error', { state: { error: error } });
+        }
+      }
+    }
+
+    fetchMyPandoraLog();
   }, [id, dashboardService, navigate]);
 
-  if (!myPandora || !logs) {
+  if (!myPandoraLog) {
     return <PageLoading />
   }
 
   return (
     <StyledContainer>
-      <span>{myPandora.label} </span>
-      <h1>{myPandora.title} 의 판도라에 대한 진행 상황</h1>
-      <p>조회수: {myPandora.coverViewCount}</p>
-      <p>풀이를 완료한자: {String(myPandora.solverAlias)}</p>
-      <p>풀이를 완료한 시점: {String(myPandora.solvedAt)}</p>
-      <p>최종 메세지 열람 확인 여부:{String(myPandora.isCatUncovered)}</p>
+      <span>라벨: {myPandoraLog.label}</span>
+      <p>내가만든 수수께끼 총 문제수: {myPandoraLog.totalProblems}개</p>
+      <p>조회수: {myPandoraLog.coverViewCount}</p>
+      <p>풀이자 별명: {String(myPandoraLog.solverAlias)}</p>
+      <p>풀이를 완료한 시점: {String(myPandoraLog.solvedAt)}</p>
+      <p>note 열람 여부: {String(myPandoraLog.isCatUncovered)}</p>
       <br />
       <h1>도전자 현황</h1>
-      {logs.map((log) => (
+      {myPandoraLog.records.map((record) => (
         <LogWrapper>
-          <p>도전 시작 시간: {log.createdAt}</p>
-          <p>최근 도전 시간: {log.updatedAt}</p>
-          <p>실패 횟수: {log.failCount}</p>
-          <p>제한이 걸린 시간:{log.restrictedUntil} 까지</p>
-          <p>진행상황: {myPandora.totalProblems} 문제중 {log.unsealedQuestionIndex ? log.unsealedQuestionIndex + 1 : '모든 문제 해결 완료'}</p>
-          <p>성공 여부: {String(log.unboxing)}</p>
+          <p>실패횟수: {record.failCount}</p>
+          <p>접근 제한 기간: {record.restrictedUntil}</p>
+          <p>풀이중인 문제: {record.unsealedQuestionIndex ? `${record.unsealedQuestionIndex + 1}번` : '모든 문제 풀이 완료'}</p>
+          <p>모든 문제 풀이 여부: {record.unboxing}</p>
+          <p>도전 시작 시간: {record.createdAt}</p>
+          <p>최근 도전 시간: {record.updatedAt}</p>
         </LogWrapper>
-
       ))}
-      <p>에러: {String(error)}</p>
     </StyledContainer>
   );
 }

@@ -1,18 +1,18 @@
 import { AiFillCaretDown } from "react-icons/ai";
 import styled from "styled-components";
-import { IProfile } from "../types/profile";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IProfile } from "../types/auth";
 
 interface IProfileProps {
   profile: IProfile | undefined;
-  status: () => Promise<boolean>;
-  signOut: () => Promise<void>;
+  logout: () => Promise<void>;
+  me: () => Promise<boolean>
   myProfile: IProfile | undefined;
   setMyProfile: Dispatch<SetStateAction<IProfile | undefined>>;
 }
 
-export default function Profile({ profile, status, signOut, myProfile, setMyProfile }: IProfileProps) {
+export default function Profile({ profile, logout, me, myProfile, setMyProfile }: IProfileProps) {
   const navigate = useNavigate();
   const [showPopper, setShowPopper] = useState(false);
 
@@ -24,23 +24,21 @@ export default function Profile({ profile, status, signOut, myProfile, setMyProf
     setShowPopper(prev => !prev);
   };
 
-  const handleMyPageClick = () => {
-    status().then((status) => {
-      if (!status) {
+  const handleMyPageClick = async () => {
+    me().then((result) => {
+      if (result) {
+        navigate('/dashboard');
+      } else {
         alert('세션이 만료되었습니다.');
         navigate('/');
-      }
-      if (status) {
-        navigate('/dashboard');
       }
     });
   };
 
-  const handleSignOutClick = () => {
-    signOut().then(() => {
-      setMyProfile(undefined);  
-      navigate('/');
-    });
+  const handleSignOutClick = async () => {
+    logout().then(() => {
+      setMyProfile(undefined);
+    })
   };
  
   return (

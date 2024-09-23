@@ -4,24 +4,27 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
 
-interface EplisProps {
+interface NoteProps {
   unboxingService: IUnboxingService;
 }
 
-export default function Elpis({ unboxingService }: EplisProps) {
+export default function Note({ unboxingService }: NoteProps) {
   const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
-  const [elpis, setElpis] = useState<string | undefined>(undefined);
+  const [note, setNote] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!id) {
-      return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
+      return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
     }
 
-    const fetchElpis = async () => {
+    const fetchNote = async () => {
       try {
-        const data = await unboxingService.getElpis(id);
-        setElpis(data.elpis);
+        const data = await unboxingService.getNote(id);
+        console.log(data.payload);
+        if (data.success) {
+          setNote(data.payload.note);
+        }
       } catch (error) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error } });
@@ -29,13 +32,13 @@ export default function Elpis({ unboxingService }: EplisProps) {
       }
     }
 
-    fetchElpis();
+    fetchNote();
   }, [id, navigate, unboxingService]);
 
   return (
     <StyledContainer>
-      <h1>Inside of pandora</h1>
-      <pre>{elpis}</pre>
+      <h1>Note Content</h1>
+      <pre>{note}</pre>
     </StyledContainer>
   );
 }

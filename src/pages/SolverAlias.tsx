@@ -23,13 +23,13 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
     const fetchSolverAliasStatus = async () => {
       try {
         const data = await unboxingService.getSolverAliasStatus(id);
-        if (data.isSolverAlias) {
-          return navigate(`/pandora/${id}/elpis`);
+        console.log(data.payload);
+        if (data.payload.isSolverAlias) {
+          return navigate(`/pandora/${id}/note`);
         }
-        return;
       } catch (error) {
         if (error instanceof HttpError) {
-          navigate('/fallback/error', { state : { error: error }});
+          return navigate('/fallback/error', { state : { error: error }});
         }
       }
     }
@@ -43,8 +43,11 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
     }
 
     try {
-      unboxingService.registerSolverAlias(id, solverAlias);
-      navigate(`/pandora/${id}/elpis`);
+      const data = await unboxingService.registerSolverAlias(id, solverAlias);
+      if (data.success) {
+        return navigate(`/pandora/${id}/note`);
+      }
+      
     } catch (error) {
       if (error instanceof HttpError) {
         return navigate('/fallback/error', { state: { error: error } });

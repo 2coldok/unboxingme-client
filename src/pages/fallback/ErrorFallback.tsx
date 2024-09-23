@@ -4,7 +4,8 @@ import { HttpError } from "../../network/HttpClient";
 
 export default function ErrorFallback() {
   const location = useLocation();
-  const error: HttpError = location.state.error;
+  const payload = location.state.payload;
+  const error: HttpError<typeof payload> = location.state.error;
 
   if (error) {
     return (

@@ -14,7 +14,7 @@ interface IPandoraCoverProps {
 export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   const { id } = useParams<{ id: string }>(); 
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | null>(null);
-  const { status, signIn } = useAuth();
+  const { me, login } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -36,7 +36,7 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } });
+          navigate('/fallback/error', { state: { error: error, type: error.payload } });
         }
       } finally {
         setIsLoading(false);
@@ -48,13 +48,13 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
 
   const handleClick = () => {
     const currentUrl = window.location.href;
-    status().then((status) => {
-      if (!status) {
+    me().then((result) => {
+      if (!result) {
         alert('구글 로그인이 필요한 서비스입니다. 로그인 창으로 이동합니다.');
-        signIn(currentUrl);
+        login(currentUrl);
       }
-      if (status) {
-        navigate(`/pandora/${id}/greenroom`);
+      if (result) {
+        navigate(`/pandora/${id}/riddle`);
       }
     });
   };

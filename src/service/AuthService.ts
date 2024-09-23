@@ -1,46 +1,42 @@
+// import { env } from '../config/env';
 import { env } from '../config/env';
 import { IHttpClient } from '../network/HttpClient';
-import { IAuthStatus } from '../types/auth';
-
-interface IProfile {
-  displayName: string,
-  photo: string,
-}
+import { IApiResponse } from '../types/api';
+import { IMe, IProfile } from '../types/auth';
 
 export interface IAuthService {
-  getProfile(): Promise<IProfile>;
-  signOut(): Promise<void>;
-  signIn(redirectUri: string): void;
-  getStatus(): Promise<IAuthStatus>;
+  login(redirectUri: string): void // 동작 디테일 체크해보기
+  logout(): Promise<IApiResponse<null>>;
+  getProfile(): Promise<IApiResponse<IProfile>>;
+  me(): Promise<IApiResponse<IMe>>;
 }
 
 class AuthService {
   constructor(private httpClient: IHttpClient) {}
 
-  async getProfile() {
-    console.log('getProfile 메서드 호출됨'); //
-    const data = await this.httpClient.fetch<IProfile, void>('/auth/profile', {
-      method: 'GET',
+  async login(redirectUri: string) {
+    window.location.href = `${env.url.GoogleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+  }
+
+  async logout() {
+    const data = await this.httpClient.fetch<null, void>('/auth/logout', {
+      method: 'POST'
     });
 
     return data;
   }
 
-  signIn(redirectUri: string) {
-    window.location.href = `${env.url.GoogleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
-  }
-
-  async signOut() {
-    console.log('signOut 메서드 호출됨');
-    await this.httpClient.fetch<void>('/auth/signout', {
-      method: 'POST',
+  async getProfile() {
+    const data = await this.httpClient.fetch<IProfile, void>('/auth/profile', {
+      method: 'GET'
     });
+
+    return data;
   }
 
-  async getStatus() {
-    console.log('getStatus 메서드 호출됨');
-    const data = await this.httpClient.fetch<IAuthStatus, void>('/auth/status', {
-      method: 'GET',
+  async me() {
+    const data = await this.httpClient.fetch<IMe, void>('/auth/me', {
+      method: 'GET'
     });
 
     return data;

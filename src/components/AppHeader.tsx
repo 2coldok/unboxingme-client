@@ -2,12 +2,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
 import { useEffect, useState } from "react";
-import { IProfile } from "../types/profile";
 import { FcGoogle } from "react-icons/fc";
 import Profile from "./Profile";
+import { IProfile } from "../types/auth";
 
 export default function AppHeader() {
-  const { profile, status, signOut, signIn } = useAuth();
+  const { profile, login, logout, me } = useAuth();
   const [myProfile, setMyProfile] = useState<IProfile | undefined>(undefined);
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ export default function AppHeader() {
   
   const handleGoogleSignInClick = () => {
     const currentUrl = window.location.href;
-    signIn(currentUrl);
+    login(currentUrl);
   };
   
   return (
@@ -41,7 +41,7 @@ export default function AppHeader() {
         </LoginWrapper>
       )}
       
-      {myProfile && <Profile profile={profile} status={status} signOut={signOut} myProfile={myProfile} setMyProfile={setMyProfile} />}
+      {myProfile && <Profile profile={profile} me={me} logout={logout} myProfile={myProfile} setMyProfile={setMyProfile} />}
     </StyledContainer>
   );
 }
