@@ -25,11 +25,11 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
         const data = await unboxingService.getSolverAliasStatus(id);
         console.log(data.payload);
         if (data.payload.isSolverAlias) {
-          return navigate(`/pandora/${id}/note`);
+          return navigate(`/pandora/${id}/note`, { replace: true });
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state : { error: error }});
+          return navigate('/fallback/error', { state : { error: error, payload: error.payload }});
         }
       }
     }

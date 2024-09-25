@@ -3,7 +3,15 @@ import styled from "styled-components";
 
 export default function NotFoundFallback() {
   const location = useLocation();
-  const message = location.state.message || "존재하지 않는 페이지입니다";
+  const message = location.state?.message;
+
+  if (!message) {
+    return (
+      <StyledContainer>
+        <h1>error의 message가 정의되어 있지 않습니다.</h1>
+      </StyledContainer>
+    )
+  }
 
   return (
     <StyledContainer>

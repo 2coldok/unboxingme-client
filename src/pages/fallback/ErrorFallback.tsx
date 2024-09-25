@@ -5,8 +5,16 @@ import { HttpError } from "../../network/HttpClient";
 export default function ErrorFallback() {
   const location = useLocation();
   // HttpError의 제네릭 타입을 캐치하기위해 payload 데이터가 필요함!
-  const payload = location.state.payload;
-  const error: HttpError<typeof payload> = location.state.error;
+  // const payload = location.state?.payload;
+  // if (!payload) {
+  //   return (
+  //     <StyledContainer>
+  //       <h1>Error Fallback Page</h1>
+  //       <p>payload가 할당되지 않았습니다.</p>
+  //     </StyledContainer>
+  //   )
+  // }
+  const error: HttpError<null> = location.state.error;
 
   if (error) {
     return (

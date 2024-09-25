@@ -4,8 +4,8 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
 import { HttpError } from "../network/HttpClient";
-import { IInitialRiddleFail } from "../types/unboxing";
 import PageLoading from "../loading/PageLoading";
+import { IInitialRiddleFailByPenalty, IInitialRiddleFailFailByStatus } from "../types/unboxing";
 
 interface IRiddleProps {
   unboxingService: IUnboxingService;
@@ -34,7 +34,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     const fetchInitialRiddle = async () => {
       try {
         const data = await unboxingService.getInitialRiddle(id);
-        if (data.payload.type === 'success') {
+        if (data.payload.RType === 'riddle') {
           const initialRiddle = data.payload;
           setProblem({ 
             question: initialRiddle.currentQuestion, 
@@ -47,16 +47,30 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          if (error.payload) {
-            const payload = error.payload as IInitialRiddleFail;
-            if (payload.type === 'fail' && payload.reason === 'NOT_FOUND_RECORD') {
-              return await setupInitialRiddle();
+          console.log(error.payload);
+          if ('RType' in error.payload) {
+            if (error.payload.RType === 'penalty') {
+              const payload = error.payload as IInitialRiddleFailByPenalty;
+              console.log(payload);
+              return navigate('/fallback/penalty', { state: { restrictedUntil: payload.restrictedUntil }, replace: true });
             }
-            if (payload.type === 'fail' && payload.reason === 'PENELTY_PERIOD') {
-              return navigate('/fallback/penalty');
+            if (error.payload.RType === 'status') {
+              const payload = error.payload as IInitialRiddleFailFailByStatus;
+              if (payload.status === 'NOT_FOUND_RECORD') {
+                return setupInitialRiddle();
+              }
+              if (payload.status === 'INACTIVE') {
+                return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
+              }
+              if (payload.status === 'SOLVED') {
+                return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
+              }
+              if (payload.status === 'MINE') {
+                return navigate('/fallback/error', { state: { error: error, payload: payload}, replace: true });
+              }
             }
           }
-          return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
+          return navigate('/fallback/error', { state: { error: error, payload: error.payload }, replace: true });
         }
       }
     }
@@ -64,7 +78,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     const setupInitialRiddle  = async () => {
       try {
         const data = await unboxingService.setupInitialRiddle(id);
-        if (data.payload.type === 'success') {
+        if (data.payload.RType === 'riddle') {
           const initialRiddle = data.payload;
 
           setProblem({ 
@@ -78,7 +92,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
+          return navigate('/fallback/error', { state: { error: error, payload: error.payload }, replace: true });
         }
       }
     }
@@ -104,10 +118,10 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         const { isCorrect, unboxing, isPenaltyPeriod, question, hint, unsealedQuestionIndex } = nextRiddle;
         
         if (!isCorrect && isPenaltyPeriod) {
-          return navigate('/fallback/penalty');
+          return navigate('/fallback/penalty', { state: { restrictedUntil: nextRiddle.restrictedUntil }, replace: true });
         }
         if (unboxing || question === null || hint === null || unsealedQuestionIndex === null) {
-          return navigate(`/pandora/${id}/solveralias`);
+          return navigate(`/pandora/${id}/solveralias`, { replace: true });
         }
 
         setProblem({ 

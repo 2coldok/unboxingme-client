@@ -32,7 +32,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
 
     const fetchSearchResult = async () => {
       try {
-        const data = await pandoraService.getPandoraSearchResult(keyword);
+        const data = await pandoraService.getPandoraSearchResult(keyword, 1);
         if (data.success && data.payload) {
           setPandoras(data.payload);
         }

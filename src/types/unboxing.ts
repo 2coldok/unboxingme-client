@@ -1,14 +1,16 @@
-export interface ISubmitAnswerForm {
-  submitAnswer: string;
+// 4xx
+export interface IInitialRiddleFailByPenalty {
+  RType: 'penalty';
+  restrictedUntil: string;
 }
-
-export interface IInitialRiddleFail {
-  type: 'fail';
-  reason: 'INACTIVE' | 'NOT_FOUND_RECORD' | 'MINE' | 'PENELTY_PERIOD' | 'SOLVED';
+// 4xx
+export interface IInitialRiddleFailFailByStatus {
+  RType: 'status';
+  status: 'INACTIVE' | 'NOT_FOUND_RECORD' | 'MINE' | 'SOLVED';
 }
-
+// 2xx
 export interface IInitialRiddleSuccess {
-  type: 'success'
+  RType: 'riddle'
   totalProblems: number;
   currentQuestion: string;
   currentHint: string;
@@ -17,8 +19,12 @@ export interface IInitialRiddleSuccess {
   restrictedUntil: string | null;
   isPenaltyPeriod: boolean;
 }
+export type TInitialRiddle = IInitialRiddleFailByPenalty | IInitialRiddleFailFailByStatus | IInitialRiddleSuccess;
 
-export type TInitialRiddle = IInitialRiddleFail | IInitialRiddleSuccess;
+
+export interface ISubmitAnswerForm {
+  submitAnswer: string;
+}
 
 export interface INextRiddle {
   isCorrect: boolean;

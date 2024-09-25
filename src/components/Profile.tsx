@@ -21,18 +21,19 @@ export default function Profile({ profile, logout, me, myProfile, setMyProfile }
   }
 
   const handleProfileClick = () => {
-    setShowPopper(prev => !prev);
+    return setShowPopper(prev => !prev);
   };
 
   const handleMyPageClick = async () => {
     me().then((result) => {
       if (result) {
-        navigate('/dashboard');
+        return navigate('/dashboard');
       } else {
         alert('세션이 만료되었습니다.');
-        navigate('/');
+        setMyProfile(undefined);
+        return navigate('/');
       }
-    });
+    })
   };
 
   const handleSignOutClick = async () => {

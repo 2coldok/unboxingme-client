@@ -22,11 +22,11 @@ export default function PandoraLog({ dashboardService }: IMyPandoraLogProps) {
 
     const fetchMyPandoraLog = async () => {
       try {
-        const data = await dashboardService.getMyPandoraLog(id);
+        const data = await dashboardService.getMyPandoraLog(id, 1);
         setMyPandoraLog(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
-          navigate('/fallback/error', { state: { error: error } });
+          navigate('/fallback/error', { state: { error: error, payload: error.payload } });
         }
       }
     }

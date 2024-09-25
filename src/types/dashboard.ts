@@ -1,7 +1,3 @@
-export interface IPageForm {
-  page: number
-}
-
 export interface IMyPandoraLog {
   label: string,
   coverViewCount: number,

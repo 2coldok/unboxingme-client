@@ -15,7 +15,7 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
   useEffect(() => {
     const fetchMyPandoras = async () => {
       try {
-        const data = await pandoraService.getMyPandoras();
+        const data = await pandoraService.getMyPandoras(1);
         if (data.success && data.payload) {
           setPandoras(data.payload);
         }
