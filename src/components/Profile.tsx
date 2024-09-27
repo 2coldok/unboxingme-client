@@ -1,58 +1,51 @@
 import { AiFillCaretDown } from "react-icons/ai";
 import styled from "styled-components";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IProfile } from "../types/auth";
+import { useAuth } from "../hook/AuthHook";
 
 interface IProfileProps {
-  profile: IProfile | undefined;
-  logout: () => Promise<void>;
-  me: () => Promise<boolean>
-  myProfile: IProfile | undefined;
-  setMyProfile: Dispatch<SetStateAction<IProfile | undefined>>;
+  profile: IProfile;
 }
 
-export default function Profile({ profile, logout, me, myProfile, setMyProfile }: IProfileProps) {
+export default function Profile({ profile }: IProfileProps) {
+  const { logout, getTokenStatus } = useAuth();
   const navigate = useNavigate();
   const [showPopper, setShowPopper] = useState(false);
-
-  if (!profile || !myProfile) {
-    return null;
-  }
 
   const handleProfileClick = () => {
     return setShowPopper(prev => !prev);
   };
 
   const handleMyPageClick = async () => {
-    me().then((result) => {
-      if (result) {
-        return navigate('/dashboard');
-      } else {
-        alert('세션이 만료되었습니다.');
-        setMyProfile(undefined);
-        return navigate('/');
-      }
-    })
+    const status = await getTokenStatus();
+    if (status === 'invalid') {
+      return alert('세션이 만료되었습니다.');
+    }
+    if (status === 'none') {
+      return alert('구글 로그인이 필요한 서비스 입니다.');
+    }
+    if (status === 'valid') {
+      return navigate('/dashboard');
+    }
   };
 
-  const handleSignOutClick = async () => {
-    logout().then(() => {
-      setMyProfile(undefined);
-    })
+  const handleLogoutClick = async () => {
+    await logout();
   };
  
   return (
     <StyledContainer>
       <ProfileWrapper onClick={handleProfileClick}>
-        <img src={myProfile.photo} alt="avatar" />
-        <span>{myProfile.displayName}</span>
+        <img src={profile.photo} alt="avatar" />
+        <span>{profile.displayName}</span>
         <AiFillCaretDown />
       </ProfileWrapper>
       {showPopper && (
         <Popper>
           <button onClick={handleMyPageClick}>마이페이지</button>
-          <button onClick={handleSignOutClick}>로그아웃</button>
+          <button onClick={handleLogoutClick}>로그아웃</button>
         </Popper>
       )}
     </StyledContainer>

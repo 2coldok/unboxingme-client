@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
+import PageLoading from "../loading/PageLoading";
 
 interface ISolverAliasProps {
   unboxingService: IUnboxingService
@@ -13,9 +14,11 @@ const message = `판도라 메세지를 열람하기 위한 모든 질문을 해
 export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const { id } = useParams<{ id: string }>();
   const [solverAlias, setSolverAlias] = useState<string>('익명');
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   
   useEffect(() => {
+    setIsLoading(true);
     if (!id) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
@@ -31,6 +34,8 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state : { error: error, payload: error.payload }});
         }
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -58,6 +63,12 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSolverAlias(event.target.value);
   };
+
+  if (isLoading) {
+    return (
+      <PageLoading />
+    );
+  }
 
   return (
     <StyledContainer>

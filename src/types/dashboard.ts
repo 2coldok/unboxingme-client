@@ -8,7 +8,7 @@ export interface IMyPandoraLog {
   records: {
     failCount: number,
     restrictedUntil: string | null,
-    unsealedQuestionIndex: number | null,
+    unsealedQuestionIndex: number,
     unboxing: boolean,
     createdAt: string,
     updatedAt: string
@@ -26,7 +26,7 @@ export interface IMyChallenge {
   totalProblems: number,
   failCount: number,
   restrictedUntil: string | null,
-  unsealedQuestionIndex: number | null,
+  unsealedQuestionIndex: number,
   isPenaltyPeriod: boolean,
   createdAt: string, // (record)
   updatedAt: string // (record)

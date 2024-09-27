@@ -52,7 +52,6 @@ export default class HttpClient implements IHttpClient {
         // 서버에서 응답이 온 경우(2xx 이외의 status code)
         if (error.response) {
           const data = error.response.data;
-          console.log(data);
           const statusCode = error.response.status;
           const payload = data.payload;
           const message = data.message || '서버에서 메세지 처리하지 않은 에러';

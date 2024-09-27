@@ -14,7 +14,7 @@ interface IPandoraCoverProps {
 export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   const { id } = useParams<{ id: string }>(); 
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | null>(null);
-  const { me, login } = useAuth();
+  const { getTokenStatus, login } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,25 +46,22 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
     fetchPandoraCover();
   }, [id, pandoraService, navigate]);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const currentUrl = window.location.href;
-    me().then((result) => {
-      if (!result) {
-        alert('구글 로그인이 필요한 서비스입니다. 로그인 창으로 이동합니다.');
-        login(currentUrl);
-      }
-      if (result) {
-        navigate(`/pandora/${id}/riddle`);
-      }
-    });
+    const status = await getTokenStatus();
+    if (status === 'valid') {
+      return navigate(`/pandora/${id}/riddle`);
+    }
+    const userConfirmation = confirm('구글 로그인이 필요한 서비스입니다. 로그인 하시겠습니까?');
+    if (userConfirmation) {
+      login(currentUrl);
+    } else {
+      return;
+    }
   };
 
   if (!pandoraCover) {
-    return (
-      <StyledContainer>
-        <p>데이터를 불러올 수 없습니다.</p>
-      </StyledContainer>
-    )
+    return null;
   }
   
   return (

@@ -47,10 +47,10 @@ export default function CreatePandora({ mode, setFormSubject, writer, title, des
       }
       // 판도라 수정 성공
       if (mode.id && mode.type === 'edit') {
-        const data = await pandoraService.replaceMyPandora(mode.id, newPandoraForm);
-        if (data.success) {
-          return navigate('/dashboard');
-        }
+        const data = await pandoraService.editMyPandora(mode.id, newPandoraForm);
+        const totalDeletedRecords = data.payload.totalDeletedRecords;
+        alert(`총 ${totalDeletedRecords}개의 도전자 기록이 삭제되었습니다.`);
+        return navigate('/dashboard');
       }
     } catch (error) {
       return navigate('/fallback/error', { state: { error: error } });

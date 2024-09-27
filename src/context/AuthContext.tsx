@@ -11,10 +11,10 @@ import { IProfile } from "../types/auth";
 import { HttpError } from "../network/HttpClient";
 
 export interface IAuthContext {
-  profile: IProfile | undefined;
+  profile: IProfile | null | undefined;
   login: (redirectUri: string) => void;
   logout: () => Promise<void>;
-  me: () => Promise<boolean>;
+  getTokenStatus: () => Promise<'valid' | 'invalid' | 'none'>;
 }
 
 interface IAuthProviderProps {
@@ -25,18 +25,18 @@ interface IAuthProviderProps {
 export const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export function AuthProvider({ authService, children }: IAuthProviderProps) {
-  const [profile, setProfile] = useState<IProfile | undefined>(undefined);
+  const [profile, setProfile] = useState<IProfile | null | undefined>(undefined);
   
   useEffect(() => { 
     const fetchProfile = async () => {
+      console.log('*****AuthContext에서 fetchProfile 실행됨*****');
       try {
         const data = await authService.getProfile();
-        if (data.success && data.payload) {
-          setProfile(data.payload);
-        }
+        setProfile(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
-          alert(error.message);
+          setProfile(null);
+          // return alert(error.message);
         }
       }
     }
@@ -44,46 +44,45 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
     fetchProfile();
   }, [authService]);
 
-  const logout = useCallback(
-    async () => 
-      authService.logout().then((data) => {
-        if (data.success) {
-          return alert('로그아웃 되었습니다.');
-        }
-      }).catch((error) => {
-        if (error instanceof HttpError) {
-          return alert(error.message);
-        }
-      }),
-    [authService]  
-  );
+  // 구글 로그인 완료후 서버에서 redirect 시킴으로 useEffect가 다시 터져 profile을 세팅함
+  const login = useCallback((redirectUri: string) => {
+    authService.login(redirectUri);
+  }, [authService]);
 
-  const login = useCallback(
-    (redirectUri: string) => {
-      authService.login(redirectUri);
-    },
-    [authService]
-  );
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      if (error instanceof HttpError) {
+        alert(error.message);
+      }
+    } finally {
+      setProfile(null);
+    }
+  }, [authService]);
 
-  const me = useCallback(
-    async () =>
-      authService.me().then((data) => {
-        return data.payload.isTokenValid;
-      }).catch((error) => {
-        if (error instanceof HttpError) {
-          alert(error.message);
-        }
-        return false;
-      }),
-    [authService]
-  );
+  const getTokenStatus = useCallback(async () => {
+    try {
+      const data = await authService.me();
+      const isTokenValid = data.payload.isTokenValid;
+      if (!isTokenValid) {
+        setProfile(null);
+        return 'invalid';
+      }
+      return 'valid';
+    } catch (error) {
+      // 토큰이 존재하지 않음
+      setProfile(null);
+      return 'none';
+    }
+  }, [authService]);
 
   const context = useMemo(() => ({
     profile,
     login,
     logout,
-    me
-  }), [profile, login, logout, me]);
+    getTokenStatus
+  }), [profile, login, logout, getTokenStatus]);
 
   return (
     <AuthContext.Provider value={context}>

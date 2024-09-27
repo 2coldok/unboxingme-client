@@ -14,7 +14,7 @@ export interface IAuthService {
 class AuthService {
   constructor(private httpClient: IHttpClient) {}
 
-  async login(redirectUri: string) {
+  login(redirectUri: string) {
     window.location.href = `${env.url.GoogleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
   }
 

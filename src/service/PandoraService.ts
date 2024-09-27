@@ -1,5 +1,5 @@
 import { IHttpClient } from './../network/HttpClient';
-import { IMyPandora, INewPandoraForm, IPandoraCover, IPandoraSearchResult, IMyPandoraEdit, IEditPandoraForm } from '../types/pandora';
+import { IMyPandora, INewPandoraForm, IPandoraCover, IPandoraSearchResult, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult } from '../types/pandora';
 import { IApiResponse } from '../types/api';
 
 export interface IPandoraService {
@@ -9,7 +9,7 @@ export interface IPandoraService {
   getMyPandoraEdit(id: string): Promise<IApiResponse<IMyPandoraEdit>>;
   createPandora(newPandoraForm: INewPandoraForm): Promise<IApiResponse<null>>;
   deleteMyPandora(id: string): Promise<IApiResponse<null>>;
-  replaceMyPandora(id: string, editPandoraForm: IEditPandoraForm): Promise<IApiResponse<null>>;
+  editMyPandora(id: string, editPandoraForm: IEditPandoraForm): Promise<IApiResponse<IEditPandoraResult>>;
 }
 
 export class PandoraService implements IPandoraService {
@@ -64,8 +64,8 @@ export class PandoraService implements IPandoraService {
     return data;
   }
   
-  async replaceMyPandora(id: string, editPandoraForm: IEditPandoraForm) {
-    const data = await this.httpClient.fetch<null, IEditPandoraForm>(`/pandora/replace/${id}`, {
+  async editMyPandora(id: string, editPandoraForm: IEditPandoraForm) {
+    const data = await this.httpClient.fetch<IEditPandoraResult, IEditPandoraForm>(`/pandora/edit/${id}`, {
       method: 'PUT',
       body: editPandoraForm
     });

@@ -52,7 +52,7 @@ export default function PandoraLog({ dashboardService }: IMyPandoraLogProps) {
         <LogWrapper>
           <p>실패횟수: {record.failCount}</p>
           <p>접근 제한 기간: {record.restrictedUntil}</p>
-          <p>풀이중인 문제: {record.unsealedQuestionIndex ? `${record.unsealedQuestionIndex + 1}번` : '모든 문제 풀이 완료'}</p>
+          <p>풀이중인 문제: {record.unsealedQuestionIndex + 1}</p>
           <p>모든 문제 풀이 여부: {record.unboxing}</p>
           <p>도전 시작 시간: {record.createdAt}</p>
           <p>최근 도전 시간: {record.updatedAt}</p>

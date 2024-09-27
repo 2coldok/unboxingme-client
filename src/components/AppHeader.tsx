@@ -1,29 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
-import { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import Profile from "./Profile";
-import { IProfile } from "../types/auth";
+import { useEffect, useState } from "react";
 
 export default function AppHeader() {
-  const { profile, login, logout, me } = useAuth();
-  const [myProfile, setMyProfile] = useState<IProfile | undefined>(undefined);
+  const { profile, login } = useAuth();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (profile) {
-      setMyProfile(profile);
-    } else {
-      setMyProfile(undefined);
+    if (profile !== undefined) {
+      setIsLoading(false);
     }
   }, [profile]);
 
   const handleLogoClick = () => {
-    navigate('/');
+    return navigate('/');
   };
   
-  const handleGoogleSignInClick = () => {
+  const handleGoogleLoginClick = () => {
     const currentUrl = window.location.href;
     login(currentUrl);
   };
@@ -31,17 +28,17 @@ export default function AppHeader() {
   return (
     <StyledContainer>
       <LogoWrapper onClick={handleLogoClick}>
-        <h1>츄츄판도라</h1>
+        <h1>리들노트</h1>
       </LogoWrapper>
 
-      {!myProfile && (
-        <LoginWrapper onClick={handleGoogleSignInClick}>
+      {(profile === null && !isLoading) &&  (
+        <LoginWrapper onClick={handleGoogleLoginClick}>
           <FcGoogle />
           <span>Google 로그인</span>
         </LoginWrapper>
       )}
       
-      {myProfile && <Profile profile={profile} me={me} logout={logout} myProfile={myProfile} setMyProfile={setMyProfile} />}
+      {(profile && !isLoading) && <Profile profile={profile} />}
     </StyledContainer>
   );
 }

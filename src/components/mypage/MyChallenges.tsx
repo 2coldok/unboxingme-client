@@ -29,7 +29,7 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   }, [navigate, dashboardService]);
 
   const handleClick = (id: string) => {
-    navigate(`/pandora/${id}`);
+    return navigate(`/pandora/${id}/riddle`);
   };
 
   return (

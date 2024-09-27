@@ -67,3 +67,7 @@ export interface IEditPandoraForm {
   problems: { question: string, hint: string, answer: string }[];
   cat: string;
 }
+
+export interface IEditPandoraResult {
+  totalDeletedRecords: number;
+}

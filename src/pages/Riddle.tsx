@@ -5,24 +5,24 @@ import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
 import { HttpError } from "../network/HttpClient";
 import PageLoading from "../loading/PageLoading";
-import { IInitialRiddleFailByPenalty, IInitialRiddleFailFailByStatus } from "../types/unboxing";
+import { IInitialRiddleFailByPenalty, IInitialRiddleFailbyIneligible } from "../types/unboxing";
 
 interface IRiddleProps {
   unboxingService: IUnboxingService;
 }
 
-interface IProblem {
+interface IRiddle {
   question: string;
   hint: string;
-  totalProblems: number;
   unsealedQuestionIndex: number;
+  totalProblems: number;
+  failCount: number;
 }
 
 export default function Riddle({ unboxingService }: IRiddleProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [problem, setProblem] = useState<IProblem | null>(null);
-  const [failCount, setFailCount] = useState<number | null>(null);
+  const [riddle, setRiddle] = useState<IRiddle | null>(null);
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [unboxingLoading, setUnboxingLoading] = useState(false);
 
@@ -34,41 +34,36 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     const fetchInitialRiddle = async () => {
       try {
         const data = await unboxingService.getInitialRiddle(id);
-        if (data.payload.RType === 'riddle') {
+        if (data.payload.status === 'riddle') {
           const initialRiddle = data.payload;
-          setProblem({ 
-            question: initialRiddle.currentQuestion, 
-            hint: initialRiddle.currentHint, 
-            totalProblems: initialRiddle.totalProblems, 
-            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex
+          setRiddle({  
+            question: initialRiddle.question, 
+            hint: initialRiddle.hint, 
+            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex,
+            totalProblems: initialRiddle.totalProblems,
+            failCount: initialRiddle.failCount
           });
-
-          setFailCount(initialRiddle.failCount);
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          console.log(error.payload);
-          if ('RType' in error.payload) {
-            if (error.payload.RType === 'penalty') {
-              const payload = error.payload as IInitialRiddleFailByPenalty;
-              console.log(payload);
-              return navigate('/fallback/penalty', { state: { restrictedUntil: payload.restrictedUntil }, replace: true });
+          if (error.payload && error.payload.status === 'penalty') {
+            const payload = error.payload as IInitialRiddleFailByPenalty;
+            return navigate('/fallback/penalty', { state: { restrictedUntil: payload.restrictedUntil, failCount: payload.failCount }, replace: true });
+          }
+          if (error.payload && error.payload.status === 'ineligible') {
+            const payload = error.payload as IInitialRiddleFailbyIneligible;
+            if (payload.reason === 'NOT_FOUND_RECORD') {
+              return setupInitialRiddle();
             }
-            if (error.payload.RType === 'status') {
-              const payload = error.payload as IInitialRiddleFailFailByStatus;
-              if (payload.status === 'NOT_FOUND_RECORD') {
-                return setupInitialRiddle();
-              }
-              if (payload.status === 'INACTIVE') {
-                return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
-              }
-              if (payload.status === 'SOLVED') {
-                return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
-              }
-              if (payload.status === 'MINE') {
-                return navigate('/fallback/error', { state: { error: error, payload: payload}, replace: true });
-              }
+            if (payload.reason === 'INACTIVE') {
+              return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
             }
+            if (payload.reason === 'SOLVED') {
+              return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
+            }
+            if (payload.reason === 'MINE') {
+              return navigate('/fallback/error', { state: { error: error, payload: payload}, replace: true });
+            }           
           }
           return navigate('/fallback/error', { state: { error: error, payload: error.payload }, replace: true });
         }
@@ -78,17 +73,15 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     const setupInitialRiddle  = async () => {
       try {
         const data = await unboxingService.setupInitialRiddle(id);
-        if (data.payload.RType === 'riddle') {
+        if (data.payload.status === 'riddle') {
           const initialRiddle = data.payload;
-
-          setProblem({ 
-            question: initialRiddle.currentQuestion, 
-            hint: initialRiddle.currentHint, 
-            totalProblems: initialRiddle.totalProblems, 
-            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex
+          setRiddle({ 
+            question: initialRiddle.question, 
+            hint: initialRiddle.hint, 
+            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex,
+            totalProblems: initialRiddle.totalProblems,
+            failCount: initialRiddle.failCount
           });
-
-          setFailCount(initialRiddle.failCount);
         }
       } catch (error) {
         if (error instanceof HttpError) {
@@ -114,24 +107,22 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     const fetchNextRiddle = async () => {
       try {
         const data = await unboxingService.getNextRiddle(id, submitAnswer);
-        const nextRiddle = data.payload;
-        const { isCorrect, unboxing, isPenaltyPeriod, question, hint, unsealedQuestionIndex } = nextRiddle;
-        
-        if (!isCorrect && isPenaltyPeriod) {
-          return navigate('/fallback/penalty', { state: { restrictedUntil: nextRiddle.restrictedUntil }, replace: true });
-        }
-        if (unboxing || question === null || hint === null || unsealedQuestionIndex === null) {
+        const payload = data.payload;
+        if (payload.status === 'end') {
           return navigate(`/pandora/${id}/solveralias`, { replace: true });
         }
-
-        setProblem({ 
-          question: question, 
-          hint: hint, 
-          totalProblems: nextRiddle.totalProblems, 
-          unsealedQuestionIndex: unsealedQuestionIndex
-        });
-
-        setFailCount(nextRiddle.failCount);
+        if (payload.status === 'penalty') {
+          return navigate('/fallback/penalty', { state: { restrictedUntil: payload.restrictedUntil, failCount: payload.failCount }, replace: true });
+        }
+        if (payload.status === 'riddle') {
+          setRiddle({
+            question: payload.question,
+            hint: payload.hint,
+            unsealedQuestionIndex: payload.unsealedQuestionIndex,
+            totalProblems: payload.totalProblems,
+            failCount: payload.failCount
+          });
+        }
       } catch (error) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
@@ -145,7 +136,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     fetchNextRiddle();
   };
 
-  if (!problem || failCount === null) {
+  if (!riddle) {
     return (
       <PageLoading />
     );
@@ -157,10 +148,10 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         <GreenroomLoading />
       ) : (
         <GreenroomWrapper>
-          <p>{problem.unsealedQuestionIndex + 1} / {problem.totalProblems}</p>
-          <h1>문제 {problem.unsealedQuestionIndex + 1}번</h1>
-          <p>문제 : {problem.question}</p>
-          <p>힌트 : {problem.hint}</p>
+          <p>{riddle.unsealedQuestionIndex + 1} / {riddle.totalProblems}</p>
+          <h1>문제 {riddle.unsealedQuestionIndex + 1}번</h1>
+          <p>문제 : {riddle.question}</p>
+          <p>힌트 : {riddle.hint}</p>
           <span>정답 : </span>
           <form onSubmit={handleSubmit}>
             <input
@@ -173,7 +164,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
             />
             <button type="submit">정답 제출</button>
           </form>
-          <p>총 실패 횟수 : {failCount}번</p>
+          <p>총 실패 횟수 : {riddle.failCount}번</p>
         </GreenroomWrapper>
       )}
     </StyledContainer>
