@@ -3,13 +3,22 @@ import { useEffect, useState } from "react";
 import { IPandoraService } from "../../service/PandoraService";
 import { IMyPandora } from "../../types/pandora";
 import { useNavigate } from "react-router-dom";
+import EditAndDeleteConfirm from "../EditAndDeleteConfirm";
 
 interface IMyPandorasProps {
   pandoraService: IPandoraService;
 }
 
+export interface ISelectedPandora {
+  action: 'edit' | 'delete';
+  id: string;
+  label: string;
+  title: string;
+}
+
 export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
   const [pandoras, setPandoras] = useState<IMyPandora[] | null>(null);
+  const [selectedPandora, setSelectedPandora] = useState<ISelectedPandora | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,13 +44,12 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
     navigate(`/dashboard/pandora/${id}/log`);
   }
 
-  const handleDeleteClick = async (id: string, label: string) => {
-    try {
-      const isConfirmed = confirm(`[${label}] 판도라를 정말 삭제하시겠습니까?`);
-      if (!isConfirmed) {
-        return;
-      }
+  const handleEdit = (id: string) => {
+    return navigate(`/pandora/form/${id}`);
+  };
 
+  const handleDelete = async (id: string) => {
+    try {
       const data = await pandoraService.deleteMyPandora(id);
       if (data.success) {
         window.location.reload();
@@ -51,8 +59,12 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
     }
   };
 
-  const handleEditClick = (id: string) => {
-    return navigate(`/pandora/form/${id}`);
+  const handleSelectedPandora = (action: 'edit' | 'delete', id: string, label: string, title: string) => {
+    setSelectedPandora({ action: action, id: id, label: label, title: title });
+  }
+
+  const handleCancelAction = () => {
+    setSelectedPandora(null);
   };
 
   if (!pandoras) {
@@ -94,12 +106,21 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
           </MyPandoraWrapper>
           <OptionWrapper>
             <button onClick={() => handleLogClick(pandora.id)}>도전 현황 보기</button>
-            <button onClick={() => handleEditClick(pandora.id)}>수정</button>
-            <button onClick={() => handleDeleteClick(pandora.id, pandora.label)}>삭제</button>
+            <button onClick={() => handleSelectedPandora('edit', pandora.id, pandora.label, pandora.title)}>수정</button>
+            <button onClick={() => handleSelectedPandora('delete', pandora.id, pandora.label, pandora.title)}>삭제</button>
             <button>비공개</button>
           </OptionWrapper>
         </>
       ))}
+
+      {selectedPandora && (
+        <EditAndDeleteConfirm
+          pandora={selectedPandora}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onCancel={handleCancelAction}
+         />
+      )}
     </StyledContainer>
   );
 }
