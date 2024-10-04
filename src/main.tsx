@@ -29,6 +29,7 @@ import Note from './pages/Note.tsx'
 import LoginFailureFallback from './pages/fallback/LoginFailureFallback.tsx'
 import Riddle from './pages/Riddle.tsx'
 import PenaltyFallback from './pages/fallback/PenaltyFallback.tsx'
+import SessionFallback from './pages/fallback/SessionFallback.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
   {
     path: '/fallback/penalty',
     element: <PenaltyFallback />
+  },
+  {
+    path: '/fallback/session',
+    element: <SessionFallback />
   }  
 ]);
 

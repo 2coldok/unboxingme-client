@@ -6,6 +6,7 @@ import { IPandoraCover } from "../types/pandora";
 import { useAuth } from "../hook/AuthHook";
 import PageLoading from "../loading/PageLoading";
 import { HttpError } from "../network/HttpClient";
+import { getInSession, saveInSession } from "../util/storage";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -28,12 +29,15 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
     const fetchPandoraCover = async () => {
       try {
         const data = await pandoraService.getPandoraCover(id);
-        if (data.success && data.payload) {
-          setPandoraCover(data.payload);
-        }
-        if (data.success && data.payload === null) {
+        const pandoraCover = data.payload;
+        if (pandoraCover === null) {
           return navigate('/fallback/404', { state : { message: '존재하지 않는 판도라id 입니다.' } });
         }
+        const saveState = saveInSession<IPandoraCover>(`cover-${pandoraCover.id}`, pandoraCover);
+        if (saveState !== 'success') {
+          return navigate('/fallback/session', { state: { type: saveState } });
+        }
+        setPandoraCover(pandoraCover);
       } catch (error) {
         if (error instanceof HttpError) {
           navigate('/fallback/error', { state: { error: error, type: error.payload } });
@@ -43,7 +47,13 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
       }
     }
 
-    fetchPandoraCover();
+    const cachedPandoraCover = getInSession<IPandoraCover>(`cover-${id}`);
+    if (cachedPandoraCover) {
+      setPandoraCover(cachedPandoraCover);
+      setIsLoading(false);
+    } else {
+      fetchPandoraCover();
+    }
   }, [id, pandoraService, navigate]);
 
   const handleClick = async () => {

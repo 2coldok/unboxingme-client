@@ -6,6 +6,7 @@ import Search from "../components/Search";
 import PageLoading from "../loading/PageLoading";
 import { IPandoraService } from "../service/PandoraService";
 import { HttpError } from "../network/HttpClient";
+import { getInSession, saveInSession } from "../util/storage";
 
 interface ISearchResultProps {
   pandoraService: IPandoraService;
@@ -15,7 +16,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
   const navigate = useNavigate();
-  const [pandoras, setPandoras] = useState<IPandoraSearchResult[] | null>(null);
+  const [pandoras, setPandoras] = useState<IPandoraSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
   useEffect(() => {
@@ -33,12 +34,12 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
     const fetchSearchResult = async () => {
       try {
         const data = await pandoraService.getPandoraSearchResult(keyword, 1);
-        if (data.success && data.payload) {
-          setPandoras(data.payload);
+        const searchResults = data.payload;
+        const saveState = saveInSession<IPandoraSearchResult[]>(`search-${keyword}-1`, searchResults);
+        if (saveState !== 'success') {
+          return navigate('/fallback/session', { state: { type: saveState } });
         }
-        if (data.success && data.payload?.length === 0) {
-          setPandoras(null);
-        }
+        setPandoras(searchResults);
       } catch (error) {
         if (error instanceof HttpError) {
           navigate('/fallback/error', { state: { error: error, type: error.payload } });
@@ -48,14 +49,22 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
       }
     }
 
-    fetchSearchResult();
+    const page = 1;
+    
+    const cachedPandoras = getInSession<IPandoraSearchResult[]>(`search-${keyword}-${page}`);
+    if (cachedPandoras) {
+      setPandoras(cachedPandoras);
+      setIsLoading(false);
+    } else {
+      fetchSearchResult();
+    }
   }, [keyword, navigate, pandoraService]);
 
   const handleClick = (id: string) => {
     return navigate(`/pandora/${id}`);
   }
 
-  if (!pandoras) {
+  if (pandoras.length === 0) {
     return (
       <StyledContainer>
         <Search />
