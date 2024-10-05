@@ -19,6 +19,11 @@ export class UnboxingService implements IUnboxingService {
       method: 'GET',
     });
 
+    const payload = data.payload;
+    if (payload.status === 'ineligible' && payload.reason === 'NOT_FOUND_RECORD') {
+      return this.setupInitialRiddle(id);
+    }
+
     return data;
   }
 

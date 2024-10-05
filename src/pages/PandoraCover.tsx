@@ -7,22 +7,25 @@ import { useAuth } from "../hook/AuthHook";
 import PageLoading from "../loading/PageLoading";
 import { HttpError } from "../network/HttpClient";
 import { getInSession, saveInSession } from "../util/storage";
+import { IUnboxingService } from "../service/UnboxingService";
+import { useLoading } from "../hook/LoadingHook";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
+  unboxingService: IUnboxingService;
 }
 
-export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
+export default function PandoraCover({ pandoraService, unboxingService }: IPandoraCoverProps) {
   const { id } = useParams<{ id: string }>(); 
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | null>(null);
   const { getTokenStatus, login } = useAuth();
+  const { isLoading, startLoading, stopLoading} = useLoading();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    
+    startLoading();
     if (!id) {
+      stopLoading();
       return navigate('/fallback/404', { state: { message: 'id를 찾을 수 없습니다' } });
     }
     
@@ -40,33 +43,57 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
         setPandoraCover(pandoraCover);
       } catch (error) {
         if (error instanceof HttpError) {
-          navigate('/fallback/error', { state: { error: error, type: error.payload } });
+          return navigate('/fallback/error', { state: { error: error } });
         }
       } finally {
-        setIsLoading(false);
+        stopLoading();
       }
     }
 
     const cachedPandoraCover = getInSession<IPandoraCover>(`cover-${id}`);
     if (cachedPandoraCover) {
       setPandoraCover(cachedPandoraCover);
-      setIsLoading(false);
+      stopLoading();
     } else {
       fetchPandoraCover();
     }
-  }, [id, pandoraService, navigate]);
+  }, [id, pandoraService, navigate, startLoading, stopLoading]);
 
-  const handleClick = async () => {
-    const currentUrl = window.location.href;
-    const status = await getTokenStatus();
-    if (status === 'valid') {
-      return navigate(`/pandora/${id}/riddle`);
-    }
-    const userConfirmation = confirm('구글 로그인이 필요한 서비스입니다. 로그인 하시겠습니까?');
-    if (userConfirmation) {
-      login(currentUrl);
-    } else {
-      return;
+  const handleChallengeClick = async () => {
+    try {
+      const tokenStatus = await getTokenStatus();
+
+      if (tokenStatus === 'valid') {
+        const data = await unboxingService.getInitialRiddle(id as string);
+        const status = data.payload.status;
+
+        if (status === 'penalty') {
+          return alert(`${data.payload.restrictedUntil}까지 패널티 기간입니다.`);
+        }
+
+        if (status === 'ineligible') {
+          if (data.payload.reason === 'MINE') {
+            return alert('자신의 수수께끼에는 도전할 수 없습니다.');
+          }
+          return navigate('/fallback/404', { state: { message: data.payload.reason }, replace: true });
+        }
+
+        if (status === 'riddle') {
+          return navigate(`/pandora/${id}/riddle`, { state: { payload: data.payload } });
+        }
+      }
+      
+      if (tokenStatus == 'none') {
+        const userConfirmation = confirm('구글 로그인이 필요한 서비스입니다. 로그인 하시겠습니까?');
+        if (userConfirmation) {
+          return login(window.location.href);
+        }
+        return;
+      }
+    } catch (error) {
+      if (error instanceof HttpError) {
+        return navigate('/fallback/error', { state: { error: error } })
+      }
     }
   };
 
@@ -93,7 +120,7 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
           <p>생성일: {pandoraCover.createdAt}</p>
           <p>업데이트일: {pandoraCover.updatedAt}</p>
 
-          <button onClick={handleClick}>도전하기</button>  
+          <button onClick={handleChallengeClick}>도전하기</button>  
         </>
       )}
     </StyledContainer>

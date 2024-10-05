@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import GreenroomLoading from "../loading/GreenroomLoading";
 import { HttpError } from "../network/HttpClient";
 import PageLoading from "../loading/PageLoading";
-import { IInitialRiddleFailByPenalty, IInitialRiddleFailbyIneligible } from "../types/unboxing";
+import { IInitialRiddleSuccess } from "../types/unboxing";
 
 interface IRiddleProps {
   unboxingService: IUnboxingService;
 }
 
 interface IRiddle {
+  status: 'riddle';
   question: string;
   hint: string;
   unsealedQuestionIndex: number;
@@ -19,79 +20,30 @@ interface IRiddle {
   failCount: number;
 }
 
+interface ILocationState {
+  payload: IInitialRiddleSuccess;
+}
+
 export default function Riddle({ unboxingService }: IRiddleProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation() as { state: ILocationState };
   const [riddle, setRiddle] = useState<IRiddle | null>(null);
   const [submitAnswer, setSubmitAnswer] = useState('');
   const [unboxingLoading, setUnboxingLoading] = useState(false);
 
   useEffect(() => {
     if (!id) {
-      return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
+      return navigate('/fallback/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
-    const fetchInitialRiddle = async () => {
-      try {
-        const data = await unboxingService.getInitialRiddle(id);
-        if (data.payload.status === 'riddle') {
-          const initialRiddle = data.payload;
-          setRiddle({  
-            question: initialRiddle.question, 
-            hint: initialRiddle.hint, 
-            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex,
-            totalProblems: initialRiddle.totalProblems,
-            failCount: initialRiddle.failCount
-          });
-        }
-      } catch (error) {
-        if (error instanceof HttpError) {
-          if (error.payload && error.payload.status === 'penalty') {
-            const payload = error.payload as IInitialRiddleFailByPenalty;
-            return navigate('/fallback/penalty', { state: { restrictedUntil: payload.restrictedUntil, failCount: payload.failCount }, replace: true });
-          }
-          if (error.payload && error.payload.status === 'ineligible') {
-            const payload = error.payload as IInitialRiddleFailbyIneligible;
-            if (payload.reason === 'NOT_FOUND_RECORD') {
-              return setupInitialRiddle();
-            }
-            if (payload.reason === 'INACTIVE') {
-              return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
-            }
-            if (payload.reason === 'SOLVED') {
-              return navigate('/fallback/error', { state: { error: error, payload: payload }, replace: true });
-            }
-            if (payload.reason === 'MINE') {
-              return navigate('/fallback/error', { state: { error: error, payload: payload}, replace: true });
-            }           
-          }
-          return navigate('/fallback/error', { state: { error: error, payload: error.payload }, replace: true });
-        }
-      }
+    if (!location.state?.payload) {
+      return navigate('/fallback/404', { state: { message: '잘못된 접근: state를 전달받지 못했습니다.' } });
     }
 
-    const setupInitialRiddle  = async () => {
-      try {
-        const data = await unboxingService.setupInitialRiddle(id);
-        if (data.payload.status === 'riddle') {
-          const initialRiddle = data.payload;
-          setRiddle({ 
-            question: initialRiddle.question, 
-            hint: initialRiddle.hint, 
-            unsealedQuestionIndex: initialRiddle.unsealedQuestionIndex,
-            totalProblems: initialRiddle.totalProblems,
-            failCount: initialRiddle.failCount
-          });
-        }
-      } catch (error) {
-        if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error, payload: error.payload }, replace: true });
-        }
-      }
-    }
-
-    fetchInitialRiddle();
-  }, [id, navigate, unboxingService]);
+    const initialRiddle = location.state.payload;
+    setRiddle(initialRiddle);
+  }, [id, navigate, unboxingService, location]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSubmitAnswer(event.target.value);
@@ -115,13 +67,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
           return navigate('/fallback/penalty', { state: { restrictedUntil: payload.restrictedUntil, failCount: payload.failCount }, replace: true });
         }
         if (payload.status === 'riddle') {
-          setRiddle({
-            question: payload.question,
-            hint: payload.hint,
-            unsealedQuestionIndex: payload.unsealedQuestionIndex,
-            totalProblems: payload.totalProblems,
-            failCount: payload.failCount
-          });
+          setRiddle(payload);
         }
       } catch (error) {
         if (error instanceof HttpError) {
