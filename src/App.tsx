@@ -4,9 +4,12 @@
 import { Outlet, useLocation } from "react-router-dom"
 import AppHeader from "./components/AppHeader"
 import AppFooter from "./components/AppFooter"
+import { useLoading } from "./hook/LoadingHook";
+import LoadingBar from "./loading/LoadingBar";
 
 function App() {
   const location = useLocation();
+  const { isLoading } = useLoading();
 
   const hideFooterPaths = [
     '/pandora/greenroom',
@@ -17,6 +20,7 @@ function App() {
 
   return (
     <>
+      <LoadingBar isLoading={isLoading} />
       <AppHeader />
       <Outlet />
       {!shouldHideFooter && <AppFooter />}

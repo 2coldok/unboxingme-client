@@ -30,6 +30,7 @@ import LoginFailureFallback from './pages/fallback/LoginFailureFallback.tsx'
 import Riddle from './pages/Riddle.tsx'
 import PenaltyFallback from './pages/fallback/PenaltyFallback.tsx'
 import SessionFallback from './pages/fallback/SessionFallback.tsx'
+import { LoadingProvider } from './context/LoadingContext.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -78,8 +79,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <AuthProvider authService={authService}>
-    <GlobalStyle />
-    <RouterProvider router={router} />
+    <LoadingProvider>
+      <GlobalStyle />
+      <RouterProvider router={router} />
+    </LoadingProvider>
   </AuthProvider>
 )
 
