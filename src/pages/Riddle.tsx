@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
-import GreenroomLoading from "../loading/GreenroomLoading";
 import { HttpError } from "../network/HttpClient";
 import PageLoading from "../loading/PageLoading";
 import { IInitialRiddleSuccess } from "../types/unboxing";
@@ -82,16 +81,10 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     fetchNextRiddle();
   };
 
-  if (!riddle) {
-    return (
-      <PageLoading />
-    );
-  }
-
   return (
     <StyledContainer>
-      {unboxingLoading ? (
-        <GreenroomLoading />
+      {unboxingLoading || !riddle ? (
+        <PageLoading type={'opacity'} />
       ) : (
         <GreenroomWrapper>
           <p>{riddle.unsealedQuestionIndex + 1} / {riddle.totalProblems}</p>

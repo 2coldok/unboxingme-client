@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
 import PageLoading from "../loading/PageLoading";
+import { useLoading } from "../hook/LoadingHook";
 
 interface ISolverAliasProps {
   unboxingService: IUnboxingService
@@ -14,11 +15,11 @@ const message = `판도라 메세지를 열람하기 위한 모든 질문을 해
 export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const { id } = useParams<{ id: string }>();
   const [solverAlias, setSolverAlias] = useState<string>('익명');
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, startLoading, stopLoading } = useLoading()
   const navigate = useNavigate();
   
   useEffect(() => {
-    setIsLoading(true);
+    startLoading()
     if (!id) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
@@ -35,14 +36,15 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
           return navigate('/fallback/error', { state : { error: error, payload: error.payload }});
         }
       } finally {
-        setIsLoading(false);
+        stopLoading();
       }
     }
 
     fetchSolverAliasStatus();
-  }, [id, navigate, unboxingService]);
+  }, [id, navigate, unboxingService, startLoading, stopLoading]);
 
   const handleClick = async () => {
+    startLoading();
     if (!id) {
       return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
     }
@@ -57,6 +59,8 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
       if (error instanceof HttpError) {
         return navigate('/fallback/error', { state: { error: error } });
       }
+    } finally {
+      stopLoading();
     }
   };
 
@@ -66,7 +70,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
 
   if (isLoading) {
     return (
-      <PageLoading />
+      <PageLoading type={'opacity'} />
     );
   }
 

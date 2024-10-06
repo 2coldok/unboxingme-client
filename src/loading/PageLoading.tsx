@@ -2,6 +2,21 @@
 import { GiJigsawBox } from "react-icons/gi";
 import styled, { keyframes } from "styled-components";
 
+interface PageLoadingProps {
+  type: 'limpidity' | 'opacity';
+}
+
+export default function PageLoading({ type }: PageLoadingProps) {
+  return (
+    <ModalContainer $type={type}>
+      <StyledContainer>
+        <><SpinnerIcon /></>
+        <h3>Loading...</h3>
+     </StyledContainer>
+    </ModalContainer>
+  );
+}
+
 const spin = keyframes`
   from {
     transform: rotate(0deg);
@@ -11,14 +26,14 @@ const spin = keyframes`
   }
 `;
 
-const ModalContainer = styled.div`
+const ModalContainer = styled.div<{ $type: 'limpidity' | 'opacity' }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
 
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.$type === 'opacity' ? 'black' : 'transparent'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,14 +54,3 @@ const SpinnerIcon = styled(GiJigsawBox)`
   /* color: #ECECEC; */
   color: #35a85f;
 `;
-
-export default function PageLoading() {
-  return (
-    <ModalContainer>
-      <StyledContainer>
-        <><SpinnerIcon /></>
-        <h3>Loading</h3>
-     </StyledContainer>
-    </ModalContainer>
-  );
-}

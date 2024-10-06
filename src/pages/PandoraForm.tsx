@@ -135,18 +135,19 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
 
 const StyledContainer = styled.main`
   display: flex;
+  width: 100%;
+  align-items: center;
   flex-direction: column;
 `;
 
 const IconContainer = styled.div`
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
-  
-  width: 800px;
 `;
 
-const FormSubject = styled.span`
+const FormSubject = styled.h1`
   display: flex;
   align-items: center;
   border-radius: 1rem;
@@ -155,13 +156,15 @@ const FormSubject = styled.span`
   margin: 0;
   padding: 0.7em;
   color: #C5D1DE;
+  width: 100%;
+  margin-bottom: 2em;
   background-color: #2D333B;
 `;
 
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 800px;
+  width: 100%;
   /* padding: 0 1rem; */
   background-color: #0d0d37;
   color: #BCC0C3;

@@ -2,22 +2,38 @@ import { useEffect, useState } from "react";
 import { IDashboardService } from "../../service/DashboardService";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { IMyConquered } from "../../types/dashboard";
 import { HttpError } from "../../network/HttpClient";
 
 interface IPandoraServiceProps {
   dashboardService: IDashboardService;
 }
 
+interface IPandoraConquered {
+  id: string;
+  label: string;
+  writer: string;
+  title: string;
+  description: string;
+  firstQuestion: string;
+  firstHint: string;
+  totalProblems: number;
+  solvedAt: string | null;
+}
+
 export default function MyConquered({ dashboardService }: IPandoraServiceProps) {
-  const [pandoras, setPandoras] = useState<IMyConquered[]>([]);
+  const [pandoras, setPandoras] = useState<IPandoraConquered[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMyConqueredPandoras = async () => {
       try {
-        const data = await dashboardService.getMyConqueredPandoras(1);
-        setPandoras(data.payload);
+        /**
+         * pagination 구현시 page 중앙관리
+         */
+        const page = 1;
+        const data = await dashboardService.getMyConqueredPandoras(page);
+        const { pandoras /**, total */ } = data.payload
+        setPandoras(pandoras);
       } catch (error) {
         if(error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error } });

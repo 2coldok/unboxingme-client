@@ -3,8 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import styled from "styled-components";
 
-export default function Search() {
-  const [searchKeyword, setSearchKeyword] = useState('');
+interface ISearchProps {
+  keyword: string;
+}
+
+export default function Search({ keyword }: ISearchProps) {
+  const [searchKeyword, setSearchKeyword] = useState(keyword);
   const maxLengthOfSearchKeyword = parseInt(import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD);
   const navigate = useNavigate();
 
@@ -26,7 +30,7 @@ export default function Search() {
   };
 
   return (
-    <StyledContainer onSubmit={onSubmit}>
+    <FormContainer onSubmit={onSubmit}>
       <SearchWrapper>
         <input
           type="search"
@@ -41,22 +45,23 @@ export default function Search() {
         />
         <button type="submit"><IoIosSearch /></button>
      </SearchWrapper>
-     <p>{searchKeyword.length} / {maxLengthOfSearchKeyword}</p>
-    </StyledContainer>
+    </FormContainer>
   );
 }
 
-const StyledContainer = styled.form`
-  
-`;
+const FormContainer = styled.form`
+  display: flex;
+  width: 100%;
+`
 
 const SearchWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 500px;
+  width: 100%;
   height: 60px;
   padding: 0;
   background-color: #181b1d;
+  
   border-radius: 1.5rem;
 
   & > input {
@@ -65,11 +70,12 @@ const SearchWrapper = styled.div`
     /* color: #40A822; */
     outline: none;
     border: none;
-    border-radius: 1.5rem;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
     font-size: 1.5em;
-    width: 80%;
+    width: 100%;
     height: 100%;
-    padding: 0 0.7em;
+    padding: 0 0 0 0.5em;
 
     &::-webkit-search-cancel-button {
       -webkit-appearance: none;
@@ -90,11 +96,14 @@ const SearchWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20%;
     background: none;
-    padding: 0 0.3rem;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+    padding-right: 0.7em;
+    padding-left: 0.4em;
+    padding-top: 0.5em;
     border: none;
-    
+    /* background-color: red; */
 
     & > svg {
       /* display: flex; */

@@ -16,7 +16,7 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   useEffect(() => {
     const fetchMyChallenges = async () => {
       try {
-        const data = await dashboardService.getMyChallenges(1);
+        const data = await dashboardService.getMyChallenges();
         setMyChallenges(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
@@ -29,7 +29,7 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   }, [navigate, dashboardService]);
 
   const handleClick = (id: string) => {
-    return navigate(`/pandora/${id}/riddle`);
+    return navigate(`/pandora/${id}`);
   };
 
   return (

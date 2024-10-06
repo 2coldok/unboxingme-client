@@ -1,11 +1,11 @@
 import { IHttpClient } from './../network/HttpClient';
-import { IMyPandora, INewPandoraForm, IPandoraCover, IPandoraSearchResult, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult } from '../types/pandora';
+import { INewPandoraForm, IPandoraCover, IPandoraSearchResults, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult, IMyPandoras } from '../types/pandora';
 import { IApiResponse } from '../types/api';
 
 export interface IPandoraService {
-  getPandoraSearchResult(keyword: string, page: number): Promise<IApiResponse<IPandoraSearchResult[]>>;
+  getPandoraSearchResult(keyword: string, page: number): Promise<IApiResponse<IPandoraSearchResults>>;
   getPandoraCover(id: string): Promise<IApiResponse<IPandoraCover>>;
-  getMyPandoras(page: number): Promise<IApiResponse<IMyPandora[]>>;
+  getMyPandoras(page: number): Promise<IApiResponse<IMyPandoras>>;
   getMyPandoraEdit(id: string): Promise<IApiResponse<IMyPandoraEdit>>;
   createPandora(newPandoraForm: INewPandoraForm): Promise<IApiResponse<null>>;
   deleteMyPandora(id: string): Promise<IApiResponse<null>>;
@@ -16,7 +16,7 @@ export class PandoraService implements IPandoraService {
   constructor(private httpClient: IHttpClient) {}
 
   async getPandoraSearchResult(keyword: string, page: number) {
-    const data = await this.httpClient.fetch<IPandoraSearchResult[], void>(`/pandora/search?keyword=${keyword}&page=${page}`, {
+    const data = await this.httpClient.fetch<IPandoraSearchResults, void>(`/pandora/search?keyword=${keyword}&page=${page}`, {
       method: 'GET',
     });
 
@@ -32,7 +32,7 @@ export class PandoraService implements IPandoraService {
   }
 
   async getMyPandoras(page: number) {
-    const data = await this.httpClient.fetch<IMyPandora[], void>(`/pandora/mine?page=${page}`, {
+    const data = await this.httpClient.fetch<IMyPandoras, void>(`/pandora/mine?page=${page}`, {
       method: 'GET',
     });
 

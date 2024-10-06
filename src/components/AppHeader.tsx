@@ -26,7 +26,7 @@ export default function AppHeader() {
   };
   
   return (
-    <StyledContainer>
+    <>
       <LogoWrapper onClick={handleLogoClick}>
         <h1>리들노트</h1>
       </LogoWrapper>
@@ -39,20 +39,9 @@ export default function AppHeader() {
       )}
       
       {(profile && !isLoading) && <Profile profile={profile} />}
-    </StyledContainer>
+    </>
   );
 }
-
-const StyledContainer = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row;
-
-  width: 100%;
-  height: 70px;
-  border: 1px solid #99C3FF;
-`;
 
 const LogoWrapper = styled.nav`
   background-color: black;

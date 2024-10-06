@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { IPandoraService } from "../../service/PandoraService";
-import { IMyPandora } from "../../types/pandora";
 import { useNavigate } from "react-router-dom";
 import EditAndDeleteConfirm from "../EditAndDeleteConfirm";
 
@@ -16,6 +15,25 @@ export interface ISelectedPandora {
   title: string;
 }
 
+export interface IMyPandora {
+  id: string;
+  label: string;
+  writer: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  problems: { question: string, hint: string, answer: string }[];
+  totalProblems: number;
+  cat: string;
+  coverViewCount: number;
+  solverAlias: string | null;
+  solvedAt: string | null;
+  isCatUncovered: boolean;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
   const [pandoras, setPandoras] = useState<IMyPandora[] | null>(null);
   const [selectedPandora, setSelectedPandora] = useState<ISelectedPandora | null>(null);
@@ -24,13 +42,17 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
   useEffect(() => {
     const fetchMyPandoras = async () => {
       try {
-        const data = await pandoraService.getMyPandoras(1);
-        if (data.success && data.payload) {
-          setPandoras(data.payload);
-        }
-        if (data.success && data.payload?.length === 0) {
+        /**
+         * pagination구현시 page상태를 중앙관리
+         */
+        const page = 1
+        const data = await pandoraService.getMyPandoras(page);
+        const { total, pandoras } = data.payload;
+        
+        if (total === 0) {
           setPandoras(null);
         }
+        setPandoras(pandoras);
       } catch (error) {
         navigate('/fallback/error', { state: { error: error } });
       }
