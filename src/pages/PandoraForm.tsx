@@ -2,26 +2,34 @@ import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 import CoverForm from "../components/form/CoverForm";
 import KeywordsForm from "../components/form/KeywordsForm";
-import MessageForm from "../components/form/MessageForm";
-import QueryForm from "../components/form/QueryForm";
-// import UnsealLimitForm from "../components/form/UnsealLimitForm";
 import { IPandoraService } from "../service/PandoraService";
 import styled from "styled-components";
 
-import { BsBoxSeam } from "react-icons/bs"; // cover
-import { LuPackageSearch } from "react-icons/lu"; // search
-import { GiThreeKeys } from "react-icons/gi"; // query
-import { TfiDropboxAlt } from "react-icons/tfi"; // message2
-import { GiLockedBox } from "react-icons/gi"; // safe box
-import { TPandoraFormSubject } from "../types/form";
-import { NEW_PANDORA_FORM } from "../constant/form";
+import { ICover, TKeywords, TPost } from "../types/form";
 import CreatePandora from "../components/form/CreatePandora";
 import { useNavigate, useParams } from "react-router-dom";
 import { HttpError } from "../network/HttpClient";
 
+import { BsCreditCard2Front } from "react-icons/bs"; // 표지
+import { BsSearch } from "react-icons/bs"; // 검색 키워드
+import { BsQuestionSquare } from "react-icons/bs"; // 질문
+import { BsEnvelopePaper } from "react-icons/bs"; // 포스트
+import RiddlesForm from "../components/form/RiddlesForm";
+import PostForm from "../components/form/PostForm";
+import { TFormSubject } from "../types/form";
+import { IRiddle } from "../types/form";
+
 interface IPandoraFormProps {
   pandoraService: IPandoraService;
 }
+
+const PANDORA_FORM_SUBJECT_TITLE = {
+  cover: '게시글 표지 작성',
+  keywords: '게시글 검색 키워드 설정',
+  riddles: '질문 설정',
+  post: '게시글 작성',
+  preview: '미리보기 및 게시글 등록하기'
+};
 
 export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const { id } = useParams<{ id: string }>();
@@ -29,15 +37,12 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
 
   // 새로운 판도라 만들기 또는 수정하기
   const [mode, setMode] = useState<{ id: string | null, type: 'new' | 'edit' }>({ id: null, type: 'new' });
-  
-  const [formSubject, setFormSubject] = useState<TPandoraFormSubject>('cover');
 
-  const [writer, setWriter] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [keywords, setKeywords] = useState<string[]>([]);
-  const [queries, setQueries] = useState([{ id: uuidv4(), question: '', hint: '', answer: '' }]);
-  const [message, setMessage] = useState('');
+  const [formSubject, setFormSubject] = useState<TFormSubject>('cover');
+  const [cover, setCover] = useState<ICover>({ writer: '', title: '', description: '' });
+  const [keywords, setKeywords] = useState<TKeywords>([]);
+  const [riddles, setRiddles] = useState<IRiddle[]>([{ id: uuidv4(), question: '', hint: '', answer: '' }]);
+  const [post, setPost] = useState<TPost>('');
 
   useEffect(() => {
     if (!id) {
@@ -51,12 +56,10 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
           const data = await pandoraService.getMyPandoraEdit(id);
           if (data.success && data.payload) {
             const pandora = data.payload;
-            setWriter(pandora.writer);
-            setTitle(pandora.title);
-            setDescription(pandora.description);
+            setCover({ writer: pandora.writer, title: pandora.title, description: pandora.description });
             setKeywords(pandora.keywords);
-            setQueries(pandora.problems.map((problem) => ({ ...problem, id: uuidv4() })));
-            setMessage(pandora.cat);
+            setRiddles(pandora.problems.map((problem) => ({ ...problem, id: uuidv4() })));
+            setPost(pandora.cat);
           }
           if (data.success && data.payload === null) {
             return navigate('/fallback/404', { state: { message: '수정할 판도라를 찾을 수 없습니다.' } });
@@ -74,29 +77,34 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
 
   return (
     <StyledContainer>
-      <IconContainer>
-        <IconWrapper $active={formSubject === 'cover'}><BsBoxSeam /></IconWrapper>
-        <Road></Road>
-        <IconWrapper $active={formSubject === 'keywords'}><LuPackageSearch /></IconWrapper>
-        <Road></Road>
-        <IconWrapper $active={formSubject === 'query'}><GiThreeKeys /></IconWrapper>
-        <Road></Road>
-        <IconWrapper $active={formSubject === 'message'}><TfiDropboxAlt /></IconWrapper>
-        <Road></Road>
-        <IconWrapper $active={formSubject === 'submit'}><GiLockedBox /></IconWrapper>
-      </IconContainer>
+      {formSubject !== 'preview' && (
+        <ProgressWrapper>
+          <IconWrapper $active={formSubject === 'cover'}><BsCreditCard2Front /></IconWrapper>
+          <Road></Road>
+          <IconWrapper $active={formSubject === 'keywords'}><BsSearch /></IconWrapper>
+          <Road></Road>
+          <IconWrapper $active={formSubject === 'riddles'}><BsQuestionSquare /></IconWrapper>
+          <Road></Road>
+          <IconWrapper $active={formSubject === 'post'}><BsEnvelopePaper /></IconWrapper>
+        </ProgressWrapper>
+      )}
+      
+      {formSubject !== 'preview' && (
+        <FormSubjectWrapper>
+          {formSubject === 'cover' && <BsCreditCard2Front />}
+          {formSubject === 'keywords' && <BsSearch />}
+          {formSubject === 'riddles' && <BsQuestionSquare />}
+          {formSubject === 'post' && <BsEnvelopePaper />}
+          {PANDORA_FORM_SUBJECT_TITLE[formSubject]}
+        </FormSubjectWrapper>
+      )}
+      
 
-      <FormSubject>{NEW_PANDORA_FORM[formSubject]}</FormSubject>
-
-      <FormContainer>
+      <FormMainWrapper>
         {formSubject === 'cover' && <CoverForm  
           setFormSubject={setFormSubject}
-          writer={writer}
-          setWriter={setWriter}
-          title={title}
-          setTitle={setTitle}
-          description={description}
-          setDescription={setDescription}
+          cover={cover}
+          setCover={setCover}
         />} 
         
         {formSubject === 'keywords' && <KeywordsForm
@@ -105,70 +113,69 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
           setKeywords={setKeywords}
         />}
   
-        {formSubject === 'query' && <QueryForm 
+        {formSubject === 'riddles' && <RiddlesForm 
           setFormSubject={setFormSubject} 
-          queries={queries}
-          setQueries={setQueries}
+          riddles={riddles}
+          setRiddles={setRiddles}
         />}
   
-        {formSubject === 'message' && <MessageForm 
+        {formSubject === 'post' && <PostForm 
           setFormSubject={setFormSubject} 
-          message={message}
-          setMessage={setMessage}
+          post={post}
+          setPost={setPost}
         />}
   
-        {formSubject === 'submit' && <CreatePandora
+        {formSubject === 'preview' && <CreatePandora
           mode={mode}
           setFormSubject={setFormSubject}
-          writer={writer}
-          title={title}
-          description={description}
+          cover={cover}
           keywords={keywords}
-          queries={queries}
-          message={message}
+          riddles={riddles}
+          post={post}
           pandoraService={pandoraService}
         />}
-      </FormContainer>
+      </FormMainWrapper>
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.main`
-  display: flex;
   width: 100%;
-  align-items: center;
-  flex-direction: column;
+
+  @media(max-width: 768px) {
+    padding: 0.7rem;
+  }
 `;
 
-const IconContainer = styled.div`
+const ProgressWrapper = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
 `;
 
-const FormSubject = styled.h1`
+const FormSubjectWrapper = styled.h2`
   display: flex;
   align-items: center;
-  border-radius: 1rem;
-  font-weight: bold;
-  font-size: 1.5em;
   margin: 0;
-  padding: 0.7em;
-  color: #C5D1DE;
-  width: 100%;
-  margin-bottom: 2em;
-  background-color: #2D333B;
+  color: #c5d1de;
+  background-color: #1a1e22;
+  margin-bottom: 1rem;
+  padding: 0.4em;
+  border-radius: 0.3rem;
+
+  & > svg {
+    margin-right: 0.7rem;
+  }
 `;
 
-const FormContainer = styled.div`
+const FormMainWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   /* padding: 0 1rem; */
-  background-color: #0d0d37;
+  /* background-color: #0d0d37; */
   color: #BCC0C3;
-  max-height: 1500px;
 `;
 
 

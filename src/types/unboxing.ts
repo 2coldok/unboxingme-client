@@ -59,6 +59,14 @@ export interface INewSolverAliasForm {
   solverAlias: string;
 }
 
+/***********************************************/
+
 export interface INote {
+  label: string;
+  writer: string;
+  title: string;
+  description: string;
+  coverViewCount: number;
   note: string;
+  createdAt: string;
 }

@@ -6,12 +6,14 @@ import AppHeader from "./components/AppHeader"
 import AppFooter from "./components/AppFooter"
 import { useLoading } from "./hook/LoadingHook";
 import LoadingBar from "./loading/LoadingBar";
+import ScrollToTop from "./util/ScrollToTop";
 
 function App() {
   const { isLoading } = useLoading();
 
   return (
     <>
+      <ScrollToTop />
       <HeaderContainer>
         <LoadingBar isLoading={isLoading} />
         <AppHeader />
@@ -21,9 +23,11 @@ function App() {
         <Outlet />
       </MainContainer>
 
-      <FooterContainer>
-        <AppFooter />
-      </FooterContainer>
+      {!isLoading && (
+        <FooterContainer>
+          <AppFooter />
+        </FooterContainer>
+      )}
     </>
   )
 }
@@ -36,27 +40,34 @@ const HeaderContainer = styled.header`
 
   width: 100%;
   height: 70px;
-  border: 3px solid red;
+  border-bottom: 1px solid #353434;
+
+  position: fixed;
+  top: 0; 
+  left: 0;
+  z-index: 8000;
+  /* background-color: #1a1f25; */
+  background-color: #12181f;
 `;
 
 const MainContainer = styled.div`
-  display: flex;
+  /* display: flex; */
   width: 90%;
   @media (max-width: 900px) {
     width: 100%;
   }
-  max-width: 1000px;
-  min-height: 800px;
-  border: 3px solid orange;
+  max-width: 1200px;
+  margin-top: 100px;
 `;
 
 const FooterContainer = styled.footer`
   display: flex;
   align-items: center;
   width: 100%;
-  margin-top: 4em;
-  border: 3px solid yellow;
-  background-color: #5d696d;
+  height: 120px;
+  margin-top: 200px;
+  margin-bottom: 200px;
+  background-color: #0f2337;
 `;
 
 export default App

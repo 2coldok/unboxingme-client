@@ -3,14 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
-import PageLoading from "../loading/PageLoading";
 import { useLoading } from "../hook/LoadingHook";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 interface ISolverAliasProps {
   unboxingService: IUnboxingService
 }
-
-const message = `판도라 메세지를 열람하기 위한 모든 질문을 해결하였습니다. 판도라 발행자는 열람자를 확인할 수 없으며, 열람 사실을 확인할 수 있습니다. etc..`;
 
 export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const { id } = useParams<{ id: string }>();
@@ -70,48 +68,126 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
 
   if (isLoading) {
     return (
-      <PageLoading type={'opacity'} />
+      <LoadingSpinner />
     );
   }
 
   return (
     <StyledContainer>
-      <h1>Solved!</h1>
       <MessageWrapper>
-        {message}
+        <h2>게시물을 열람하기 위한 모든 질문을 해결하였습니다!</h2>
+        <div className="notion">
+          <p>* 모든 질문이 최초로 해결됨에 따라 본 게시물은 비공개로 전환됩니다.</p>
+          <p>* 게시물 작성자가 확인할 수 있는 '열람자 별명'을 설정할 수 있으며 이후 수정할 수 없습니다.</p>
+          <p>* 게시물 작성자는 설정된 '열람자 별명' 이외의 열람자의 정보를 확인할 수 없습니다.</p>
+          <p>* 열람한 게시물은 마이페이지에서 다시 확인할 수 있으며, 게시물이 삭제될 경우 마이페이지 열람 내역에서 삭제됩니다.</p>
+       </div>
+
+       <InputWrapper>
+          <label className="floating-label">열람자 별명 입력</label>
+          <input 
+            className="alias"
+            type="text" 
+            name="alias" 
+            placeholder="익명" 
+            value={solverAlias}
+            onChange={onChange}
+            autoComplete="off"
+            maxLength={40}
+          />
+          <small> {solverAlias.length}/40</small>
+       </InputWrapper> 
+
+       <button onClick={handleClick}>게시물 내용 확인하기</button>
       </MessageWrapper>
-
-      <label>
-        <span>열람자 별명</span>
-        <input 
-          type="text" 
-          name="alias" 
-          placeholder="익명" 
-          value={solverAlias}
-          onChange={onChange}
-        />
-      </label>
-
-      <button onClick={handleClick}>Open Pandora</button>
+      
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.main`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 3rem;
+  width: 100%;
   flex-direction: column;
   color: #ECECEC;
-  border: 1px solid #54ce7d;
-  width: 80%;
-  height: 800px;
+  border: 1px solid var(--dark-gray);
+  border-radius: 0.5rem;
 `;
 
 const MessageWrapper = styled.div`
   display: flex;
-  color: #91a2ae;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
   font-weight: bold;
   padding: 2rem;
-  border: 3px solid green;
+  border-radius: 1rem;
+
+  & > svg {
+    font-size: 4em;
+    color: #48be44
+  }
+
+  .notion {
+    display: flex;
+    flex-direction: column;
+    font-weight: normal;
+    /* color: #837f7f; */
+    color: var(--light-white);
+    border-radius: 1rem;
+    padding: 0.3rem;
+  }
+
+  button {
+    width: 20rem;
+    margin-top: 2rem;
+    background-color: var(--middle-blue);
+    color: white;
+    font-weight: bold;
+    padding: 0.6em 2em 0.6em 2em;
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  width: 20rem;
+  margin-top: 2em;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
+  .floating-label {
+    position: absolute;
+    top: -5px;
+    left: 15px;
+    padding: 0 7px;
+    font-size: 12px;
+    color: var(--middle-blue);
+    pointer-events: none;
+    background-color: var(--background-color);
+  }
+
+  .alias {
+    background-color: var(--background--color);
+    color: white;
+    width: 100%;
+    padding: 1em;
+    font-size: 1em;
+    border: 1.5px solid var(--light-gray);
+    border-radius: 0.4rem;
+    outline: none;
+    :focus {
+      border-color: var(--middle-blue);
+    }
+  }
+
+  & > small {
+    color: var(--dark-gray);
+  }
 `;

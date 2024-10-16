@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 import { IMyChallenge } from "../../types/dashboard";
 import { useNavigate } from "react-router-dom";
 import { HttpError } from "../../network/HttpClient";
+import { IoPerson } from "react-icons/io5";
+import { LuEye } from "react-icons/lu";
+import { formatTimeAgo } from "../../util/formatTimeAgo";
+import { IoIosFingerPrint } from "react-icons/io";
+import RiddleProgress from "../../util/RiddleProgress";
+import { useLoading } from "../../hook/LoadingHook";
+import { LoadingSpinner } from "../../loading/LoadingSpinner";
+// import { HiOutlineDocumentText } from "react-icons/hi";
 
 interface IMyChallengesProps {
   dashboardService: IDashboardService;
@@ -11,9 +19,11 @@ interface IMyChallengesProps {
 
 export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   const navigate = useNavigate();
+  const { isLoading, startLoading, stopLoading } = useLoading();
   const [myChallenges, setMyChallenges] = useState<IMyChallenge[]>([]);
 
   useEffect(() => {
+    startLoading();
     const fetchMyChallenges = async () => {
       try {
         const data = await dashboardService.getMyChallenges();
@@ -22,11 +32,13 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error } });
         }
+      } finally {
+        stopLoading();
       }
     }
 
     fetchMyChallenges();
-  }, [navigate, dashboardService]);
+  }, [navigate, dashboardService, startLoading, stopLoading]);
 
   const handleClick = (id: string) => {
     return navigate(`/pandora/${id}`);
@@ -34,35 +46,85 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
 
   return (
     <StyledContainer>
-      {myChallenges.map((challenge) => (
-        <ChallengeWrapper onClick={() => handleClick(challenge.id)}>
-          <h1>라벨:{challenge.label}</h1>
-          <p>작성자: {challenge.writer}</p>
-          <p>제목: {challenge.title}</p>
-          <p>설명: {challenge.description}</p>
-          <p>현재 진행중인 문제: {challenge.currentQuestion}</p>
-          <p>현재 진행중인 문제의 힌트: {challenge.currentHint}</p>
-          <p>총 문제수: {challenge.totalProblems}</p>
-          <p>나의 총 실패 횟수: {challenge.failCount}</p>
-          <p>나의 패널티 기간: {challenge.restrictedUntil}</p>
-          <p>내가 풀이중인 문제 번호: {challenge.unsealedQuestionIndex ? `${challenge.unsealedQuestionIndex + 1}번` : '모든 문제 풀이 완료'}</p>
-          <p>패널티 기간인가요? {String(challenge.isPenaltyPeriod)}</p>
-          <p>나의 도전 시작시간: {challenge.createdAt}</p>
-          <p>나의 최근 도전시간: {challenge.updatedAt}</p>
-        </ChallengeWrapper>
-      ))}
+      <h1>진행중</h1>
+      <p>최근 최대 10개의 목록</p>
+      {isLoading && <LoadingSpinner />}
+      <ul>
+        {myChallenges.map((challenge) => (
+          <ChallengeList key={challenge.id}>
+            <h2 className="title" onClick={() => handleClick(challenge.id)}>{challenge.title}</h2>
+            <p className="writer"> <IoPerson /> {challenge.writer}</p>
+            <span className="viewcount"> <LuEye />  {challenge.coverViewCount}</span>
+            <span className="created"> · {formatTimeAgo(challenge.createdAt)}</span>
+            <p className="label"><IoIosFingerPrint /> {challenge.label}</p>
+            
+            <div className="progress-wrapper">
+              <RiddleProgress currentStep={challenge.unsealedQuestionIndex} totalSteps={challenge.totalProblems} />
+            </div>
+           
+  
+            {challenge.isPenaltyPeriod && (
+              <p className="penalty">{challenge.restrictedUntil} 까지 접근이 제한됩니다.</p>
+            )}
+            <p className="br"></p>
+          </ChallengeList>
+        ))}
+      </ul>
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.div`
-  background-color: black;
-  color: white;
+  margin-left: 0.5em;
 `;
 
-const ChallengeWrapper = styled.div`
-  background-color: blue;
-  color: white;
-  margin: 2rem;
-  border: 5px solid yellow;
-`;
+const ChallengeList = styled.li`
+  .title {
+    color: #3b90f9;
+    margin: 0 0 0.3em 0;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .writer {
+    color: #cbcbcb;
+    font-weight: bold;
+    margin: 0 0 0.2em 0;
+  }
+
+  .viewcount {
+    color: #686868;
+  }
+
+  .created {
+    color: #686868;
+  }
+
+  .total {
+    color: #686868;
+    margin: 0;
+  }
+
+  .br {
+    width: 100%;
+    height: 0.5px;
+    background-color: #606060;
+  }
+
+  .label {
+    margin: 0.1em 0 0 0;
+    font-size: 0.8em;
+    color: #646464;
+  }
+
+  .penalty {
+    color: red;
+  }
+
+  .progress-wrapper {
+    margin: 1em 0 1em 0;    
+  }
+`

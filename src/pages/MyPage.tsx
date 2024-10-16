@@ -5,44 +5,64 @@ import { IDashboardService } from "../service/DashboardService";
 import MyPandoras from "../components/mypage/MyPandoras";
 import MyChallenges from "../components/mypage/MyChallenges";
 import MyConquered from "../components/mypage/MyConquered";
-import PreCreationGuidelines from "../components/form/PreCreationGuidelines";
 
 import { TfiDropboxAlt } from "react-icons/tfi"; // 열람
 import { GiLockedBox } from "react-icons/gi"; // 나의노트
 import { BiPlusCircle } from "react-icons/bi"; // 생성
 import { PiNotePencil } from "react-icons/pi"; // 풀이중
 import { useEffect, useState } from "react";
+import CreationGuidelines from "../components/mypage/CreationGuidelines";
+import { getInSession } from "../util/storage";
 interface IMypageProps {
   pandoraService: IPandoraService;
   dashboardService: IDashboardService;
 }
 
-type Ttab = 'mine' | 'challenges' | 'conquered' | 'make';
+// type Ttab = 'mine' | 'challenges' | 'conquered' | 'make';
 
-function getTabName(tab: Ttab) {
-  if (tab === 'mine') return '나의노트';
-  if (tab === 'challenges') return '풀이중';
-  if (tab === 'conquered') return '열람';
-  if (tab === 'make') return '만들기'
-}
+// function getTabName(tab: Ttab) {
+//   if (tab === 'mine') return '나의노트';
+//   if (tab === 'challenges') return '풀이중';
+//   if (tab === 'conquered') return '열람';
+//   if (tab === 'make') return '만들기'
+// }
 
 export default function MyPage({ pandoraService, dashboardService }: IMypageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get('tab') || 'mine';
+  const [mineCurrentPage, setMineCurrentPage] = useState(1);
+  const [conqueredCurrentPage, setConqueredPage] = useState(1);
   const navigate = useNavigate();
-  const [tab, setTab] = useState<Ttab>('mine');
+  // const [tab, setTab] = useState<Ttab>('mine');
+
+  useEffect(() => {
+    const cachedMine = getInSession<number>('mine-currentPage');
+    if (cachedMine) {
+      setMineCurrentPage(cachedMine);
+    }
+
+    const cachedConquered = getInSession<number>('conquered-currentPage');
+    if (cachedConquered) {
+      setConqueredPage(cachedConquered);
+    }
+
+  }, []);
 
   useEffect(() => {
     const validTabs = ['mine', 'challenges', 'conquered', 'make'];
     
-    if (currentTab && validTabs.includes(currentTab)) {
-      setTab(currentTab as Ttab);
-    } else {
+    if (!currentTab && !validTabs.includes(currentTab)) {
       return navigate('/fallback/404', { state: { message: '지원하지 않는 탭입니다.' } })
-    }  
+    }
   }, [navigate, currentTab]);
 
-  const handleNavigation = (tab: string) => {
+  const handleNavigation = (tab: 'mine' | 'challenges' | 'conquered' | 'make') => {
+    if (tab === 'mine') {
+      setMineCurrentPage(1);
+    }
+    if (tab === 'conquered') {
+      setConqueredPage(1);
+    }
     setSearchParams({ tab });
   };
   
@@ -51,11 +71,11 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
       <NavigateWrapper>
         <NavButton onClick={() => handleNavigation('mine')}>
           <GiLockedBox />
-          <span>나의노트</span>
+          <span>나의 게시물</span>
         </NavButton>
         <NavButton onClick={() => handleNavigation('challenges')}>
           <PiNotePencil />
-          <span>풀이중</span>
+          <span>진행중</span>
         </NavButton>
         <NavButton onClick={() => handleNavigation('conquered')}>
           <TfiDropboxAlt />
@@ -68,11 +88,10 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
       </NavigateWrapper>
 
       <ContentWrapper>
-        <h1>{getTabName(tab)}</h1>
-        { currentTab === 'mine' && <MyPandoras pandoraService={pandoraService} /> }
+        { currentTab === 'mine' && <MyPandoras pandoraService={pandoraService} currentPage={mineCurrentPage} setCurrentPage={setMineCurrentPage} /> }
         { currentTab === 'challenges' && <MyChallenges dashboardService={dashboardService} /> }
-        { currentTab === 'conquered' && <MyConquered dashboardService={dashboardService} />}
-        { currentTab === 'make' && <PreCreationGuidelines /> }
+        { currentTab === 'conquered' && <MyConquered dashboardService={dashboardService} currentPage={conqueredCurrentPage} setCurrentPage={setConqueredPage} />}
+        { currentTab === 'make' && <CreationGuidelines /> }
       </ContentWrapper>
       
     </StyledContainer>
@@ -121,13 +140,19 @@ const NavButton = styled.button`
 const NavigateWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 150px;
-  /* padding: 2rem; */
-  background-color: gray;
-  color: yellow;
+  width: 200px;
+  flex-shrink: 0;
+  /* background-color: #161e2b; */
+  /* border-right: 1px solid #2e353f; */
+  padding: 1em;
 
   & > button {
     margin-top: 2em;
+    color: white;
+    :hover {
+      background-color: #427bff;
+    }
+
   }
 
   @media (max-width: 768px) {
@@ -136,7 +161,7 @@ const NavigateWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 60px;
-    background-color: gray;
+    background-color: #161e2b;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
@@ -151,7 +176,9 @@ const NavigateWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   flex-grow: 1;
-  background-color: black;
+  /* background-color: #1d2636; */
   color: white;
-  padding: 2rem;
+  padding-left: 1em;
+  padding-right: 0.5em;
+  /* padding: 2rem; */
 `;

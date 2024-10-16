@@ -4,12 +4,18 @@ import { IPandoraService } from "../service/PandoraService";
 import { useEffect, useState } from "react";
 import { IPandoraCover } from "../types/pandora";
 import { useAuth } from "../hook/AuthHook";
-import PageLoading from "../loading/PageLoading";
 import { HttpError } from "../network/HttpClient";
 import { getInSession, saveInSession } from "../util/storage";
 import { IUnboxingService } from "../service/UnboxingService";
 import { useLoading } from "../hook/LoadingHook";
 import Alert from "../util/Alert";
+
+import { IoPerson } from "react-icons/io5"; // writer
+import { LuEye } from "react-icons/lu"; // coverViewCount
+import { IoIosFingerPrint } from "react-icons/io"; // label
+import { GoClock } from "react-icons/go"; // created
+import { HiOutlineDocumentText } from "react-icons/hi"; // totalProblems
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -39,10 +45,7 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
         if (pandoraCover === null) {
           return navigate('/fallback/404', { state : { message: '존재하지 않는 판도라id 입니다.' } });
         }
-        const saveState = saveInSession<IPandoraCover>(`cover-${pandoraCover.id}`, pandoraCover);
-        if (saveState !== 'success') {
-          return navigate('/fallback/session', { state: { type: saveState } });
-        }
+        saveInSession<IPandoraCover>(`cover-${pandoraCover.id}`, pandoraCover);
         setPandoraCover(pandoraCover);
       } catch (error) {
         if (error instanceof HttpError) {
@@ -106,30 +109,36 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
   };
 
   if (challengerLoading) {
-    return <PageLoading type={'opacity'} />
+    return <LoadingSpinner />
   }
 
   return (
     <StyledContainer>
       {isLoading || !pandoraCover ? (
-        <PageLoading type={'limpidity'} />
+        <LoadingSpinner />
       ) : (
-        <>
-          <h1>판도라 uuid : {pandoraCover.id}</h1>
-          <h3>고유 라벨: {pandoraCover.label}</h3>
-          <p>작성자 : {pandoraCover.writer}</p>
-          <p>제목: {pandoraCover.title}</p>
-          <pre>설명: {pandoraCover.description}</pre>
-          <p>조회수: {pandoraCover.coverViewCount}</p>
+        <CoverWrapper>
+          <HeadWrapper>
+            <h1 className="title">{pandoraCover.title}</h1>
+            <p className="writer"><IoPerson /> {pandoraCover.writer}</p>
+            <p className="view-created"><LuEye /> {pandoraCover.coverViewCount} &nbsp;·&nbsp; <GoClock /> {pandoraCover.createdAt}</p>
+            <p className="total"><HiOutlineDocumentText /> {pandoraCover.totalProblems} 문제</p>
+            <p className="label"><IoIosFingerPrint /> {pandoraCover.label}</p>
+          </HeadWrapper>
           
-          <p>총 문제수: {pandoraCover.totalProblems}</p>
-          <p>첫번째 질문: {pandoraCover.firstQuestion}</p>
-          <p>첫번쨰 힌트: {pandoraCover.firstHint}</p>
-          <p>생성일: {pandoraCover.createdAt}</p>
-          <p>업데이트일: {pandoraCover.updatedAt}</p>
-
-          <button onClick={handleChallengeClick}>도전하기</button>  
-        </>
+          <DescriptionWrapper>
+            <pre>{pandoraCover.description}</pre>
+          </DescriptionWrapper>
+          
+          <RiddleWrapper>
+            <div className="question">
+              <p className="index">질문 1. &nbsp;</p>
+              <p className="content">{pandoraCover.firstQuestion}</p>
+            </div>
+            {/* */}
+            <button className="button" onClick={handleChallengeClick}>노트 확인하기</button>
+          </RiddleWrapper>  
+        </CoverWrapper>
       )}
 
       {alertMessage && (
@@ -140,13 +149,117 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
 }
     
 const StyledContainer = styled.main`
-  background-color: #264283;
   display: flex;
   flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+  
+  width: 100%;
+  /* margin: 3em; */
+  /* padding-left: 0.4rem;
+  padding-right: 0.4rem; */
+  padding: 4em;
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
+  .description {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+`;
+
+const CoverWrapper = styled.div`
+  border: 1px solid #5a5a5a;;
+  border-radius: 1em;
+  overflow: hidden;
+`
+
+const HeadWrapper = styled.div`
+  background-color: #1c1f24;
+  padding: 1.5rem;
+  /* border-bottom: 0.5px solid #757575; */
+
+  .title {
+    color: #1775d9;
+    margin: 0;
+  }
+
+  .writer {
+    margin: 0.1em 0 0 0;
+  }
+
+  .view-created {
+    margin: 0.1em 0 0 0;
+    color: #686868;
+  }
+
+  .label {
+    margin: 0.1em 0 0 0;
+    color: #686868;
+  }
+
+  .total {
+    margin: 0.1em 0 0 0;
+    color: #686868;
+  }
+`
+
+const DescriptionWrapper = styled.div`
+  padding: 1.5em 1em 5em 1em;
+  font-size: 1.5em;
+  & > pre {
+    white-space: pre-wrap;
+  }
+`
+
+const RiddleWrapper = styled.div`
+  display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid white;
-  border-radius: 3em;
-  width: 100%;
-  margin: 3em;
+  flex-direction: column;
+  color: #d1d7e0;
+  padding: 1rem;
+  margin-top: auto;
+  margin-left: 2em;
+  margin-right: 2em;
+  margin-bottom: 2em;
+  border: 1px dashed #626262;
+  border-radius: 1em;
+
+  .question {
+    display: flex;
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: 1.2rem;
+
+    .index {
+      white-space: nowrap;
+      color: #767676;
+    }
+
+    .content {
+      font-size: 1.2rem;
+    }
+  }
+
+  .hint {
+    display: flex;
+    margin-bottom: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+
+    .bulb {
+      color: #f4ff7f;
+      white-space: nowrap;
+    }
+
+    .content {
+
+    }
+  }
+
+  .button {
+    margin-top: 2em;
+  }
 `;

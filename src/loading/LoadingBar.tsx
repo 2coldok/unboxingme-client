@@ -14,7 +14,8 @@ const LoadingBar = styled.div<{ isLoading: boolean }>`
   top: 0;
   left: 0;
   height: 4px;
-  background-color: #3498db;
+  /* background-color: #3498db; */
+  background-color: var(--light-blue);
   z-index: 9999;
   width: ${({ isLoading }) => (isLoading ? '100%' : '0')};
   animation: ${({ isLoading }) => (isLoading ? loadingAnimation : 'none')} 2s ease-out;

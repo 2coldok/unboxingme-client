@@ -2,6 +2,7 @@ import {
   ReactNode, 
   createContext, 
   useCallback, 
+  useEffect, 
   useMemo, 
   useState 
 } from "react";
@@ -20,15 +21,36 @@ interface ILoadingProviderProps {
 export const LoadingContext = createContext<ILoadingContext | undefined>(undefined);
 
 export function LoadingProvider({ children }: ILoadingProviderProps) {
+  const [isFetching, setIsFetching] = useState<boolean>(false); //
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const LOADING_DELAY = 300;
+  
   const startLoading = useCallback(() => {
-    setIsLoading(true);
+    setIsFetching(true);
   }, []);
 
   const stopLoading = useCallback(() => {
+    setIsFetching(false);
     setIsLoading(false);
   }, []);
+
+  useEffect(() => {
+    let delayTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    if (isFetching) {
+      delayTimeout = setTimeout(() => {
+        setIsLoading(true);
+      }, LOADING_DELAY);
+    } else {
+      setIsLoading(false);
+    }
+
+    return () => {
+      if (delayTimeout) {
+        clearTimeout(delayTimeout);
+      }
+    };
+  }, [isFetching, LOADING_DELAY]);
 
   const context = useMemo(() => ({
     isLoading,

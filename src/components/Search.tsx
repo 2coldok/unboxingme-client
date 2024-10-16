@@ -5,9 +5,10 @@ import styled from "styled-components";
 
 interface ISearchProps {
   keyword: string;
+  onChangeCurrentPage?: () => void;
 }
 
-export default function Search({ keyword }: ISearchProps) {
+export default function Search({ keyword, onChangeCurrentPage }: ISearchProps) {
   const [searchKeyword, setSearchKeyword] = useState(keyword);
   const maxLengthOfSearchKeyword = parseInt(import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD);
   const navigate = useNavigate();
@@ -15,10 +16,13 @@ export default function Search({ keyword }: ISearchProps) {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmedSearchKeyword = searchKeyword.trim();
+
     if (trimmedSearchKeyword.length > 0) {
-      navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
+      sessionStorage.removeItem('search-currentPage');
+      onChangeCurrentPage && onChangeCurrentPage();
+      return navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
     } else {
-      setSearchKeyword('');
+      return setSearchKeyword('');
     }
   };
 

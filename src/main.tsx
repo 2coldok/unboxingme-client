@@ -20,7 +20,6 @@ import { PandoraService } from './service/PandoraService.ts'
 import { UnboxingService } from './service/UnboxingService.ts'
 import { DashboardService } from './service/DashboardService.ts'
 import MyPage from './pages/MyPage.tsx'
-import PandoraLog from './pages/PandoraLog.tsx'
 import PandoraForm from './pages/PandoraForm.tsx'
 import SolverAlias from './pages/SolverAlias.tsx'
 import NotFoundFallback from './pages/fallback/NotFoundFallback.tsx'
@@ -31,6 +30,7 @@ import Riddle from './pages/Riddle.tsx'
 import PenaltyFallback from './pages/fallback/PenaltyFallback.tsx'
 import SessionFallback from './pages/fallback/SessionFallback.tsx'
 import { LoadingProvider } from './context/LoadingContext.tsx'
+import PandoraDetail from './pages/PandoraDetail.tsx'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
@@ -49,10 +49,10 @@ const router = createBrowserRouter([
       { path: 'pandora/:id/riddle', element: <Riddle unboxingService={unboxingService} /> },
       { path: 'pandora/:id/solveralias', element: <SolverAlias unboxingService={unboxingService} /> },
       { path: 'pandora/:id/note', element: <Note unboxingService={unboxingService} /> },
-      { path: '/pandora/form', element: <PandoraForm pandoraService={pandoraService} /> },
-      { path: '/pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
+      { path: 'pandora/form', element: <PandoraForm pandoraService={pandoraService} /> },
+      { path: 'pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
       { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
-      { path: 'dashboard/pandora/:id/log', element: <PandoraLog dashboardService={dashboardService} /> }
+      { path: 'dashboard/pandora/:id', element: <PandoraDetail dashboardService={dashboardService} pandoraService={pandoraService} /> },
     ]
   },
   {

@@ -1,19 +1,26 @@
-export interface IMyPandoraLogs {
-  label: string;
-  totalProblems: number;
-  coverViewCount: number;
-  solverAlias: string | null;
-  solvedAt: string | null;
-  isCatUncovered: boolean;
-  total: number;
-  records: {
-    failCount: number,
-    restrictedUntil: string | null,
+export interface IMyPandoraDetail {
+  pandora: {
+    label: string,
+    writer: string,
+    title: string,
+    description: string,
+    keywords: string[],
+    problems: { question: string, hint: string, answer: string }[],
+    totalProblems: number,
+    cat: string,
+    coverViewCount: number,
+    solverAlias: string | null,
+    solvedAt: string | null,
+    isCatUncovered: boolean,
+    active: boolean,
+    createdAt: string
+  };
+  totalRecords: number;
+  record: {
     unsealedQuestionIndex: number,
     unboxing: boolean,
-    createdAt: string,
     updatedAt: string
-  }[];
+  } | null;
 }
 
 export interface IMyChallenge {
@@ -21,16 +28,13 @@ export interface IMyChallenge {
   label: string;
   writer: string;
   title: string;
-  description: string;
-  currentQuestion: string;
-  currentHint: string;
   totalProblems: number;
+  coverViewCount: number;
+  createdAt: string;
   failCount: number;
   restrictedUntil: string | null;
   unsealedQuestionIndex: number;
   isPenaltyPeriod: boolean;
-  createdAt: string; // (record)
-  updatedAt: string; // (record)
 }
 
 export interface IMyConquereds {
@@ -40,10 +44,8 @@ export interface IMyConquereds {
     label: string,
     writer: string,
     title: string,
-    description: string,
-    firstQuestion: string,
-    firstHint: string,
-    totalProblems: number,
-    solvedAt: string | null
+    coverViewCount: number,
+    solvedAt: string,
+    createdAt: string
   }[];
 }

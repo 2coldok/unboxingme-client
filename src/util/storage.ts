@@ -3,13 +3,13 @@ interface IStorageData<T> {
   timeStamp: number;
 }
 
-type TSaveItemInSession = 'success' | 'security' | 'unknown';
-
 // 검색 결과, 판도라 표지의 데이터 신선도. 이 기간동안은 세션스토리지 데이터를 이용함
 const EXPIRATION_TIME = 1 * 60 * 1000;
 
-export const saveInSession = <T>(key: string, data: T): TSaveItemInSession => {
+export const saveInSession = <T>(key: string, data: T): void => {
   try {
+    console.log(key);
+    console.log(data);
     const now = Date.now();
     const storageData: IStorageData<T> = {
       value: data,
@@ -17,18 +17,12 @@ export const saveInSession = <T>(key: string, data: T): TSaveItemInSession => {
     };
 
     sessionStorage.setItem(key, JSON.stringify(storageData));
-    return 'success';
   } catch (error) {
-    if (error instanceof DOMException) {
-      if (error.name === 'QuotaExceededError') {
-        sessionStorage.clear();
-      }
-      if (error.name === "SecurityError") {
-        return 'security';
-      }
-      return 'unknown';
+    if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+      console.log('seesion error');
+      sessionStorage.clear();
     }
-    return 'unknown';
+    // 에러 다이렉트 만들기
   }
 }
 

@@ -2,12 +2,11 @@ export interface IPandoraSearchResults {
   total: number
   pandoras: {
     id: string;
+    label: string;
     writer: string;
     title: string;
-    description: string;
     coverViewCount: number;
     createdAt: string;
-    updatedAt: string;
   }[]
 }
 
@@ -32,20 +31,32 @@ export interface IMyPandoras {
     label: string;
     writer: string;
     title: string;
-    description: string;
-    keywords: string[];
-    problems: { question: string, hint: string, answer: string }[];
-    totalProblems: number;
-    cat: string;
     coverViewCount: number;
     solverAlias: string | null;
     solvedAt: string | null;
     isCatUncovered: boolean;
     active: boolean;
     createdAt: string;
-    updatedAt: string;
   }[]
 }
+
+// export interface IMyPandoraDetail {
+//   id: string;
+//   label: string;
+//   writer: string;
+//   title: string;
+//   description: string;
+//   keywords: string[];
+//   problems: { question: string, hint: string, answer: string }[];
+//   totalProblems: number;
+//   cat: string;
+//   coverViewCount: number;
+//   solverAlias: string | null;
+//   solvedAt: string | null;
+//   isCatUncovered: boolean;
+//   active: boolean;
+//   createdAt: string;
+// }
 
 export interface IMyPandoraEdit {
   writer: string;

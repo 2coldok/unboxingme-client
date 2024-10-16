@@ -3,7 +3,13 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
   // html
   :root {
-    
+    --background-color: #1c2128;
+    --light-blue: #90CBFB;
+    --middle-blue: #4588e1;
+    --light-gray: #9198a1;
+    --light-white: #c5d1de;
+    --dark-gray: #4f4f4f;
+    --light-white: #d1d7e0;
   }
 
   @font-face {
@@ -29,7 +35,8 @@ const GlobalStyle = createGlobalStyle`
     font-synthesis: none;
     text-rendering: optimizeLegibility;
 
-    background-color: #212121;
+    /* background-color: #212121; */
+    background-color: var(--background-color);
     color: #ECECEC;
   }
 
@@ -65,6 +72,35 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 500;
     color: #646cff;
     text-decoration: inherit;
+  }
+
+  input {
+    background-color: var(--background-color);
+    outline: none;
+    border-radius: 0.4rem;
+    border: 1.5px solid var(--light-gray);
+    color: #ECECEC;
+    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+  }
+
+  input:focus {
+    border-color: var(--middle-blue);
+  }
+
+  textarea {
+    background-color: var(--background-color);
+    outline: none;
+    border-radius: 0.4rem;
+    border: 1.5px solid var(--light-gray);
+    color: #ECECEC;
+    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+    line-height: 1.4;
+    word-spacing: -0.3rem;
+    resize: none;
+  }
+
+  textarea:focus {
+    border-color: var(--middle-blue);
   }
 `;
 

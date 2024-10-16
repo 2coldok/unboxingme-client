@@ -2,11 +2,18 @@ import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Search from "../components/Search";
-import PageLoading from "../loading/PageLoading";
 import { IPandoraService } from "../service/PandoraService";
 import { HttpError } from "../network/HttpClient";
 import { getInSession, saveInSession } from "../util/storage";
 import { useLoading } from "../hook/LoadingHook";
+import { Pagination } from "../util/Pagination";
+import { IPandoraSearchResults } from "../types/pandora";
+
+import { IoPerson } from "react-icons/io5"; // writer
+import { LuEye } from "react-icons/lu"; // coverViewCount
+import { IoIosFingerPrint } from "react-icons/io"; // label
+import { formatTimeAgo } from "../util/formatTimeAgo";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 
 interface ISearchResultProps {
@@ -15,12 +22,11 @@ interface ISearchResultProps {
 
 interface IPandoraSearched {
   id: string;
+  label: string;
   writer: string;
   title: string;
-  description: string;
   coverViewCount: number;
   createdAt: string;
-  updatedAt: string;
 }
 
 export default function SearchResult({ pandoraService }: ISearchResultProps) {
@@ -29,28 +35,26 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
   const navigate = useNavigate();
   const [pandoras, setPandoras] = useState<IPandoraSearched[]>([]);
   const { isLoading, startLoading, stopLoading } = useLoading();
-  
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [totalItems, setTotalItems] = useState<number>(0);
+
   useEffect(() => {
     startLoading();
     if (keyword && keyword.length > import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD) {
-      navigate('/fallback/404', { state: { message: '잘못된 접근: 검색 키워드 글자수 오류' } });
-      return;
+      return navigate('/fallback/404', { state: { message: '잘못된 접근: 검색 키워드 글자수 오류' } });
     }
 
     if (!keyword || keyword.length === 0) {
-      navigate('/fallback/404', { state: { message: '잘못된 접근: 존재하지 않는 검색' } });
-      return;
+      return navigate('/fallback/404', { state: { message: '잘못된 접근: 존재하지 않는 검색' } });
     }
 
     const fetchSearchResult = async () => {
       try {
-        const data = await pandoraService.getPandoraSearchResult(keyword, 1);
-        const { pandoras /** , total */ } = data.payload;
-        const saveState = saveInSession<IPandoraSearched[]>(`search-${keyword}-1`, pandoras);
-        if (saveState !== 'success') {
-          return navigate('/fallback/session', { state: { type: saveState } });
-        }
+        const data = await pandoraService.getPandoraSearchResult(keyword, currentPage);
+        const { pandoras, total} = data.payload;
+        saveInSession<IPandoraSearchResults>(`search-${keyword}-${currentPage}`, data.payload);
         setPandoras(pandoras);
+        setTotalItems(total);
       } catch (error) {
         if (error instanceof HttpError) {
           navigate('/fallback/error', { state: { error: error, type: error.payload } });
@@ -60,48 +64,64 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
       }
     }
 
-    /**
-     * 페이지네이션 구현시 page,상태를 중앙관리
-     */
-    const page = 1;
-    
-    const cachedPandoras = getInSession<IPandoraSearched[]>(`search-${keyword}-${page}`);
-    if (cachedPandoras) {
-      setPandoras(cachedPandoras);
+    const cachedCurrentPage = getInSession<number>('search-currentPage');
+    if (cachedCurrentPage) {
+      setCurrentPage(cachedCurrentPage);
+    } else {
+      saveInSession<number>('search-currentPage', 1);
+    }
+  
+    const cachedSearchResults = getInSession<IPandoraSearchResults>(`search-${keyword}-${currentPage}`);
+    if (cachedSearchResults) {
+      setPandoras(cachedSearchResults.pandoras);
+      setTotalItems(cachedSearchResults.total);
       stopLoading()
     } else {
       fetchSearchResult();
     }
-  }, [keyword, navigate, pandoraService, startLoading, stopLoading]);
+  }, [keyword, navigate, pandoraService, startLoading, stopLoading, currentPage]);
 
   const handleClick = (id: string) => {
     return navigate(`/pandora/${id}`);
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    saveInSession<number>('search-currentPage', page);
+  };
+
   return (
     <StyledContainer>
       <SearchWrapper>
-        <Search keyword={keyword as string} />
+        <Search keyword={keyword as string} onChangeCurrentPage={() => setCurrentPage(1)} />
       </SearchWrapper>
      
       {isLoading ? (
-        <PageLoading type={'limpidity'} />
+        <LoadingSpinner />
       ) : ( 
       <>
-        {pandoras.length > 0 ? (
-          <ul>
-            {pandoras.map((pandora) => (
-              <li key={pandora.id} onClick={() => handleClick(pandora.id)}>
-                <h1>uuid: {pandora.id}</h1>
-                <h3>제목: {pandora.title}</h3>
-                <h2>작성자: {pandora.writer}</h2>
-                <p>설명: {pandora.description}</p>
-                <p>생성일: {pandora.createdAt}</p>
-                <p>수정일: {pandora.updatedAt}</p>
-                <p>조회수: {pandora.coverViewCount}</p>
-              </li>
-            ))}
-          </ul>
+        {totalItems > 0 ? (
+          <>
+            <ul>
+              {pandoras.map((pandora) => (
+                <SearchList key={pandora.id}>
+                  <h1 onClick={() => handleClick(pandora.id)}>{pandora.title}</h1>
+                  <p className="writer"> <IoPerson /> {pandora.writer}</p>                  
+                  <span className="viewcount"> <LuEye /> {pandora.coverViewCount}</span>
+                  <span className="created"> · {formatTimeAgo(pandora.createdAt)}</span>
+                  <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
+                  <p className="br"></p>                
+                </SearchList>
+              ))}
+            </ul>
+            <Pagination
+              currentPage={currentPage}
+              totalItems={totalItems}
+              itemsPerPage={10}
+              maxVisibleTotalPages={5}
+              onPageChange={handlePageChange}
+            />
+          </>
         ) : (
           <h1>검색 결과를 찾을 수 없습니다.</h1>
         )}
@@ -125,3 +145,42 @@ const SearchWrapper = styled.div`
     width: 100%;
   }
 `;
+
+const SearchList = styled.li`
+
+  h1 {
+    color: #3b90f9;
+    margin: 0 0 0.3em 0;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  .writer {
+    color: #cbcbcb;
+    font-weight: bold;
+    margin: 0 0 0.2em 0;
+  }
+
+  .viewcount {
+    color: #686868;
+  }
+
+  .created {
+    color: #686868;
+  }
+
+  .br {
+    width: 100%;
+    height: 0.5px;
+    background-color: #606060;
+  }
+
+  .label {
+    margin: 0.1em 0 0 0;
+    font-size: 0.8em;
+    color: #646464;
+  }
+`

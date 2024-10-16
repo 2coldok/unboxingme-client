@@ -1,9 +1,9 @@
 import { IApiResponse } from '../types/api';
-import { IMyChallenge, IMyConquereds, IMyPandoraLogs } from '../types/dashboard';
+import { IMyChallenge, IMyConquereds, IMyPandoraDetail } from '../types/dashboard';
 import { IHttpClient } from './../network/HttpClient';
 
 export interface IDashboardService {
-  getMyPandoraLog(id: string, page: number): Promise<IApiResponse<IMyPandoraLogs>>;
+  getMyPandoraDetail(id: string): Promise<IApiResponse<IMyPandoraDetail>>;
   getMyChallenges(): Promise<IApiResponse<IMyChallenge[]>>;
   getMyConqueredPandoras(page: number): Promise<IApiResponse<IMyConquereds>>;
 }
@@ -11,8 +11,8 @@ export interface IDashboardService {
 export class DashboardService implements IDashboardService {
   constructor(private httpClient: IHttpClient) {}
 
-  async getMyPandoraLog(id: string, page: number) {
-    const data = await this.httpClient.fetch<IMyPandoraLogs, void>(`/dashboard/pandora/${id}/log?page=${page}`, {
+  async getMyPandoraDetail(id: string) {
+    const data = await this.httpClient.fetch<IMyPandoraDetail, void>(`/dashboard/pandora/${id}`, {
       method: 'GET'
     });
 

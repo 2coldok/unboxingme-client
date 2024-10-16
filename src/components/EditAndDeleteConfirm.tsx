@@ -1,76 +1,34 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
-import { ISelectedPandora } from './mypage/MyPandoras';
+import { ISelectedPandora } from '../pages/PandoraDetail';
+import { BsX } from "react-icons/bs";
+
 
 interface IEditAndDeleteConfirmProps {
-  pandora: ISelectedPandora,
+  pandora: ISelectedPandora
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   onCancel: () => void;
 }
 
 export default function EditAndDeleteConfirm({ pandora, onEdit, onDelete, onCancel }: IEditAndDeleteConfirmProps) {
-  const [showWarning, setShowWarning] = useState(true);
-  const [inputLabel, setInputLabel] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputLabel(e.target.value.trim());
-    setErrorMessage('');
-  }
-
-  const handleDeleteComplete = () => {
-    if (inputLabel === pandora.label) {
-      return onDelete(pandora.id);
-    }
-    console.log(inputLabel);
-    console.log(pandora.label);
-    setErrorMessage('입력한 제목이 일치하지 않습니다.');
-  }
-
-  if (showWarning && pandora.action === 'edit') {
-    return (
-      <ModalContainer>
-        <ShowWarningContainer>
-          <h3>'{pandora.title}' 노트를 수정하시겠습니까?</h3>
-          <p>- 수정 도중 모든 수수께끼가 해결되면 수정할 수 없습니다.</p>
-          <p>- 수정시 수수께끼에 도전한 사람들의 기록이 패널티를 포함하여 모두 초기화됩니다.</p>
-          <button onClick={onCancel}>취소</button>
-          <button onClick={() => onEdit(pandora.id)}>수정하기</button>
-        </ShowWarningContainer>
-      </ModalContainer>
-    )
-  }
-
-  if (showWarning && pandora.action === 'delete') {
-    return (
-      <ModalContainer>
-        <ShowWarningContainer>
-          <h3>{pandora.title} 판도라를 정말 삭제하시겠습니까?</h3>
-          <p>삭제시 해당 수수께끼에 도전한 사용자의 기록과, 도전현황이 모두 삭제됩니다.</p>
-          <p>삭제된 수수께끼는 복구가 불가능합니다.</p>
-          <button onClick={onCancel}>취소</button>
-          <button onClick={() => setShowWarning(false)}>삭제하기</button>
-        </ShowWarningContainer>
-     </ModalContainer>
-    )
-  }
   
   return (
     <ModalContainer>
-      <InputLabelContainer>
-        <h3>삭제 확인을 위해 <h1>"{pandora.label}"</h1> 을 입력해주세요.</h3>
-        <input
-          type='text'
-          value={inputLabel}
-          onChange={handleInputChange}
-         />
-         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-         <button onClick={onCancel}>취소</button>
-         <button onClick={handleDeleteComplete}>삭제 완료</button>
-      </InputLabelContainer>
+      <AlertWrapper>
+        <div className='close' onClick={onCancel}><BsX /> </div>
+        <h3 className='title'>{pandora.title}</h3>
+        <span className='total-records'>(문제풀이 참여 인원: {pandora.totalRecords}명)</span>
+        <ButtonWrapper>
+          {pandora.action === 'edit' && (
+            <button className='edit' onClick={() => onEdit(pandora.id)}>수정하기</button>
+          )}
+          {pandora.action === 'delete' && (
+            <button className='delete' onClick={() => onDelete(pandora.id)}>삭제하기</button>
+          )}
+        </ButtonWrapper>
+      </AlertWrapper>
     </ModalContainer>
-  );
+  )
 }
 
 const ModalContainer = styled.div`
@@ -79,23 +37,64 @@ const ModalContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(43, 54, 61, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
 `;  
 
-const ShowWarningContainer = styled.div`
+const AlertWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
+  align-items: center;
+  position: relative;
+
+  width: 410px;
+  background-color: var(--background-color);
+  border-radius: 0.5rem;
+  border: 1px solid var(--dark-gray);
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding: 1rem;
+
+  .title {
+    color: var(--light-white);
+    /* margin-bottom: 2rem; */
+    margin-bottom: 0.3em;
+  }
+
+  .total-records {
+    margin-top: 0;
+    margin-bottom: 2em;
+    color: var(--light-gray);
+  }
+
+  .close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--light-gray);
+  }
 `;
 
-const InputLabelContainer = styled.div`
+const ButtonWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  border: 3px solid pink;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-weight: bold;
+  justify-content: center;
+  & > button {
+    background-color: var(--background-color);
+    font-weight: bold;
+  }
+
+  .edit {
+    color: #a5b513;
+    border: 2px solid #a5b513;
+  }
+
+  .delete {
+    color: #c95047;
+    border: 2px solid #c95047;
+  }
 `;

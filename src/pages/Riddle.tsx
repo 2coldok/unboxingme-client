@@ -3,8 +3,11 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
-import PageLoading from "../loading/PageLoading";
 import { IInitialRiddleSuccess } from "../types/unboxing";
+
+import { FaLightbulb } from "react-icons/fa"; //힌트
+import RiddleProgress from "../util/RiddleProgress";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 interface IRiddleProps {
   unboxingService: IUnboxingService;
@@ -48,7 +51,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     setSubmitAnswer(event.target.value);
   };
   
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setUnboxingLoading(true);
     if (!id) {
@@ -84,45 +87,95 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
   return (
     <StyledContainer>
       {unboxingLoading || !riddle ? (
-        <PageLoading type={'opacity'} />
+        <LoadingSpinner />
       ) : (
-        <GreenroomWrapper>
-          <p>{riddle.unsealedQuestionIndex + 1} / {riddle.totalProblems}</p>
-          <h1>문제 {riddle.unsealedQuestionIndex + 1}번</h1>
-          <p>문제 : {riddle.question}</p>
-          <p>힌트 : {riddle.hint}</p>
-          <span>정답 : </span>
-          <form onSubmit={handleSubmit}>
-            <input
+        
+        <RiddleWrapper>
+          <RiddleProgress currentStep={riddle.unsealedQuestionIndex} totalSteps={riddle.totalProblems} />
+          <div className="question">
+            <p className="index">질문 {riddle.unsealedQuestionIndex + 1}. &nbsp;</p>
+            <p className="content">{riddle.question}</p>
+          </div>
+          
+          <p className="hint"><FaLightbulb /> &nbsp;{riddle.hint}</p>
+          <input
               type='text'
               name='answer'
-              placeholder='정답을 입력하세여'
               value={submitAnswer}
               onChange={handleChange}
               autoFocus
+              autoComplete="off"
             />
-            <button type="submit">정답 제출</button>
-          </form>
           <p>총 실패 횟수 : {riddle.failCount}번</p>
-        </GreenroomWrapper>
+          <button onClick={handleSubmit}>정답 제출</button>
+          
+        </RiddleWrapper>
       )}
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.main`
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  color: #ECECEC;
-  border: 1px solid #54ce7d;
-  width: 80%;
-  height: 800px;
 `;
 
-const GreenroomWrapper = styled.section`
-  border: 2px solid #995fc5;
-  border-radius: 1rem;
-  padding: 0.8rem;
+const RiddleWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #4e4e4f;
+  border-radius: 1em;
+  padding: 0.8em;
+
+  
+  
+  .question {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: bold;
+    font-size: 1.5em;
+    
+    .index {
+      white-space: nowrap;
+      color: #767676;
+      margin: 0;
+    }
+
+    .content {
+      margin: 0;
+    }
+  }
+
+  .hint {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0;
+    color: gray;
+    & > svg {
+      color: #efe282;
+    }
+
+    /* .index {
+      white-space: nowrap;
+      color: #efe282;
+      font-weight: bold;
+      font-size: 1.5rem;
+    } */
+  }
+
+  & > input {
+    width: 100%;
+    height: 2.3em;
+    background-color: #18191a;
+    color: #4a689b;
+    outline: none;
+    border: 1px solid #4482ed;
+    border-radius: 0.3em;
+    font-size: 1em;
+    padding: 0.5em;
+  }
 `;

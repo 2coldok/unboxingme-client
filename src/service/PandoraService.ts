@@ -32,7 +32,7 @@ export class PandoraService implements IPandoraService {
   }
 
   async getMyPandoras(page: number) {
-    const data = await this.httpClient.fetch<IMyPandoras, void>(`/pandora/mine?page=${page}`, {
+    const data = await this.httpClient.fetch<IMyPandoras, void>(`/pandora/mines?page=${page}`, {
       method: 'GET',
     });
 
