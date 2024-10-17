@@ -1,5 +1,5 @@
+
 // import { env } from '../config/env';
-import { env } from '../config/env';
 import { IHttpClient } from '../network/HttpClient';
 import { IApiResponse } from '../types/api';
 import { IMe, IProfile } from '../types/auth';
@@ -15,7 +15,7 @@ class AuthService {
   constructor(private httpClient: IHttpClient) {}
 
   login(redirectUri: string) {
-    window.location.href = `${env.url.GoogleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+    window.location.href = `${import.meta.env.VITE_GOOGLE_SIGN_IN}?redirect_uri=${encodeURIComponent(redirectUri)}`;
   }
 
   async logout() {
