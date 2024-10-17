@@ -35,9 +35,11 @@ dist-ssr
 
 # Custom
 .vscode
-.yarn
-.yarnrc.yml
 .eslintrc.cjs
-yarn.lock
 docs
 .env
+
+## 배포시 필요
+# yarn.lock
+# .yarn
+# .yarnrc.yml
