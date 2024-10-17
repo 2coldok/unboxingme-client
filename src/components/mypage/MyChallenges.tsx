@@ -47,7 +47,7 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   return (
     <StyledContainer>
       <h1>진행중</h1>
-      <p>최근 최대 10개의 목록</p>
+      <small>최근 최대 10개의 목록</small>
       {isLoading && <LoadingSpinner />}
       <ul>
         {myChallenges.map((challenge) => (

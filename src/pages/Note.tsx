@@ -8,6 +8,8 @@ import { LuEye } from "react-icons/lu";
 import { GoClock } from "react-icons/go";
 import { IoIosFingerPrint } from "react-icons/io";
 import { IoPerson } from "react-icons/io5";
+import { useLoading } from "../hook/LoadingHook";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -17,11 +19,14 @@ export default function Note({ unboxingService }: NoteProps) {
   const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
   const [pandora, setPandora] = useState<INote | null>(null);
+  const { isLoading, startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     if (!id) {
       return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
     }
+    
+    startLoading();
 
     const fetchNote = async () => {
       try {
@@ -31,31 +36,32 @@ export default function Note({ unboxingService }: NoteProps) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
         }
+      } finally {
+        stopLoading();
       }
     }
 
     fetchNote();
-  }, [id, navigate, unboxingService]);
+  }, [id, navigate, unboxingService, startLoading, stopLoading]);
 
-  if (!pandora) {
-    return null;
-  }
 
   return (
     <StyledContainr>
-      <CoverWrapper>
-        <HeadWrapper>
-          <h1 className="title">{pandora.title}</h1>
-          <p className="writer"><IoPerson /> {pandora.writer}</p>
-          <p className="view-created"><LuEye /> {pandora.coverViewCount} &nbsp;·&nbsp; <GoClock /> {pandora.createdAt}</p>
-          <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
-        </HeadWrapper>
-  
-        <DescriptionWrapper>
-         <pre className="description">{pandora.description}</pre>
-         <pre className="note">{pandora.note}</pre>
-        </DescriptionWrapper> 
-      </CoverWrapper>
+      {isLoading || !pandora ? <LoadingSpinner /> : ( 
+        <CoverWrapper>
+          <HeadWrapper>
+            <h1 className="title">{pandora.title}</h1>
+            <p className="writer"><IoPerson /> {pandora.writer}</p>
+            <p className="view-created"><LuEye /> {pandora.coverViewCount} &nbsp;·&nbsp; <GoClock /> {pandora.createdAt}</p>
+            <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
+          </HeadWrapper>
+    
+          <DescriptionWrapper>
+          <pre className="description">{pandora.description}</pre>
+          <pre className="note">{pandora.note}</pre>
+          </DescriptionWrapper> 
+        </CoverWrapper>
+      )}
    </StyledContainr>
   );
 }
@@ -73,7 +79,7 @@ const StyledContainr = styled.div`
 
 const CoverWrapper = styled.div`
   border: 1px solid var(--dark-gray);
-  border-radius: 1em;
+  border-radius: 0.5rem;
   overflow: hidden;
 `;
 

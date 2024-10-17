@@ -25,7 +25,7 @@ export function Copy({ text }: ICopyProps) {
 
   return (
     <>
-      <BsCopy onClick={handleCopy} />
+      <CopyIcon onClick={handleCopy} />
       {copied && (
         <ModalContainer visible={copied}>
           <span>게시물 링크를 복사하였습니다</span>
@@ -35,6 +35,10 @@ export function Copy({ text }: ICopyProps) {
     </>
   )
 }
+
+const CopyIcon = styled(BsCopy)`
+  cursor: pointer;
+`
 
 const ModalContainer = styled.div<{ visible: boolean }>`
   position: fixed;
@@ -46,7 +50,7 @@ const ModalContainer = styled.div<{ visible: boolean }>`
     align-items: center;
   }
   @media (max-width: 768px) {
-    width: 100%;
+    width: 80%;
   }
   transform: translateX(-50%);
   background-color: var(--light-blue);

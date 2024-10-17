@@ -12,13 +12,13 @@ import { BiPlusCircle } from "react-icons/bi"; // 생성
 import { PiNotePencil } from "react-icons/pi"; // 풀이중
 import { useEffect, useState } from "react";
 import CreationGuidelines from "../components/mypage/CreationGuidelines";
-import { getInSession } from "../util/storage";
+import { getInSession, saveInSession } from "../util/storage";
 interface IMypageProps {
   pandoraService: IPandoraService;
   dashboardService: IDashboardService;
 }
 
-// type Ttab = 'mine' | 'challenges' | 'conquered' | 'make';
+type Ttab = 'mine' | 'challenges' | 'conquered' | 'make';
 
 // function getTabName(tab: Ttab) {
 //   if (tab === 'mine') return '나의노트';
@@ -33,7 +33,7 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
   const [mineCurrentPage, setMineCurrentPage] = useState(1);
   const [conqueredCurrentPage, setConqueredPage] = useState(1);
   const navigate = useNavigate();
-  // const [tab, setTab] = useState<Ttab>('mine');
+  const [tab, setTab] = useState<Ttab>('mine');
 
   useEffect(() => {
     const cachedMine = getInSession<number>('mine-currentPage');
@@ -46,6 +46,10 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
       setConqueredPage(cachedConquered);
     }
 
+    const cachedTab = getInSession<Ttab>('tab');
+    if (cachedTab) {
+      setTab(cachedTab);
+    }
   }, []);
 
   useEffect(() => {
@@ -54,6 +58,7 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
     if (!currentTab && !validTabs.includes(currentTab)) {
       return navigate('/fallback/404', { state: { message: '지원하지 않는 탭입니다.' } })
     }
+
   }, [navigate, currentTab]);
 
   const handleNavigation = (tab: 'mine' | 'challenges' | 'conquered' | 'make') => {
@@ -63,35 +68,37 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
     if (tab === 'conquered') {
       setConqueredPage(1);
     }
+    saveInSession<Ttab>('tab', tab);
+    setTab(tab);
     setSearchParams({ tab });
   };
   
   return (
     <StyledContainer>
       <NavigateWrapper>
-        <NavButton onClick={() => handleNavigation('mine')}>
+        <NavButton onClick={() => handleNavigation('mine')} $active={tab === 'mine'}>
           <GiLockedBox />
           <span>나의 게시물</span>
         </NavButton>
-        <NavButton onClick={() => handleNavigation('challenges')}>
+        <NavButton onClick={() => handleNavigation('challenges')} $active={tab === 'challenges'}>
           <PiNotePencil />
           <span>진행중</span>
         </NavButton>
-        <NavButton onClick={() => handleNavigation('conquered')}>
+        <NavButton onClick={() => handleNavigation('conquered')} $active={tab === 'conquered'}>
           <TfiDropboxAlt />
           <span>열람</span>
         </NavButton>
-        <NavButton onClick={() => handleNavigation('make')}>
+        <NavButton onClick={() => handleNavigation('make')} $active={tab === 'make'}>
           <BiPlusCircle />
           <span>만들기</span>
         </NavButton>
       </NavigateWrapper>
 
       <ContentWrapper>
-        { currentTab === 'mine' && <MyPandoras pandoraService={pandoraService} currentPage={mineCurrentPage} setCurrentPage={setMineCurrentPage} /> }
-        { currentTab === 'challenges' && <MyChallenges dashboardService={dashboardService} /> }
-        { currentTab === 'conquered' && <MyConquered dashboardService={dashboardService} currentPage={conqueredCurrentPage} setCurrentPage={setConqueredPage} />}
-        { currentTab === 'make' && <CreationGuidelines /> }
+        { tab === 'mine' && <MyPandoras pandoraService={pandoraService} currentPage={mineCurrentPage} setCurrentPage={setMineCurrentPage} /> }
+        { tab === 'challenges' && <MyChallenges dashboardService={dashboardService} /> }
+        { tab === 'conquered' && <MyConquered dashboardService={dashboardService} currentPage={conqueredCurrentPage} setCurrentPage={setConqueredPage} />}
+        { tab === 'make' && <CreationGuidelines /> }
       </ContentWrapper>
       
     </StyledContainer>
@@ -104,14 +111,14 @@ const StyledContainer = styled.div`
   /* height: 100vh; */
 `;
 
-const NavButton = styled.button`
+const NavButton = styled.button<{ $active: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 2em;
-  background: none;
+  /* background: none; */
+  background: ${({$active}) => ($active ? 'var(--middle-blue)' : 'none')};
   border: none;
-  color: yellow;
   font-size: 1rem;
   cursor: pointer;
 
@@ -149,10 +156,6 @@ const NavigateWrapper = styled.div`
   & > button {
     margin-top: 2em;
     color: white;
-    :hover {
-      background-color: #427bff;
-    }
-
   }
 
   @media (max-width: 768px) {
@@ -161,7 +164,7 @@ const NavigateWrapper = styled.div`
     left: 0;
     width: 100%;
     height: 60px;
-    background-color: #161e2b;
+    background-color: #15191f;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;

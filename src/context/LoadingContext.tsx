@@ -23,7 +23,7 @@ export const LoadingContext = createContext<ILoadingContext | undefined>(undefin
 export function LoadingProvider({ children }: ILoadingProviderProps) {
   const [isFetching, setIsFetching] = useState<boolean>(false); //
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const LOADING_DELAY = 300;
+  const LOADING_DELAY = 1000;
   
   const startLoading = useCallback(() => {
     setIsFetching(true);

@@ -25,11 +25,12 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
     const fetchSolverAliasStatus = async () => {
       try {
         const data = await unboxingService.getSolverAliasStatus(id);
-        console.log(data.payload);
+        // 잘못된접근: 이미 solverAlias가 설정되어 있음
         if (data.payload.isSolverAlias) {
-          return navigate(`/pandora/${id}/note`, { replace: true });
+          return navigate('/fallback/404', { state: { message: '잘못된 접근입니다.' } });
         }
       } catch (error) {
+        // solverAlias 페이지에 접근 자격이 없음
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state : { error: error, payload: error.payload }});
         }

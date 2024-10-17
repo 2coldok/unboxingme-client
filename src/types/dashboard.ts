@@ -46,6 +46,7 @@ export interface IMyConquereds {
     title: string,
     coverViewCount: number,
     solvedAt: string,
+    solverAlias: string | null,
     createdAt: string
   }[];
 }

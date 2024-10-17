@@ -25,6 +25,7 @@ interface IPandoraConquered {
   title: string;
   coverViewCount: number;
   solvedAt: string;
+  solverAlias: string | null;
   createdAt: string;
 }
 
@@ -56,8 +57,12 @@ export default function MyConquered({ dashboardService, currentPage, setCurrentP
     fetchMyConqueredPandoras();
   }, [dashboardService, navigate, currentPage, startLoading, stopLoading]);
 
-  const handleClick = (pandoraId: string) => {
-    navigate(`/pandora/${pandoraId}/solveralias`);
+  const handleClick = (id: string, solverAlias: string | null) => {
+    if (solverAlias) {
+      return navigate(`/pandora/${id}/note`, { replace: true });
+    } else {
+      return navigate(`/pandora/${id}/solveralias`);
+    }
   }
   
   return (
@@ -68,12 +73,13 @@ export default function MyConquered({ dashboardService, currentPage, setCurrentP
           <ul>
             {pandoras.map((pandora) => (
               <ConqueredList key={pandora.id}>
-                <h2 className="title" onClick={() => handleClick(pandora.id)}>{pandora.title}</h2>
+                <h2 className="title" onClick={() => handleClick(pandora.id, pandora.solverAlias)}>{pandora.title}</h2>
                 <p className="writer"><IoPerson /> {pandora.writer}</p>
                 <span className="viewcount"> <LuEye /> {pandora.coverViewCount}</span>
                 <span className="created"> · {formatTimeAgo(pandora.createdAt)}</span>
                 <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
                 <p className="solved-at">{pandora.solvedAt} 완료</p>
+                {pandora.solverAlias && <p className="solveralias">열람자 별명: {pandora.solverAlias}</p>}
                 <p className="br"></p>
               </ConqueredList>
             ))}

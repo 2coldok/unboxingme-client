@@ -56,7 +56,9 @@ const MainContainer = styled.div`
   @media (max-width: 900px) {
     width: 100%;
   }
+
   max-width: 1200px;
+  min-height: 1000px;
   margin-top: 100px;
 `;
 
@@ -65,8 +67,7 @@ const FooterContainer = styled.footer`
   align-items: center;
   width: 100%;
   height: 120px;
-  margin-top: 200px;
-  margin-bottom: 200px;
+  margin-top: 30px;
   background-color: #0f2337;
 `;
 

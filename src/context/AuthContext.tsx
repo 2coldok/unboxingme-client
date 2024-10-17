@@ -32,11 +32,12 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
       console.log('*****AuthContext에서 fetchProfile 실행됨*****');
       try {
         const data = await authService.getProfile();
+        console.log('프로필', data.payload);
         setProfile(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
           setProfile(null);
-          // return alert(error.message);
+          console.error(error);
         }
       }
     }
