@@ -21,3 +21,5 @@ export function formatTimeAgo(createdAt: string): string {
     return `${year}.${month}.${day} ${hours}:${minutes}`;
   }
 }
+// TODO
+// 서버시간 UTC 고려하기. 클라 현재 컴 시간 시차 적용
