@@ -8,7 +8,7 @@
   to = "https://riddlenote.du.r.appspot.com/api/:splat"
   status = 200
   force = true
-  headers = {
-    X-Forwarded-Host = "riddlenote.com"
-  }
-  
+  [[redirects.headers]]
+    for = "/*"
+    values = { X-Forwarded-Host = "riddlenote.com" }
+    
