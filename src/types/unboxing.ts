@@ -67,6 +67,6 @@ export interface INote {
   title: string;
   description: string;
   coverViewCount: number;
-  note: string;
+  cat: string;
   createdAt: string;
 }

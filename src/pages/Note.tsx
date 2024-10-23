@@ -58,7 +58,7 @@ export default function Note({ unboxingService }: NoteProps) {
     
           <DescriptionWrapper>
           <pre className="description">{pandora.description}</pre>
-          <pre className="note">{pandora.note}</pre>
+          <pre className="note">{pandora.cat}</pre>
           </DescriptionWrapper> 
         </CoverWrapper>
       )}

@@ -78,7 +78,7 @@ export default function MyConquered({ dashboardService, currentPage, setCurrentP
                 <span className="viewcount"> <LuEye /> {pandora.coverViewCount}</span>
                 <span className="created"> · {formatTimeAgo(pandora.createdAt)}</span>
                 <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
-                <p className="solved-at">{pandora.solvedAt} 완료</p>
+                <p className="solved-at">{formatTimeAgo(pandora.solvedAt)} 완료</p>
                 {pandora.solverAlias && <p className="solveralias">열람자 별명: {pandora.solverAlias}</p>}
                 <p className="br"></p>
               </ConqueredList>

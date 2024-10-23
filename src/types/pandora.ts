@@ -88,3 +88,7 @@ export interface IEditPandoraForm {
 export interface IEditPandoraResult {
   totalDeletedRecords: number;
 }
+
+export interface IDeletePandoraResult {
+  totalDeletedRecords: number;
+}

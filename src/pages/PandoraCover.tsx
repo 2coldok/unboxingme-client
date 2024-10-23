@@ -16,6 +16,7 @@ import { IoIosFingerPrint } from "react-icons/io"; // label
 import { GoClock } from "react-icons/go"; // created
 import { HiOutlineDocumentText } from "react-icons/hi"; // totalProblems
 import { LoadingSpinner } from "../loading/LoadingSpinner";
+import { formatTimeAgo } from "../util/formatTimeAgo";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -121,7 +122,7 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
           <HeadWrapper>
             <h1 className="title">{pandoraCover.title}</h1>
             <p className="writer"><IoPerson /> {pandoraCover.writer}</p>
-            <p className="view-created"><LuEye /> {pandoraCover.coverViewCount} &nbsp;·&nbsp; <GoClock /> {pandoraCover.createdAt}</p>
+            <p className="view-created"><LuEye /> {pandoraCover.coverViewCount} &nbsp;·&nbsp; <GoClock /> {formatTimeAgo(pandoraCover.createdAt)}</p>
             <p className="total"><HiOutlineDocumentText /> {pandoraCover.totalProblems} 문제</p>
             <p className="label"><IoIosFingerPrint /> {pandoraCover.label}</p>
           </HeadWrapper>

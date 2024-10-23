@@ -3,7 +3,7 @@ import { IDashboardService } from "../service/DashboardService";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { HttpError } from "../network/HttpClient";
-import { formatTimeAgo } from "../util/formatTimeAgo";
+import { formatTime, formatTimeAgo } from "../util/formatTimeAgo";
 import { BsFillCaretDownFill } from "react-icons/bs"; // 펼치기
 import { BsFillCaretUpFill } from "react-icons/bs"; // 접기
 
@@ -71,9 +71,8 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   const handleDelete = async (id: string) => {
     try {
       const data = await pandoraService.deleteMyPandora(id);
-      if (data.success) {
-        return navigate('/dashboard');
-      }
+      alert(`총 ${data.payload.totalDeletedRecords} 개의 기록이 삭제되었습니다.`);
+      return navigate('/dashboard');
     } catch (error) {
       return navigate('/fallback/error', { state: { error: error } });
     }
@@ -179,7 +178,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
         <p>게시 상태: {detail.pandora.active ? '게시중' : '비공개'}</p>
         <p>게시물 내용 열람 상태: {detail.pandora.isCatUncovered ? '열람됨' : '미열람'} </p>
         <p>조회수: {detail.pandora.coverViewCount}</p>
-        <p>생성일: {detail.pandora.createdAt}</p>
+        <p>생성일: {formatTime(detail.pandora.createdAt)}</p>
 
         
         <h2>

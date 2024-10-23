@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { HttpError } from "../../network/HttpClient";
 import { IoPerson } from "react-icons/io5";
 import { LuEye } from "react-icons/lu";
-import { formatTimeAgo } from "../../util/formatTimeAgo";
+import { formatTime, formatTimeAgo } from "../../util/formatTimeAgo";
 import { IoIosFingerPrint } from "react-icons/io";
 import RiddleProgress from "../../util/RiddleProgress";
 import { useLoading } from "../../hook/LoadingHook";
@@ -63,8 +63,8 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
             </div>
            
   
-            {challenge.isPenaltyPeriod && (
-              <p className="penalty">{challenge.restrictedUntil} 까지 접근이 제한됩니다.</p>
+            {challenge.isPenaltyPeriod && challenge.restrictedUntil && (
+              <p className="penalty">{formatTime(challenge.restrictedUntil)} 까지 접근이 제한됩니다.</p>
             )}
             <p className="br"></p>
           </ChallengeList>

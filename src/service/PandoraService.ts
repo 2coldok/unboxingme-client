@@ -1,5 +1,5 @@
 import { IHttpClient } from './../network/HttpClient';
-import { INewPandoraForm, IPandoraCover, IPandoraSearchResults, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult, IMyPandoras } from '../types/pandora';
+import { INewPandoraForm, IPandoraCover, IPandoraSearchResults, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult, IMyPandoras, IDeletePandoraResult } from '../types/pandora';
 import { IApiResponse } from '../types/api';
 
 export interface IPandoraService {
@@ -8,7 +8,7 @@ export interface IPandoraService {
   getMyPandoras(page: number): Promise<IApiResponse<IMyPandoras>>;
   getMyPandoraEdit(id: string): Promise<IApiResponse<IMyPandoraEdit>>;
   createPandora(newPandoraForm: INewPandoraForm): Promise<IApiResponse<null>>;
-  deleteMyPandora(id: string): Promise<IApiResponse<null>>;
+  deleteMyPandora(id: string): Promise<IApiResponse<IDeletePandoraResult>>;
   editMyPandora(id: string, editPandoraForm: IEditPandoraForm): Promise<IApiResponse<IEditPandoraResult>>;
 }
 
@@ -57,7 +57,7 @@ export class PandoraService implements IPandoraService {
   }
 
   async deleteMyPandora(id: string) {
-    const data = await this.httpClient.fetch<null, void>(`/pandora/delete/${id}`, {
+    const data = await this.httpClient.fetch<IDeletePandoraResult, void>(`/pandora/delete/${id}`, {
       method: 'DELETE'
     });
 
