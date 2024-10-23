@@ -15,7 +15,6 @@ import PandoraCover from './pages/PandoraCover.tsx'
 import AuthService from './service/AuthService.ts'
 import HttpClient from './network/HttpClient.ts'
 import { AuthProvider } from './context/AuthContext.tsx'
-import { env } from './config/env.ts';
 import { PandoraService } from './service/PandoraService.ts'
 import { UnboxingService } from './service/UnboxingService.ts'
 import { DashboardService } from './service/DashboardService.ts'
@@ -31,6 +30,8 @@ import PenaltyFallback from './pages/fallback/PenaltyFallback.tsx'
 import SessionFallback from './pages/fallback/SessionFallback.tsx'
 import { LoadingProvider } from './context/LoadingContext.tsx'
 import PandoraDetail from './pages/PandoraDetail.tsx'
+
+import { env } from './config/env.ts'
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);

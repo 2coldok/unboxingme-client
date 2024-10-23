@@ -1,5 +1,5 @@
 function getEnv(key: string): string {
-  return import.meta.env[`VITE_${key}`];
+  return import.meta.env[key];
 }
 
 export const env = {
