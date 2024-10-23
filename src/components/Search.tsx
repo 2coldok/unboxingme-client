@@ -10,7 +10,7 @@ interface ISearchProps {
 
 export default function Search({ keyword, onChangeCurrentPage }: ISearchProps) {
   const [searchKeyword, setSearchKeyword] = useState(keyword);
-  const maxLengthOfSearchKeyword = parseInt(import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD);
+  const maxLengthOfSearchKeyword = 50;
   const navigate = useNavigate();
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {

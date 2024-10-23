@@ -1,8 +1,7 @@
-
-// import { env } from '../config/env';
 import { IHttpClient } from '../network/HttpClient';
 import { IApiResponse } from '../types/api';
 import { IMe, IProfile } from '../types/auth';
+import { env } from '../config/env';
 
 export interface IAuthService {
   login(redirectUri: string): void // 동작 디테일 체크해보기
@@ -15,7 +14,7 @@ class AuthService {
   constructor(private httpClient: IHttpClient) {}
 
   login(redirectUri: string) {
-    window.location.href = `${import.meta.env.VITE_GOOGLE_SIGN_IN}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+    window.location.href = `${env.url.googleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
   }
 
   async logout() {

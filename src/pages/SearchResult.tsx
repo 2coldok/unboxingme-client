@@ -40,7 +40,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
 
   useEffect(() => {
     startLoading();
-    if (keyword && keyword.length > import.meta.env.VITE_MAX_LENGTH_SEARCH_KEYWORD) {
+    if (keyword && keyword.length > 50) {
       return navigate('/fallback/404', { state: { message: '잘못된 접근: 검색 키워드 글자수 오류' } });
     }
 
