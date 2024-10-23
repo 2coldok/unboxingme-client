@@ -4,8 +4,8 @@ function getEnv(key: string): string {
 
 export const env = {
   url: {
-    serverBaseURL: getEnv('SERVER_BASE_URL'),
-    googleSignIn: getEnv('GOOGLE_SIGN_IN')
+    serverBaseURL: getEnv('VITE_SERVER_BASE_URL'),
+    googleSignIn: getEnv('VITE_GOOGLE_SIGN_IN')
   },
   restriction: {
     
