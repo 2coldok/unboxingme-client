@@ -43,7 +43,7 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
   };
 
   return (
-    <SearchFormContainer onSubmit={onSubmit}>
+    <SearchFormContainer onSubmit={onSubmit} role="search">
       <IoIosSearch />
       <input
         type="search"
@@ -55,9 +55,9 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
         autoFocus
         onChange={onChange}
         autoComplete="off"
-
       />
-      <button type='button'onClick={onCancel}><BsX /></button>
+      <button className="submit" type="submit"></button>
+      <button className="cancel" type='button'onClick={onCancel}><BsX /></button>
     </SearchFormContainer>
   );
 }
@@ -94,21 +94,21 @@ const SearchFormContainer = styled.form`
     color: var(--white200);
     outline: none;
     border: none;
-    font-size: 1.1em;
+    font-size: 1.2em;
     @media (max-width: 768px) {
-      font-size: 1em;
+      font-size: 1.1em;
     }
     width: 100%;
     height: 100%;
     padding: 0 0.6em 0 0.6em;
-    /* &::-webkit-search-cancel-button {
+    &::-webkit-search-cancel-button {
       -webkit-appearance: none;
     }
     &::-ms-clear {
       display: none;
       width: 0;
       height: 0;
-    } */
+    }
     /* &::-webkit-search-decoration,
     &::-webkit-search-results-decoration, */
     /* &::-webkit-search-results-button {
@@ -116,7 +116,11 @@ const SearchFormContainer = styled.form`
     } */
   }
 
-  & > button {
+  .submit {
+    display: none;
+  }
+
+  .cancel {
     padding-left: 0;
     border: none;
     background-color: var(--gray300);

@@ -239,4 +239,5 @@ const NoContent = styled.div`
   flex-direction: column;
   justify-content: center;
   background-color: var(--black100);
+  padding: 0.4em;
 `;
