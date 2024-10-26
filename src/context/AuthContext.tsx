@@ -27,10 +27,12 @@ export const AuthContext = createContext<IAuthContext | undefined>(undefined);
 export function AuthProvider({ authService, children }: IAuthProviderProps) {
   const [profile, setProfile] = useState<IProfile | null | undefined>(undefined);
   
-  useEffect(() => { 
+  useEffect(() => {
+     
     const fetchProfile = async () => {
       console.log('*****AuthContext에서 fetchProfile 실행됨*****');
       try {
+        
         const data = await authService.getProfile();
         console.log('프로필', data.payload);
         setProfile(data.payload);

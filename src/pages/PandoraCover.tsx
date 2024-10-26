@@ -67,7 +67,6 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
 
   const handleChallengeClick = async () => {
     try {
-      setChallengeLoading(true);
       const tokenStatus = await getTokenStatus();
 
       if (tokenStatus === 'valid') {
@@ -94,12 +93,7 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
       }
       
       if (tokenStatus == 'none') {
-        setChallengeLoading(false);
-        const userConfirmation = confirm('구글 로그인이 필요한 서비스입니다. 로그인 하시겠습니까?');
-        if (userConfirmation) {
-          return login(window.location.href);
-        }
-        return;
+        login(window.location.href);
       }
     } catch (error) {
       if (error instanceof HttpError) {

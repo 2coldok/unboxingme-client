@@ -4,17 +4,19 @@ import { useAuth } from "../hook/AuthHook";
 // import { FcGoogle } from "react-icons/fc";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
-
 export default function AppHeader() {
   const { profile, login } = useAuth();
+  const [ready, setReady] = useState(false);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (profile !== undefined) {
-      setIsLoading(false);
+    if (profile === undefined) {
+      setReady(false);
     }
-  }, [profile]);
+    if (profile === null) {
+      setReady(true);
+    }
+  }, [profile])
 
   const handleLogoClick = () => {
     return navigate('/');
@@ -32,14 +34,21 @@ export default function AppHeader() {
         <p>iddleNote</p>
       </LogoWrapper>
 
-      {(profile === null && !isLoading) &&  (
-        <LoginWrapper onClick={handleGoogleLoginClick}>
+      {profile === undefined && (
+        <LoginWrapper $ready={ready}>
+          <img src="/google.png" alt="google" />
+          <span>Login</span>
+        </LoginWrapper>
+      )}
+
+      {profile === null && (
+        <LoginWrapper onClick={handleGoogleLoginClick} $ready={ready}>
           <img src="/google.png" alt="google" />
           <span>Login</span>
         </LoginWrapper>
       )}
       
-      {(profile && !isLoading) && <Profile profile={profile} />}
+      {profile && <Profile profile={profile} />}
     </>
   );
 }
@@ -69,7 +78,7 @@ const LogoWrapper = styled.nav`
   }
 `;
 
-const LoginWrapper = styled.nav`
+const LoginWrapper = styled.nav<{ $ready: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,13 +87,15 @@ const LoginWrapper = styled.nav`
   border-radius: 1.5em;
   color: white;
   margin-right: 0.2em;
+  cursor: ${({ $ready }) => ($ready ? 'pointer' : 'not-allowed')};
 
   img {
     width: 1.5em;
     height: auto;
+    filter: ${({ $ready }) => ($ready ? 'none' : 'grayscale(100%)')};
   }
 
-  :hover {
-    cursor: pointer;
+  span {
+    color: ${({ $ready }) => ($ready ? 'var(--white100)' : 'gray')};
   }
 `;
