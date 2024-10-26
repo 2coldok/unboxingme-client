@@ -32,7 +32,7 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmedSearchKeyword = searchKeyword.trim();
-    if (searchKeyword.trim().length > 0) {
+    if (trimmedSearchKeyword.length > 0) {
       startLoading();
       sessionStorage.removeItem('search-currentPage');
       resetPage && resetPage();
@@ -43,18 +43,19 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
   };
 
   return (
-    <SearchFormContainer onSubmit={onSubmit} role="search">
+    <SearchFormContainer onSubmit={onSubmit} role="search" action="">
       <IoIosSearch />
       <input
         type="search"
         placeholder="keyword"
-        name="searchKeyword"
+        name="search"
         value={searchKeyword}
         maxLength={SEARCH_KEYWORD.maxLength}
         required
         autoFocus
         onChange={onChange}
         autoComplete="off"
+        enterKeyHint="search"
       />
       <button className="submit" type="submit"></button>
       <button className="cancel" type='button'onClick={onCancel}><BsX /></button>
