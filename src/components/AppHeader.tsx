@@ -35,7 +35,7 @@ export default function AppHeader() {
       {(profile === null && !isLoading) &&  (
         <LoginWrapper onClick={handleGoogleLoginClick}>
           <img src="/google.png" alt="google" />
-          <span>로그인</span>
+          <span>Login</span>
         </LoginWrapper>
       )}
       
@@ -51,7 +51,8 @@ const LogoWrapper = styled.nav`
   height: 100%;
 
   p {
-    font-size: 1.3em;  
+    font-size: 1.3em;
+    margin-bottom: 0.7em;  
 
   }
 
@@ -59,7 +60,6 @@ const LogoWrapper = styled.nav`
     width: 1.6em;
     height: auto;
     margin-left: 1em;
-    margin-bottom: 0.3em;
     border-radius: 0.2em;
   }
   
@@ -77,6 +77,7 @@ const LoginWrapper = styled.nav`
   font-size: 1.2em;
   border-radius: 1.5em;
   color: white;
+  margin-right: 0.2em;
 
   img {
     width: 1.5em;
