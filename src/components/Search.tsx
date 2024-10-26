@@ -55,6 +55,7 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
         autoFocus
         onChange={onChange}
         autoComplete="off"
+
       />
       <button type='button'onClick={onCancel}><BsX /></button>
     </SearchFormContainer>
@@ -100,19 +101,19 @@ const SearchFormContainer = styled.form`
     width: 100%;
     height: 100%;
     padding: 0 0.6em 0 0.6em;
-    &::-webkit-search-cancel-button {
+    /* &::-webkit-search-cancel-button {
       -webkit-appearance: none;
     }
     &::-ms-clear {
       display: none;
       width: 0;
       height: 0;
-    }
-    &::-webkit-search-decoration,
-    &::-webkit-search-results-decoration,
-    &::-webkit-search-results-button {
+    } */
+    /* &::-webkit-search-decoration,
+    &::-webkit-search-results-decoration, */
+    /* &::-webkit-search-results-button {
       display: none;
-    }
+    } */
   }
 
   & > button {
