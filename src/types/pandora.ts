@@ -5,6 +5,7 @@ export interface IPandoraSearchResults {
     label: string;
     writer: string;
     title: string;
+    totalProblems: number;
     coverViewCount: number;
     createdAt: string;
   }[]

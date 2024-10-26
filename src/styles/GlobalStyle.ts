@@ -10,6 +10,28 @@ const GlobalStyle = createGlobalStyle`
     --light-white: #c5d1de;
     --dark-gray: #4f4f4f;
     --light-white: #d1d7e0;
+
+    --dark-black100: #12181f;
+    --light-white500: #a6b6e3;
+
+    /*white*/
+    --white100: #ececec; //
+    --white200: #cdcdcd; // 글씨 + 
+
+    /*blue*/
+    --blue100: #7eaaff; // 검색 테두리 + 
+    --blue200: #3b90f9;
+    
+    /*gray*/
+    --gray100: #6a737d; // 검색 돋보기,x색 +
+    --gray200: #3a3d42;
+    --gray300: #181b1d; // input 내부배경 +
+
+    /*black*/
+    --black100: #101114;
+
+    /*red*/
+    --red500: #db3535;
   }
 
   @font-face {
@@ -29,15 +51,15 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    font-family: 'Roboto', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+    font-family: 'DungGeunMo', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
 
-    /* background-color: #212121; */
-    background-color: var(--background-color);
-    color: #ECECEC;
+    background-color: var(--black100);
+    color: var(--white200);
   }
 
   // App StyledContainer
@@ -81,6 +103,7 @@ const GlobalStyle = createGlobalStyle`
     border: 1.5px solid var(--light-gray);
     color: #ECECEC;
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+    font-family: 'DungGeunMo', sans-serif;
   }
 
   input:focus {
@@ -97,10 +120,15 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.4;
     word-spacing: -0.3rem;
     resize: none;
+    font-family: 'DungGeunMo', sans-serif;
   }
 
   textarea:focus {
     border-color: var(--middle-blue);
+  }
+
+  pre {
+    font-family: 'DungGeunMo', sans-serif;
   }
 `;
 

@@ -1,6 +1,6 @@
 export const SEARCH_KEYWORD = Object.freeze({
   minLength: 1,
-  maxLength: 20
+  maxLength: 30
 });
 
 export const SUBMIT_ANSWER = Object.freeze({
@@ -32,7 +32,7 @@ export const PANDORA_FORM = Object.freeze({
   minTotalKeywords: 0,
   maxTotalKeywords: 10,
   minKeywordLength: 1,
-  maxKeywordLength: 20,
+  maxKeywordLength: 30,
 
   // 문제
   minTotalProblems: 1,

@@ -11,9 +11,12 @@ import { IPandoraSearchResults } from "../types/pandora";
 
 import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
-import { IoIosFingerPrint } from "react-icons/io"; // label
 import { formatTimeAgo } from "../util/formatTimeAgo";
-import { LoadingSpinner } from "../loading/LoadingSpinner";
+import { GoDotFill } from "react-icons/go";
+import { AiFillLock } from "react-icons/ai"; // lock 자물쇠 - 총 질문 개수
+import { BiSolidLabel } from "react-icons/bi"; // 라벨
+import { SEARCH_KEYWORD } from "../constant/constraints";
+import PandoraListSkeleton from "../loading/PandoraListSkeleton";
 
 
 interface ISearchResultProps {
@@ -25,6 +28,7 @@ interface IPandoraSearched {
   label: string;
   writer: string;
   title: string;
+  totalProblems: number;
   coverViewCount: number;
   createdAt: string;
 }
@@ -33,14 +37,14 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
   const navigate = useNavigate();
-  const [pandoras, setPandoras] = useState<IPandoraSearched[]>([]);
+  const [pandoras, setPandoras] = useState<IPandoraSearched[] | null>(null);
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
     startLoading();
-    if (keyword && keyword.length > 50) {
+    if (keyword && keyword.length > SEARCH_KEYWORD.maxLength) {
       return navigate('/fallback/404', { state: { message: '잘못된 접근: 검색 키워드 글자수 오류' } });
     }
 
@@ -75,14 +79,14 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
     if (cachedSearchResults) {
       setPandoras(cachedSearchResults.pandoras);
       setTotalItems(cachedSearchResults.total);
-      stopLoading()
+      stopLoading();
     } else {
       fetchSearchResult();
     }
   }, [keyword, navigate, pandoraService, startLoading, stopLoading, currentPage]);
 
   const handleClick = (id: string) => {
-    return navigate(`/pandora/${id}`);
+    return navigate(`/pandora/${id}?keyword=${keyword}`);
   }
 
   const handlePageChange = (page: number) => {
@@ -90,97 +94,149 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
     saveInSession<number>('search-currentPage', page);
   };
 
-  return (
-    <StyledContainer>
-      <SearchWrapper>
-        <Search keyword={keyword as string} onChangeCurrentPage={() => setCurrentPage(1)} />
-      </SearchWrapper>
-     
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : ( 
+  /*********************************************************************************/
+
+  if (isLoading) {
+    return (
       <>
-        {totalItems > 0 ? (
-          <>
-            <ul>
-              {pandoras.map((pandora) => (
-                <SearchList key={pandora.id}>
-                  <h1 onClick={() => handleClick(pandora.id)}>{pandora.title}</h1>
-                  <p className="writer"> <IoPerson /> {pandora.writer}</p>                  
-                  <span className="viewcount"> <LuEye /> {pandora.coverViewCount}</span>
-                  <span className="created"> · {formatTimeAgo(pandora.createdAt)}</span>
-                  <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
-                  <p className="br"></p>                
-                </SearchList>
-              ))}
-            </ul>
-            <Pagination
-              currentPage={currentPage}
-              totalItems={totalItems}
-              itemsPerPage={10}
-              maxVisibleTotalPages={5}
-              onPageChange={handlePageChange}
-            />
-          </>
-        ) : (
-          <h1>검색 결과를 찾을 수 없습니다.</h1>
-        )}
+        <SearchWrapper>
+          <Search keyword={keyword as string} resetPage={() => setCurrentPage(1)} />
+        </SearchWrapper>
+        <PandoraListSkeleton />
       </>
+    )
+  }
+
+  // 500ms 동안은(fetch가 빠를경우 로딩 안보여줌) isLoading이 false 임으로 이 시간동한만 null을 반환
+  if (!pandoras) {
+    return null;
+  }
+
+  return (
+    <>
+      <SearchWrapper>
+        <Search keyword={keyword as string} resetPage={() => setCurrentPage(1)} />
+      </SearchWrapper>
+      {totalItems > 0 ? (
+        <SearchUl>
+          {pandoras.map((pandora) => (
+            <SearchList key={pandora.id}>
+              <h2 className="title" onClick={() => handleClick(pandora.id)}>{pandora.title}</h2>
+              <InfoWrapper>
+                <div className="left-contents">
+                  <p className="writer"> <IoPerson /> {pandora.writer}</p>                  
+                  <p className="view-createdat"> 
+                    <AiFillLock /> {pandora.totalProblems} ·&nbsp;
+                    <LuEye /> {pandora.coverViewCount} ·&nbsp;
+                    {formatTimeAgo(pandora.createdAt)}
+                  </p>
+                  <p className="label"><BiSolidLabel /> {pandora.label}</p>
+                </div>
+                <div className="right-contents">
+                  <p className="state"><GoDotFill /> 미열람</p>
+                </div>
+              </InfoWrapper>
+            </SearchList>
+          ))}
+        </SearchUl>
+      ) : (
+        <NoContent>
+          <h1>검색 결과가 없습니다.</h1>
+          <p>* 게시글 작성자가 설정한 키워드를 통해서만 검색할 수 있습니다.</p>
+          <p>* 게시글의 제목, 작성자 및 내용은 검색 결과에서 제외됩니다.</p>
+          <p>* 모든 질문이 해결되어 게시물이 열람되었을 경우 검색 결과에서 제외됩니다.</p>
+          <p>* 대소문자 및 띄어쓰기 구분합니다.</p>
+        </NoContent>
+       
+
       )}
-    </StyledContainer>
+      {totalItems > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalItems={totalItems}
+          itemsPerPage={10}
+          maxVisibleTotalPages={5}
+          onPageChange={handlePageChange}
+        />
+      )}
+    </>
   );
 }
 
-const StyledContainer = styled.main`
-  width: 100%;
-  padding-left: 0.8em;
-  padding-right: 0.8em;
-`;
-
 const SearchWrapper = styled.div`
   display: flex;
-  width: 70%;
-  margin-top: 1.5em;
-  @media (max-width: 900px) {
-    width: 100%;
-  }
+  justify-content: center;
+  margin-bottom: 30px;
 `;
 
-const SearchList = styled.li`
+const SearchUl = styled.ul`
+  margin: 0;
+`
 
-  h1 {
-    color: #3b90f9;
-    margin: 0 0 0.3em 0;
+const SearchList = styled.li`
+  background-color: var(--black100);
+  border-bottom: 1px solid var(--gray200);
+  padding: 1em 1.5em 1em 1em;
+
+  .title {
+    color: var(--blue100);
     cursor: pointer;
+    margin: 0;
 
     &:hover {
       text-decoration: underline;
     }
   }
-  
+`;
+
+const InfoWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-itmes: center;
+
   .writer {
-    color: #cbcbcb;
+    display: flex;
+    color: var(--white200);
     font-weight: bold;
-    margin: 0 0 0.2em 0;
+    font-size: 1.1em;
+    margin: 0.9em 0 0.2em 0;
+    & > svg {
+      margin-right: 0.3em;
+    }
   }
 
-  .viewcount {
-    color: #686868;
-  }
-
-  .created {
-    color: #686868;
-  }
-
-  .br {
-    width: 100%;
-    height: 0.5px;
-    background-color: #606060;
+  .view-createdat {
+    display: flex;
+    color: var(--gray100);
+    margin: 0.3em 0 0.2em 0;
+    & > svg {
+      margin-right: 0.3em;
+    }
   }
 
   .label {
-    margin: 0.1em 0 0 0;
+    display: flex;
+    margin: 0.6em 0 0 0;
     font-size: 0.8em;
-    color: #646464;
+    color: var(--gray100);
+    & > svg {
+      margin-right: 0.3em;
+    }
   }
-`
+
+  .state {
+    display: flex;
+    color: var(--gray100);  
+    & > svg {
+      margin-right: 0.3em;
+      color: var(--red500);
+    }
+  }
+`;
+
+const NoContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--black100);
+`;

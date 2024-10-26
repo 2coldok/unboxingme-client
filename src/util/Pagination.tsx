@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { MdChevronLeft } from "react-icons/md"; // 이전
+import { MdChevronRight } from "react-icons/md"; // 다음
 
 interface PaginationProps {
   currentPage: number;
@@ -57,9 +59,9 @@ export function Pagination({ currentPage, totalItems, itemsPerPage, maxVisibleTo
 
   return (
     <PaginationContainer>
-      <Button onClick={handlePrevious} $disabled={currentPage === 1}>
-        Previous
-      </Button>
+      <Direction onClick={handlePrevious} $disabled={currentPage === 1}>
+        <MdChevronLeft />
+      </Direction>
       {visiblePages.map((page) => (
         <PageButton
           key={page}
@@ -69,9 +71,9 @@ export function Pagination({ currentPage, totalItems, itemsPerPage, maxVisibleTo
           {page}
         </PageButton>
       ))}
-      <Button onClick={handleNext} $disabled={currentPage === totalPages}>
-        Next
-      </Button>
+      <Direction onClick={handleNext} $disabled={currentPage === totalPages}>
+        <MdChevronRight />
+      </Direction>
     </PaginationContainer>
   );
 }
@@ -81,17 +83,28 @@ const PaginationContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.6em;
-  margin-top: 5em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  margin-bottom: 2em;
+  background-color: var(--black100);
+  font-size: 1.5em;
 `;
 
-const Button = styled.button<{ $disabled: boolean }>`
-  background-color: gray;
-  color: white;
-  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+const Direction = styled.div<{ $disabled: boolean }>`
+  display: flex;
+  color: ${({ $disabled }) => ($disabled ? 'var(--gray200)' : 'var(--blue100)')};
   pointer-events: ${({ $disabled }) => ($disabled ? 'none' : 'auto')};
+  :hover {
+    cursor: pointer;
+  }
 `;
 
-const PageButton = styled.button<{ $isActive: boolean }>`
-  background-color: gray;
-  background-color: ${({ $isActive }) => ($isActive ? '#007bff' : 'none')};
+const PageButton = styled.span<{ $isActive: boolean }>`
+  padding: 0.1em 0.4em 0.1em 0.4em;
+  border-radius: 0.1em;
+  color: var(--blue100);
+  border: 1px solid ${({ $isActive }) => ($isActive ? 'var(--blue100)' : 'none')};
+  :hover {
+    cursor: pointer;
+  }
 `;

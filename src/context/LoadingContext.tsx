@@ -21,9 +21,9 @@ interface ILoadingProviderProps {
 export const LoadingContext = createContext<ILoadingContext | undefined>(undefined);
 
 export function LoadingProvider({ children }: ILoadingProviderProps) {
-  const [isFetching, setIsFetching] = useState<boolean>(false); //
+  const [isFetching, setIsFetching] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const LOADING_DELAY = 1000;
+  const LOADING_DELAY = 500;
   
   const startLoading = useCallback(() => {
     setIsFetching(true);
@@ -31,7 +31,6 @@ export function LoadingProvider({ children }: ILoadingProviderProps) {
 
   const stopLoading = useCallback(() => {
     setIsFetching(false);
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {

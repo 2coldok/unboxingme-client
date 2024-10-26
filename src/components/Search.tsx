@@ -1,86 +1,105 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
+import { BsX } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import React, { useState } from "react";
+import { SEARCH_KEYWORD } from "../constant/constraints";
+import { useLoading } from "../hook/LoadingHook";
 
 interface ISearchProps {
   keyword: string;
-  onChangeCurrentPage?: () => void;
+  // 검색어 제출시 session에 저장된 현재 페이지를 1로 초기화 한다.
+  resetPage?: () => void;
 }
 
-export default function Search({ keyword, onChangeCurrentPage }: ISearchProps) {
+export default function Search({ keyword, resetPage }: ISearchProps) {
   const [searchKeyword, setSearchKeyword] = useState(keyword);
-  const maxLengthOfSearchKeyword = 50;
+  const { startLoading } = useLoading();
   const navigate = useNavigate();
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    if (value.length <= SEARCH_KEYWORD.maxLength) {
+      setSearchKeyword(value);
+    }
+  };
+
+  const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setSearchKeyword('');
+  };
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const trimmedSearchKeyword = searchKeyword.trim();
-
-    if (trimmedSearchKeyword.length > 0) {
+    if (searchKeyword.trim().length > 0) {
+      startLoading();
       sessionStorage.removeItem('search-currentPage');
-      onChangeCurrentPage && onChangeCurrentPage();
+      resetPage && resetPage();
       return navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
     } else {
       return setSearchKeyword('');
     }
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    if (value.length <= maxLengthOfSearchKeyword) {
-      setSearchKeyword(value);
-    }
-  };
-
   return (
-    <FormContainer onSubmit={onSubmit}>
-      <SearchWrapper>
-        <input
-          type="search"
-          placeholder="Keyword..."
-          name="searchKeyword"
-          value={searchKeyword}
-          maxLength={maxLengthOfSearchKeyword} // 검색 키워드 최대 20글자
-          required
-          autoFocus
-          onChange={onChange}
-          autoComplete="off"
-        />
-        <button type="submit"><IoIosSearch /></button>
-     </SearchWrapper>
-    </FormContainer>
+    <SearchFormContainer onSubmit={onSubmit}>
+      <IoIosSearch />
+      <input
+        type="search"
+        placeholder="keyword"
+        name="searchKeyword"
+        value={searchKeyword}
+        maxLength={SEARCH_KEYWORD.maxLength}
+        required
+        autoFocus
+        onChange={onChange}
+        autoComplete="off"
+      />
+      <button type='button'onClick={onCancel}><BsX /></button>
+    </SearchFormContainer>
   );
 }
 
-const FormContainer = styled.form`
-  display: flex;
-  width: 100%;
-`
-
-const SearchWrapper = styled.div`
+const SearchFormContainer = styled.form`
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  height: 60px;
-  padding: 0;
-  background-color: #181b1d;
-  
-  border-radius: 1.5rem;
+  align-items: center;
+  background-color: var(--gray300);
+  border: 1.5px solid var(--blue100);
 
+  width: 700px;
+  @media (max-width: 768px) {
+    width: 85%;
+  }
+
+  height: 50px;
+  @media (max-width: 760px) {
+    height: 40px;
+  }
+
+  padding: 0;
+  border-radius: 1.6rem;
+  overflow: hidden;
+  
+  & > svg {
+    color: var(--gray100);
+    margin-left: 0.5em;
+    font-size: 1.7em;
+  }
+  
   & > input {
-    background-color: #181b1d;
-    color: #A6B5E3;
-    /* color: #40A822; */
+    background-color: var(--gray300);
+    color: var(--white200);
     outline: none;
     border: none;
-    border-top-left-radius: 1.5rem;
-    border-bottom-left-radius: 1.5rem;
-    font-size: 1.5em;
+    font-size: 1.1em;
+    @media (max-width: 768px) {
+      font-size: 1em;
+    }
     width: 100%;
     height: 100%;
-    padding: 0 0 0 0.5em;
-
+    padding: 0 0.6em 0 0.6em;
     &::-webkit-search-cancel-button {
       -webkit-appearance: none;
     }
@@ -97,35 +116,13 @@ const SearchWrapper = styled.div`
   }
 
   & > button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: none;
-    border-top-right-radius: 1.5rem;
-    border-bottom-right-radius: 1.5rem;
-    padding-right: 0.7em;
-    padding-left: 0.4em;
-    padding-top: 0.5em;
+    padding-left: 0;
     border: none;
-    /* background-color: red; */
+    background-color: var(--gray300);
 
     & > svg {
-      /* display: flex; */
-      color: #A6B5E3;
+      color: var(--gray100);
       font-size: 1.8em;
     }
   }
-
-  &:focus-within {
-    border: 2px solid #A6B5E3;
-  }
-
-  &:hover {
-    box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.75);
-    -webkit-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 1px 4px 0px rgba(0,0,0,0.75);
-  }
-
-  
-  
 `;

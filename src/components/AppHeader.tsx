@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
 
@@ -28,13 +28,14 @@ export default function AppHeader() {
   return (
     <>
       <LogoWrapper onClick={handleLogoClick}>
-        <h1>리들노트</h1>
+        <img src="/logo.png" alt="logo" />
+        <p>iddleNote</p>
       </LogoWrapper>
 
       {(profile === null && !isLoading) &&  (
         <LoginWrapper onClick={handleGoogleLoginClick}>
-          <FcGoogle />
-          <span>Google 로그인</span>
+          <img src="/google.png" alt="google" />
+          <span>로그인</span>
         </LoginWrapper>
       )}
       
@@ -44,11 +45,28 @@ export default function AppHeader() {
 }
 
 const LogoWrapper = styled.nav`
-  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  p {
+    font-size: 1.3em;  
+
+  }
+
+  img {
+    width: 1.6em;
+    height: auto;
+    margin-left: 1em;
+    margin-bottom: 0.3em;
+    border-radius: 0.2em;
+  }
+  
 
   &:hover {
     cursor: pointer;
-  }    
+  }
 `;
 
 const LoginWrapper = styled.nav`
@@ -56,13 +74,16 @@ const LoginWrapper = styled.nav`
   justify-content: center;
   align-items: center;
   padding: 0.5em 0.7em;
-  border: 1px solid white;
+  font-size: 1.2em;
   border-radius: 1.5em;
   color: white;
-  font-weight: bold;
 
-  & > svg {
-    margin-right: 0.3em;
-    font-size: 1.5em;
+  img {
+    width: 1.5em;
+    height: auto;
+  }
+
+  :hover {
+    cursor: pointer;
   }
 `;

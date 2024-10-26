@@ -122,8 +122,10 @@ const DescriptionWrapper = styled.div`
   .note {
     margin-top: 1em;
     margin-bottom: 0;
-    background-color: #12181f;
+    /* background-color: #12181f; */
+    background-color: var(--dark-black100);
     padding: 1.5em 1em 1.5em 1em;
     border-top: 2px dashed var(--dark-gray);
+    color: var(--light-white500);
   }
 `;

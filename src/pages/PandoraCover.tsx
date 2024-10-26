@@ -13,10 +13,9 @@ import Alert from "../util/Alert";
 import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
 import { IoIosFingerPrint } from "react-icons/io"; // label
-import { GoClock } from "react-icons/go"; // created
-import { HiOutlineDocumentText } from "react-icons/hi"; // totalProblems
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { formatTimeAgo } from "../util/formatTimeAgo";
+import RiddleProgress from "../util/RiddleProgress";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -114,153 +113,121 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
   }
 
   return (
-    <StyledContainer>
+    <>
       {isLoading || !pandoraCover ? (
         <LoadingSpinner />
       ) : (
         <CoverWrapper>
           <HeadWrapper>
             <h1 className="title">{pandoraCover.title}</h1>
-            <p className="writer"><IoPerson /> {pandoraCover.writer}</p>
-            <p className="view-created"><LuEye /> {pandoraCover.coverViewCount} &nbsp;·&nbsp; <GoClock /> {formatTimeAgo(pandoraCover.createdAt)}</p>
-            <p className="total"><HiOutlineDocumentText /> {pandoraCover.totalProblems} 문제</p>
-            <p className="label"><IoIosFingerPrint /> {pandoraCover.label}</p>
+            <p className="writer">
+              <IoPerson /> {pandoraCover.writer}
+            </p>
+            <p className="view-createdat">
+              <LuEye /> {pandoraCover.coverViewCount} &nbsp;·&nbsp; 
+              {formatTimeAgo(pandoraCover.createdAt)}
+            </p>
+            <p className="label">
+              <IoIosFingerPrint /> {pandoraCover.label}
+            </p>
           </HeadWrapper>
           
-          <DescriptionWrapper>
-            <pre>{pandoraCover.description}</pre>
-          </DescriptionWrapper>
+          <Description>{pandoraCover.description}</Description>
           
-          <RiddleWrapper>
-            <div className="question">
+          <FirstRiddleWrapper>
+            <RiddleProgress totalSteps={pandoraCover.totalProblems} currentStep={0} />
+            <div className="problem">
               <p className="index">질문 1. &nbsp;</p>
-              <p className="content">{pandoraCover.firstQuestion}</p>
+              <p>{pandoraCover.firstQuestion}</p>
             </div>
-            {/* */}
-            <button className="button" onClick={handleChallengeClick}>노트 확인하기</button>
-          </RiddleWrapper>  
+            <button onClick={handleChallengeClick}>게시글 내용 확인하기</button>
+          </FirstRiddleWrapper>  
         </CoverWrapper>
       )}
 
       {alertMessage && (
         <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
-    </StyledContainer>
+    </>
   );
 }
     
-const StyledContainer = styled.main`
+const CoverWrapper = styled.main`
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  /* align-items: center; */
-  
-  width: 100%;
-  /* margin: 3em; */
-  /* padding-left: 0.4rem;
-  padding-right: 0.4rem; */
-  padding: 4em;
-  @media (max-width: 768px) {
-    padding: 0;
-  }
-
-  .description {
-    font-size: 1rem;
-    font-weight: bold;
-  }
+  border: 1px solid #3a3d42;
+  border-radius: 0.7rem;
+  padding: 1.5em;
+  overflow: hidden;
+  background-color: #101114;
 `;
 
-const CoverWrapper = styled.div`
-  border: 1px solid #5a5a5a;;
-  border-radius: 1em;
-  overflow: hidden;
-`
-
 const HeadWrapper = styled.div`
-  background-color: #1c1f24;
-  padding: 1.5rem;
-  /* border-bottom: 0.5px solid #757575; */
-
   .title {
-    color: #1775d9;
+    color: #7eaaff;
     margin: 0;
   }
 
   .writer {
-    margin: 0.1em 0 0 0;
+    font-weight: bold;
+    margin: 0.5em 0 0.2em 0;
+    color: #d1d5da;
   }
 
-  .view-created {
-    margin: 0.1em 0 0 0;
-    color: #686868;
+  .view-createdat {
+    display: flex;
+    margin: 0.1em 0 0.2em 0;
+    color: #6a737d;
+    font-weight: bold;
+    & > svg {
+      margin-right: 0.3em;
+    }
   }
 
   .label {
-    margin: 0.1em 0 0 0;
-    color: #686868;
+    display: flex;
+    margin: 0.1em 0 0.2em 0;
+    color: #6a737d;
+    font-weight: bold;
+    & > svg {
+      margin-right: 0.3em;
+    }
   }
+`;
 
-  .total {
-    margin: 0.1em 0 0 0;
-    color: #686868;
-  }
-`
-
-const DescriptionWrapper = styled.div`
-  padding: 1.5em 1em 5em 1em;
+const Description = styled.pre`
+  color: #cdcdcd;
+  padding-top: 1.5em;
+  padding-bottom: 5em;
   font-size: 1.5em;
-  & > pre {
-    white-space: pre-wrap;
-  }
-`
+  white-space: pre-wrap;
+`;
 
-const RiddleWrapper = styled.div`
+const FirstRiddleWrapper = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
-  color: #d1d7e0;
-  padding: 1rem;
-  margin-top: auto;
-  margin-left: 2em;
-  margin-right: 2em;
-  margin-bottom: 2em;
-  border: 1px dashed #626262;
-  border-radius: 1em;
+  color: #CDD4DC;
+  background-color: #16181b;
+  padding: 1em;
+  border: 1px dashed #3a3d42;
+  border-radius: 1rem;
 
-  .question {
+  .problem {
     display: flex;
     margin-bottom: 0;
-    font-weight: bold;
-    font-size: 1.2rem;
-
+    font-size: 1.1rem;
     .index {
+      font-weight: bold;
       white-space: nowrap;
-      color: #767676;
-    }
-
-    .content {
-      font-size: 1.2rem;
     }
   }
 
-  .hint {
-    display: flex;
-    margin-bottom: 0;
-    font-size: 1.2rem;
+  & > button {
+    background-color: #195ba3;
+    color: var(--light-white);
+    
     font-weight: bold;
-
-    .bulb {
-      color: #f4ff7f;
-      white-space: nowrap;
-    }
-
-    .content {
-
-    }
-  }
-
-  .button {
     margin-top: 2em;
   }
 `;

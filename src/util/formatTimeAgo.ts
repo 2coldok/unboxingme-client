@@ -21,7 +21,7 @@ export function formatTimeAgo(ISO8601: string): string {
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
     
-    return `${year}.${month}.${day} ${hours}:${minutes}`;
+    return `${year}. ${month}. ${day}. ${hours}:${minutes}`;
   }
 }
 
