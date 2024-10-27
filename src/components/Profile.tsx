@@ -39,7 +39,6 @@ export default function Profile({ profile }: IProfileProps) {
     <StyledContainer>
       <ProfileWrapper onClick={handleProfileClick}>
         <img src={profile.photo} alt="avatar" />
-        <span>{profile.displayName}</span>
         <AiFillCaretDown />
       </ProfileWrapper>
       {showPopper && (
@@ -67,6 +66,7 @@ const ProfileWrapper = styled.div`
   border-radius: 1.5rem;
   padding: 0.2em 0.7em;
   margin-right: 1rem;
+  cursor: pointer;
 
   & > img {
     width: 40px;
@@ -81,12 +81,6 @@ const ProfileWrapper = styled.div`
 
   & > svg {
     margin-left: 0.5em;
-  }
-
-  &:hover {
-    cursor: pointer;
-    
-    background-color: #141227;
   }
 `
 

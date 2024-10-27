@@ -25,7 +25,8 @@ const GlobalStyle = createGlobalStyle`
     /*gray*/
     --gray100: #6a737d; // 검색 돋보기,x색 +
     --gray200: #3a3d42;
-    --gray300: #181b1d; // input 내부배경 +
+    --gray300: #202124;
+    --gray400: #181b1d; // input 내부배경 +
 
     /*black*/
     --black100: #101114;
@@ -51,14 +52,14 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
 
-    /* font-family: 'Roboto', sans-serif; */
-    font-family: 'DungGeunMo', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    /* font-family: 'DungGeunMo', sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
 
-    background-color: var(--black100);
+    background-color: var(--gray300);
     color: var(--white200);
   }
 
@@ -103,7 +104,8 @@ const GlobalStyle = createGlobalStyle`
     border: 1.5px solid var(--light-gray);
     color: #ECECEC;
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    font-family: 'DungGeunMo', sans-serif;
+    /* font-family: 'DungGeunMo', sans-serif; */
+    font-family: 'Roboto', sans-serif;
   }
 
   input:focus {
@@ -120,7 +122,8 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.4;
     word-spacing: -0.3rem;
     resize: none;
-    font-family: 'DungGeunMo', sans-serif;
+    /* font-family: 'DungGeunMo', sans-serif; */
+    font-family: 'Roboto', sans-serif;
   }
 
   textarea:focus {
@@ -128,7 +131,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   pre {
-    font-family: 'DungGeunMo', sans-serif;
+    /* font-family: 'DungGeunMo', sans-serif; */
+    font-family: 'Roboto', sans-serif;
   }
 `;
 

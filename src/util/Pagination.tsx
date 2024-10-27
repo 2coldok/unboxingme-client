@@ -86,7 +86,7 @@ const PaginationContainer = styled.div`
   padding-top: 1em;
   padding-bottom: 1em;
   margin-bottom: 2em;
-  background-color: var(--black100);
+  background-color: var(--gray300);
   font-size: 1.5em;
 `;
 

@@ -3,14 +3,11 @@ import { IDashboardService } from "../../service/DashboardService";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { HttpError } from "../../network/HttpClient";
-import { IoPerson } from "react-icons/io5";
-import { IoIosFingerPrint } from "react-icons/io";
-import { LuEye } from "react-icons/lu";
-import { formatTimeAgo } from "../../util/formatTimeAgo";
 import { Pagination } from "../../util/Pagination";
 import { saveInSession } from "../../util/storage";
 import { useLoading } from "../../hook/LoadingHook";
 import { LoadingSpinner } from "../../loading/LoadingSpinner";
+import PandoraList from "../PandoraList";
 
 interface IPandoraServiceProps {
   dashboardService: IDashboardService;
@@ -23,10 +20,11 @@ interface IPandoraConquered {
   label: string;
   writer: string;
   title: string;
+  totalProblems: number;
   coverViewCount: number;
-  solvedAt: string;
-  solverAlias: string | null;
   createdAt: string;
+  isCatUncovered: boolean;
+  solverAlias: string | null;
 }
 
 export default function MyConquered({ dashboardService, currentPage, setCurrentPage }: IPandoraServiceProps) {
@@ -35,7 +33,6 @@ export default function MyConquered({ dashboardService, currentPage, setCurrentP
   const navigate = useNavigate();
   const { isLoading, startLoading, stopLoading } = useLoading();
   
-
   useEffect(() => {
     startLoading();
     const fetchMyConqueredPandoras = async () => {
@@ -56,35 +53,18 @@ export default function MyConquered({ dashboardService, currentPage, setCurrentP
 
     fetchMyConqueredPandoras();
   }, [dashboardService, navigate, currentPage, startLoading, stopLoading]);
-
-  const handleClick = (id: string, solverAlias: string | null) => {
-    if (solverAlias) {
-      return navigate(`/pandora/${id}/note`, { replace: true });
-    } else {
-      return navigate(`/pandora/${id}/solveralias`);
-    }
-  }
   
   return (
     <StyledContainer>
       <h1>열람 ({totalItems})</h1>
       {isLoading ? <LoadingSpinner /> : (
         <>
-          <ul>
-            {pandoras.map((pandora) => (
-              <ConqueredList key={pandora.id}>
-                <h2 className="title" onClick={() => handleClick(pandora.id, pandora.solverAlias)}>{pandora.title}</h2>
-                <p className="writer"><IoPerson /> {pandora.writer}</p>
-                <span className="viewcount"> <LuEye /> {pandora.coverViewCount}</span>
-                <span className="created"> · {formatTimeAgo(pandora.createdAt)}</span>
-                <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
-                <p className="solved-at">{formatTimeAgo(pandora.solvedAt)} 완료</p>
-                {pandora.solverAlias && <p className="solveralias">열람자 별명: {pandora.solverAlias}</p>}
-                <p className="br"></p>
-              </ConqueredList>
-            ))}
-         </ul>
-         <Pagination
+          <PandoraList 
+            action="conquered"
+            pandoras={pandoras}
+            keyword=""
+          />
+          <Pagination
             currentPage={currentPage}
             totalItems={totalItems}
             itemsPerPage={10}
@@ -104,40 +84,3 @@ const StyledContainer = styled.div`
   color: white; */
 `;
 
-const ConqueredList = styled.li`
-  h2 {
-    color: #3b90f9;
-    margin: 0 0 0.3em 0;
-    cursor: pointer;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  
-  .writer {
-    color: #cbcbcb;
-    font-weight: bold;
-    margin: 0 0 0.2em 0;
-  }
-
-  .viewcount {
-    color: #686868;
-  }
-
-  .created {
-    color: #686868;
-  }
-
-  .br {
-    width: 100%;
-    height: 0.5px;
-    background-color: #606060;
-  }
-
-  .label {
-    margin: 0.1em 0 0 0;
-    font-size: 0.8em;
-    color: #646464;
-  }
-`;

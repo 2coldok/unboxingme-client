@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import React, { useState } from "react";
 import { SEARCH_KEYWORD } from "../constant/constraints";
-import { useLoading } from "../hook/LoadingHook";
 
 interface ISearchProps {
   keyword: string;
@@ -14,7 +13,6 @@ interface ISearchProps {
 
 export default function Search({ keyword, resetPage }: ISearchProps) {
   const [searchKeyword, setSearchKeyword] = useState(keyword);
-  const { startLoading } = useLoading();
   const navigate = useNavigate();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +31,6 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
     event.preventDefault();
     const trimmedSearchKeyword = searchKeyword.trim();
     if (trimmedSearchKeyword.length > 0) {
-      startLoading();
       sessionStorage.removeItem('search-currentPage');
       resetPage && resetPage();
       return navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
@@ -67,7 +64,7 @@ const SearchFormContainer = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--gray300);
+  background-color: var(--gray400);
   border: 1.5px solid var(--blue100);
 
   width: 700px;
@@ -91,7 +88,7 @@ const SearchFormContainer = styled.form`
   }
   
   & > input {
-    background-color: var(--gray300);
+    background-color: var(--gray400);
     color: var(--white200);
     outline: none;
     border: none;
@@ -124,7 +121,7 @@ const SearchFormContainer = styled.form`
   .cancel {
     padding-left: 0;
     border: none;
-    background-color: var(--gray300);
+    background-color: var(--gray400);
 
     & > svg {
       color: var(--gray100);

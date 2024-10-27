@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
-// import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
 export default function AppHeader() {
@@ -31,7 +31,7 @@ export default function AppHeader() {
     <>
       <LogoWrapper onClick={handleLogoClick}>
         <img src="/logo.png" alt="logo" />
-        <p>iddleNote</p>
+        <span>RiddleNote</span>
       </LogoWrapper>
 
       {profile === undefined && (
@@ -43,7 +43,7 @@ export default function AppHeader() {
 
       {profile === null && (
         <LoginWrapper onClick={handleGoogleLoginClick} $ready={ready}>
-          <img src="/google.png" alt="google" />
+          <FcGoogle />
           <span>Login</span>
         </LoginWrapper>
       )}
@@ -58,23 +58,20 @@ const LogoWrapper = styled.nav`
   justify-content: center;
   align-items: center;
   height: 100%;
-
-  p {
-    font-size: 1.3em;
-    margin-bottom: 0.7em;  
-
-  }
+  margin-left: 1em;
+  cursor: pointer;
 
   img {
-    width: 1.6em;
+    width: 1.8em;
     height: auto;
-    margin-left: 1em;
-    border-radius: 0.2em;
+    margin-right: 0.5em;
   }
-  
 
-  &:hover {
-    cursor: pointer;
+  span {
+    font-size: 1.6em;
+    font-family: "Grandstander", cursive;
+    font-weight: 600;
+    margin-top: 0.1em;
   }
 `;
 
@@ -86,16 +83,16 @@ const LoginWrapper = styled.nav<{ $ready: boolean }>`
   font-size: 1.2em;
   border-radius: 1.5em;
   color: white;
-  margin-right: 0.2em;
+  margin-right: 0.3em;
   cursor: ${({ $ready }) => ($ready ? 'pointer' : 'not-allowed')};
 
-  img {
-    width: 1.5em;
-    height: auto;
+  svg {
+    margin-right: 0.3em;
     filter: ${({ $ready }) => ($ready ? 'none' : 'grayscale(100%)')};
   }
 
   span {
+    font-weight: bold;
     color: ${({ $ready }) => ($ready ? 'var(--white100)' : 'gray')};
   }
 `;

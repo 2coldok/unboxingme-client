@@ -40,7 +40,7 @@ const HeaderContainer = styled.header`
   flex-direction: row;
   width: 100%;
   height: 70px;
-  background-color: var(--black100);
+  background-color: var(--gray300);
   border-bottom: 1px solid var(--gray200);
 
   position: fixed;

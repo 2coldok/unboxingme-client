@@ -8,6 +8,7 @@ export interface IPandoraSearchResults {
     totalProblems: number;
     coverViewCount: number;
     createdAt: string;
+    isCatUncovered: boolean
   }[]
 }
 
@@ -32,13 +33,11 @@ export interface IMyPandoras {
     label: string;
     writer: string;
     title: string;
+    totalProblems: number;
     coverViewCount: number;
-    solverAlias: string | null;
-    solvedAt: string | null;
-    isCatUncovered: boolean;
-    active: boolean;
     createdAt: string;
-  }[]
+    isCatUncovered: boolean;
+  }[];
 }
 
 // export interface IMyPandoraDetail {

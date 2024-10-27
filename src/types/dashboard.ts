@@ -31,22 +31,20 @@ export interface IMyChallenge {
   totalProblems: number;
   coverViewCount: number;
   createdAt: string;
-  failCount: number;
-  restrictedUntil: string | null;
-  unsealedQuestionIndex: number;
-  isPenaltyPeriod: boolean;
+  isCatUncovered: boolean;
 }
 
 export interface IMyConquereds {
   total: number;
   pandoras: {
-    id: string,
-    label: string,
-    writer: string,
-    title: string,
-    coverViewCount: number,
-    solvedAt: string,
-    solverAlias: string | null,
-    createdAt: string
+    id: string;
+    label: string;
+    writer: string;
+    title: string;
+    totalProblems: number;
+    coverViewCount: number;
+    createdAt: string;
+    isCatUncovered: boolean;
+    solverAlias: string | null;
   }[];
 }

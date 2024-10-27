@@ -47,7 +47,7 @@ const SkeletonBox = styled.div<{ width: number, height: number }>`
 `;
 
 const SkeletonList = styled.li`
-  background-color: var(--black100);
+  background-color: var(--gray300);
   border-bottom: 1px solid var(--gray200);
   padding: 1em 1.5em 1em 1em;
   border-radius: 0.3em;

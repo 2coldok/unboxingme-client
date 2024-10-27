@@ -4,7 +4,7 @@ import Search from "../components/Search";
 export default function Home() {
   return (
     <StyledContainer>
-      <h1>Show me the keyword</h1>
+      <h2>Show me the keyword</h2>
       <Search keyword={''} />
     </StyledContainer>
   );
