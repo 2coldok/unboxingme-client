@@ -3,14 +3,11 @@ import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import { GrAddCircle } from "react-icons/gr";
 import { IoClose } from "react-icons/io5";
-import { TFormSubject } from "../../types/form";
-
-export interface IRiddle {
-  id: string;
-  question: string;
-  hint: string;
-  answer: string;
-}
+import { IRiddle, TFormSubject } from "../../types/form";
+import { PANDORA_FORM } from "../../constant/constraints";
+import { FORM_LENGTH_ERROR_MESSAGE } from "../../constant/errorMessage";
+import { GrFormCheckmark } from "react-icons/gr";
+import { AiFillLock } from "react-icons/ai"; 
 
 export interface IRiddlesFormProps {
   setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
@@ -20,20 +17,34 @@ export interface IRiddlesFormProps {
 
 export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRiddlesFormProps) {
   const handleAdd = () => {
-    if (riddles.length >= 10) {
-      return alert('질문은 최대 10개까지 등록할 수 있습니다.');
+    if (riddles.length >= PANDORA_FORM.maxTotalProblems) {
+      return;
     }
-    setRiddles(prev => [...prev, { id: uuidv4(), question: '', hint: '', answer: '' }]);
+    setRiddles(prev => [...prev, { id: uuidv4(), isQuestionValid: false, isAnswerValid: false, question: '', hint: '', answer: '' }]);
   };
 
-  const handleRemove = (id: string, index: number) => {
-    const confirm = window.confirm(`[문제 ${index+1}]을 삭제하시겠습니까?`);
-    if (confirm) {
-      setRiddles(riddles.filter((riddle) => riddle.id !== id));
-    }
+  const handleRemove = (id: string) => {
+    setRiddles(riddles.filter((riddle) => riddle.id !== id));
   };
 
   const handleChange = (id: string, field: keyof IRiddle, value: string) => {
+    if (field === 'question') {
+      return setRiddles(
+        riddles.map((riddle) =>
+          riddle.id === id ? { ...riddle, [field]: value, isQuestionValid: value.trim().length >= PANDORA_FORM.minQuestionLength  } : riddle
+        )
+      );
+    }
+
+    if (field === 'answer') {
+      return setRiddles(
+        riddles.map((riddle) =>
+          riddle.id === id ? { ...riddle, [field]: value, isAnswerValid: value.trim().length >= PANDORA_FORM.minAnswerLength  } : riddle
+        )
+      );
+    } 
+
+    // 힌트는 유효성 검사를 하지 않음
     setRiddles(
       riddles.map((riddle) =>
         riddle.id === id ? { ...riddle, [field]: value } : riddle
@@ -42,14 +53,12 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
   };
 
   const handleNextButton = () => {
-    if (!riddles.every((riddle) => riddle.question.length >= 3)) {
-      return alert('질문을 3글자 이상 입력해주세요.');
-    }
-    if (!riddles.every((riddle) => riddle.answer.length > 0)) {
-      return alert('정답을 입력해주세요.');
-    }
-    if (riddles.length === 0) {
-      return alert('질문을 1개 이상 등록해주세요.');
+    const isValid = riddles.every((riddle) => {
+      return riddle.isQuestionValid && riddle.isAnswerValid
+    });
+
+    if (!isValid) {
+      return;
     }
 
     setRiddles((prevRiddles) =>
@@ -64,140 +73,200 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
   };
   
   return (
-    <StyledContainer>
-      <p>* 첫번째 질문과 힌트는 게시글에 노출됩니다.</p>
-      <p>* 두번째 질문부터는 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</p>
-      <p>* 모든 질문을 최초로 해결한 한명의 사용자만 게시글의 내용을 확인할 수 있습니다.</p>
-      <p>* 모든 질문이 해결되면 게시글이 비공개로 전환됩니다.</p>
+    <>
+      <Guide>* 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</Guide>
+      <Guide>* 모든 질문을 최초로 해결한 한명의 사용자만 게시글의 내용을 확인할 수 있습니다.</Guide>
+      <Guide>* 모든 질문이 해결되면 게시글이 비공개로 전환됩니다.</Guide>
       <ul>
         {riddles.map((riddle, index) => (
-          <Riddle key={riddle.id}>
-            <h3 className="index">
-              <span>문제 {index + 1}번</span>
-              <IoClose className="close" onClick={() => handleRemove(riddle.id, index)} />
-            </h3>
-            <ContentWrapper>
-              <p className="field">질문</p>
-              <textarea
-                className="question"
-                maxLength={100}
-                value={riddle.question}
-                onChange={(e) => handleChange(riddle.id, 'question', e.target.value)}
-                placeholder="3글자 이상 질문을 입력하세요"
-              />
-              <p className="field">힌트</p>
-              <input 
-                className="hint"
-                type="text"
-                value={riddle.hint}
-                onChange={(e) => handleChange(riddle.id, 'hint', e.target.value)}
-                maxLength={32}
-                placeholder="힌트 없음"
-              />
-              <p className="field">정답</p>
-              <input 
-                className="answer"
-                type="text"
-                value={riddle.answer}
-                onChange={(e) => handleChange(riddle.id, 'answer', e.target.value)}
-                maxLength={32}
-                placeholder="정답 입력"
-              />
-           </ContentWrapper>
-          </Riddle>
+          <RiddleContainer>
+            <RiddleIndex>
+              <AiFillLock />
+              문제 {index + 1}
+              </RiddleIndex>
+            <RiddleWrapper key={riddle.id}>
+              <CloseWrapper>
+                <IoClose className="close" onClick={() => handleRemove(riddle.id)} />
+              </CloseWrapper>
+              <SubTitle>
+                질문
+                {!riddle.isQuestionValid && <GrFormCheckmark />}
+              </SubTitle>
+              <QuestionWrapper>
+                <textarea
+                  maxLength={PANDORA_FORM.maxQuestionLength}
+                  value={riddle.question}
+                  onChange={(e) => handleChange(riddle.id, 'question', e.target.value)}
+                  placeholder="질문 입력"
+                />
+                <LengthCount>{riddle.question.length}/{PANDORA_FORM.maxQuestionLength}</LengthCount>
+              </QuestionWrapper>
+              <SubTitle>힌트</SubTitle>
+              <HintWrapper>
+                <input 
+                  type="text"
+                  value={riddle.hint}
+                  onChange={(e) => handleChange(riddle.id, 'hint', e.target.value)}
+                  maxLength={PANDORA_FORM.maxHintLegnth}
+                  placeholder="힌트 없음"
+                />
+                <LengthCount>{riddle.hint.length}/{PANDORA_FORM.maxHintLegnth}</LengthCount>
+              </HintWrapper>
+              <SubTitle>
+                정답
+                {!riddle.isAnswerValid && <GrFormCheckmark />}
+              </SubTitle>
+              
+              <AnswerWrapper>
+                <input 
+                  type="text"
+                  value={riddle.answer}
+                  onChange={(e) => handleChange(riddle.id, 'answer', e.target.value)}
+                  maxLength={PANDORA_FORM.maxAnswerLength}
+                  placeholder="정답 입력"
+                />
+                <LengthCount>{riddle.answer.length}/{PANDORA_FORM.maxAnswerLength}</LengthCount>
+              </AnswerWrapper>
+            </RiddleWrapper>
+          </RiddleContainer>
         ))}
       </ul>
       <AddRiddle onClick={handleAdd}>
-        <p>질문 추가</p>
-        <GrAddCircle />
+        {riddles.length >= PANDORA_FORM.maxTotalProblems ? (
+          <p>{FORM_LENGTH_ERROR_MESSAGE.totalProblems}</p>
+        ) : (
+          <>
+            <p>질문 추가</p>
+            <GrAddCircle />
+          </>
+        )}
       </AddRiddle>
       <ButtonWrapper>
-        <button className="previous" onClick={() => setFormSubject('keywords')}>이전</button>
+        <button className="previous" onClick={() => setFormSubject('cover')}>이전</button>
         <button className="next" onClick={handleNextButton}>다음</button>
      </ButtonWrapper>
-    </StyledContainer>
+    </>
   );  
 }
 
-const StyledContainer = styled.div`
-`;
-
-const Riddle = styled.li`
-  border: 0.5px solid var(--dark-gray);
-  border-radius: 1rem;
-  margin-top: 1.5rem;
-
-  .index {
-    position: relative;
-    margin-top: 0;
-    padding: 0.5em 0.8em 0.5em 0.8em;
-    border-radius: 0.9rem 0.9rem 0 0;
-    color: #bdc1c6;
-    
-    & > svg {
-      margin-right: 0.3em;
-    }
-
-    .close {
-      position: absolute;
-      right: 0.2em;
-      font-size: 1.2em;
-      color: #e65757;
-      cursor: pointer;
-    }
-  }
-`;
-
-const ContentWrapper = styled.div`
-  margin: 1em;
-
-  .field {
-    margin-bottom: 0.3em;
-    margin-left: 0.2em;
-    color: var(--light-gray);
-  }
-
-  .question {
-    width: 100%; 
-    height: 5rem;
-    font-size: 1rem;
-  }
-
-  .hint {
-    min-width: 15rem;
-    font-size: 1em;
-    @media(max-width: 768px) {
-      width: 100%;
-    }
-  }
-
-  .answer {
-    min-width: 15rem;
-    font-size: 1em;
-    @media(max-width: 768px) {
-      width: 100%;
-    }
-  }
+const Guide = styled.p`
+  color: var(--font-explain);
 `
+
+const RiddleContainer = styled.div`
+  position: relative;
+  margin-top: 3rem;
+`;
+
+const RiddleIndex = styled.label`
+  display: flex;
+  position: absolute;
+  top: -0.8em;
+  left: 25px;
+  border-radius: 0.3em;
+  padding: 0.3em;
+  font-size: 1.4rem;
+  background-color: var(--background);
+  font-weight: bold;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const RiddleWrapper = styled.li`
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 0.8em;
+`;
+
+const CloseWrapper = styled.h2`
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 1.5em;
+  
+  svg {
+    position: absolute;
+    right: 0em;
+    font-size: 1em;
+    color: var(--font-chore);
+    cursor: pointer;
+  }
+`;
+
+const SubTitle = styled.p`
+  display: flex;
+  margin-bottom: 0.3em;
+  margin-left: 0.2em;
+
+  svg {
+    color: var(--font-warning);
+    margin-left: 0.3em;
+    font-size: 1em;
+  }
+`;
+
+const QuestionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+  textarea {
+    width: 100%;
+    height: 5rem;
+  }
+`;
+
+const HintWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 20rem;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  input {
+    width: 100%;
+  }
+`;
+
+const AnswerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 20rem;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  input {
+    width: 100%;
+  }
+`;
+
+const LengthCount = styled.small`
+  align-self: flex-end; 
+  margin-top: 0.2em;
+  margin-right: 0.2em;
+  color: var(--font-chore);
+`;
 
 const AddRiddle = styled.button`
   display: flex;
   width: 100%;
   justify-content: center;
-  background-color: #1a1e23;
+  background-color: var(--background);
   align-items: center;
   border-radius: 1rem
   margin-top: 0;
   padding: 0.3em;
-  border: 1px dashed var(--dark-gray);
+  border: 1px dashed var(--font-chore);
 
-  & > p {
-    color: var(--light-gray);
-    font-size: 1.2em;
+  p {
+    color: var(--font-chore);
+    font-size: 1.1em;
   }
 
-  & > svg {
-    color: var(--light-gray);
+  svg {
+    color: var(--font-chore);
     margin-left: 0.3em;
     font-size: 1.3em;
   }
@@ -211,11 +280,7 @@ const ButtonWrapper = styled.div`
     justify-content: center;
   }
   
-  & > button {
-    background-color: var(--middle-blue);
-    color: white;
-    font-weight: bold;
-    padding: 0.6em 2em 0.6em 2em;
+  button {
     @media (max-width: 768px) {
       width: 100%;
     }

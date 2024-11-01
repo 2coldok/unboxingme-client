@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { IPandoraService } from "../service/PandoraService";
 import { useEffect, useState } from "react";
@@ -6,40 +6,54 @@ import { IPandoraCover } from "../types/pandora";
 import { useAuth } from "../hook/AuthHook";
 import { HttpError } from "../network/HttpClient";
 import { getInSession, saveInSession } from "../util/storage";
-import { IUnboxingService } from "../service/UnboxingService";
 import { useLoading } from "../hook/LoadingHook";
 import Alert from "../util/Alert";
 
 import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
-import { IoIosFingerPrint } from "react-icons/io"; // label
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { formatTimeAgo } from "../util/formatTimeAgo";
-import RiddleProgress from "../util/RiddleProgress";
+import { AiFillLock } from "react-icons/ai";
+import { BsUpc } from "react-icons/bs";
+import { GoDotFill } from "react-icons/go";
+import Search from "../components/Search";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
-  unboxingService: IUnboxingService;
 }
 
-export default function PandoraCover({ pandoraService, unboxingService }: IPandoraCoverProps) {
+export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   const { id } = useParams<{ id: string }>(); 
+  const [searchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword');
+
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const { getTokenStatus, login } = useAuth();
   const { isLoading, startLoading, stopLoading} = useLoading();
-  const [challengerLoading, setChallengeLoading] = useState(false);
   const navigate = useNavigate();
 
+  // fallback from riddle page
+  const location = useLocation();
+  const state = location.state as { userColor?: string; restrictedUntil?: string };
+
   useEffect(() => {
-    startLoading();
+    if (state?.userColor === 'penalty' && state.restrictedUntil) {
+      return setAlertMessage(`${state.restrictedUntil}까지 접근이 제한됩니다.`);
+    }
+    if (state?.userColor === 'maker') {
+      return setAlertMessage('게시물 생성자는 "마이페이지"에서 열람할 수 있습니다.');
+    }
+  }, [state]);
+
+  useEffect(() => {
     if (!id) {
-      stopLoading();
       return navigate('/fallback/404', { state: { message: 'id를 찾을 수 없습니다' } });
     }
     
     const fetchPandoraCover = async () => {
       try {
+        startLoading();
         const data = await pandoraService.getPandoraCover(id);
         const pandoraCover = data.payload;
         if (pandoraCover === null) {
@@ -54,12 +68,11 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
       } finally {
         stopLoading();
       }
-    }
+    };
 
     const cachedPandoraCover = getInSession<IPandoraCover>(`cover-${id}`);
     if (cachedPandoraCover) {
       setPandoraCover(cachedPandoraCover);
-      stopLoading();
     } else {
       fetchPandoraCover();
     }
@@ -70,26 +83,7 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
       const tokenStatus = await getTokenStatus();
 
       if (tokenStatus === 'valid') {
-        const data = await unboxingService.getInitialRiddle(id as string);
-        const status = data.payload.status;
-  
-        if (status === 'penalty') {
-          setChallengeLoading(false);
-          return setAlertMessage(`${data.payload.restrictedUntil}까지 패널티 기간입니다.`);
-        }
-
-        if (status === 'ineligible') {
-          setChallengeLoading(false);
-          if (data.payload.reason === 'MINE') {
-            return setAlertMessage('자신의 수수께끼에는 도전할 수 없습니다.');
-          }
-          return navigate('/fallback/404', { state: { message: data.payload.reason }, replace: true });
-        }
-
-        if (status === 'riddle') {
-          setChallengeLoading(false);
-          return navigate(`/pandora/${id}/riddle`, { state: { payload: data.payload } });
-        }
+        return navigate(`/pandora/${id}/riddle2`);
       }
       
       if (tokenStatus == 'none') {
@@ -102,42 +96,43 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
     }
   };
 
-  if (challengerLoading) {
-    return <LoadingSpinner />
+  if (isLoading || !pandoraCover) {
+    return (
+      <LoadingSpinner />
+    )
   }
 
   return (
     <>
-      {isLoading || !pandoraCover ? (
-        <LoadingSpinner />
-      ) : (
-        <CoverWrapper>
-          <HeadWrapper>
-            <h1 className="title">{pandoraCover.title}</h1>
-            <p className="writer">
-              <IoPerson /> {pandoraCover.writer}
-            </p>
-            <p className="view-createdat">
-              <LuEye /> {pandoraCover.coverViewCount} &nbsp;·&nbsp; 
+      <SearchWrapper>
+        <Search keyword={keyword ? keyword : ''} />
+      </SearchWrapper>
+     
+      <CoverWrapper>
+        <Title>{pandoraCover.title}</Title>
+        <InfoWrapper>
+          <div>
+            <Writer> <IoPerson /> {pandoraCover.writer}</Writer>                  
+            <MainInfo> 
+              <AiFillLock /> {pandoraCover.totalProblems} ·&nbsp;
+              <LuEye /> {pandoraCover.coverViewCount} ·&nbsp;
               {formatTimeAgo(pandoraCover.createdAt)}
-            </p>
-            <p className="label">
-              <IoIosFingerPrint /> {pandoraCover.label}
-            </p>
-          </HeadWrapper>
-          
-          <Description>{pandoraCover.description}</Description>
-          
-          <FirstRiddleWrapper>
-            <RiddleProgress totalSteps={pandoraCover.totalProblems} currentStep={0} />
-            <div className="problem">
-              <p className="index">질문 1. &nbsp;</p>
-              <p>{pandoraCover.firstQuestion}</p>
-            </div>
-            <button onClick={handleChallengeClick}>게시글 내용 확인하기</button>
-          </FirstRiddleWrapper>  
-        </CoverWrapper>
-      )}
+            </MainInfo>
+            <Label><BsUpc /> {pandoraCover.label}</Label>
+          </div>
+          <div>
+            <State $open={pandoraCover.isCatUncovered}><GoDotFill/> {pandoraCover.isCatUncovered ? '열람됨' : '미열람'}</State>
+          </div>
+        </InfoWrapper>
+        <Description>{pandoraCover.description}</Description>
+        <FirstRiddleWrapper>
+          <div>
+            <p className="index">질문 1. &nbsp;</p>
+            <p>{pandoraCover.firstQuestion}</p>
+          </div>
+          <button onClick={handleChallengeClick}>게시물 열람하기</button>
+        </FirstRiddleWrapper>  
+      </CoverWrapper>
 
       {alertMessage && (
         <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />
@@ -145,55 +140,88 @@ export default function PandoraCover({ pandoraService, unboxingService }: IPando
     </>
   );
 }
-    
+
+const SearchWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+`;
+
 const CoverWrapper = styled.main`
   display: flex;
   flex-direction: column;
-  border: 1px solid #3a3d42;
-  border-radius: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
   padding: 1.5em;
-  overflow: hidden;
-  background-color: #101114;
+  @media (max-width: 768px) {
+    border-style: none;
+  }
 `;
 
-const HeadWrapper = styled.div`
-  .title {
-    color: #7eaaff;
-    margin: 0;
+const Title = styled.h2`
+  color: var(--list-title);
+  font-weight: 800;
+  font-size: 1.8em;
+  margin: 0;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
   }
+`;
 
-  .writer {
-    font-weight: bold;
-    margin: 0.5em 0 0.2em 0;
-    color: #d1d5da;
+const InfoWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-itmes: center;
+  color: var(--list-info);
+`;
+
+const Writer = styled.p`
+  display: flex;
+  color: var(--font);
+  font-weight: 500;
+  font-size: 1em;
+  margin: 0.9em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
   }
+`;
 
-  .view-createdat {
-    display: flex;
-    margin: 0.1em 0 0.2em 0;
-    color: #6a737d;
-    font-weight: bold;
-    & > svg {
-      margin-right: 0.3em;
-    }
+const MainInfo = styled.p`
+  display: flex;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin: 0.3em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
   }
+`;
 
-  .label {
-    display: flex;
-    margin: 0.1em 0 0.2em 0;
-    color: #6a737d;
-    font-weight: bold;
-    & > svg {
-      margin-right: 0.3em;
-    }
+const Label = styled.p`
+  display: flex;
+  margin: 0.6em 0 0 0;
+  font-weight: 500;
+  font-size: 0.9em;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const State = styled.p<{ $open: boolean }>`
+  display: flex;
+  font-weight: 600;
+  svg {
+    margin-right: 0.3em;
+    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
   }
 `;
 
 const Description = styled.pre`
-  color: #cdcdcd;
-  padding-top: 1.5em;
+  font-size: 1.1em;
+  padding-top: 3em;
   padding-bottom: 5em;
-  font-size: 1.5em;
+  padding-left: 0.4em;
+  border-radius: 0;
   white-space: pre-wrap;
 `;
 
@@ -201,13 +229,11 @@ const FirstRiddleWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  color: #CDD4DC;
-  background-color: #16181b;
+  background-color: #252932;
   padding: 1em;
-  border: 1px dashed #3a3d42;
-  border-radius: 1rem;
+  border-radius: 0.4rem;
 
-  .problem {
+  div {
     display: flex;
     margin-bottom: 0;
     font-size: 1.1rem;
@@ -217,11 +243,7 @@ const FirstRiddleWrapper = styled.div`
     }
   }
 
-  & > button {
-    background-color: #195ba3;
-    color: var(--light-white);
-    
-    font-weight: bold;
+  button {
     margin-top: 2em;
   }
 `;

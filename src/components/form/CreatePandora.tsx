@@ -5,7 +5,8 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { IPandoraService } from "../../service/PandoraService";
 import { useNavigate } from "react-router-dom";
 import { ICover, IRiddle, TFormSubject, TKeywords, TPost } from "../../types/form";
-import { BsCreditCard2Front, BsEnvelopePaper, BsQuestionSquare } from "react-icons/bs";
+import { AiFillLock } from "react-icons/ai"; // lock;
+
 
 interface ICreatePandoraProps {
   mode: { id: string | null, type: 'new' | 'edit' };
@@ -56,234 +57,286 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
 
   return (
     <>
-      <p>* 브라우저 뒤로 가기 시 작성된 내용이 초기화됩니다.</p>
-      <FormSubjectWrapper>
-        <BsCreditCard2Front />
-        <span>게시글 표지</span>
-        <span className="edit" onClick={() => setFormSubject('cover')}>수정</span>
-      </FormSubjectWrapper>
-      <CoverWrapper>
-        <strong className="subtitle">작성자명</strong>
-        <p className="writer">{cover.writer}</p>
-        <strong className="subtitle">제목</strong>
-        <p className="title">{cover.title}</p>
-        <strong className="subtitle">설명</strong>
-        <pre className="description">{cover.description}</pre>
-      </CoverWrapper>
-
-      <FormSubjectWrapper>
-        <AiOutlineSearch />
-        <span>게시글 검색 키워드</span>
-        <span className="edit" onClick={() => setFormSubject('keywords')}>수정</span>
-      </FormSubjectWrapper>
-      <KeywordsWrapper>
-        {keywords.length === 0 && <p>검색 키워드가 설정되지 않았습니다.</p>}
-        {keywords.map((keyword) => (
-          <li key={uuidv4()}>
-            <AiOutlineSearch />
-            <span>{keyword}</span>
-          </li>
-        ))}
-      </KeywordsWrapper>
+      <GuideWrapper>
+        <p>* 브라우저 뒤로가기 / 새로고침시 작성된 내용이 초기화됩니다.</p>
+      </GuideWrapper>
+      
       
       <FormSubjectWrapper>
-        <BsQuestionSquare />
-        <span>질문</span>
-        <span className="edit" onClick={() => setFormSubject('riddles')}>수정</span>
+        <Subject>게시물 검색 키워드</Subject>
+        <EditButton className="edit" onClick={() => setFormSubject('keywords')}>
+          수정
+        </EditButton>
       </FormSubjectWrapper>
-      <RiddlesWrapper>
-        {riddles.map((riddle, index) => (
-          <li key={riddle.id}>
-            <h3 className="index">
-              <span>문제 {index + 1}번</span>
-            </h3>
-            <div className="riddle">
-              <strong className="field">질문</strong>
-              <pre className="question">{riddle.question}</pre>
-              <strong className="field">힌트</strong>
-              <p className="hint">{riddle.hint ? riddle.hint : '힌트 없음'}</p>
-              <strong className="field">정답</strong>
-              <p className="answer">{riddle.answer}</p>
-            </div>
-          </li>
+      <KeywordsWrapper>
+        {keywords.length === 0 && (
+          <>
+            <p>검색 키워드가 설정되지 않았습니다.</p>
+            <p>게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
+          </>
+
+        )}
+        {keywords.map((keyword) => (
+          <Keyword key={uuidv4()}>
+            <AiOutlineSearch />
+            <span>{keyword}</span>
+          </Keyword>
         ))}
-      </RiddlesWrapper>
+      </KeywordsWrapper>
+
+      <Divide></Divide>
 
       <FormSubjectWrapper>
-        <BsEnvelopePaper />
-        <span>게시물 내용</span>
-        <span className="edit" onClick={() => setFormSubject('post')}>수정</span>
+        <Subject>게시물 표지</Subject>
+        <EditButton className="edit" onClick={() => setFormSubject('cover')}>
+          수정
+        </EditButton>
       </FormSubjectWrapper>
-      <PostWrapper>
-        {post}
-      </PostWrapper>
+      <CoverWrapper>
+        <SubTitle>작성자명</SubTitle>
+        <WriterWrapper>{cover.writer}</WriterWrapper>
+        <SubTitle>제목</SubTitle>
+        <TitleWrapper>{cover.title}</TitleWrapper>
+        <SubTitle>소개</SubTitle>
+        <DescriptionWrapper>{cover.description}</DescriptionWrapper>
+      </CoverWrapper>
 
-      <SubmitButton onClick={handleSubmit}>{mode.type === 'edit' ? '수정 완료하기' : '게시글 등록하기'}</SubmitButton>
+      <Divide></Divide>
+
+      <FormSubjectWrapper>
+        <Subject>질문</Subject>
+        <EditButton className="edit" onClick={() => setFormSubject('riddles')}>
+          수정
+        </EditButton>
+      </FormSubjectWrapper>
+      <RiddleWrapper>
+        {riddles.map((riddle, index) => (
+          <RiddleBox>
+            <RiddleIndex><AiFillLock /> 문제 {index + 1}</RiddleIndex>
+            <Riddle key={riddle.id}>             
+              <RiddleContent>
+                <span>질문</span>
+                <p>{riddle.question}</p>
+              </RiddleContent>
+              <RiddleContent>
+                <span>힌트</span>
+                <p>{riddle.hint ? riddle.hint : '힌트 없음'}</p>
+              </RiddleContent>
+              <RiddleContent>
+                <span>정답</span>
+                <p className="answer">{riddle.answer}</p>
+              </RiddleContent>
+            </Riddle>
+          </RiddleBox>
+        ))}
+      </RiddleWrapper>
+
+      <Divide></Divide>
+
+      <FormSubjectWrapper>
+        <Subject>노트</Subject>
+        <EditButton className="edit" onClick={() => setFormSubject('post')}>
+          수정
+        </EditButton>
+      </FormSubjectWrapper>
+      <NoteWrapper>
+        {post}
+      </NoteWrapper>
+
+      <ButtonWrapper>
+        <button className="previous" onClick={() => setFormSubject('post')}>이전</button>
+        <button onClick={handleSubmit}>{mode.type === 'edit' ? '수정 완료' : '게시물 등록하기'}</button>
+      </ButtonWrapper> 
+      
     </>
   );  
 }
 
-const FormSubjectWrapper = styled.h2`
+const GuideWrapper = styled.div`
+  color: var(--font-warning);
+  margin-top: 0;
+  margin-bottom: 2em;
+`;
+
+const FormSubjectWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 0.8rem;
-  color: #c5d1de;
-  background-color: #1a1e22;
-  /* margin-bottom: rem; */
-  padding: 0.3em;
-  border-radius: 0.3rem;
+`;
 
-  & > svg {
-    margin-right: 0.7rem;
-  }
+const Subject = styled.h2`
+  color: var(--font);
+  margin: 0;
+  margin-right: 0.6em;
+  margin-top: 0.3em;
+`;
 
-  .edit {
-    margin-left: 1em;
-    font-size: 0.6em;
-    font-weight: bold;
-    padding: 0.3em 1em 0.3em 1em;
-    background-color: #cbad1a;
-    color: #322406;
-    border-radius: 1em;
-    cursor: pointer;
+const EditButton = styled.span`
+  /* border: 1px solid #6a6e72;
+  background-color: #40464c;
+  color: #cbcbcb; */
+  border: 1px solid #4c545c;
+  background-color: #2e363e;
+  color: #929aa2;
+
+
+  font-size: 0.7em;
+  padding: 0.3em 1em 0.3em 1em;
+  font-weight: bold;
+  border-radius: 0.4em;
+  margin-top: 0.4em;
+  cursor: pointer;
+  :hover {
+    filter: brightness(125%);
   }
 `;
 
-const CoverWrapper = styled.div`
-  .subtitle {
-    color: var(--light-gray);
-  }
-
-  .writer {
-    font-size: 1.1rem;
-    width: 15rem;
-    padding: 0.3em;
-    margin-top: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    border-radius: 0.3em;
-  }
-
-  .title {
-    width: 100%;
-    font-size: 1.1rem;
-    padding: 0.3em;
-    margin-top: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    border-radius: 0.3em;
-  }
-
-  .description {
-    height: 10rem;
-    font-size: 1.1rem;
-    margin-top: 0.3em;
-    padding: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    border-radius: 0.3em;
-    white-space: pre-wrap;
-    overflow-y: auto
-  }
+const Divide = styled.div`
+  height: 1px;
+  margin: 2em;
 `;
 
+// keywords
 const KeywordsWrapper = styled.ul`
-  margin-top: 0;
-  & > li {
-    display: flex;
-    padding: 0.4em 0.8em 0.4em 0.6em;
-    align-items: center;
-    margin-bottom: 0.8em;
-    border: 1px solid var(--middle-blue);
-    color: var(--middle-blue);
-    border-radius: 0.9em;
-    width: fit-content;
-    font-weight: bold;
+  min-height: 5em;
+  padding: 1em;
+  border-radius: 0.4rem;
+  border: 1px dashed var(--border);
+`;
 
-    & > svg {
-      margin-right: 0.4em;
-    }
+const Keyword = styled.li`
+  display: flex;
+  padding: 0.4em 0.8em 0.4em 0.6em;
+  align-items: center;
+  margin-bottom: 0.8em;
+  border: 1px solid var(--brand);
+  color: var(--brand);
+  border-radius: 0.9em;
+  width: fit-content;
+  font-weight: bold;
+
+  svg {
+    margin-right: 0.4em;
   }
 `;
 
-const RiddlesWrapper = styled.ul`
+// cover
+const CoverWrapper = styled.div`
+  margin-bottom: 3rem;
+  margin-top: 2em;
+`;
+
+const SubTitle = styled.p`
+  margin-bottom: 0.2em;
+  margin-left: 0.1em;
+  color: var(--font-chore);
+`;
+
+const WriterWrapper = styled.p`
   margin-top: 0;
-  & > li {
-    border: 0.5px solid var(--dark-gray);
-    border-radius: 1rem;
-    margin-bottom: 1rem;
+  width: 15rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+  margin-bottom: 2em;
+`;
 
-    .index {
-      position: relative;
-      margin-top: 0;
-      padding: 0.5em 0.8em 0.5em 0.8em;
-      border-radius: 0.9rem 0.9rem 0 0;
-      color: #bdc1c6;
-      
-      & > svg {
-        margin-right: 0.3em;
-      }
-    }
+const TitleWrapper = styled.p`
+  margin-top: 0;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+  margin-bottom: 2em;
+`;
+
+const DescriptionWrapper = styled.pre`
+  margin-top: 0; 
+  border-radius: 0.4rem;
+  border: 1px solid var(--border);
+  height: 10rem;
+`;
+
+
+// Riddles
+const RiddleWrapper = styled.ul`
+  margin-top: 2rem;
+`;
+
+const RiddleBox = styled.div`
+  position: relative;
+  margin-bottom: 2.5rem;
+`;
+
+const RiddleIndex = styled.label`
+  position: absolute;
+  top: -0.9rem;
+  left: 25px;
+  display: flex;
+  border-radius: 0.7em;
+  padding: 0.3em 0.5em 0.3em 0.5em;
+  font-size: 1.2rem;
+  font-weight: 500;
+  background-color: var(--background);
+  color: var(--font-chore);
+
+  svg {
+    margin-right: 0.4em;
+  }
+`;
+
+const Riddle = styled.li`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 1.2em;
+`;
+
+const RiddleContent = styled.div`
+  display: flex;
+  margin-top: 2em;
+
+  span {
+    margin-right: 0.8em;
+    color: var(--font-chore);
+    font-weight: bold;
+    white-space: nowrap;
   }
 
-  .riddle {
-    margin: 1em;
-  }
-
-  .field {
-    margin-bottom: 0.3em;
-    margin-left: 0.2em;
-    color: var(--light-gray);
-  }
-
-  .question {
-    height: 5rem;
-    font-size: 1rem;
-    margin-top: 0.3em;
-    padding: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    border-radius: 0.3em;
-    white-space: pre-wrap;
-    overflow-y: auto;
-  }
-
-  .hint {
-    font-size: 1em;
-    border-radius: 0.4rem;
-    margin-top: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    color: #ECECEC;
-    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    @media(max-width: 768px) {
-      width: 100%;
-    }
+  p {
+    margin: 0;
   }
 
   .answer {
-    margin-top: 0.3em;
-    font-size: 1em;
-    border-radius: 0.4rem;
-    border: 1.5px solid var(--dark-gray);
-    color: #ECECEC;
-    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    @media(max-width: 768px) {
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
+`;
+
+// Note
+const NoteWrapper = styled.pre`
+  height: 20rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+`;
+
+// Button
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.2rem;
+  margin-bottom: 1rem;
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
+  
+  button {
+    @media (max-width: 768px) {
       width: 100%;
     }
   }
-`;
 
-const PostWrapper = styled.pre`
-  height: 20rem;
-  font-size: 1.1em;
-  margin-top: 0.3em;
-  padding: 0.3em;
-  border: 1.5px solid var(--dark-gray);
-  border-radius: 0.3em;
-  white-space: pre-wrap;
-  overflow-y: auto;
-`;
-
-const SubmitButton = styled.button`
-  margin-top: 2rem; 
-  background-color: var(--middle-blue);
-  color: white;
-  font-weight: bold;
-  padding: 0.6em 2em 0.6em 2em;
+  .previous {
+    margin-right: 1em;
+  }
 `;

@@ -3,12 +3,12 @@ import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
 import styled from "styled-components";
 import { formatTimeAgo } from "../util/formatTimeAgo";
-import { BiSolidLabel } from "react-icons/bi"; // label
 import { GoDotFill } from "react-icons/go"; // 구분점
 import { useNavigate } from "react-router-dom";
+import { BsUpc } from "react-icons/bs"; // 라벨
 
 interface IPandoraListProps {
-  action: 'cover' | 'conquered' | 'detail';
+  action: 'glimpse' | 'cover' | 'conquered' | 'detail';
   keyword: string;
   pandoras: {
     id: string;
@@ -27,6 +27,9 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
   const navigate = useNavigate();
 
   const handleClick = (id: string, solverAlias?: string | null) => {
+    if (action === 'glimpse') {
+      return;
+    }
     if (action === 'cover') {
       return navigate(`/pandora/${id}?keyword=${keyword}`);
     }
@@ -46,91 +49,92 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
   };
 
   return (
-    <SearchUl>
+    <PandorasContainer>
       {pandoras.map((pandora) => (
-        <SearchList key={pandora.id}>
-          <h2 className="title" onClick={() => handleClick(pandora.id, pandora?.solverAlias)}>{pandora.title}</h2>
-          <InfoWrapper $open={pandora.isCatUncovered}>
+        <PandoraWrapper key={pandora.id}>
+          <Title onClick={() => handleClick(pandora.id, pandora?.solverAlias)}>{pandora.title}</Title>
+          <InfoWrapper>
             <div>
-              <p className="writer"> <IoPerson /> {pandora.writer}</p>                  
-              <p className="view-createdat"> 
+              <Writer> <IoPerson /> {pandora.writer}</Writer>                  
+              <MainInfo> 
                 <AiFillLock /> {pandora.totalProblems} ·&nbsp;
                 <LuEye /> {pandora.coverViewCount} ·&nbsp;
                 {formatTimeAgo(pandora.createdAt)}
-              </p>
-              <p className="label"><BiSolidLabel /> {pandora.label}</p>
+              </MainInfo>
+              <Label><BsUpc /> {pandora.label}</Label>
             </div>
             <div>
-              <p className="state"><GoDotFill/> {pandora.isCatUncovered ? '열람됨' : '미열람'}</p>
+              <State $open={pandora.isCatUncovered}><GoDotFill/> {pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
             </div>
           </InfoWrapper>
-        </SearchList>
+        </PandoraWrapper>
       ))}
-    </SearchUl>
+    </PandorasContainer>
   );
 }
 
-const SearchUl = styled.ul`
+const PandorasContainer = styled.ul`
   margin: 0;
 `;
 
-const SearchList = styled.li`
-  background-color: var(--gray300);
-  border-bottom: 1px solid var(--gray200);
-  padding: 1em 1.5em 1em 1em;
+const PandoraWrapper = styled.li`
+  border-bottom: 1px solid var(--divide);
+  padding: 1em;
+`;
 
-  .title {
-    color: var(--blue100);
-    cursor: pointer;
-    margin: 0;
-
-    &:hover {
-      text-decoration: underline;
-    }
+const Title = styled.h2`
+  color: var(--list-title);
+  font-weight: 800;
+  margin: 0;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
   }
 `;
 
-const InfoWrapper = styled.div<{ $open: boolean }>`
+const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-itmes: center;
+  color: var(--list-info);
+`;
 
-  .writer {
-    display: flex;
-    color: var(--white200);
-    font-weight: bold;
-    font-size: 1.1em;
-    margin: 0.9em 0 0.2em 0;
-    svg {
-      margin-right: 0.3em;
-    }
+const Writer = styled.p`
+  display: flex;
+  color: var(--font);
+  font-weight: 500;
+  font-size: 1em;
+  margin: 0.9em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
   }
+`;
 
-  .view-createdat {
-    display: flex;
-    color: var(--gray100);
-    margin: 0.3em 0 0.2em 0;
-    svg {
-      margin-right: 0.3em;
-    }
+const MainInfo = styled.p`
+  display: flex;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin: 0.3em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
   }
+`;
 
-  .label {
-    display: flex;
-    margin: 0.6em 0 0 0;
-    font-size: 0.8em;
-    color: var(--gray100);
-    svg {
-      margin-right: 0.3em;
-    }
+const Label = styled.p`
+  display: flex;
+  margin: 0.6em 0 0 0;
+  font-weight: 500;
+  font-size: 0.9em;
+  svg {
+    margin-right: 0.3em;
   }
+`;
 
-  .state {
-    display: flex;
-    color: var(--gray100);  
-    svg {
-      margin-right: 0.3em;
-      color: ${({ $open }) => $open ? 'green' : 'yellow'}
-    }
+const State = styled.p<{ $open: boolean }>`
+  display: flex;
+  font-weight: 600;
+  svg {
+    margin-right: 0.3em;
+    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
   }
 `;

@@ -1,8 +1,9 @@
 import { IHttpClient } from './../network/HttpClient';
-import { INewPandoraForm, IPandoraCover, IPandoraSearchResults, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult, IMyPandoras, IDeletePandoraResult } from '../types/pandora';
+import { INewPandoraForm, IPandoraCover, IPandoraSearchResults, IMyPandoraEdit, IEditPandoraForm, IEditPandoraResult, IMyPandoras, IDeletePandoraResult, IOpenedPandoraGlimpse } from '../types/pandora';
 import { IApiResponse } from '../types/api';
 
 export interface IPandoraService {
+  getOpenedPandorasGlimpse(): Promise<IApiResponse<IOpenedPandoraGlimpse[]>>;
   getPandoraSearchResult(keyword: string, page: number): Promise<IApiResponse<IPandoraSearchResults>>;
   getPandoraCover(id: string): Promise<IApiResponse<IPandoraCover>>;
   getMyPandoras(page: number): Promise<IApiResponse<IMyPandoras>>;
@@ -14,6 +15,14 @@ export interface IPandoraService {
 
 export class PandoraService implements IPandoraService {
   constructor(private httpClient: IHttpClient) {}
+
+  async getOpenedPandorasGlimpse() {
+    const data = await this.httpClient.fetch<IOpenedPandoraGlimpse[], void>('/pandora/glimpse', {
+      method: 'GET'
+    });
+
+    return data;
+  }
 
   async getPandoraSearchResult(keyword: string, page: number) {
     const data = await this.httpClient.fetch<IPandoraSearchResults, void>(`/pandora/search?keyword=${keyword}&page=${page}`, {

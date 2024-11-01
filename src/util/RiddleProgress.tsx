@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { BsCheckSquare } from "react-icons/bs"; // 사각형
 
 interface IRiddleProgressProps {
   totalSteps: number;
@@ -10,12 +11,15 @@ export function RiddleProgress({ totalSteps, currentStep }: IRiddleProgressProps
     <StyledContainer>
         {Array.from({ length: totalSteps }).map((_, index) => (
           <>
-            <Square
-              filled={index < currentStep}
-              isCurrent={index === currentStep}
-            >
-              {index + 1}
-            </Square>
+            {index < currentStep ? (
+              <CheckedBox><BsCheckSquare color="#8ab4f8" /></CheckedBox>
+            ) : (
+              <Square isCurrent={index === currentStep}>
+                {index + 1}
+              </Square>
+
+            )}
+            
             {index < totalSteps - 1 && <Line filled={index < currentStep} />}
           </>
         ))}
@@ -26,29 +30,42 @@ export function RiddleProgress({ totalSteps, currentStep }: IRiddleProgressProps
 const StyledContainer = styled.div`
   display: flex;
   align-items: center;
+  margin: 0;
 `;
 
-const Square = styled.div<{ filled: boolean; isCurrent: boolean }>`
+const CheckedBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  width: 2em;
+  height: 2em;
+  /* border: 1px solid yellow; */
+
+  svg {
+    margin: 0;
+    font-size: 2em;
+  }
+`;
+
+const Square = styled.div<{ isCurrent: boolean }>`
   width: 2em;
   height: 2em;
   border-radius: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1em;
   font-weight: bold;
-  /* border: ${({ filled }) => (filled ? '1px solid #44d97b' : '1px solid #a0a0a0')};
-  color: ${({ filled }) => (filled ? '#44d97b' : '#a0a0a0')}; */
-  border: ${({ filled, isCurrent }) =>
-    isCurrent ? '2px solid #c4c4c4' : filled ? '1px solid #44d97b' : '1px solid #8b8b8b'};
-  color: ${({ filled, isCurrent }) =>
-    isCurrent ? '#c8c8c8' : filled ? '#44d97b' : '#838383'};
+  border: ${({ isCurrent }) => isCurrent ? '1px solid var(--font)' : '1px solid #3f4147'};
+  /* background-color: ${({ isCurrent }) => isCurrent? '#ececec' : '#292e33'}; */
+  color: ${({ isCurrent }) => isCurrent ? 'var(--font)' : '#3f4147'};
 `;
 
 const Line = styled.div<{ filled: boolean }>`
   width: 0.4em;
   height: 1px;
-  border-bottom: 1px solid ${({ filled }) => (filled ? '#44d97b' : '#aab7cb')};
+  /* border-bottom: 1px solid ${({ filled }) => (filled ? '#44d97b' : '#aab7cb')}; */
+  border-bottom: 1px solid #3f4147;
 `;
 
 export default RiddleProgress;

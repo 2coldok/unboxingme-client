@@ -36,7 +36,7 @@ export default function AppHeader() {
 
       {profile === undefined && (
         <LoginWrapper $ready={ready}>
-          <img src="/google.png" alt="google" />
+          <FcGoogle />
           <span>Login</span>
         </LoginWrapper>
       )}
@@ -59,6 +59,9 @@ const LogoWrapper = styled.nav`
   align-items: center;
   height: 100%;
   margin-left: 1em;
+  margin-top: 0.3em;
+  /* color: var(--blue500); */
+  
   cursor: pointer;
 
   img {
@@ -68,10 +71,10 @@ const LogoWrapper = styled.nav`
   }
 
   span {
-    font-size: 1.6em;
+    font-size: 1.4em;
     font-family: "Grandstander", cursive;
     font-weight: 600;
-    margin-top: 0.1em;
+    margin-top: 0.3em;
   }
 `;
 
@@ -82,7 +85,6 @@ const LoginWrapper = styled.nav<{ $ready: boolean }>`
   padding: 0.5em 0.7em;
   font-size: 1.2em;
   border-radius: 1.5em;
-  color: white;
   margin-right: 0.3em;
   cursor: ${({ $ready }) => ($ready ? 'pointer' : 'not-allowed')};
 

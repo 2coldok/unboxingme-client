@@ -1,3 +1,14 @@
+export interface IOpenedPandoraGlimpse {
+  id: string;
+  label: string;
+  writer: string;
+  title: string;
+  totalProblems: number;
+  coverViewCount: number;
+  createdAt: string;
+  isCatUncovered: boolean
+}
+
 export interface IPandoraSearchResults {
   total: number
   pandoras: {
@@ -19,11 +30,10 @@ export interface IPandoraCover {
   title: string;
   description: string;
   firstQuestion: string; 
-  firstHint: string; 
   totalProblems: number;
   coverViewCount: number;
+  isCatUncovered: boolean;
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface IMyPandoras {

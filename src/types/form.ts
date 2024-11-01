@@ -10,6 +10,8 @@ export type TKeywords = string[];
 
 export interface IRiddle {
   id: string;
+  isQuestionValid: boolean;
+  isAnswerValid: boolean;
   question: string;
   hint: string;
   answer: string;

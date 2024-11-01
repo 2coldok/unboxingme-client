@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 interface AlertProps {
@@ -8,6 +8,14 @@ interface AlertProps {
 
 export default function Alert({ message, onClose }: AlertProps) {
   const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   const handleClick = () => {
     setIsVisible(false);
@@ -20,10 +28,10 @@ export default function Alert({ message, onClose }: AlertProps) {
 
   return (
     <AlertContainer>
-      <MessageWrapper>
-        <h2>{message}</h2>
+      <MessageContainer>
+        <Message>{message}</Message>
         <button onClick={handleClick}>확인</button>
-     </MessageWrapper>
+     </MessageContainer>
     </AlertContainer>
   );
 }
@@ -34,20 +42,31 @@ const AlertContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 100;
 `;
 
-const MessageWrapper = styled.div`
+const MessageContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 2em;
+  border-radius: 0.7rem;
+  background-color: #252932;
+  border: 1px solid var(--border);
+  
 
-  width: 40%;
-  height: 40%;
-  background-color: white;
-  color: black
+  width:  400px;
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+  
+`;
+
+const Message = styled.p`
+  margin-bottom: 2em;
 `;

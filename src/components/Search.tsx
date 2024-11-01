@@ -40,11 +40,11 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
   };
 
   return (
-    <SearchFormContainer onSubmit={onSubmit} role="search" action="">
-      <IoIosSearch />
-      <input
+    <SearchFormWrapper onSubmit={onSubmit} role="search" action="">
+      <SearchIcon />
+      <SearchInput
         type="search"
-        placeholder="keyword"
+        placeholder="게시물 키워드"
         name="search"
         value={searchKeyword}
         maxLength={SEARCH_KEYWORD.maxLength}
@@ -54,19 +54,25 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
         autoComplete="off"
         enterKeyHint="search"
       />
-      <button className="submit" type="submit"></button>
-      <button className="cancel" type='button'onClick={onCancel}><BsX /></button>
-    </SearchFormContainer>
+      <SubmitButton className="submit" type="submit"></SubmitButton>
+      <CancelButton className="cancel" type='button'onClick={onCancel}><BsX /></CancelButton>
+    </SearchFormWrapper>
   );
 }
 
-const SearchFormContainer = styled.form`
+/**
+ * 흰색배경에서 shadow
+ * 
+ * box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+ */
+
+const SearchFormWrapper = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--gray400);
-  border: 1.5px solid var(--blue100);
-
+  background-color: var(--search-background);
+  border: 1px solid var(--brand);
+  
   width: 700px;
   @media (max-width: 768px) {
     width: 85%;
@@ -80,52 +86,49 @@ const SearchFormContainer = styled.form`
   padding: 0;
   border-radius: 1.6rem;
   overflow: hidden;
-  
-  & > svg {
-    color: var(--gray100);
-    margin-left: 0.5em;
-    font-size: 1.7em;
-  }
-  
-  & > input {
-    background-color: var(--gray400);
-    color: var(--white200);
-    outline: none;
-    border: none;
-    font-size: 1.2em;
-    @media (max-width: 768px) {
-      font-size: 1.1em;
-    }
-    width: 100%;
-    height: 100%;
-    padding: 0 0.6em 0 0.6em;
-    &::-webkit-search-cancel-button {
-      -webkit-appearance: none;
-    }
-    &::-ms-clear {
-      display: none;
-      width: 0;
-      height: 0;
-    }
-    /* &::-webkit-search-decoration,
-    &::-webkit-search-results-decoration, */
-    /* &::-webkit-search-results-button {
-      display: none;
-    } */
-  }
+`;
 
-  .submit {
+const SearchIcon = styled(IoIosSearch)`
+  background-color: var(--search-background);
+  color: var(--list-info);
+  margin-left: 0.5em;
+  font-size: 1.7em;
+`;
+
+const SearchInput = styled.input`
+  background-color: var(--search-background);
+  color: var(--font);
+  outline: none;
+  border: none;
+  font-size: 1.2em;
+  @media (max-width: 768px) {
+    font-size: 1.1em;
+  }
+  width: 100%;
+  height: 100%;
+  padding: 0 0.6em 0 0.6em;
+
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+  &::-ms-clear {
     display: none;
+    width: 0;
+    height: 0;
   }
+`;
 
-  .cancel {
-    padding-left: 0;
-    border: none;
-    background-color: var(--gray400);
+const CancelButton = styled.button`
+  padding-left: 0;
+  border: none;
+  background-color: var(--search-background);
 
-    & > svg {
-      color: var(--gray100);
-      font-size: 1.8em;
-    }
+  & > svg {
+    color: var(--list-info);
+    font-size: 1.8em;
   }
+`;
+
+const SubmitButton = styled.button`
+  display: none;
 `;

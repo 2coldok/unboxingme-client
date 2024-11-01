@@ -1,12 +1,11 @@
 export interface IInitialRiddleFailByPenalty {
   status: 'penalty';
-  failCount: number;
   restrictedUntil: string;
 }
 
 export interface IInitialRiddleFailbyIneligible {
   status: 'ineligible';
-  reason: 'INACTIVE' | 'NOT_FOUND_RECORD' | 'MINE' | 'SOLVED';
+  reason: 'NOT_FOUND_RECORD' | 'MINE';
 }
 
 export interface IInitialRiddleSuccess {
@@ -44,6 +43,17 @@ export interface INextRiddleChallengeable {
 }
 
 export type TNextRiddle = INextRiddlePenalty | INextRiddleEnd | INextRiddleChallengeable;
+
+/***********************************************/
+// IInitialRiddleSuccess 과 INextRiddleChallengeable 과 동일해서 별도의 간단한 이름으로 추가
+export interface IRiddle {
+  status: 'riddle';
+  question: string;
+  hint: string;
+  unsealedQuestionIndex: number;
+  totalProblems: number;
+  failCount: number;
+}
 
 /***********************************************/
 

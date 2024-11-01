@@ -1,4 +1,4 @@
-import { AiFillCaretDown } from "react-icons/ai";
+// import { AiFillCaretDown } from "react-icons/ai";
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -39,7 +39,7 @@ export default function Profile({ profile }: IProfileProps) {
     <StyledContainer>
       <ProfileWrapper onClick={handleProfileClick}>
         <img src={profile.photo} alt="avatar" />
-        <AiFillCaretDown />
+        <span>{profile.displayName}</span>
       </ProfileWrapper>
       {showPopper && (
         <Popper>
@@ -77,12 +77,11 @@ const ProfileWrapper = styled.div`
 
   & > span {
     font-weight: bold;
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
-
-  & > svg {
-    margin-left: 0.5em;
-  }
-`
+`;
 
 const Popper = styled.div`
   position: absolute;

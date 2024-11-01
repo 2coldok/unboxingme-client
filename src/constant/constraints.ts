@@ -16,16 +16,16 @@ export const SOLVERALIAS = Object.freeze({
 
 export const PANDORA_FORM = Object.freeze({
   // 작성자
-  minWriterLength: 1,
+  minWriterLength: 2,
   maxWriterLength: 15,
   defaultWriter: '익명',
 
   // 제목
-  minTitleLength: 3,
+  minTitleLength: 5,
   maxTitleLength: 60,
 
   // 설명
-  minDescriptionLength: 3,
+  minDescriptionLength: 5,
   maxDescriptionLength: 300,
 
   // 키워드
@@ -37,15 +37,14 @@ export const PANDORA_FORM = Object.freeze({
   // 문제
   minTotalProblems: 1,
   maxTotalProblems: 10,
-  minQuestionLength: 3,
-  maxQuestionLength: 60,
-  minHintLegnth: 1,
+  minQuestionLength: 1,
+  maxQuestionLength: 100,
+  minHintLegnth: 0,
   maxHintLegnth: 32,
-  defaultHint: '힌트 없음',
   minAnswerLength: 1,
   maxAnswerLength: 32,
 
   // 노트
-  minNoteLength: 3,
+  minNoteLength: 5,
   maxNoteLength: 1000
 });

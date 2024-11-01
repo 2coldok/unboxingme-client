@@ -1,15 +1,14 @@
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import styled from "styled-components";
 import { Outlet } from "react-router-dom"
 import AppHeader from "./components/AppHeader"
-// import AppFooter from "./components/AppFooter"
 import { useLoading } from "./hook/LoadingHook";
 import LoadingBar from "./loading/LoadingBar";
 import ScrollToTop from "./util/ScrollToTop";
+// import AppFooter from "./components/HomeFooter";
 
 function App() {
   const { isLoading } = useLoading();
+  // const location = useLocation();
   
 
   return (
@@ -24,7 +23,7 @@ function App() {
         <Outlet />
       </MainContainer>
 
-      {/* {!isLoading && (
+      {/* {!isLoading && location.pathname === '/' && (
         <FooterContainer>
           <AppFooter />
         </FooterContainer>
@@ -40,8 +39,8 @@ const HeaderContainer = styled.header`
   flex-direction: row;
   width: 100%;
   height: 70px;
-  background-color: var(--gray300);
-  border-bottom: 1px solid var(--gray200);
+  background-color: var(--background);
+  border-bottom: 1px solid var(--divide);
 
   position: fixed;
   top: 0; 
@@ -50,7 +49,7 @@ const HeaderContainer = styled.header`
   
 `;
 
-const MainContainer = styled.div`
+const MainContainer = styled.main`
   width: 90%;
   max-width: 1200px;
   margin-top: 100px;
@@ -61,11 +60,13 @@ const MainContainer = styled.div`
 
 // const FooterContainer = styled.footer`
 //   display: flex;
+//   flex-direction: column;
 //   align-items: center;
+//   justify-content: center;
 //   width: 100%;
-//   height: 120px;
+//   height: 100px;
 //   margin-top: 30px;
-//   background-color: #0f2337;
+//   background-color: #11202f;
 // `;
 
 export default App

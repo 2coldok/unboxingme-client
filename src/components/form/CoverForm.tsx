@@ -1,6 +1,8 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import { ICover, TFormSubject } from "../../types/form";
+import { PANDORA_FORM } from "../../constant/constraints";
+import { FORM_LENGTH_ERROR_MESSAGE } from "../../constant/errorMessage";
 
 export interface ICoverFormProps {
   setFormSubject: Dispatch<React.SetStateAction<TFormSubject>>;
@@ -9,6 +11,8 @@ export interface ICoverFormProps {
 }
 
 export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFormProps) {
+  const [showErrors, setShowErrors] = useState(false);
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setCover((prev) => ({
@@ -17,113 +21,164 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
     }));
   };
 
-  const handleNextButton = () => {
-    if (cover.writer.length === 0) {
-      return alert('작성자명을 입력해주세요');
-    }
-    if (cover.title.length === 0) {
-      return alert('제목을 입력해주세요');
-    }
-    if (cover.description.length === 0) {
-      return alert('설명을 입력해주세요');
-    }
+  const isWriterValid = cover.writer.trim().length >= PANDORA_FORM.minWriterLength;
+  const isTitleValid = cover.title.trim().length >= PANDORA_FORM.minTitleLength;
+  const isDescriptionValid = cover.description.trim().length >= PANDORA_FORM.minDescriptionLength;
+  const isFormValid = isWriterValid && isTitleValid && isDescriptionValid;
 
-    setCover((prev) => ({
-      ...prev,
-      writer: prev.writer.trim(),
-      title: prev.title.trim(),
-      description: prev.description.trim()
-    }));
-    setFormSubject('keywords');
+  const handleNextButton = () => {
+    if (isFormValid) {
+      setCover((prev) => ({
+        ...prev,
+        writer: prev.writer.trim(),
+        title: prev.title.trim(),
+        description: prev.description.trim()
+      }));
+      setFormSubject('riddles');
+    } else {
+      setShowErrors(true);
+    }
   };
 
   return (
-    <StyledContainer>
-      <p className="subtitle">작성자명</p>
-      <input 
-        className="writer"
-        type="text" 
-        name="writer" 
-        value={cover.writer}
-        onChange={onChange}
-        maxLength={25}
-        autoComplete="off"
-        autoFocus
-      />
-      <p className="subtitle">제목</p>
-      <input 
-        className="title"
-        type="text" 
-        name="title" 
-        placeholder="제목을 입력하세요" 
-        value={cover.title}
-        onChange={onChange}
-        maxLength={60}
-        autoComplete="off"
-      />
-      <p className="subtitle">설명</p>
-      <textarea 
-        className="description"
-        name="description"
-        maxLength={300} 
-        placeholder="설명을 입력하세요" 
-        value={cover.description}
-        onChange={onChange}
-        autoComplete="off"
-      />
+    <>
+      <Advice>* 상대방이 당신의 질문을 해결하기 전, 게시물을 간단히 소개해주세요.</Advice>
+
+      <SubTitle>
+        작성자명
+        {showErrors && !isWriterValid && (
+          <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.writer}</ErrorMessage>
+        )}
+      </SubTitle>
+      <WriterWrapper>
+        <input
+          type="text" 
+          name="writer" 
+          value={cover.writer}
+          onChange={onChange}
+          maxLength={PANDORA_FORM.maxWriterLength}
+          autoComplete="off"
+          autoFocus
+          placeholder="작성자명 입력"
+        />
+        <LengthCount>{cover.writer.length}/{PANDORA_FORM.maxWriterLength}</LengthCount>
+      </WriterWrapper>
+      
+      
+      <SubTitle>
+        제목
+        {showErrors&& !isTitleValid && (
+          <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.title}</ErrorMessage>
+        )}
+      </SubTitle>
+      <TitleWrapper>
+        <input 
+          type="text" 
+          name="title" 
+          value={cover.title}
+          onChange={onChange}
+          maxLength={PANDORA_FORM.maxTitleLength}
+          autoComplete="off"
+          placeholder="제목 입력"
+        />
+        <LengthCount>{cover.title.length}/{PANDORA_FORM.maxTitleLength}</LengthCount>
+      </TitleWrapper>
+
+      <SubTitle>
+        소개
+        {showErrors && !isDescriptionValid && (
+          <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.description}</ErrorMessage>
+        )}
+      </SubTitle>
+      <DescriptionWrapper>
+        <textarea 
+          className="description"
+          name="description"
+          maxLength={PANDORA_FORM.maxDescriptionLength} 
+          value={cover.description}
+          onChange={onChange}
+          autoComplete="off"
+          placeholder="설명 입력"
+        />
+        <LengthCount>{cover.description.length}/{PANDORA_FORM.maxDescriptionLength}</LengthCount>
+      </DescriptionWrapper>
+
       <ButtonWrapper>
-        <button type="button" onClick={handleNextButton}>다음</button>
+        <button className='previous' type='button' onClick={() => setFormSubject('keywords')}>이전</button>
+        <button className="next" type="button" onClick={handleNextButton}>다음</button>
       </ButtonWrapper>
-    </StyledContainer>
+    </>
   );
 }
 
-const StyledContainer = styled.div`
-  .subtitle {
-    margin-bottom: 0.3em;
-    color: var(--light-gray);
-  }
+const Advice = styled.p`
+  color: var(--font-explain);
+  margin-bottom: 2em;
+`;
 
-  input, textarea {
-    font-size: 1.1rem;
-    margin-bottom: 0.4rem;
-  }
+const SubTitle = styled.p`
+  margin-bottom: 0.3em;
+  margin-left: 0.1em;
+`;
 
-  & > small {
-    margin-left: 0.1rem;
-    color: var(--dark-gray);
-  }
+const LengthCount = styled.small`
+  align-self: flex-end; 
+  margin-top: 0.2em;
+  margin-right: 0.2em;
+  color: var(--font-chore);
+`;
 
-  .writer {
-    width: 15rem;
-  }
-
-  .title {
+const WriterWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 15rem;
+  input {
     width: 100%;
   }
+`;
 
-  .description {
+const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  input {
+    width: 100%;
+  }
+`;
+
+const DescriptionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  textarea {
     width: 100%;
     height: 10rem;
-    font-size: 1.1rem;
   }
+`;
+
+const ErrorMessage = styled.small`
+  font-weight: normal;
+  margin-left: 0.4em;
+  color: var(--font-warning);
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
+  margin-bottom: 2rem;
   @media (max-width: 768px) {
     justify-content: center;
   }
   
-  & > button {
-    background-color: var(--middle-blue);
-    color: white;
-    font-weight: bold;
-    padding: 0.6em 2em 0.6em 2em;
+  button {
     @media (max-width: 768px) {
       width: 100%;
     }
+  }
+
+  .next {
+    margin-left: 0.8em;
   }
 `;

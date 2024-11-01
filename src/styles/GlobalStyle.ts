@@ -14,27 +14,51 @@ const GlobalStyle = createGlobalStyle`
     --dark-black100: #12181f;
     --light-white500: #a6b6e3;
 
-    /*white*/
-    --white100: #ececec; //
-    --white200: #cdcdcd; // 글씨 + 
+    --white200: #cdcdcd; 
 
-    /*blue*/
-    --blue100: #7eaaff; // 검색 테두리 + 
+    --blue100: #7eaaff; 
+    /* --blue100: #3772ff; */
     --blue200: #3b90f9;
+    /* --blue300: #4588e1; */
     
-    /*gray*/
-    --gray100: #6a737d; // 검색 돋보기,x색 +
+    --gray100: #6a737d;
     --gray200: #3a3d42;
     --gray300: #202124;
-    --gray400: #181b1d; // input 내부배경 +
+    --gray400: #181b1d; 
 
-    /*black*/
     --black100: #101114;
 
-    /*red*/
-    --red500: #db3535;
-  }
+    --red500: #e65757;
 
+    /**Custom */
+    --blue500: #3772ff;
+    --white100: #FFFFFF;
+    --black900: #080708;
+    --gray500: #5c5c5c;
+    --gray900: #333333;
+
+
+    /**DarkTheme */
+    --background: #202124;
+    --brand: #7eaaff;
+    --brand-light: #8ab4f8;
+    --font: #cdcdcd;
+    --list-title: #7eaaff;
+    --list-info: #6a737d;
+    --divide: #3b3d43;
+    --border: #3b3d43;
+    --search-background: #191b1d;
+    --sub-title: #6a737d;
+    --font-chore: #6a737d;
+    --font-explain: #999fa5; // form에서 가이드설명
+    --font-subtitle: #6a737d;
+    --font-warning: #ff4d4d;
+
+    --button-border: #485f88;
+    --button-background: #324055;
+    --button-font: #8ab4f8;
+  }
+  
   @font-face {
     font-family: 'DungGeunMo';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
@@ -53,14 +77,13 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
 
     font-family: 'Roboto', sans-serif;
-    /* font-family: 'DungGeunMo', sans-serif; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-synthesis: none;
     text-rendering: optimizeLegibility;
 
-    background-color: var(--gray300);
-    color: var(--white200);
+    background-color: var(--background);
+    color: var(--font);
   }
 
   // App StyledContainer
@@ -77,12 +100,14 @@ const GlobalStyle = createGlobalStyle`
   }
 
   button {
-    border-style: none;
-    border-radius: 8px;
-    padding: 0.6em 1.2em;
+    border: 1px solid var(--button-border);
+    background-color: var(--button-background);
+    color: var(--button-font);
+    padding: 0.4em 1.5em;
+    border-radius: 0.5rem;
     font-size: 1em;
-    font-weight: 500;
     font-family: inherit;
+    font-weight: 700;
     cursor: pointer;
   }
 
@@ -98,41 +123,42 @@ const GlobalStyle = createGlobalStyle`
   }
 
   input {
-    background-color: var(--background-color);
     outline: none;
     border-radius: 0.4rem;
-    border: 1.5px solid var(--light-gray);
-    color: #ECECEC;
+    font-size: 1rem;
+    border: 1px solid var(--font-chore);
+    background-color: var(--background);
+    color: var(--font);
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    /* font-family: 'DungGeunMo', sans-serif; */
     font-family: 'Roboto', sans-serif;
-  }
-
-  input:focus {
-    border-color: var(--middle-blue);
+    :focus {
+      border-color: var(--brand);
+    }
   }
 
   textarea {
-    background-color: var(--background-color);
+    background-color: var(--background);
+    color: var(--font);
     outline: none;
     border-radius: 0.4rem;
-    border: 1.5px solid var(--light-gray);
-    color: #ECECEC;
+    border: 1px solid var(--font-chore);
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    line-height: 1.4;
-    word-spacing: -0.3rem;
+    font-size: 1rem;
     resize: none;
-    /* font-family: 'DungGeunMo', sans-serif; */
     font-family: 'Roboto', sans-serif;
-  }
-
-  textarea:focus {
-    border-color: var(--middle-blue);
+    :focus {
+      border-color: var(--brand);
+    }
   }
 
   pre {
     /* font-family: 'DungGeunMo', sans-serif; */
+    white-space: pre-wrap;
     font-family: 'Roboto', sans-serif;
+    overflow-x: auto;
+    font-size: 1em;
+    border-radius: 0.4rem;
+    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
   }
 `;
 

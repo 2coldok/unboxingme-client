@@ -1,6 +1,8 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TFormSubject } from '../../types/form';
+import { PANDORA_FORM } from '../../constant/constraints';
+import { FORM_LENGTH_ERROR_MESSAGE } from '../../constant/errorMessage';
 
 export interface IPostFormProps {
   setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
@@ -9,70 +11,83 @@ export interface IPostFormProps {
 }
 
 export default function PostForm({ setFormSubject, post, setPost }: IPostFormProps) {
-  
-  // useEffect(() => {
-  //   if (message.trim().length < 1) {
-  //     setValidForm(false);
-  //     setFormErrorMessage('판도라의 메세지를 입력해주세요');
-  //   } else {
-  //     setValidForm(true);
-  //     setFormErrorMessage(null);
-  //   }
-  // }, [message]);
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    let timer: number;
+    if (showError) {
+      timer = setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [showError]);
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPost(event.target.value);
   };
 
   const handleNextButton = () => {
-    if (post.length === 0) {
-      return alert('게시글 내용을 입력해주세요.');
+    if (post.trim().length < PANDORA_FORM.minNoteLength) {
+      return setShowError(true);
     }
+  
     setPost((prev) => prev.trim());
     setFormSubject('preview');
-  }
+  };
 
   return (
-    <StyledContainer>
-      <p>* 모든 질문을 최초로 해결한 한명의 사용자만 게시글 내용을 확인할 수 있습니다.</p>
-      <textarea 
+    <>
+      <Guide>
+        * 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.
+      </Guide>
+
+      {showError && <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.note}</ErrorMessage>}
+      <Note 
           name='post'
-          maxLength={1000} 
-          placeholder="게시글 내용 입력" 
+          maxLength={PANDORA_FORM.maxNoteLength} 
+          placeholder="노트 입력" 
           value={post}
           onChange={onChange}
       />
-      <small>{`${post.length}/1000`}</small>
+      <Count>{`${post.length}/${PANDORA_FORM.maxNoteLength}`}</Count>
       <ButtonWrapper>
         <button className='previous' onClick={() => setFormSubject('riddles')}>이전</button>
-        <button className='next' onClick={handleNextButton}>다음</button>
+        <button className='next' onClick={handleNextButton}>미리보기/생성</button>
       </ButtonWrapper>
-    </StyledContainer>
+    </>
   );
 }
 
-const StyledContainer = styled.div`
-  & > textarea {
-    width: 100%;
-    height: 20rem;
-    font-size: 1.1rem;
-    margin-top: 0.5rem;
-  }
+const Guide = styled.p`
+  color: var(--font-explain);
+  /* margin-bottom: 2rem; */
+`;
+
+const ErrorMessage = styled.small`
+  color: var(--red500);
+  margin-left: 0.2em;
+`;
+
+const Note = styled.textarea`
+  width: 100%;
+  height: 20rem;
+`;
+
+const Count = styled.small`
+  color: var(--font-chore);
+  margin-left: 0.3em;
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: 0.2rem;
   @media (max-width: 768px) {
     justify-content: center;
   }
   
-  & > button {
-    background-color: var(--middle-blue);
-    color: white;
-    font-weight: bold;
-    padding: 0.6em 2em 0.6em 2em;
+  button {
     @media (max-width: 768px) {
       width: 100%;
     }
