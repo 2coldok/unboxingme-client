@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
-import { FcGoogle } from "react-icons/fc";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
+import Login from "./Login";
 export default function AppHeader() {
-  const { profile, login } = useAuth();
+  const { profile } = useAuth();
   const [ready, setReady] = useState(false);
+  const [showLoginPop, setShowLoginPop] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,9 +23,8 @@ export default function AppHeader() {
     return navigate('/');
   };
   
-  const handleGoogleLoginClick = () => {
-    const currentUrl = window.location.href;
-    login(currentUrl);
+  const handleLoginClick = () => {
+    setShowLoginPop(true);
   };
   
   return (
@@ -34,17 +34,17 @@ export default function AppHeader() {
         <span>RiddleNote</span>
       </LogoWrapper>
 
+      {showLoginPop && <Login onClose={() => setShowLoginPop(false)} />}      
+
       {profile === undefined && (
         <LoginWrapper $ready={ready}>
-          <FcGoogle />
-          <span>Login</span>
+          <button>로그인</button>
         </LoginWrapper>
       )}
 
       {profile === null && (
-        <LoginWrapper onClick={handleGoogleLoginClick} $ready={ready}>
-          <FcGoogle />
-          <span>Login</span>
+        <LoginWrapper onClick={handleLoginClick} $ready={ready}>
+          <button>로그인</button>
         </LoginWrapper>
       )}
       
@@ -88,13 +88,10 @@ const LoginWrapper = styled.nav<{ $ready: boolean }>`
   margin-right: 0.3em;
   cursor: ${({ $ready }) => ($ready ? 'pointer' : 'not-allowed')};
 
-  svg {
-    margin-right: 0.3em;
-    filter: ${({ $ready }) => ($ready ? 'none' : 'grayscale(100%)')};
-  }
-
-  span {
-    font-weight: bold;
-    color: ${({ $ready }) => ($ready ? 'var(--white100)' : 'gray')};
+  button {
+    
+    font-size: 0.8em;
+    padding: 0.3em 1em 0.3em 1em;
+    opacity: ${({ $ready }) => ($ready ? 1 : 0.5)};
   }
 `;

@@ -12,11 +12,12 @@ import Alert from "../util/Alert";
 import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
 import { LoadingSpinner } from "../loading/LoadingSpinner";
-import { formatTimeAgo } from "../util/formatTimeAgo";
+import { formatTime, formatTimeAgo } from "../util/formatTimeAgo";
 import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
 import Search from "../components/Search";
+import Login from "../components/Login";
 
 interface IPandoraCoverProps {
   pandoraService: IPandoraService;
@@ -26,10 +27,10 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
   const { id } = useParams<{ id: string }>(); 
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
-
+  const [showLoginPop, setShowLoginPop] = useState(false);
   const [pandoraCover, setPandoraCover] = useState<IPandoraCover | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const { getTokenStatus, login } = useAuth();
+  const { getTokenStatus } = useAuth();
   const { isLoading, startLoading, stopLoading} = useLoading();
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
 
   useEffect(() => {
     if (state?.userColor === 'penalty' && state.restrictedUntil) {
-      return setAlertMessage(`${state.restrictedUntil}까지 접근이 제한됩니다.`);
+      return setAlertMessage(`${formatTime(state.restrictedUntil)} 까지 접근이 제한됩니다.`);
     }
     if (state?.userColor === 'maker') {
       return setAlertMessage('게시물 생성자는 "마이페이지"에서 열람할 수 있습니다.');
@@ -83,11 +84,11 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
       const tokenStatus = await getTokenStatus();
 
       if (tokenStatus === 'valid') {
-        return navigate(`/pandora/${id}/riddle2`);
+        return navigate(`/pandora/${id}/riddle`);
       }
       
       if (tokenStatus == 'none') {
-        login(window.location.href);
+        return setShowLoginPop(true);
       }
     } catch (error) {
       if (error instanceof HttpError) {
@@ -137,6 +138,8 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
       {alertMessage && (
         <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
+
+      {showLoginPop && <Login onClose={() => setShowLoginPop(false)} />}
     </>
   );
 }

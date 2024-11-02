@@ -8,7 +8,6 @@ import { useLoading } from "../hook/LoadingHook";
 import RiddleProgress from "../util/RiddleProgress";
 import { PANDORA_FORM } from "../constant/constraints"; 
 import { getRemainingAttempts } from "../util/remainingAttempts";
-import { formatTime } from "../util/formatTimeAgo";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 
@@ -22,7 +21,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
   const { isLoading, startLoading, stopLoading } = useLoading();
   const [userColor, setUserColor] = useState<'challenger' | 'maker' | 'penalty' | 'solver'| null>(null);
   const [riddle, setRiddle] = useState<IRiddle | null>(null);
-  const [restrictedUntil, setRestrictedUntil] = useState<string | null>(null);
+  const [restrictedUntil, setRestrictedUntil] = useState<string | null>(null); // ISO string. format변환은 cover 컴포넌트에서.
   const [submitAnswer, setSubmitAnswer] = useState('');
 
   useEffect(() => {
@@ -43,7 +42,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
         // 페널티 기간일 경우
         if (status === 'penalty') {
-          setRestrictedUntil(formatTime(data.payload.restrictedUntil));
+          setRestrictedUntil(data.payload.restrictedUntil);
           return setUserColor('penalty');
         }
 
@@ -66,15 +65,15 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
   useEffect(() => {
     if (userColor === 'penalty' && restrictedUntil) {
-      navigate(`/pandora/${id}`, { state: { userColor: 'penalty', restrictedUntil: formatTime(restrictedUntil) }, replace: true });
+      return navigate(`/pandora/${id}`, { state: { userColor: 'penalty', restrictedUntil: restrictedUntil }, replace: true });
     }
 
     if (userColor === 'maker') {
-      navigate(`/pandora/${id}`, { state: { userColor: 'maker' }, replace: true });
+      return navigate(`/pandora/${id}`, { state: { userColor: 'maker' }, replace: true });
     }
 
     if (userColor === 'solver') {
-      navigate(`/pandora/${id}/solveralias`, { replace: true });
+      return navigate(`/pandora/${id}/solveralias`, { replace: true });
     }
   }, [userColor, restrictedUntil, id, navigate]);
 
@@ -184,7 +183,7 @@ const RiddleWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  height: 40%;
+  height: 50%;
   max-width: 1000px;
   border-radius: 1rem;
   @media (max-width: 768px) {
@@ -310,6 +309,7 @@ const HintWrapper = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 0;
   width: 100%;
   height: 60px;
   padding-bottom: 20px;
