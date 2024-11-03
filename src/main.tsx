@@ -4,7 +4,8 @@ import App from './App.tsx'
 import GlobalStyle from './styles/GlobalStyle.ts'
 
 //
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 // pages
 import Home from './pages/Home.tsx'
@@ -34,6 +35,7 @@ import { env } from './config/env.ts'
 import Introduce from './pages/Introduce.tsx'
 import Guide from './pages/Guide.tsx'
 import Riddle from './pages/Riddle.tsx'
+
 
 
 const httpClient = new HttpClient(env.url.serverBaseURL);
@@ -87,12 +89,14 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <AuthProvider authService={authService}>
-    <LoadingProvider>
-      <GlobalStyle />
-      <RouterProvider router={router} />
-    </LoadingProvider>
-  </AuthProvider>
+  <HelmetProvider>
+    <AuthProvider authService={authService}>
+      <LoadingProvider>
+        <GlobalStyle />
+        <RouterProvider router={router} />
+      </LoadingProvider>
+    </AuthProvider>
+  </HelmetProvider>
 )
 
 // ReactDOM.createRoot(document.getElementById('root')!).render(
