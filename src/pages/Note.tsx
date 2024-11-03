@@ -5,11 +5,13 @@ import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
 import { INote } from "../types/unboxing";
 import { LuEye } from "react-icons/lu";
-import { GoClock } from "react-icons/go";
-import { IoIosFingerPrint } from "react-icons/io";
+import { GoDotFill } from "react-icons/go";
 import { IoPerson } from "react-icons/io5";
 import { useLoading } from "../hook/LoadingHook";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
+import { AiFillLock } from "react-icons/ai";
+import { BsUpc } from "react-icons/bs";
+import { formatTimeAgo } from "../util/formatTimeAgo";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -25,11 +27,10 @@ export default function Note({ unboxingService }: NoteProps) {
     if (!id) {
       return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
     }
-    
-    startLoading();
-
+  
     const fetchNote = async () => {
       try {
+        startLoading();
         const data = await unboxingService.getNote(id);
         setPandora(data.payload);
       } catch (error) {
@@ -44,88 +45,136 @@ export default function Note({ unboxingService }: NoteProps) {
     fetchNote();
   }, [id, navigate, unboxingService, startLoading, stopLoading]);
 
+  if (!pandora || isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
-    <StyledContainr>
-      {isLoading || !pandora ? <LoadingSpinner /> : ( 
-        <CoverWrapper>
-          <HeadWrapper>
-            <h1 className="title">{pandora.title}</h1>
-            <p className="writer"><IoPerson /> {pandora.writer}</p>
-            <p className="view-created"><LuEye /> {pandora.coverViewCount} &nbsp;·&nbsp; <GoClock /> {pandora.createdAt}</p>
-            <p className="label"><IoIosFingerPrint /> {pandora.label}</p>
-          </HeadWrapper>
-    
-          <DescriptionWrapper>
-          <pre className="description">{pandora.description}</pre>
-          <pre className="note">{pandora.cat}</pre>
-          </DescriptionWrapper> 
-        </CoverWrapper>
-      )}
-   </StyledContainr>
+    <>
+      <CoverWrapper>
+        <Title>{pandora.title}</Title>
+        <InfoWrapper>
+          <div>
+            <Writer> <IoPerson /> {pandora.writer}</Writer>                  
+            <MainInfo> 
+              <AiFillLock /> {pandora.totalProblems} ·&nbsp;
+              <LuEye /> {pandora.coverViewCount} ·&nbsp;
+              {formatTimeAgo(pandora.createdAt)}
+            </MainInfo>
+            <Label><BsUpc /> {pandora.label}</Label>
+          </div>
+          <div>
+            <State $open={pandora.isCatUncovered}><GoDotFill/> {pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+          </div>
+        </InfoWrapper>
+        <Description>{pandora.description}</Description>
+      </CoverWrapper>  
+      <NoteWrapper>
+        {pandora.cat}
+      </NoteWrapper>
+    </>
   );
 }
 
-const StyledContainr = styled.div`
+const CoverWrapper = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 100%; 
-  padding: 4em;
-  @media (max-width: 768px) {
-    padding: 0;
-  }
-`
-
-const CoverWrapper = styled.div`
-  border: 1px solid var(--dark-gray);
-  border-radius: 0.5rem;
-  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  padding: 1.1em;
+  margin-bottom: 30px;
+  /* @media (max-width: 768px) {
+    border-style: none;
+  } */
 `;
 
-const HeadWrapper = styled.div`
-  background-color: #1c1f24;
-  padding: 1.5em;
-  .title {
-    color: #1775d9;
-    margin: 0;
-  }
-
-  .writer {
-    margin: 0.1em 0 0 0;
-  }
-
-  .view-created {
-    margin: 0.1em 0 0 0;
-    color: #686868;
-  }
-
-  .label {
-    margin: 0.1em 0 0 0;
-    color: #686868;
+const Title = styled.h2`
+  color: var(--list-title);
+  font-weight: 800;
+  font-size: 1.8em;
+  margin: 0;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
   }
 `;
 
-const DescriptionWrapper = styled.div`
-  width: 100%;
-  font-size: 1.5em;
+const InfoWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-itmes: center;
+  color: var(--list-info);
+`;
 
-  & > pre {
-    white-space: pre-wrap;
-  }
-
-
-  .description {
-    padding: 1.5em 1em 1.5em 1em;
-  }
-
-  .note {
-    margin-top: 1em;
-    margin-bottom: 0;
-    /* background-color: #12181f; */
-    background-color: var(--dark-black100);
-    padding: 1.5em 1em 1.5em 1em;
-    border-top: 2px dashed var(--dark-gray);
-    color: var(--light-white500);
+const Writer = styled.p`
+  display: flex;
+  color: var(--font);
+  font-weight: 500;
+  font-size: 1em;
+  margin: 0.9em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
   }
 `;
+
+const MainInfo = styled.p`
+  display: flex;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin: 0.3em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const Label = styled.p`
+  display: flex;
+  margin: 0.6em 0 0 0;
+  font-weight: 500;
+  font-size: 0.9em;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const State = styled.p<{ $open: boolean }>`
+  display: flex;
+  font-weight: 600;
+  svg {
+    margin-right: 0.3em;
+    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
+  }
+`;
+
+const Description = styled.pre`
+  font-size: 1.1em;
+  min-height: 10em;
+  border-top: 1px solid var(--border);
+  padding: 2em 0 0 0;
+  border-radius: 0;
+  white-space: pre-wrap;
+`;
+
+const NoteWrapper = styled.pre`
+  display: flex;
+  border: 1px solid var(--border);
+  padding: 1.1em;
+  border-radius: 0.4em;
+  margin: 0;
+  margin-bottom: 30px;
+  background-color: #252932;
+  /* color: #8ca8c3; */
+  color: #a3c0dd;
+  min-height: 15em;
+  font-size: 1.2em;
+`;
+
+
+// .note {
+//   margin-top: 1em;
+//   margin-bottom: 0;
+//   background-color: var(--dark-black100);
+//   padding: 1.5em 1em 1.5em 1em;
+//   border-top: 2px dashed var(--dark-gray);
+//   color: var(--light-white500);
+// }

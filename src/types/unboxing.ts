@@ -76,7 +76,11 @@ export interface INote {
   writer: string;
   title: string;
   description: string;
+  totalProblems: number;
   coverViewCount: number;
-  cat: string;
+  isCatUncovered: boolean;
   createdAt: string;
+  solvedAt: string;
+  solverAlias: string;
+  cat: string;
 }

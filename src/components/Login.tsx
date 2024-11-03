@@ -22,26 +22,24 @@ export default function Login({ onClose }: LoginProps) {
   return (
     <StyledContainer>
       <LoginContainer>
-        <LogoWrapper>
-          <Logo>
-            <img src="/logo.png" alt="logo" />
-            <span>RiddleNote</span>
-          </Logo>
-          <Close onClick={handleCancel}>
-            <BsX />
-          </Close>
-        </LogoWrapper>
-        <MessageWrapper>
-          리들노트 앱은 Google 계정을 통해 사용자를 인증합니다.<br></br>
-          Google 로그인 진행시 리들노트 <span className='terms-of-service'>이용약관</span>에 동의하게 됩니다.<br></br>
-          자세한 내용은 <span className='privacy-policy'>개인정보 처리방침</span>을 확인하세요.
-        </MessageWrapper>
-        <LoginButtonWrapper>
-          <LoginButton onClick={handleLogin}>
-            <img src='/google_logo.svg' alt='google logo' />
-            <span>Google 계정으로 계속하기</span>
-          </LoginButton>
+        <CloseButtonWrapper>
+          <BsX onClick={handleCancel} />
+        </CloseButtonWrapper>
+
+        <TitleWrapper>
+          <img src="/logo.png" alt="logo" />
+          <span>RiddleNote App 로그인</span>
+        </TitleWrapper>
+        
+        
+        <LoginButtonWrapper onClick={handleLogin}>
+          <img src='/google_logo.svg' alt='google logo' />
+          <span>Google 계정으로 계속하기</span>
         </LoginButtonWrapper>
+        
+        <MessageWrapper>
+          계속 진행시 riddlenote의 <Link href='/'>이용약관</Link>과 <Link href='/'>개인정보 처리방침</Link>에 동의하게 됩니다.
+        </MessageWrapper>
       </LoginContainer>
     </StyledContainer>
   );
@@ -63,7 +61,9 @@ const StyledContainer = styled.div`
 const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1em;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
   border-radius: 0.4rem;
   background-color: #252932;
   /* background-color: white; */
@@ -77,87 +77,79 @@ const LoginContainer = styled.div`
   }
 `;
 
-const LogoWrapper = styled.div`
+const CloseButtonWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* background-color: red; */
+  width: 100%;
+  justify-content: flex-end;
+  font-size: 1.5em;
+
+  svg {
+    cursor: pointer;
+  }
 `;
 
-const Logo = styled.div`
+const TitleWrapper = styled.div`
   display: flex;
-  /* color: #1f1f1f; */
+  width: 100%;
   color: var(--font);
+  margin-bottom: 40px;
+  margin-left: 10px;
   img {
-    width: 1.5em;
-    height: auto;
+    width: 25px;
+    height: 25px;
     margin-right: 0.5em;
   }
 
   span {
-    font-size: 1.3em;
+    font-size: 18px;
     margin-top: 0.2em;
-    font-family: "Grandstander", cursive;
-    font-weight: 600;
+    /* font-family: "Grandstander", cursive; */
+    font-weight: 500;
   }
 `;
 
-const Close = styled.div`
-  display: flex;
-  font-size: 1.9em;
-  cursor: pointer;
+// color: #4285F4;
 
-  svg {
-    /* color: #1f1f1f; */
-    color: var(--font);
-  }
-`;
-
-const MessageWrapper = styled.div`
-  font-size: 1em;
-  /* color: #1f1f1f; */
-  color: var(--font);
-  margin: 2em 0 2em 0;
-  
-
-  .terms-of-service {
-    cursor: pointer;
-    /* color: #1a73e8; */
-    color: #4285F4;
-  }
-
-  .privacy-policy {
-    cursor: pointer;
-    /* color: #1a73e8; */
-    color: #4285F4;
-  }
-`;
-
-const LoginButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const LoginButton = styled.span`
+const LoginButtonWrapper = styled.span`
   display: flex;
   align-items: center;
   background-color: #4285F4;
-  /* color: #1f1f1f; */
-  /* border: 1px solid #747775; */
-  color: #ffffff;
-  border-radius: 6px;
-  padding-right: 13px;
+  border-radius: 4.2px;
   font-weight: 600;
+  width: auto;
   cursor: pointer;
 
   img {
     border: 1px solid #4285F4;
     border-radius: 6px;
-    margin-right: 13px;
+  }
+
+  span {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 14px;
+    margin-left: 12px;
+    margin-right: 12px;
   }
 
   :hover {
     filter: brightness(115%);
+  }
+`;
+
+const MessageWrapper = styled.div`
+  align-items: center;
+  font-size: 0.8em;
+  margin-top: 30px;
+`;
+
+const Link = styled.a.attrs({
+  target: "_blank",
+  rel: "noopener noreferrer"
+})`
+  color: #4285F4;
+  text-decoration: underline;
+  :hover {
+    filter: brightness(125%);
   }
 `;

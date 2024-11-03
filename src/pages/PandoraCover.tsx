@@ -155,7 +155,7 @@ const CoverWrapper = styled.main`
   flex-direction: column;
   border: 1px solid var(--border);
   border-radius: 1rem;
-  padding: 1.5em;
+  padding: 1.1em;
   @media (max-width: 768px) {
     border-style: none;
   }
@@ -225,6 +225,7 @@ const Description = styled.pre`
   padding-bottom: 5em;
   padding-left: 0.4em;
   border-radius: 0;
+  min-height: 10em;
   white-space: pre-wrap;
 `;
 

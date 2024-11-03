@@ -10,7 +10,7 @@ export const SUBMIT_ANSWER = Object.freeze({
 
 export const SOLVERALIAS = Object.freeze({
   minLength: 1,
-  maxLength: 20,
+  maxLength: 40,
   default: '익명'
 });
 
