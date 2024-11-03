@@ -130,7 +130,7 @@ const Head = styled.h2`
 `;
 
 const GuideWrapper = styled.div`
-  color: var(--font-chore);
+  /* color: var(--font-chore); */
 `;
 
 const FormContainer = styled.div`
@@ -152,7 +152,7 @@ const InputWrapper = styled.div`
     left: 15px;
     padding: 0 7px;
     font-size: 12px;
-    color: var(--font-chore);
+    /* color: var(--font-chore); */
     pointer-events: none;
     background-color: #252932;
   }
@@ -160,7 +160,11 @@ const InputWrapper = styled.div`
   .alias {
     background-color: #252932;
     width: 100%;
+    border: 1px solid var(--font);
     padding: 1.2em 1em 1em 1em;
+    :focus {
+      border-color: var(--brand);
+    }
 
   }
 

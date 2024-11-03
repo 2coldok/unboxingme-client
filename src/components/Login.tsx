@@ -28,7 +28,7 @@ export default function Login({ onClose }: LoginProps) {
 
         <TitleWrapper>
           <img src="/logo.png" alt="logo" />
-          <span>RiddleNote App 로그인</span>
+          <span>RiddleNote App</span>
         </TitleWrapper>
         
         
@@ -51,7 +51,7 @@ const StyledContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,10 +90,10 @@ const CloseButtonWrapper = styled.div`
 
 const TitleWrapper = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
+  margin-top: 10px;
   color: var(--font);
-  margin-bottom: 40px;
-  margin-left: 10px;
   img {
     width: 25px;
     height: 25px;
@@ -117,6 +117,8 @@ const LoginButtonWrapper = styled.span`
   border-radius: 4.2px;
   font-weight: 600;
   width: auto;
+  margin-top: 90px;
+  margin-bottom: 30px;
   cursor: pointer;
 
   img {
@@ -140,7 +142,6 @@ const LoginButtonWrapper = styled.span`
 const MessageWrapper = styled.div`
   align-items: center;
   font-size: 0.8em;
-  margin-top: 30px;
 `;
 
 const Link = styled.a.attrs({

@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import Search from "../components/Search";
 import { IPandoraService } from "../service/PandoraService";
@@ -45,6 +46,10 @@ export default function Home({ pandoraService }: IHomeProps) {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <title>리들노트</title>
+        <meta name="description" content="리들노트 - 비공개 게시물 플랫폼" />
+      </Helmet>
       {/* <Guide><IoHelpCircleOutline /> 가이드</Guide> */}
       <Search keyword={''} />
       <div className="nav">

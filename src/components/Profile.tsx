@@ -33,6 +33,7 @@ export default function Profile({ profile }: IProfileProps) {
 
   const handleLogoutClick = async () => {
     await logout();
+    return navigate('/');
   };
  
   return (
