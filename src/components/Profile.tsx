@@ -19,6 +19,7 @@ export default function Profile({ profile }: IProfileProps) {
   };
 
   const handleMyPageClick = async () => {
+    setShowPopper(false);
     const status = await getTokenStatus();
     if (status === 'invalid') {
       return alert('세션이 만료되었습니다.');
@@ -33,6 +34,7 @@ export default function Profile({ profile }: IProfileProps) {
 
   const handleLogoutClick = async () => {
     await logout();
+    setShowPopper(false);
     return navigate('/');
   };
  
@@ -44,8 +46,8 @@ export default function Profile({ profile }: IProfileProps) {
       </ProfileWrapper>
       {showPopper && (
         <Popper>
-          <button onClick={handleMyPageClick}>마이페이지</button>
-          <button onClick={handleLogoutClick}>로그아웃</button>
+          <div className="mypage" onClick={handleMyPageClick}>마이페이지</div>
+          <div className="logout" onClick={handleLogoutClick}>로그아웃</div>
         </Popper>
       )}
     </StyledContainer>
@@ -87,31 +89,42 @@ const ProfileWrapper = styled.div`
 const Popper = styled.div`
   position: absolute;
   top: 50px;
-  left: calc(50% - 100px);
-  max-width: 200px;
-  background-color: white;
-  border: 1px solid #ccc;
+  /* left: calc(50% - 100px); */
+  right: 20px;
+  /* max-width: 400px; */
+  /* background-color: #252932; */
+  background-color: var(--background);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  
-  padding: 10px;
+  padding: 0.5em;
   z-index: 10;
+  width: 140px;
 
-  @media (max-width: 400px) {
+  /* @media (max-width: 400px) {
     left: auto; 
     right: 10px;
-  }
+  } */
   
-  & > button {
-    display: block;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    padding: 10px;
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #f0f0f0;
+    margin: 0;
+    font-size: 1.1em;
+    /* font-weight: bold; */
+    /* border-radius: 0.4em; */
+    padding: 0.2em;
+    font-weight: 600;
+    /* background-color: gray; */
+    /* color: var(--button-font); */
+    :hover {
+      filter: brightness(125%);
+      cursor: pointer;
     }
+  }
+
+  .mypage {
+    margin-bottom: 0.5em;
   }
 `;

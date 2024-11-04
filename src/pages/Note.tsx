@@ -70,6 +70,12 @@ export default function Note({ unboxingService }: NoteProps) {
         <Description>{pandora.description}</Description>
       </CoverWrapper>  
       <NoteWrapper>
+        Riddlenote &gt; solved-at <br></br>
+        Riddlenote &gt; {pandora.solvedAt} <br></br>
+        Riddlenote &gt; solver-alias <br></br>
+        Riddlenote &gt; {pandora.solverAlias} <br></br>
+        Riddlenote &gt; note <br></br>
+        Riddlenote &gt; <br></br> <br></br>
         {pandora.cat}
       </NoteWrapper>
     </>
@@ -80,9 +86,8 @@ const CoverWrapper = styled.main`
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 0.4rem;
+  border-radius: 0.4rem 0.4rem 0 0;
   padding: 1.1em;
-  margin-bottom: 30px;
   /* @media (max-width: 768px) {
     border-style: none;
   } */
@@ -157,14 +162,14 @@ const Description = styled.pre`
 
 const NoteWrapper = styled.pre`
   display: flex;
-  border: 1px solid var(--border);
+  border: 2px solid #5a5a5a;
+  background-color: #131313;
+  font-family: 'DungGeunMo', sans-serif;
   padding: 1.1em;
-  border-radius: 0.4em;
+  border-radius: 0.1rem;
   margin: 0;
   margin-bottom: 30px;
-  background-color: #252932;
   /* color: #8ca8c3; */
-  color: #a3c0dd;
   min-height: 15em;
   font-size: 1.2em;
 `;

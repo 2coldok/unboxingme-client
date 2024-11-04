@@ -63,14 +63,13 @@ const LoginContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 16px;
   border-radius: 0.4rem;
   background-color: #252932;
   /* background-color: white; */
   /* border: 1px solid #797c7a; */
   border: 1px solid var(--border);
 
-  width: 500px;
   max-width: 500px;
   @media (max-width: 768px) {
     width: 90%;
@@ -94,6 +93,7 @@ const TitleWrapper = styled.div`
   width: 100%;
   margin-top: 10px;
   color: var(--font);
+  
   img {
     width: 25px;
     height: 25px;
@@ -104,7 +104,7 @@ const TitleWrapper = styled.div`
     font-size: 18px;
     margin-top: 0.2em;
     /* font-family: "Grandstander", cursive; */
-    font-weight: 500;
+    font-weight: 800;
   }
 `;
 
@@ -117,8 +117,8 @@ const LoginButtonWrapper = styled.span`
   border-radius: 4.2px;
   font-weight: 600;
   width: auto;
-  margin-top: 90px;
-  margin-bottom: 30px;
+  margin-top: 40px;
+  margin-bottom: 50px;
   cursor: pointer;
 
   img {

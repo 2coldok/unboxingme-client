@@ -59,10 +59,6 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
     if (tab === 'conquered') {
       sessionStorage.removeItem('conquered_currentPage');
     }
-
-    if (tab === 'challenges') {
-      sessionStorage.removeItem('challenge');
-    }
     saveInSession<Ttab>('tab', tab);
     setTab(tab);
     setSearchParams({ tab });
@@ -119,7 +115,7 @@ const NavigateWrapper = styled.div`
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60px;
+    height: 70px;
     background-color: var(--background);
     flex-direction: row;
     justify-content: space-around;
