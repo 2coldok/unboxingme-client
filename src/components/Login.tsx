@@ -28,7 +28,7 @@ export default function Login({ onClose }: LoginProps) {
 
         <TitleWrapper>
           <img src="/logo.png" alt="logo" />
-          <span>RiddleNote App</span>
+          <span>리들노트 앱 로그인</span>
         </TitleWrapper>
         
         

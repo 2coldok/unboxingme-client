@@ -7,38 +7,25 @@ import { HttpError } from "../network/HttpClient";
 import { getInSession, saveInSession } from "../util/storage";
 import { useLoading } from "../hook/LoadingHook";
 import { Pagination } from "../util/Pagination";
-import { IPandoraSearchResults } from "../types/pandora";
+import { IPandoraList, IPandoraSearchResults } from "../types/pandora";
 import { SEARCH_KEYWORD } from "../constant/constraints";
 import PandoraListSkeleton from "../loading/PandoraListSkeleton";
 import PandoraList from "../components/PandoraList";
 
-
 interface ISearchResultProps {
   pandoraService: IPandoraService;
-}
-
-interface IPandoraSearched {
-  id: string;
-  label: string;
-  writer: string;
-  title: string;
-  totalProblems: number;
-  coverViewCount: number;
-  createdAt: string;
-  isCatUncovered: boolean;
 }
 
 export default function SearchResult({ pandoraService }: ISearchResultProps) {
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
   const navigate = useNavigate();
-  const [pandoras, setPandoras] = useState<IPandoraSearched[] | null>(null);
+  const [pandoras, setPandoras] = useState<IPandoraList[] | null>(null);
   const { isLoading, startLoading, stopLoading } = useLoading();
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [currentPage, setCurrentPage] = useState<number>(getInSession<number>(`search_currentPage`) || 1);
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
-    startLoading();
     if (keyword && keyword.length > SEARCH_KEYWORD.maxLength) {
       return navigate('/fallback/404', { state: { message: '잘못된 접근: 검색 키워드 글자수 오류' } });
     }
@@ -49,11 +36,12 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
 
     const fetchSearchResult = async () => {
       try {
+        startLoading();
         const data = await pandoraService.getPandoraSearchResult(keyword, currentPage);
         const { pandoras, total} = data.payload;
-        saveInSession<IPandoraSearchResults>(`search-${keyword}-${currentPage}`, data.payload);
         setPandoras(pandoras);
         setTotalItems(total);
+        saveInSession<IPandoraSearchResults>(`search_${keyword}_${currentPage}`, data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
           navigate('/fallback/error', { state: { error: error, type: error.payload } });
@@ -62,28 +50,15 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
         stopLoading();
       }
     }
-
-    const cachedCurrentPage = getInSession<number>('search-currentPage');
-    if (cachedCurrentPage) {
-      setCurrentPage(cachedCurrentPage);
-    } else {
-      saveInSession<number>('search-currentPage', 1);
-    }
   
-    const cachedSearchResults = getInSession<IPandoraSearchResults>(`search-${keyword}-${currentPage}`);
+    const cachedSearchResults = getInSession<IPandoraSearchResults>(`search_${keyword}_${currentPage}`);
     if (cachedSearchResults) {
       setPandoras(cachedSearchResults.pandoras);
       setTotalItems(cachedSearchResults.total);
-      stopLoading();
     } else {
       fetchSearchResult();
     }
   }, [keyword, navigate, pandoraService, startLoading, stopLoading, currentPage]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    saveInSession<number>('search-currentPage', page);
-  };
 
   /*********************************************************************************/
 
@@ -91,7 +66,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
     return (
       <>
         <SearchWrapper>
-          <Search keyword={keyword as string} resetPage={() => setCurrentPage(1)} />
+          <Search keyword={keyword as string} />
         </SearchWrapper>
         <PandoraListSkeleton />
       </>
@@ -106,7 +81,7 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
   return (
     <>
       <SearchWrapper>
-        <Search keyword={keyword as string} resetPage={() => setCurrentPage(1)} />
+        <Search keyword={keyword as string} />
       </SearchWrapper>
       {totalItems > 0 ? (
         <PandoraList
@@ -124,11 +99,12 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
       )}
       {totalItems > 0 && (
         <Pagination
+          type='search'
           currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
           totalItems={totalItems}
           itemsPerPage={10}
           maxVisibleTotalPages={5}
-          onPageChange={handlePageChange}
         />
       )}
     </>

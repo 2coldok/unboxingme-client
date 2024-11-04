@@ -7,11 +7,9 @@ import { SEARCH_KEYWORD } from "../constant/constraints";
 
 interface ISearchProps {
   keyword: string;
-  // 검색어 제출시 session에 저장된 현재 페이지를 1로 초기화 한다.
-  resetPage?: () => void;
 }
 
-export default function Search({ keyword, resetPage }: ISearchProps) {
+export default function Search({ keyword }: ISearchProps) {
   const [searchKeyword, setSearchKeyword] = useState(keyword);
   const navigate = useNavigate();
 
@@ -31,8 +29,7 @@ export default function Search({ keyword, resetPage }: ISearchProps) {
     event.preventDefault();
     const trimmedSearchKeyword = searchKeyword.trim();
     if (trimmedSearchKeyword.length > 0) {
-      sessionStorage.removeItem('search-currentPage');
-      resetPage && resetPage();
+      sessionStorage.removeItem('search_currentPage');
       return navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
     } else {
       return setSearchKeyword('');

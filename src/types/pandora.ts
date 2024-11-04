@@ -23,6 +23,17 @@ export interface IPandoraSearchResults {
   }[]
 }
 
+export interface IPandoraList {
+  id: string;
+  label: string;
+  writer: string;
+  title: string;
+  totalProblems: number;
+  coverViewCount: number;
+  createdAt: string;
+  isCatUncovered: boolean
+}
+
 export interface IPandoraCover {
   id: string;
   label: string;

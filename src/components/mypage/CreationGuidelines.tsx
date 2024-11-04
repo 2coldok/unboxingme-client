@@ -5,21 +5,36 @@ export default function CreationGuidelines() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/pandora/form');
+    return navigate('/pandora/form');
   };
 
   return (
-    <StyledContainer>
-      <button onClick={handleClick}>판도라 만들기</button>
-      <h1>노트 만들기</h1>
-      <p>표지 가이드</p>
-      <p>키워드 가이드</p>
-      <p>수수께끼 가이드</p>
-      <p>노트 가이드</p>
+    <>
+      <Title>게시물 만들기</Title>
+      <CreateWrapper>
+        <p>게시물 생성 가이드를 참고하세요</p>
+        <CreateButton onClick={handleClick}>판도라 만들기</CreateButton>
+
+      </CreateWrapper>
       
-    </StyledContainer>
+    </>
   );
 }
 
-const StyledContainer = styled.div`
+const Title = styled.h3`
+  margin-left: 1em;
+`;
+
+const CreateWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--border);
+  margin: 1em;
+  padding: 1em;
+  border-radius: 0.7rem;
+`;
+
+const CreateButton = styled.button`
+  max-width: 300px;
 `;

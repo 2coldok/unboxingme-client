@@ -7,6 +7,7 @@ import { HttpError } from "../../network/HttpClient";
 import { useLoading } from "../../hook/LoadingHook";
 import { LoadingSpinner } from "../../loading/LoadingSpinner";
 import PandoraList from "../PandoraList";
+import { getInSession, saveInSession } from "../../util/storage";
 // import { HiOutlineDocumentText } from "react-icons/hi";
 
 interface IMyChallengesProps {
@@ -16,14 +17,15 @@ interface IMyChallengesProps {
 export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
   const navigate = useNavigate();
   const { isLoading, startLoading, stopLoading } = useLoading();
-  const [myChallenges, setMyChallenges] = useState<IMyChallenge[]>([]);
+  const [myChallenges, setMyChallenges] = useState<IMyChallenge[] | null>(null);
 
   useEffect(() => {
-    startLoading();
     const fetchMyChallenges = async () => {
       try {
+        startLoading();
         const data = await dashboardService.getMyChallenges();
         setMyChallenges(data.payload);
+        saveInSession<IMyChallenge[]>('challenge', data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error } });
@@ -33,23 +35,32 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
       }
     }
 
-    fetchMyChallenges();
+    const cachedPandoras = getInSession<IMyChallenge[]>('challenge');
+    if (cachedPandoras) {
+      setMyChallenges(cachedPandoras);
+    } else {
+      fetchMyChallenges();
+    }
   }, [navigate, dashboardService, startLoading, stopLoading]);
 
+  if (!myChallenges || isLoading) {
+    return (
+      <LoadingSpinner />
+    );
+  }
+
   return (
-    <StyledContainer>
-      <h1>진행중</h1>
-      <small>최근 최대 10개의 목록</small>
-      {isLoading && <LoadingSpinner />}
+    <>
+      <Title>진행중</Title>
       <PandoraList
         action="cover"
         keyword=""
         pandoras={myChallenges}
        />
-    </StyledContainer>
+    </>
   );
 }
 
-const StyledContainer = styled.div`
-  margin-left: 0.5em;
+const Title = styled.h3`
+  margin-left: 1em;
 `;

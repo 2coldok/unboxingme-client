@@ -4,18 +4,20 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { HttpError } from "../network/HttpClient";
 import { formatTime, formatTimeAgo } from "../util/formatTimeAgo";
-import { BsFillCaretDownFill } from "react-icons/bs"; // 펼치기
+import { BsFillCaretDownFill, BsUpc } from "react-icons/bs"; // 펼치기
 import { BsFillCaretUpFill } from "react-icons/bs"; // 접기
 
 import RiddleProgress from "../util/RiddleProgress";
 import { IMyPandoraDetail } from "../types/dashboard";
 import { IoPerson } from "react-icons/io5"; // writer
 import { v4 as uuidv4 } from "uuid";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiFillLock, AiOutlineSearch } from "react-icons/ai";
 
 import { IPandoraService } from "../service/PandoraService";
 import EditAndDeleteConfirm from "../components/EditAndDeleteConfirm";
 import { Copy } from "../util/Copy";
+import { LuEye } from "react-icons/lu";
+import { GoDotFill } from "react-icons/go";
 
 
 interface IPandoraDetailProps {
@@ -88,127 +90,135 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   }
 
   return (
-    <StyledContainer>
-      <MyPandoraDetail>
-      
-        <Pandora>
-          <h1 className="title">{detail.pandora.title}</h1>
-          <p className="writer"><IoPerson /> {detail.pandora.writer}</p>
-          <pre className="description">{detail.pandora.description}</pre>
-          
-          <h4 onClick={() => setKeywordsView((prev) => !prev)}>검색 키워드  {keywordsView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</h4>
-          {keywordsView && (
-            <KeywordsWrapper>
-              {detail.pandora.keywords.length === 0 && <p>검색 키워드가 설정되지 않았습니다.</p>}
-              {detail.pandora.keywords.map((keyword) => (
-                <li key={uuidv4()}>
-                  <AiOutlineSearch />
-                  <span>{keyword}</span>
-                </li>
-              ))}
-            </KeywordsWrapper>
-          )}
-          
-          <h4 onClick={() => setRiddlesView((prev) => !prev)}>질문{`(${detail.pandora.totalProblems})`} {riddlesView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</h4>  
-          {riddlesView && (
-            <RiddlesWrapper>
-              {detail.pandora.problems.map((riddle, index) => (
-                <li key={index}>
-                  <h3 className="index">
-                    <span>문제 {index + 1}번</span>
-                  </h3>
-                  <div className="riddle">
-                    <strong className="field">질문</strong>
-                    <pre className="question">{riddle.question}</pre>
-                    <strong className="field">힌트</strong>
-                    <p className="hint">{riddle.hint ? riddle.hint : '힌트 없음'}</p>
-                    <strong className="field">정답</strong>
+    <>
+      <SubContentWrapper>
+        <Title>{detail.pandora.title}</Title>
+        <InfoWrapper>
+          <div>
+            <Writer> <IoPerson /> {detail.pandora.writer}</Writer>                  
+            <MainInfo> 
+              <AiFillLock /> {detail.pandora.totalProblems} ·&nbsp;
+              <LuEye /> {detail.pandora.coverViewCount} ·&nbsp;
+              {formatTimeAgo(detail.pandora.createdAt)}
+            </MainInfo>
+            <Label><BsUpc /> {detail.pandora.label}</Label>
+          </div>
+          <div>
+            <State $open={detail.pandora.isCatUncovered}><GoDotFill/> {detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+          </div>
+        </InfoWrapper>
+        <Description>{detail.pandora.description}</Description>
+        
+        <HiddenDetail onClick={() => setKeywordsView((prev) => !prev)}>검색 키워드  {keywordsView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
+        {keywordsView && (
+          <KeywordsWrapper>
+            {detail.pandora.keywords.length === 0 && (
+              <>
+                <p>검색 키워드가 설정되지 않았습니다.</p>
+                <p>게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
+              </>
+    
+            )}
+            {detail.pandora.keywords.map((keyword) => (
+              <Keyword key={uuidv4()}>
+                <AiOutlineSearch />
+                <span>{keyword}</span>
+              </Keyword>
+            ))}
+          </KeywordsWrapper>
+        )}
+        
+        <HiddenDetail onClick={() => setRiddlesView((prev) => !prev)}>질문{`(${detail.pandora.totalProblems})`} {riddlesView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>  
+        {riddlesView && (
+          <RiddleWrapper>
+            {detail.pandora.problems.map((riddle, index) => (
+              <RiddleBox>
+                <RiddleIndex><AiFillLock /> 문제 {index + 1}</RiddleIndex>
+                <Riddle key={uuidv4()}>             
+                  <RiddleContent>
+                    <span>질문</span>
+                    <p>{riddle.question}</p>
+                  </RiddleContent>
+                  <RiddleContent>
+                    <span>힌트</span>
+                    <p>{riddle.hint ? riddle.hint : '힌트 없음'}</p>
+                  </RiddleContent>
+                  <RiddleContent>
+                    <span>정답</span>
                     <p className="answer">{riddle.answer}</p>
-                  </div>
-                </li>
-              ))}
-            </RiddlesWrapper>
-          )}
-          
-          <h4 onClick={() => setNoteView((prev) => !prev)}>게시글 내용 {noteView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</h4>
-          {noteView && (
-            <pre className="note">{detail.pandora.cat}</pre>
-          )}
-        </Pandora>
+                  </RiddleContent>
+                </Riddle>
+              </RiddleBox>
+            ))}
+          </RiddleWrapper>
+        )}
+        
+        <HiddenDetail onClick={() => setNoteView((prev) => !prev)}>게시글 내용 {noteView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
+        {noteView && (
+          <NoteWrapper>
+            {detail.pandora.cat}
+          </NoteWrapper>
+        )}
+      </SubContentWrapper>
 
-        <h2>
-          <span>게시물 링크</span>
-        </h2>
+      
+      <SubContentWrapper>
+        <SubTitle>게시물 링크</SubTitle>  
         <CopyButtonWrapper>
-          <input type="texgt" value={`localhost:5173/pandora/${id}`} readOnly />
-          <Copy text={`localhost:5173/pandora/${id}`} />
+          <input type="text" value={`https://riddlenote.com/pandora/${id}`} readOnly />
+          <Copy text={`https://riddlenote.com/pandora/${id}`} />
         </CopyButtonWrapper>
-       
+      </SubContentWrapper>
 
-        <h2>
-          <span>문제풀이 진행 현황</span>
-        </h2>
-        <RiddleStatusWrapper>
-          <small>* 진행률이 가장 높은 최근 기록을 기준으로 책정됩니다.</small>
-          {detail.totalRecords === 0 && <p>기록 없음</p>}
-          {detail.totalRecords !== 0 && detail.record && (
-            <>
-              
-              <RiddleProgress 
-                totalSteps={detail.pandora.totalProblems} 
-                currentStep={detail.record.unboxing ? detail.record.unsealedQuestionIndex + 1 : detail.record.unsealedQuestionIndex} 
-              />
-              {/* <p className="updatedat">{detail.record.updatedAt} 업데이트 됨</p> */}
-              <p className="total-challengers">문제풀이 참여 인원: <span>{detail.totalRecords}명</span></p>
-            </>
-          )}
-          {detail.pandora.solvedAt && detail.pandora.isCatUncovered && (
-            <div className="solver-state">
-              <p className="solvedat">문제풀이 완료 시점: <span>{formatTimeAgo(detail.pandora.solvedAt)}</span></p>
-              <p className="solveralias">열람자 별명: <span>{detail.pandora.solverAlias}</span></p>
-            </div>
-          )}
-        </RiddleStatusWrapper>
-        
+      <SubContentWrapper>
+        <SubTitle>게시물 상태</SubTitle>
+        <p>게시물 공개 상태: <InputReadOnly value={detail.pandora.active ? '공개중' : '비공개'} /></p>
+        <p>게시물 질문 상태: <InputReadOnly value={detail.pandora.solvedAt ? '완료' : '미완료'} /></p>
+        <p>게시물 열람 상태: <InputReadOnly value={detail.pandora.isCatUncovered ? '열람됨' : '미열람'} /></p>
+      </SubContentWrapper>
+      
+      <SubContentWrapper>
+        <SubTitle>질문 풀이 현황</SubTitle>
+        {detail.totalRecords === 0 && (
+          <>
+            <RiddleProgress
+              totalSteps={detail.pandora.totalProblems}
+              currentStep={0}
+            />
+            <p>기록 없음</p>
+          </>
+        )}
+        {detail.totalRecords >0 && detail.record && (
+          <>
+            <RiddleProgress 
+            totalSteps={detail.pandora.totalProblems} 
+            currentStep={detail.record.unboxing ? detail.record.unsealedQuestionIndex + 1 : detail.record.unsealedQuestionIndex} 
+            />
+            <p>업데이트: <InputReadOnly value={formatTime(detail.record.updatedAt)} /></p>
+            <p>문제풀이 참여 인원: <InputReadOnly value={`${detail.totalRecords} 명`} /></p>
+            <p>게시물 열람자 별명: {detail.pandora.solverAlias && <InputReadOnly value={detail.pandora.solverAlias} />}</p>
+          </>
+        )}
+      </SubContentWrapper>
 
-        <h2>
-          {/* <BsDatabase /> */}
-          <span>상태 정보</span>
-        </h2>
-        <p>게시 상태: {detail.pandora.active ? '게시중' : '비공개'}</p>
-        <p>게시물 내용 열람 상태: {detail.pandora.isCatUncovered ? '열람됨' : '미열람'} </p>
-        <p>조회수: {detail.pandora.coverViewCount}</p>
-        <p>생성일: {formatTime(detail.pandora.createdAt)}</p>
-
-        
-        <h2>
-          {/* <BsFingerprint /> */}
-          <span>시리얼 라벨</span>
-        </h2>
-        <LabelWrapper>
-          <small>* 시리얼 라벨은 게시물에 할당되는 고유한 문자입니다.</small>
-          <p>{detail.pandora.label}</p>
-        </LabelWrapper>
-
-        <h2>
-          {/* <BsGear /> */}
-          <span>설정</span>
-        </h2>
+      <SubContentWrapper>
+        <SubTitle>설정</SubTitle>
         <ModifyButtonWrapper>
-          <div className="edit">
-            <span>
-              모든 질문을 해결한 사용자가 있을 경우 게시글을 수정할 수 없습니다.<br/>
-              수정시 패널티 기록을 포함해 게시글에 접근한 모든 사용자들의 기록이 삭제됩니다.
-            </span>
-            <button onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>수정</button>
-          </div>
-          <div className="delete">
-            <span>삭제시 패널티 기록을 포함해 게시글에 접근한 모든 사용자들의 기록이 삭제됩니다.</span>
-            <button onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</button>
-          </div>
+          <span>
+            모든 질문을 해결한 사용자가 있을 경우 게시물을 수정할 수 없으며,<br/>
+            수정시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제됩니다.
+          </span>
+          <EditButton onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>수정</EditButton>
         </ModifyButtonWrapper>
-      </MyPandoraDetail>
-
+        <ModifyButtonWrapper>
+          <span>
+            삭제시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제되며,<br/>
+            게시물이 영구적으로 삭제됩니다.
+          </span>
+          <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
+        </ModifyButtonWrapper>
+      </SubContentWrapper>
+      
       {selectedPandora && (
         <EditAndDeleteConfirm
           pandora={selectedPandora}
@@ -217,292 +227,252 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           onCancel={handleCancelModifyAction}
         />
       )}   
-    </StyledContainer>
+    </>
   );
 }
 
-const StyledContainer = styled.div`
+const SubTitle = styled.span`
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0.2em 0.4em 0.2em 0.4em;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 50px;
 `;
 
-const Pandora = styled.div`
-  padding: 0.4rem;
-  border: 1px solid var(--dark-gray);
-  border-radius: 0.5rem;
-  margin-top: 2rem;
+const SubContentWrapper = styled.div`
+  /* background-color: #181a1e; */
+  border-radius: 0.7rem;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  margin-bottom: 40px;
+`;
 
-  h4 {
-    /* color: #3b90f9; */
-    border-radius: 0.3rem 0.3rem 0 0;
-    /* background-color: #3e5772; */
-    /* background-color: #212830; */
-    /* background-color: #323b46; */
-    border-bottom: 1px solid var(--dark-gray);
-    
-    /* border-bottom: 0.5px solid var(--light-gray); */
-    font-size: 1.1em;
-    padding: 0.5em;
-    
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  .title {
-    margin-bottom: 0.3rem;
-    margin-left: 0.4rem;
-  }  
-  
-  .writer {
-    color: #8c8c8c;
-    font-weight: bold;
-    margin: 0 0 0 0.4rem;
+const InputReadOnly = styled.input.attrs({ readOnly: true })`
+  font-weight: 600;
+  color: #ffffff;
+  padding: 0.3em 0.8em 0.3em 0.8em;
+  border-radius: 0.3em;
+  border: 1px solid var(--border);
+  margin-left: 0.2em;
+  width: auto;
+  background-color: #1f2021;
+`;
+
+//  검색 키워드, 질문, 게시글내용
+const HiddenDetail = styled.h4`
+  display: flex;
+  background-color: #252932;
+  padding: 1em;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  :hover {
+    filter: brightness(125%);
   }
 
-  .description {
-    white-space: pre-wrap;
-    font-size: 1.1rem;
-    color: white;
-    /* border-radius: 0.5rem; */
-    /* border: 1px solid gray; */
-    padding: 0.5rem 0.4rem 1.2rem 0.4rem;
-  }
-
-  .viewcount {
-    color: #686868;
+  svg {
+    margin-left: 0.4em;
   }
 `;
 
+/**pandora***/
+const Title = styled.h2`
+  color: var(--list-title);
+  font-weight: 700;
+  font-size: 2.3em;
+  margin: 0;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const InfoWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-itmes: center;
+  color: var(--list-info);
+`;
+
+const Writer = styled.p`
+  display: flex;
+  color: var(--font);
+  font-weight: 500;
+  font-size: 1em;
+  margin: 0.9em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const MainInfo = styled.p`
+  display: flex;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin: 0.3em 0 0.2em 0;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const Label = styled.p`
+  display: flex;
+  margin: 0.6em 0 0 0;
+  font-weight: 500;
+  font-size: 0.9em;
+  svg {
+    margin-right: 0.3em;
+  }
+`;
+
+const State = styled.p<{ $open: boolean }>`
+  display: flex;
+  font-weight: 600;
+  svg {
+    margin-right: 0.3em;
+    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
+  }
+`;
+
+const Description = styled.pre`
+  font-size: 1.1em;
+  min-height: 10em;
+  white-space: pre-wrap;
+  border: 1px solid var(--border);
+`;
+
+/*****/
+
+// keywords
 const KeywordsWrapper = styled.ul`
-  margin-top: 0;
-  & > li {
-    display: flex;
-    padding: 0.4em 0.8em 0.4em 0.6em;
-    align-items: center;
-    margin-bottom: 0.8em;
-    border: 1px solid var(--middle-blue);
-    color: var(--middle-blue);
-    border-radius: 0.9em;
-    width: fit-content;
-    font-weight: bold;
-
-    & > svg {
-      margin-right: 0.4em;
-    }
-  }
+  min-height: 5em;
+  padding: 1em;
+  border-radius: 0.4rem;
+  border: 1px dashed var(--border);
 `;
 
-const RiddlesWrapper = styled.ul`
-  margin-top: 0;
-  & > li {
-    border-radius: 1rem;
-    /* background-color: #282f38; */
-    background-color: #171e2a;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5em;
+const Keyword = styled.li`
+  display: flex;
+  padding: 0.4em 0.8em 0.4em 0.6em;
+  align-items: center;
+  margin-bottom: 0.8em;
+  border: 1px solid var(--brand);
+  color: var(--brand);
+  border-radius: 0.9em;
+  width: fit-content;
+  font-weight: bold;
 
-    .index {
-      position: relative;
-      margin-top: 0;
-      padding: 0.5em 0.8em 0.5em 0.8em;
-      border-radius: 0.9rem 0.9rem 0 0;
-      /* color: #bdc1c6; */
-      /* color: #407acb; */
-      color: var(--light-white);
-      
-      & > svg {
-        margin-right: 0.3em;
-      }
-    }
-  }
-
-  .riddle {
-    margin: 1em;
-  }
-
-  .field {
-    margin-bottom: 0.3em;
-    margin-left: 0.2em;
-    color: var(--light-gray);
-  }
-
-  .question {
-    height: 5rem;
-    font-size: 1rem;
-    margin-top: 0.3em;
-    padding: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    border-radius: 0.3em;
-    white-space: pre-wrap;
-    overflow-y: auto;
-  }
-
-  .hint {
-    font-size: 1em;
-    border-radius: 0.4rem;
-    margin-top: 0.3em;
-    border: 1.5px solid var(--dark-gray);
-    color: #ECECEC;
-    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    @media(max-width: 768px) {
-      width: 100%;
-    }
-  }
-
-  .answer {
-    margin-top: 0.3em;
-    font-size: 1em;
-    border-radius: 0.4rem;
-    border: 1.5px solid var(--dark-gray);
-    color: #ECECEC;
-    padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-    @media(max-width: 768px) {
-      width: 100%;
-    }
+  svg {
+    margin-right: 0.4em;
   }
 `;
-
-const MyPandoraDetail = styled.div`
-  & > h2 {
-    margin-top: 3em;
-    margin-bottom: 0;
-    padding-bottom: 0.3em;
-    border-bottom: 0.5px solid var(--dark-gray);
-    font-size: 2em;
-    & > svg {
-      margin-right: 0.4em;
-    }
-  }
-  .created {
-    color: #686868;
-  }
-
-  .note {
-    white-space: pre-wrap;
-    padding: 0.6rem;
-    font-size: 1rem;
-  }
-`;
-
-const CopyButtonWrapper = styled.div`\
-  margin-top: 1em;
-  & > input {
+const CopyButtonWrapper = styled.div`
+  input {
     width: 60%;
     max-width: 500px;
-    color: var(--light-gray);
-    border: 1px solid var(--dark-gray);
+    font-weight: 600;
+    color: var(--brand);
+    padding: 0.3em;
+    border-radius: 0.3em;
+    border: 1px solid var(--border);
   }
 
-  & > svg {
+  svg {
     margin-left: 1em;
-    color: white;
-    /* font-size: 1.1rem; */
   }
+`;
 
-  /* & > button {
-    background-color: #1c2631;
-    color: var(--middle-blue);
+// Riddles
+const RiddleWrapper = styled.ul`
+  margin-top: 2rem;
+`;
+
+const RiddleBox = styled.div`
+  position: relative;
+  margin-bottom: 2.5rem;
+`;
+
+const RiddleIndex = styled.label`
+  position: absolute;
+  top: -0.9rem;
+  left: 25px;
+  display: flex;
+  border-radius: 0.7em;
+  padding: 0.3em 0.5em 0.3em 0.5em;
+  font-size: 1.2rem;
+  font-weight: 500;
+  background-color: var(--background);
+  color: var(--font-chore);
+
+  svg {
+    margin-right: 0.4em;
+  }
+`;
+
+const Riddle = styled.li`
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  padding: 1.2em;
+`;
+
+const RiddleContent = styled.div`
+  display: flex;
+  margin-top: 2em;
+
+  span {
+    margin-right: 0.8em;
+    color: var(--font-chore);
     font-weight: bold;
-    padding: 0.5em 0.8em 0.5em 0.8em;
-    border: 1px solid var(--middle-blue);
-    border-radius: 0;
-  } */
-`
-
-const RiddleStatusWrapper = styled.div`
-  & > small {
-    color: var(--light-gray);
-    display: block;
-    margin-bottom: 2em;
+    white-space: nowrap;
   }
 
-  .updatedat {
-    margin-top: 0.3em;
-    color: gray;
-  }
-
-  .total-challengers {
-    color: white;
-
-    & > span {
-      font-weight: bold;
-      color: var(--light-white);
-      margin-left: 0.4rem;
-    }
-  }
-
-  .solver-state {
-    & > p {
-      color: white;
-
-      & > span {
-        color: var(--light-white);
-        font-weight: bold;
-        margin-left: 0.4rem;
-      }
-    }
-  }
-
-`
-
-const LabelWrapper = styled.div`
-  padding-top:0;
-  & > small {
-    color: var(--light-gray);
+  p {
     margin: 0;
   }
 
-  & > p {
-    /* color: var(--middle-blue); */
-    /* font-size: 1.2em; */
-    /* font-weight: bold; */
+  .answer {
+    font-weight: bold;
+    font-size: 1.2em;
   }
+  
+` ;
+
+/****************** */
+
+
+// Note
+const NoteWrapper = styled.pre`
+  height: 20rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
 `;
 
+/******* */
+
 const ModifyButtonWrapper = styled.div`
-  margin-top: 1rem;
-  color: #d1d7e0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 1em 1em 2em 1em;
+  border-radius: 0.4em;
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+`;
+
+const EditButton = styled.button`
+  background-color: #2e363e;
+  color: #929aa2;
+  border: 2px solid #4c545c;
   font-weight: bold;
-  .edit {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 1em 1em 2em 1em;
-    border-radius: 0.4em;
-    border: 1px solid var(--dark-gray);
-    margin-bottom: 1rem;
+  padding: 0.3em 2em 0.3em 2em;
+  margin-left: 2rem;
+`;
 
-    & > button {
-      background-color: var(--background-color);
-      border: 2px solid #a5b513;
-      font-weight: bold;
-      color: #a5b513;
-      padding: 0.3em 2em 0.3em 2em;
-      margin-left: 2rem;
-    }
-    
-  }
-
-  .delete {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 1em 1em 2em 1em;
-    border-radius: 0.4em;
-    border: 1px solid var(--dark-gray);
-
-    & > button {
-      background-color: var(--background-color);
-      border: 2px solid #c95047;
-      font-weight: bold;
-      color: #c95047;
-      padding: 0.3em 2em 0.3em 2em;
-      margin-left: 2rem;
-    }
-  }
-
-  
+const DeleteButton = styled.button`
+  background-color: #341f24;
+    border: 2px solid #c95047;
+    font-weight: bold;
+    color: #c95047;
+    padding: 0.3em 2em 0.3em 2em;
+    margin-left: 2rem;
 `;

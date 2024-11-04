@@ -1,29 +1,34 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MdChevronLeft } from "react-icons/md"; // 이전
 import { MdChevronRight } from "react-icons/md"; // 다음
+import { saveInSession } from './storage';
 
 interface PaginationProps {
+  type: 'search' | 'mine' | 'conquered';
   currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   totalItems: number;
   itemsPerPage: number;
   maxVisibleTotalPages: number;
-  onPageChange: (page: number) => void;
 }
 
 /**
- * currentPage: 현재 페이지 상태. 서버에 페이지 번호를 전달하기 위해 부모 컴포넌트에서 현재 페이지 상태를 관리한다.
+ * type: 어떤 타입의 페이지인지
+ * currentPage: 부모컴포넌트에서 관리하는 state
+ * setCurrentPage: 부모컴포넌트에서 관리하는 state 함수
  * totalItems: 모든 페이지에 대한 아이템의 총 개수
  * itemsPerPage: 한 페이지에 보여지길 원하는 아이템 개수
  * maxVisibleTotalPages: 페이지네이션에 보여지길 원하는 페이지 번호 총 개수
- * onPageChange: currentPage의 상태를 변경하는 state함수
  */
 
-export function Pagination({ currentPage, totalItems, itemsPerPage, maxVisibleTotalPages, onPageChange }: PaginationProps) {
+export function Pagination({ type, currentPage, setCurrentPage, totalItems, itemsPerPage, maxVisibleTotalPages }: PaginationProps) {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
 
   useEffect(() => {
+    saveInSession<number>(`${type}_currentPage`, currentPage);
+
     const pageFloor: number = Math.ceil(parseFloat((currentPage / maxVisibleTotalPages).toFixed(1)));
     const maxPageInFloor = maxVisibleTotalPages * pageFloor;
     const startShowPage: number = maxPageInFloor - (maxVisibleTotalPages - 1);
@@ -35,11 +40,11 @@ export function Pagination({ currentPage, totalItems, itemsPerPage, maxVisibleTo
     }
 
     setVisiblePages(visiblePageArray);
-  }, [currentPage, maxVisibleTotalPages ,totalPages]);
+  }, [type, currentPage, maxVisibleTotalPages ,totalPages]);
 
   const handlePrevious = () => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
+      setCurrentPage(prev => prev - 1);
       window.scrollTo(0, 0);
     }
     
@@ -47,15 +52,15 @@ export function Pagination({ currentPage, totalItems, itemsPerPage, maxVisibleTo
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
+      setCurrentPage(prev => prev + 1);
       window.scrollTo(0, 0);
     }
   };
 
   const handlePageButton = (page: number) => {
-    onPageChange(page);
+    setCurrentPage(page);
     window.scrollTo(0, 0);
-  }
+  };
 
   return (
     <PaginationContainer>
@@ -82,11 +87,10 @@ const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.6em;
-  padding-top: 1em;
-  padding-bottom: 1em;
-  margin-bottom: 2em;
-  background-color: var(--gray300);
+  gap: 0.5em;
+  padding: 1em 0 1em 0;
+  margin: 0;
+  background-color: var(--background);
   font-size: 1.5em;
 `;
 
