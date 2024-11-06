@@ -5,6 +5,7 @@ import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { SOLVERALIAS } from "../constant/constraints";
+import { Helmet } from "react-helmet-async";
 
 interface ISolverAliasProps {
   unboxingService: IUnboxingService
@@ -82,6 +83,9 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <Head>게시물을 열람하기 위한 모든 질문이 해결되었습니다.</Head>
       <GuideWrapper>
         <p>* 모든 질문이 최초로 해결됨에 따라 본 게시물은 비공개로 전환됩니다.</p>

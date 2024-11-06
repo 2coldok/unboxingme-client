@@ -1,16 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 export default function CreationGuidelines() {
   const navigate = useNavigate();
+  const [, setSearchParams] = useSearchParams();
 
   const handleClick = () => {
     return navigate('/pandora/form');
   };
 
+  useEffect(() => {
+    setSearchParams({ tab: 'create' })
+  }, [setSearchParams]);
+
   return (
     <>
-      <Title>게시물 만들기</Title>
+      <Title>나의 게시물 만들기</Title>
       <CreateWrapper>
         <p>게시물 생성 가이드를 참고하세요</p>
         <CreateButton onClick={handleClick}>판도라 만들기</CreateButton>

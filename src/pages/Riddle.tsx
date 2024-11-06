@@ -9,6 +9,7 @@ import RiddleProgress from "../util/RiddleProgress";
 import { PANDORA_FORM } from "../constant/constraints"; 
 import { getRemainingAttempts } from "../util/remainingAttempts";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
+import { Helmet } from "react-helmet-async";
 
 
 interface IRiddleProps {
@@ -125,6 +126,9 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <RiddleWrapper>
         <TopWrapper>
           <Logo onClick={handleLogoClick}>

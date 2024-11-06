@@ -2,93 +2,74 @@ import styled from "styled-components";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Search from "../components/Search";
-import { IPandoraService } from "../service/PandoraService";
-import { HttpError } from "../network/HttpClient";
-import { getInSession, saveInSession } from "../util/storage";
-import { useLoading } from "../hook/LoadingHook";
 import { Pagination } from "../util/Pagination";
-import { IPandoraList, IPandoraSearchResults } from "../types/pandora";
-import { SEARCH_KEYWORD } from "../constant/constraints";
 import PandoraListSkeleton from "../loading/PandoraListSkeleton";
 import PandoraList from "../components/PandoraList";
+import { useSearchResultQuery } from "../hook/QueryHook";
+import { useLoading } from "../hook/LoadingHook";
+import { ITEMS_PER_PAGE } from "../constant/pageItems";
 
-interface ISearchResultProps {
-  pandoraService: IPandoraService;
-}
-
-export default function SearchResult({ pandoraService }: ISearchResultProps) {
-  const [searchParams] = useSearchParams();
-  const keyword = searchParams.get('keyword');
+export default function SearchResult() {
   const navigate = useNavigate();
-  const [pandoras, setPandoras] = useState<IPandoraList[] | null>(null);
-  const { isLoading, startLoading, stopLoading } = useLoading();
-  const [currentPage, setCurrentPage] = useState<number>(getInSession<number>(`search_currentPage`) || 1);
-  const [totalItems, setTotalItems] = useState<number>(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword') || '';
+  const page = searchParams.get('page') || '1';
+  const [currentPage, setCurrentPage] = useState<number>(Number(page));
+  const { startLoading, stopLoading } = useLoading();
+
+  const { 
+    isLoading, 
+    data = { payload: { total: 0, pandoras: []} }, 
+    error 
+  } = useSearchResultQuery(keyword, Number(page));
 
   useEffect(() => {
-    if (keyword && keyword.length > SEARCH_KEYWORD.maxLength) {
-      return navigate('/fallback/404', { state: { message: '잘못된 접근: 검색 키워드 글자수 오류' } });
-    }
+    setSearchParams({ keyword: keyword, page: String(currentPage) });
+  }, [currentPage, keyword, setSearchParams]);
 
-    if (!keyword) {
-      return navigate('/fallback/404', { state: { message: '잘못된 접근: 존재하지 않는 검색' } });
-    }
+  // Top loading bar
+  useEffect(() => {
+    isLoading ? startLoading() : stopLoading();  
+  }, [isLoading, startLoading, stopLoading]);
 
-    const fetchSearchResult = async () => {
-      try {
-        startLoading();
-        const data = await pandoraService.getPandoraSearchResult(keyword, currentPage);
-        const { pandoras, total} = data.payload;
-        setPandoras(pandoras);
-        setTotalItems(total);
-        saveInSession<IPandoraSearchResults>(`search_${keyword}_${currentPage}`, data.payload);
-      } catch (error) {
-        if (error instanceof HttpError) {
-          navigate('/fallback/error', { state: { error: error, type: error.payload } });
-        }
-      } finally {
-        stopLoading();
-      }
+  useEffect(() => {
+    if (error) {
+      return navigate('/fallback/error', { state: { error: error }, replace: true });
     }
-  
-    const cachedSearchResults = getInSession<IPandoraSearchResults>(`search_${keyword}_${currentPage}`);
-    if (cachedSearchResults) {
-      setPandoras(cachedSearchResults.pandoras);
-      setTotalItems(cachedSearchResults.total);
-    } else {
-      fetchSearchResult();
-    }
-  }, [keyword, navigate, pandoraService, startLoading, stopLoading, currentPage]);
-
-  /*********************************************************************************/
+  }, [navigate, error]);
 
   if (isLoading) {
     return (
       <>
         <SearchWrapper>
-          <Search keyword={keyword as string} />
+          <Search keyword={keyword} />
         </SearchWrapper>
         <PandoraListSkeleton />
       </>
     )
   }
 
-  // 500ms 동안은(fetch가 빠를경우 로딩 안보여줌) isLoading이 false 임으로 이 시간동한만 null을 반환
-  if (!pandoras) {
-    return null;
-  }
-
   return (
     <>
       <SearchWrapper>
-        <Search keyword={keyword as string} />
+        <Search keyword={keyword} />
       </SearchWrapper>
-      {totalItems > 0 ? (
-        <PandoraList
-          action="cover"
-          keyword={keyword as string}
-          pandoras={pandoras}
-        />
+      {data.payload.total > 0 ? (
+        <>
+          <PandoraList
+            action="cover"
+            keyword={keyword}
+            pandoras={data.payload.pandoras}
+          />
+          <Pagination
+            type='search'
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalItems={data.payload.total}
+            itemsPerPage={ITEMS_PER_PAGE.searchResult}
+            maxVisibleTotalPages={5}
+          />
+        </>
       ) : (
         <NoContent>
           <h1>검색 결과가 없습니다.</h1>
@@ -96,16 +77,6 @@ export default function SearchResult({ pandoraService }: ISearchResultProps) {
           <p>* 열람된 게시물은 검색 결과에서 제외됩니다.</p>
           <p>* 키워드는 대소문자 및 띄어쓰기를 구분합니다.</p>
         </NoContent>
-      )}
-      {totalItems > 0 && (
-        <Pagination
-          type='search'
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalItems={totalItems}
-          itemsPerPage={10}
-          maxVisibleTotalPages={5}
-        />
       )}
     </>
   );
@@ -121,6 +92,5 @@ const NoContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: var(--black100); */
   padding: 0.4em;
 `;

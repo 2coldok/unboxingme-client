@@ -1,78 +1,64 @@
 import {useEffect, useState } from "react";
-import { IDashboardService } from "../../service/DashboardService";
-import { useNavigate } from "react-router-dom";
-import { HttpError } from "../../network/HttpClient";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination } from "../../util/Pagination";
-import { getInSession, saveInSession } from "../../util/storage";
 import { useLoading } from "../../hook/LoadingHook";
 import { LoadingSpinner } from "../../loading/LoadingSpinner";
 import PandoraList from "../PandoraList";
-import { IMyConquereds } from "../../types/dashboard";
-import { IPandoraList } from "../../types/pandora";
 import styled from "styled-components";
+import { useConqueredsQuery } from "../../hook/QueryHook";
 
-interface IPandoraServiceProps {
-  dashboardService: IDashboardService;
-}
-
-export default function MyConquered({ dashboardService }: IPandoraServiceProps) {
-  const [pandoras, setPandoras] = useState<IPandoraList[] | null>(null);
-  const [totalItems, setTotalItems] = useState(0);
-  const [currentPage, setCurrnetPage] = useState(getInSession<number>('conquered_currentPage') || 1);
+export default function MyConquered() {
   const navigate = useNavigate();
-  const { isLoading, startLoading, stopLoading } = useLoading();
-  
+  const [searchParams, setSearhParams] = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const [currentPage, setCurrnetPage] = useState<number>(Number(page));
+  const { startLoading, stopLoading } = useLoading();
+  const {
+    isLoading,
+    data = { payload: { total: 0, pandoras: [] } },
+    error
+  } = useConqueredsQuery(Number(page));
+
   useEffect(() => {
-    const fetchMyConqueredPandoras = async () => {
-      try {
-        startLoading();
-        const data = await dashboardService.getMyConqueredPandoras(currentPage);
-        const { pandoras, total} = data.payload;
-        setPandoras(pandoras);
-        setTotalItems(total);
-        saveInSession<IMyConquereds>(`conquered_${currentPage}`, data.payload);
-      } catch (error) {
-        if(error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } });
-        }
-      } finally {
-        stopLoading();
-      }
-    }
+    setSearhParams({ tab: 'conquereds', page: String(currentPage) });
+  }, [currentPage, setSearhParams]);
 
-    const cachedPandoras = getInSession<IMyConquereds>(`conquered_${currentPage}`);
-    if (cachedPandoras) {
-      setPandoras(cachedPandoras.pandoras);
-      setTotalItems(cachedPandoras.total);
-    } else {
-      fetchMyConqueredPandoras();
-    }
-  }, [dashboardService, navigate, currentPage, startLoading, stopLoading]);
+  useEffect(() => {
+    isLoading ? startLoading() : stopLoading(); 
+   }, [isLoading, startLoading, stopLoading]);
 
-  if (!pandoras || isLoading) {
+  useEffect(() => {
+    if (error) {
+      return navigate('/fallback/error', { state: { error: error }, replace: true });
+    }
+  }, [navigate, error]);
+
+  if (isLoading) {
     return (
       <LoadingSpinner />
-    )
+    );
   }
   
   return (
     <>
-      <Title>열람 ({totalItems})</Title>
+      <Title>내가 열람한 게시물 ({data.payload.total})</Title>
       <PandoraList 
         action="conquered"
-        pandoras={pandoras}
+        pandoras={data.payload.pandoras}
         keyword=""
       />
-      <PaginationWrapper>
+      {data.payload.total > 0 && (
+        <PaginationWrapper>
         <Pagination
           type='conquered'
           currentPage={currentPage}
           setCurrentPage={setCurrnetPage}
-          totalItems={totalItems}
+          totalItems={data.payload.total}
           itemsPerPage={10}
           maxVisibleTotalPages={5}
         />
-      </PaginationWrapper>
+        </PaginationWrapper>
+      )}
     </>
   );
 }

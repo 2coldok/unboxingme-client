@@ -18,6 +18,7 @@ import EditAndDeleteConfirm from "../components/EditAndDeleteConfirm";
 import { Copy } from "../util/Copy";
 import { LuEye } from "react-icons/lu";
 import { GoDotFill } from "react-icons/go";
+import { Helmet } from "react-helmet-async";
 
 
 interface IPandoraDetailProps {
@@ -91,6 +92,9 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
 
   return (
     <>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <SubContentWrapper>
         <Title>{detail.pandora.title}</Title>
         <InfoWrapper>

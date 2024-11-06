@@ -4,7 +4,7 @@ interface IStorageData<T> {
 }
 
 // 검색 결과, 판도라 표지의 데이터 신선도. 이 기간동안은 세션스토리지 데이터를 이용함
-const EXPIRATION_TIME = 1 * 60 * 1000;
+const EXPIRATION_TIME = 5 * 60 * 1000;
 
 export const saveInSession = <T>(key: string, data: T): void => {
   try {

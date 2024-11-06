@@ -1,49 +1,37 @@
 import styled from "styled-components";
-import { IDashboardService } from "../../service/DashboardService";
-import { useEffect, useState } from "react";
-import { IMyChallenge } from "../../types/dashboard";
-import { useNavigate } from "react-router-dom";
-import { HttpError } from "../../network/HttpClient";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useLoading } from "../../hook/LoadingHook";
 import { LoadingSpinner } from "../../loading/LoadingSpinner";
 import PandoraList from "../PandoraList";
-import { getInSession, saveInSession } from "../../util/storage";
-// import { HiOutlineDocumentText } from "react-icons/hi";
+import { useChallengesQuery } from "../../hook/QueryHook";
 
-interface IMyChallengesProps {
-  dashboardService: IDashboardService;
-}
-
-export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
+export default function MyChallenges() {
   const navigate = useNavigate();
-  const { isLoading, startLoading, stopLoading } = useLoading();
-  const [myChallenges, setMyChallenges] = useState<IMyChallenge[] | null>(null);
+  const [, setSearchParams] = useSearchParams();
+  const { startLoading, stopLoading } = useLoading();
+
+  const {
+    isLoading,
+    data = { payload: [] },
+    error
+  } = useChallengesQuery();
 
   useEffect(() => {
-    const fetchMyChallenges = async () => {
-      try {
-        startLoading();
-        const data = await dashboardService.getMyChallenges();
-        setMyChallenges(data.payload);
-        saveInSession<IMyChallenge[]>('challenge', data.payload);
-      } catch (error) {
-        if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } });
-        }
-      } finally {
-        stopLoading();
-      }
-    }
+    setSearchParams({ tab: 'challenges' });
+  }, [setSearchParams]);
 
-    const cachedPandoras = getInSession<IMyChallenge[]>('challenge');
-    if (cachedPandoras) {
-      setMyChallenges(cachedPandoras);
-    } else {
-      fetchMyChallenges();
-    }
-  }, [navigate, dashboardService, startLoading, stopLoading]);
+  useEffect(() => {
+    isLoading ? startLoading() : stopLoading();
+  });
 
-  if (!myChallenges || isLoading) {
+  useEffect(() => {
+    if (error) {
+      return navigate('/fallback/error', { state: { error: error }, replace: true });
+    }
+  });
+
+  if (isLoading) {
     return (
       <LoadingSpinner />
     );
@@ -51,11 +39,11 @@ export default function MyChallenges({ dashboardService }: IMyChallengesProps) {
 
   return (
     <>
-      <Title>진행중</Title>
+      <Title>진행중인 최근 10개의 게시물</Title>
       <PandoraList
         action="cover"
         keyword=""
-        pandoras={myChallenges}
+        pandoras={data.payload}
        />
     </>
   );

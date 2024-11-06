@@ -1,35 +1,35 @@
 import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import Search from "../components/Search";
-import { IPandoraService } from "../service/PandoraService";
 import { useEffect, useState } from "react";
-import { HttpError } from "../network/HttpClient";
 import PandoraList from "../components/PandoraList";
-import { IOpenedPandoraGlimpse } from "../types/pandora";
-// import { IoHelpCircleOutline } from "react-icons/io5";
 import PandoraListSkeleton from "../loading/PandoraListSkeleton";
-import { getInSession, saveInSession } from "../util/storage";
 import HomeFooter from "../components/HomeFooter";
+import { IOpenedPandoraGlimpse } from "../types/pandora";
+import { IPandoraService } from "../service/PandoraService";
+import { getInSession, saveInSession } from "../util/storage";
+import { HttpError } from "../network/HttpClient";
+import { useNavigate } from "react-router-dom";
 
 interface IHomeProps {
   pandoraService: IPandoraService;
 }
 
 export default function Home({ pandoraService }: IHomeProps) {
+  const navigate = useNavigate();
   const [pandoras, setPandoras] = useState<IOpenedPandoraGlimpse[]>([]);
-  const [glimpseLoading, setGlimpseLoading] = useState(true);
-  
+  const [glimpseLoading, setGlimpseLoading] = useState(false);
+
   useEffect(() => {
-    setGlimpseLoading(false);
     const fetchPandoraPreview = async () => {
-      setGlimpseLoading(true);
       try {
+        setGlimpseLoading(true);
         const data = await pandoraService.getOpenedPandorasGlimpse();
         saveInSession<IOpenedPandoraGlimpse[]>('glimpse', data.payload);
         setPandoras(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
-          console.log(error);
+          return navigate('/fallback/error', { state: { error: error }, replace: true });
         }
       } finally {
         setGlimpseLoading(false);
@@ -42,13 +42,12 @@ export default function Home({ pandoraService }: IHomeProps) {
     } else {
       fetchPandoraPreview();
     }
-  }, [pandoraService]);
+  }, [pandoraService, navigate]);
 
   return (
     <StyledContainer>
       <Helmet>
-        <title>리들노트</title>
-        <meta name="description" content="리들노트 - 비공개 게시물 플랫폼" />
+        <title>리들노트 | 수수께끼 노트.</title>
       </Helmet>
       {/* <Guide><IoHelpCircleOutline /> 가이드</Guide> */}
       <Search keyword={''} />

@@ -1,7 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { IPandoraService } from "../service/PandoraService";
-import { IDashboardService } from "../service/DashboardService";
 import MyPandoras from "../components/mypage/MyPandoras";
 import MyChallenges from "../components/mypage/MyChallenges";
 import MyConquered from "../components/mypage/MyConquered";
@@ -14,26 +11,12 @@ import { BsPersonCircle } from "react-icons/bs"; // 나의 게시물 2
 import { BsPlusCircle } from "react-icons/bs"; // 생성
 import { AiFillUnlock } from "react-icons/ai";
 import { BsActivity } from "react-icons/bs";
+import { Helmet } from "react-helmet-async";
 
-interface IMypageProps {
-  pandoraService: IPandoraService;
-  dashboardService: IDashboardService;
-}
+type Ttab = 'mines' | 'challenges' | 'conquereds' | 'create';
 
-type Ttab = 'mine' | 'challenges' | 'conquered' | 'make';
-
-// function getTabName(tab: Ttab) {
-//   if (tab === 'mine') return '나의노트';
-//   if (tab === 'challenges') return '풀이중';
-//   if (tab === 'conquered') return '열람';
-//   if (tab === 'make') return '만들기'
-// }
-
-export default function MyPage({ pandoraService, dashboardService }: IMypageProps) {
-  const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentTab = searchParams.get('tab') || 'mine';
-  const [tab, setTab] = useState<Ttab>('mine');
+export default function MyPage() {
+  const [tab, setTab] = useState<Ttab>('mines');
 
   useEffect(() => {
     const cachedTab = getInSession<Ttab>('tab');
@@ -42,32 +25,18 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
     }
   }, []);
 
-  useEffect(() => {
-    const validTabs = ['mine', 'challenges', 'conquered', 'make'];
-    
-    if (!currentTab && !validTabs.includes(currentTab)) {
-      return navigate('/fallback/404', { state: { message: '지원하지 않는 탭입니다.' } })
-    }
-
-  }, [navigate, currentTab]);
-
-  const handleNavigation = (tab: 'mine' | 'challenges' | 'conquered' | 'make') => {
-    // 페이지 초기화
-    if (tab === 'mine') {
-      sessionStorage.removeItem('mine_currentPage');
-    }
-    if (tab === 'conquered') {
-      sessionStorage.removeItem('conquered_currentPage');
-    }
+  const handleNavigation = (tab: 'mines' | 'challenges' | 'conquereds' | 'create') => {
     saveInSession<Ttab>('tab', tab);
     setTab(tab);
-    setSearchParams({ tab });
   };
   
   return (
     <StyledContainer>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <NavigateWrapper>
-        <NavButton onClick={() => handleNavigation('mine')} $active={tab === 'mine'}>
+        <NavButton onClick={() => handleNavigation('mines')} $active={tab === 'mines'}>
           <BsPersonCircle />
           <span>나의 게시물</span>
         </NavButton>
@@ -75,21 +44,21 @@ export default function MyPage({ pandoraService, dashboardService }: IMypageProp
           <BsActivity />
           <span>진행중</span>
         </NavButton>
-        <NavButton onClick={() => handleNavigation('conquered')} $active={tab === 'conquered'}>
+        <NavButton onClick={() => handleNavigation('conquereds')} $active={tab === 'conquereds'}>
           <AiFillUnlock />
           <span>열람</span>
         </NavButton>
-        <NavButton onClick={() => handleNavigation('make')} $active={tab === 'make'}>
+        <NavButton onClick={() => handleNavigation('create')} $active={tab === 'create'}>
           <BsPlusCircle />
           <span>만들기</span>
         </NavButton>
       </NavigateWrapper>
 
       <ContentWrapper>
-        { tab === 'mine' && <MyPandoras pandoraService={pandoraService} /> }
-        { tab === 'challenges' && <MyChallenges dashboardService={dashboardService} /> }
-        { tab === 'conquered' && <MyConquered dashboardService={dashboardService} />}
-        { tab === 'make' && <CreationGuidelines /> }
+        { tab === 'mines' && <MyPandoras /> }
+        { tab === 'challenges' && <MyChallenges /> }
+        { tab === 'conquereds' && <MyConquered />}
+        { tab === 'create' && <CreationGuidelines /> }
       </ContentWrapper>
       
     </StyledContainer>

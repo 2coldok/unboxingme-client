@@ -12,6 +12,7 @@ import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
 import { formatTimeAgo } from "../util/formatTimeAgo";
+import { Helmet } from "react-helmet-async";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -51,6 +52,9 @@ export default function Note({ unboxingService }: NoteProps) {
 
   return (
     <>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <CoverWrapper>
         <Title>{pandora.title}</Title>
         <InfoWrapper>

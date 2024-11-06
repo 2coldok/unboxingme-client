@@ -9,7 +9,6 @@ import { HelmetProvider } from 'react-helmet-async';
 
 // pages
 import Home from './pages/Home.tsx'
-import SearchResult from './pages/SearchResult.tsx'
 import PandoraCover from './pages/PandoraCover.tsx'
 
 //
@@ -35,14 +34,19 @@ import { env } from './config/env.ts'
 import Introduce from './pages/Introduce.tsx'
 import Guide from './pages/Guide.tsx'
 import Riddle from './pages/Riddle.tsx'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import SearchResult from './pages/SearchResult.tsx';
 
 
-
+// service
 const httpClient = new HttpClient(env.url.serverBaseURL);
 const authService = new AuthService(httpClient);
 const pandoraService = new PandoraService(httpClient);
 const unboxingService = new UnboxingService(httpClient);
 const dashboardService = new DashboardService(httpClient);
+
+// query
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -50,13 +54,13 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <Home pandoraService={pandoraService} /> },
-      { path: 'search', element: <SearchResult pandoraService={pandoraService} /> },
-      { path: 'pandora/:id', element: <PandoraCover pandoraService={pandoraService} /> },
+      { path: 'search', element: <SearchResult /> },
+      { path: 'pandora/:id', element: <PandoraCover /> },
       { path: 'pandora/:id/solveralias', element: <SolverAlias unboxingService={unboxingService} /> },
       { path: 'pandora/:id/note', element: <Note unboxingService={unboxingService} /> },
       { path: 'pandora/form', element: <PandoraForm pandoraService={pandoraService} /> },
       { path: 'pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
-      { path: 'dashboard', element: <MyPage pandoraService={pandoraService} dashboardService={dashboardService} /> },
+      { path: 'dashboard', element: <MyPage /> },
       { path: 'dashboard/pandora/:id', element: <PandoraDetail dashboardService={dashboardService} pandoraService={pandoraService} /> },
       { path: 'introduce', element: <Introduce /> },
       { path: 'guide', element: <Guide /> }
@@ -92,8 +96,10 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <HelmetProvider>
     <AuthProvider authService={authService}>
       <LoadingProvider>
-        <GlobalStyle />
-        <RouterProvider router={router} />
+        <QueryClientProvider client={queryClient}>
+          <GlobalStyle />
+          <RouterProvider router={router} />
+        </QueryClientProvider>
       </LoadingProvider>
     </AuthProvider>
   </HelmetProvider>

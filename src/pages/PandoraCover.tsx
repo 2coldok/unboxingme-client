@@ -1,11 +1,9 @@
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
-import { IPandoraService } from "../service/PandoraService";
 import { useEffect, useState } from "react";
-import { IPandoraCover } from "../types/pandora";
 import { useAuth } from "../hook/AuthHook";
 import { HttpError } from "../network/HttpClient";
-import { getInSession, saveInSession } from "../util/storage";
+
 import { useLoading } from "../hook/LoadingHook";
 import Alert from "../util/Alert";
 
@@ -18,66 +16,41 @@ import { BsUpc } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
 import Search from "../components/Search";
 import Login from "../components/Login";
+import { Helmet } from "react-helmet-async";
+import { useCoverQuery } from "../hook/QueryHook";
 
-interface IPandoraCoverProps {
-  pandoraService: IPandoraService;
-}
-
-export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
-  const { id } = useParams<{ id: string }>(); 
+export default function PandoraCover() {
+  const navigate = useNavigate();
+  const { id } = useParams() as { id: string };
+  const { isLoading, data = { payload: null }, error } = useCoverQuery(id);
+  const { getTokenStatus } = useAuth();
+  const { startLoading, stopLoading} = useLoading();
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
   const [showLoginPop, setShowLoginPop] = useState(false);
-  const [pandoraCover, setPandoraCover] = useState<IPandoraCover | null>(null);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const { getTokenStatus } = useAuth();
-  const { isLoading, startLoading, stopLoading} = useLoading();
-  const navigate = useNavigate();
 
   // fallback from riddle page
   const location = useLocation();
   const state = location.state as { userColor?: string; restrictedUntil?: string };
-
   useEffect(() => {
     if (state?.userColor === 'penalty' && state.restrictedUntil) {
       return setAlertMessage(`${formatTime(state.restrictedUntil)} 까지 접근이 제한됩니다.`);
     }
     if (state?.userColor === 'maker') {
-      return setAlertMessage('게시물 생성자는 "마이페이지"에서 열람할 수 있습니다.');
+      return setAlertMessage('자신의 게시물은 "마이페이지"에서 열람할 수 있습니다.');
     }
   }, [state]);
 
   useEffect(() => {
-    if (!id) {
-      return navigate('/fallback/404', { state: { message: 'id를 찾을 수 없습니다' } });
-    }
-    
-    const fetchPandoraCover = async () => {
-      try {
-        startLoading();
-        const data = await pandoraService.getPandoraCover(id);
-        const pandoraCover = data.payload;
-        if (pandoraCover === null) {
-          return navigate('/fallback/404', { state : { message: '존재하지 않는 판도라id 입니다.' } });
-        }
-        saveInSession<IPandoraCover>(`cover-${pandoraCover.id}`, pandoraCover);
-        setPandoraCover(pandoraCover);
-      } catch (error) {
-        if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } });
-        }
-      } finally {
-        stopLoading();
-      }
-    };
+    isLoading ? startLoading() : stopLoading();
+  }, [isLoading, startLoading, stopLoading]);
 
-    const cachedPandoraCover = getInSession<IPandoraCover>(`cover-${id}`);
-    if (cachedPandoraCover) {
-      setPandoraCover(cachedPandoraCover);
-    } else {
-      fetchPandoraCover();
+  useEffect(() => {
+    if (error) {
+      return navigate('/fallback/error', { state: { error: error }, replace: true });
     }
-  }, [id, pandoraService, navigate, startLoading, stopLoading]);
+  }, [navigate, error]);
 
   const handleChallengeClick = async () => {
     try {
@@ -97,39 +70,50 @@ export default function PandoraCover({ pandoraService }: IPandoraCoverProps) {
     }
   };
 
-  if (isLoading || !pandoraCover) {
+  if (isLoading) {
     return (
       <LoadingSpinner />
+    );
+  }
+
+  if (data.payload === null) {
+    return (
+      <h1>
+        열람 또는 삭제됨 또는 존재하지 않는 id
+      </h1>
     )
   }
 
   return (
     <>
+      <Helmet>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <SearchWrapper>
         <Search keyword={keyword ? keyword : ''} />
       </SearchWrapper>
      
       <CoverWrapper>
-        <Title>{pandoraCover.title}</Title>
+        <Title>{data.payload.title}</Title>
         <InfoWrapper>
           <div>
-            <Writer> <IoPerson /> {pandoraCover.writer}</Writer>                  
+            <Writer> <IoPerson /> {data.payload.writer}</Writer>                  
             <MainInfo> 
-              <AiFillLock /> {pandoraCover.totalProblems} ·&nbsp;
-              <LuEye /> {pandoraCover.coverViewCount} ·&nbsp;
-              {formatTimeAgo(pandoraCover.createdAt)}
+              <AiFillLock /> {data.payload.totalProblems} ·&nbsp;
+              <LuEye /> {data.payload.coverViewCount} ·&nbsp;
+              {formatTimeAgo(data.payload.createdAt)}
             </MainInfo>
-            <Label><BsUpc /> {pandoraCover.label}</Label>
+            <Label><BsUpc /> {data.payload.label}</Label>
           </div>
           <div>
-            <State $open={pandoraCover.isCatUncovered}><GoDotFill/> {pandoraCover.isCatUncovered ? '열람됨' : '미열람'}</State>
+            <State $open={data.payload.isCatUncovered}><GoDotFill/> {data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
           </div>
         </InfoWrapper>
-        <Description>{pandoraCover.description}</Description>
+        <Description>{data.payload.description}</Description>
         <FirstRiddleWrapper>
           <div>
             <p className="index">질문 1. &nbsp;</p>
-            <p>{pandoraCover.firstQuestion}</p>
+            <p>{data.payload.firstQuestion}</p>
           </div>
           <button onClick={handleChallengeClick}>게시물 열람하기</button>
         </FirstRiddleWrapper>  

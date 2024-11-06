@@ -1,52 +1,40 @@
 import { useEffect, useState } from "react";
-import { IPandoraService } from "../../service/PandoraService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination } from "../../util/Pagination";
-import { getInSession, saveInSession } from "../../util/storage";
 import { useLoading } from "../../hook/LoadingHook";
 import { LoadingSpinner } from "../../loading/LoadingSpinner";
 import PandoraList from "../PandoraList";
-import { IMyPandoras, IPandoraList } from "../../types/pandora";
 import styled from "styled-components";
+import { ITEMS_PER_PAGE } from "../../constant/pageItems";
+import { useMinesQuery } from "../../hook/QueryHook";
 
-
-interface IMyPandorasProps {
-  pandoraService: IPandoraService;
-}
-
-export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
-  const [pandoras, setPandoras] = useState<IPandoraList[] | null>(null);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState(getInSession<number>(`mine_currentPage`) || 1);
+export default function MyPandoras() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const [currentPage, setCurrentPage] = useState<number>(Number(page));
   const navigate = useNavigate();
-  const { isLoading, startLoading, stopLoading } = useLoading();
+  const { startLoading, stopLoading } = useLoading();
+  const { 
+    isLoading, 
+    data = { payload: { total: 0, pandoras: [] } },
+    error 
+  } = useMinesQuery(Number(page));
 
   useEffect(() => {
-    const fetchMyPandoras = async () => {
-      try {
-        startLoading();
-        const data = await pandoraService.getMyPandoras(currentPage);
-        const { total, pandoras } = data.payload;
-        setPandoras(pandoras);
-        setTotalItems(total);
-        saveInSession<IMyPandoras>(`mine_${currentPage}`, data.payload);
-      } catch (error) {
-        navigate('/fallback/error', { state: { error: error } });
-      } finally {
-        stopLoading();
-      }
-    }
+    setSearchParams({ tab: 'mines', page: String(currentPage) });
+  }, [currentPage, setSearchParams]);
 
-    const cachedPandoras = getInSession<IMyPandoras>(`mine_${currentPage}`);
-    if (cachedPandoras) {
-      setPandoras(cachedPandoras.pandoras);
-      setTotalItems(cachedPandoras.total);
-    } else {
-      fetchMyPandoras();
-    }
-  }, [pandoraService, navigate, startLoading, stopLoading, currentPage]);
+  useEffect(() => {
+   isLoading ? startLoading() : stopLoading(); 
+  }, [isLoading, startLoading, stopLoading]);
 
-  if (!pandoras || isLoading) {
+  useEffect(() => {
+    if (error) {
+      return navigate('/fallback/error', { state: { error: error }, replace: true });
+    }
+  }, [navigate, error]);
+
+  if (isLoading) {
     return (
       <LoadingSpinner />
     );
@@ -54,23 +42,25 @@ export default function MyPandoras({ pandoraService }: IMyPandorasProps) {
   
   return (
     <>
-      <Title>나의 게시물 {`(${totalItems})`}</Title>
+      <Title>나의 게시물 {data.payload.total}</Title>
       <PandoraList
-          action="detail"
-          keyword=""
-          pandoras={pandoras}
-        />
-      
-      <PaginationWrapper>
+        action="detail"
+        keyword=""
+        pandoras={data.payload.pandoras}
+      />
+
+      {data.payload.total > 0 && (
+        <PaginationWrapper>
         <Pagination 
           type='mine'
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
-          totalItems={totalItems}
-          itemsPerPage={5}
+          totalItems={data.payload.total}
+          itemsPerPage={ITEMS_PER_PAGE.mine}
           maxVisibleTotalPages={5}
         />
-      </PaginationWrapper>
+        </PaginationWrapper>
+      )}
     </>
   );
 }
