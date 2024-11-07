@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import styled from "styled-components";
 import Search from "../components/Search";
 import { useEffect, useState } from "react";
@@ -10,6 +9,7 @@ import { IPandoraService } from "../service/PandoraService";
 import { getInSession, saveInSession } from "../util/storage";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
+import DetailHelmet from "./helmets/DetailHelmet";
 
 interface IHomeProps {
   pandoraService: IPandoraService;
@@ -46,9 +46,7 @@ export default function Home({ pandoraService }: IHomeProps) {
 
   return (
     <StyledContainer>
-      <Helmet>
-        <title>리들노트 | 수수께끼 노트.</title>
-      </Helmet>
+      <DetailHelmet />
       {/* <Guide><IoHelpCircleOutline /> 가이드</Guide> */}
       <Search keyword={''} />
       <div className="nav">
