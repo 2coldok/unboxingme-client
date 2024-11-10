@@ -119,6 +119,8 @@ const Advice = styled.p`
 const SubTitle = styled.p`
   margin-bottom: 0.3em;
   margin-left: 0.1em;
+  color: var(--font-subtitle);
+  font-weight: 500;
 `;
 
 const LengthCount = styled.small`

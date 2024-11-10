@@ -31,11 +31,13 @@ import { LoadingProvider } from './context/LoadingContext.tsx'
 import PandoraDetail from './pages/PandoraDetail.tsx'
 
 import { env } from './config/env.ts'
-import Introduce from './pages/Introduce.tsx'
-import Guide from './pages/Guide.tsx'
+import Introduce from './pages/about/Introduce.tsx'
 import Riddle from './pages/Riddle.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchResult from './pages/SearchResult.tsx';
+import PrivacyPolicy from './pages/about/PrivacyPolicy.tsx';
+import TermsOfService from './pages/about/TermsOfService.tsx';
+import Caution from './pages/about/Caution.tsx';
 
 
 // service
@@ -62,8 +64,22 @@ const router = createBrowserRouter([
       { path: 'pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
       { path: 'dashboard', element: <MyPage /> },
       { path: 'dashboard/pandora/:id', element: <PandoraDetail dashboardService={dashboardService} pandoraService={pandoraService} /> },
-      { path: 'introduce', element: <Introduce /> },
-      { path: 'guide', element: <Guide /> }
+      { 
+        path: '/about/introduce', 
+        element: <Introduce /> 
+      },
+      {
+        path: '/about/privacy',
+        element: <PrivacyPolicy />
+      },
+      {
+        path: '/about/terms',
+        element: <TermsOfService />
+      },
+      {
+        path: '/about/caution',
+        element: <Caution />
+      }
     ]
   },
   {
@@ -89,7 +105,7 @@ const router = createBrowserRouter([
   {
     path: '/fallback/session',
     element: <SessionFallback />
-  }  
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

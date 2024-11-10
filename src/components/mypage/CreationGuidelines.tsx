@@ -18,8 +18,11 @@ export default function CreationGuidelines() {
     <>
       <Title>나의 게시물 만들기</Title>
       <CreateWrapper>
-        <p>게시물 생성 가이드를 참고하세요</p>
-        <CreateButton onClick={handleClick}>판도라 만들기</CreateButton>
+        <p>게시물을 생성하기전 
+        <Link href="/about/caution" target="_blank" rel="noopener noreferrer"> 게시물 작성 주의사항</Link> 
+        을 확인해주세요.
+        </p>
+        <CreateButton onClick={handleClick}>게시물 만들기</CreateButton>
 
       </CreateWrapper>
       
@@ -32,9 +35,10 @@ const Title = styled.h3`
 `;
 
 const CreateWrapper = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; */
+  display: inline-block;
   border: 1px solid var(--border);
   margin: 1em;
   padding: 1em;
@@ -44,3 +48,7 @@ const CreateWrapper = styled.div`
 const CreateButton = styled.button`
   max-width: 300px;
 `;
+
+const Link = styled.a`
+  
+`

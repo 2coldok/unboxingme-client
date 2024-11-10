@@ -40,7 +40,7 @@ const HeaderContainer = styled.header`
   width: 100%;
   height: 70px;
   background-color: var(--background);
-  border-bottom: 1px solid var(--divide);
+  border-bottom: 1px solid var(--border);
 
   position: fixed;
   top: 0; 

@@ -167,6 +167,7 @@ const RiddleIndex = styled.label`
   padding: 0.3em;
   font-size: 1.4rem;
   background-color: var(--background);
+  color: var(--font-subtitle);
   font-weight: bold;
   svg {
     margin-right: 0.3em;
@@ -188,7 +189,7 @@ const CloseWrapper = styled.h2`
     position: absolute;
     right: 0em;
     font-size: 1em;
-    color: var(--font-chore);
+    color: var(--font-subtitle);
     cursor: pointer;
   }
 `;
@@ -197,9 +198,11 @@ const SubTitle = styled.p`
   display: flex;
   margin-bottom: 0.3em;
   margin-left: 0.2em;
+  color: var(--font-subtitle);
+  font-weight: 500;
 
   svg {
-    color: var(--font-warning);
+    color: var(--font-red);
     margin-left: 0.3em;
     font-size: 1em;
   }
@@ -253,20 +256,20 @@ const AddRiddle = styled.button`
   display: flex;
   width: 100%;
   justify-content: center;
-  background-color: var(--background);
+  background-color: var(--background-riddle);
   align-items: center;
   border-radius: 1rem
   margin-top: 0;
   padding: 0.3em;
-  border: 1px dashed var(--font-chore);
+  border: 1px dashed var(--border);
 
   p {
-    color: var(--font-chore);
+    color: var(--font-subtitle);
     font-size: 1.1em;
   }
 
   svg {
-    color: var(--font-chore);
+    color: var(--font-subtitle);
     margin-left: 0.3em;
     font-size: 1.3em;
   }

@@ -121,7 +121,7 @@ const AddKeywordWrapper = styled.div`
       width: 100%;
     }
     
-    border: 1px solid var(--brand-light);
+    border: 1px solid var(--brand);
     background-color: var(--background);
 
     border-right: none;
@@ -130,9 +130,9 @@ const AddKeywordWrapper = styled.div`
  
   button {
     background-color: var(--background);
-    border: 1px solid var(--brand-light);
+    border: 1px solid var(--brand);
     border-left: none;
-    color: var(--brand-light);
+    color: var(--brand);
     font-weight: bold;
     border-radius: 0 0.5rem 0.5rem 0;
     white-space: nowrap;
@@ -164,7 +164,7 @@ const AddedKeywords = styled.ul`
     }
 
     svg:nth-child(3) {
-      fill: var(--font);
+      fill: var(--font-subtitle);
       margin-left: 0.4em;
       cursor: pointer;
     }

@@ -171,12 +171,9 @@ const Subject = styled.h2`
 `;
 
 const EditButton = styled.span`
-  /* border: 1px solid #6a6e72;
-  background-color: #40464c;
-  color: #cbcbcb; */
-  border: 1px solid #4c545c;
-  background-color: #2e363e;
-  color: #929aa2;
+  border: 1px solid #808488;
+  background-color: #494f55;
+  color: #ffffff;
 
 
   font-size: 0.7em;
@@ -228,7 +225,8 @@ const CoverWrapper = styled.div`
 const SubTitle = styled.p`
   margin-bottom: 0.2em;
   margin-left: 0.1em;
-  color: var(--font-chore);
+  color: var(--font-subtitle);
+  font-weight: 500;
 `;
 
 const WriterWrapper = styled.p`
@@ -276,7 +274,6 @@ const RiddleIndex = styled.label`
   font-size: 1.2rem;
   font-weight: 500;
   background-color: var(--background);
-  color: var(--font-chore);
 
   svg {
     margin-right: 0.4em;
@@ -298,6 +295,7 @@ const RiddleContent = styled.div`
   span {
     margin-right: 0.8em;
     color: var(--font-chore);
+    color: var(--font-pink);
     font-weight: bold;
     white-space: nowrap;
   }

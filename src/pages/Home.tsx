@@ -3,13 +3,13 @@ import Search from "../components/Search";
 import { useEffect, useState } from "react";
 import PandoraList from "../components/PandoraList";
 import PandoraListSkeleton from "../loading/PandoraListSkeleton";
-import HomeFooter from "../components/HomeFooter";
 import { IOpenedPandoraGlimpse } from "../types/pandora";
 import { IPandoraService } from "../service/PandoraService";
 import { getInSession, saveInSession } from "../util/storage";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
 import DetailHelmet from "./helmets/DetailHelmet";
+import AppFooter from "../components/AppFooter";
 
 interface IHomeProps {
   pandoraService: IPandoraService;
@@ -46,7 +46,7 @@ export default function Home({ pandoraService }: IHomeProps) {
 
   return (
     <StyledContainer>
-      <DetailHelmet />
+      <DetailHelmet title="리들노트" />
       {/* <Guide><IoHelpCircleOutline /> 가이드</Guide> */}
       <Search keyword={''} />
       <div className="nav">
@@ -70,9 +70,7 @@ export default function Home({ pandoraService }: IHomeProps) {
         )}
       </GlimpseWrapper>
       {!glimpseLoading && (
-        <FooterContainer>
-          <HomeFooter />
-        </FooterContainer>
+        <AppFooter />
       )}
     </StyledContainer>
   );
@@ -141,15 +139,4 @@ const GlimpseWrapper = styled.div`
   @media (max-width: 768px) {
     width: 100%;
   }
-`;
-
-const FooterContainer = styled.footer`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100px;
-  margin-top: 30px;
-  padding-bottom: 0;
 `;

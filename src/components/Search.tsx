@@ -1,4 +1,4 @@
-import { IoIosSearch } from "react-icons/io";
+import { IoSearch } from "react-icons/io5";
 import { BsX } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -67,8 +67,13 @@ const SearchFormWrapper = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--search-background);
-  border: 1px solid var(--brand);
+  /* background-color: var(--background-search); */
+  background-color: #e5e5e5;
+  /* border: 1px solid var(--brand); */
+  border: 1px solid #6d6e6e;
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
   
   width: 700px;
   @media (max-width: 768px) {
@@ -85,15 +90,17 @@ const SearchFormWrapper = styled.form`
   overflow: hidden;
 `;
 
-const SearchIcon = styled(IoIosSearch)`
-  background-color: var(--search-background);
-  color: var(--list-info);
+const SearchIcon = styled(IoSearch)`
+  /* color: var(--font-info); */
+  color: #454545;
   margin-left: 0.5em;
   font-size: 1.7em;
 `;
 
 const SearchInput = styled.input`
-  background-color: var(--search-background);
+  /* background-color: var(--background-search); */
+  background-color: #e5e5e5;
+  
   color: var(--font);
   outline: none;
   border: none;
@@ -118,10 +125,12 @@ const SearchInput = styled.input`
 const CancelButton = styled.button`
   padding-left: 0;
   border: none;
-  background-color: var(--search-background);
+  /* background-color: var(--background-search); */
+  background-color: #e5e5e5;
 
   & > svg {
-    color: var(--list-info);
+    color: var(--font-info);
+    color: #454545;
     font-size: 1.8em;
   }
 `;

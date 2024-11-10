@@ -3,7 +3,6 @@ import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
 import styled from "styled-components";
 import { formatTimeAgo } from "../util/formatTimeAgo";
-import { GoDotFill } from "react-icons/go"; // 구분점
 import { useNavigate } from "react-router-dom";
 import { BsUpc } from "react-icons/bs"; // 라벨
 
@@ -64,7 +63,7 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
               <Label><BsUpc /> {pandora.label}</Label>
             </div>
             <div>
-              <State $open={pandora.isCatUncovered}><GoDotFill/> {pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+              <State $open={pandora.isCatUncovered}>{pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
             </div>
           </InfoWrapper>
         </PandoraWrapper>
@@ -78,12 +77,12 @@ const PandorasContainer = styled.ul`
 `;
 
 const PandoraWrapper = styled.li`
-  border-bottom: 1px solid var(--divide);
+  border-bottom: 1px solid var(--border);
   padding: 1em;
 `;
 
 const Title = styled.h2`
-  color: var(--list-title);
+  color: var(--brand);
   font-weight: 800;
   margin: 0;
   cursor: pointer;
@@ -96,14 +95,12 @@ const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-itmes: center;
-  color: var(--list-info);
+  color: var(--font-info);
+  font-weight: 600;
 `;
 
 const Writer = styled.p`
   display: flex;
-  color: var(--font);
-  font-weight: 500;
-  font-size: 1em;
   margin: 0.9em 0 0.2em 0;
   svg {
     margin-right: 0.3em;
@@ -112,8 +109,6 @@ const Writer = styled.p`
 
 const MainInfo = styled.p`
   display: flex;
-  font-size: 0.9em;
-  font-weight: 500;
   margin: 0.3em 0 0.2em 0;
   svg {
     margin-right: 0.3em;
@@ -133,8 +128,11 @@ const Label = styled.p`
 const State = styled.p<{ $open: boolean }>`
   display: flex;
   font-weight: 600;
-  svg {
-    margin-right: 0.3em;
-    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
-  }
+  font-size: 0.85rem;
+  padding: 3px 7px 3px 7px;
+  border-radius: 0.7rem;
+  border: ${({ $open }) => $open ? '1px solid #00FF7F' : '1px solid #445261'};
+  background: ${({ $open }) => $open ? '#334a46' : '#353d44'};
+  color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
 `;
+// #ffd54f

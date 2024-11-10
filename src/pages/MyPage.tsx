@@ -78,7 +78,6 @@ const NavigateWrapper = styled.div`
   /* background-color: #161e2b; */
   margin-right: 1em;
   padding-top: 4em;
-
   @media (max-width: 768px) {
     position: fixed;
     bottom: 0;
@@ -100,17 +99,15 @@ const NavButton = styled.div<{ $active: boolean }>`
   align-items: center;
   width: 100%;
   padding: 0.7em;
-  /* border: 1px solid var(--brand); */
   margin-top: 1em;
   border-radius: 0.5em;
-  /* background-color: black; */
-  color: ${({ $active }) => $active ? 'var(--brand-light)' : 'var(--font-chore)'};
+  color: ${({ $active }) => $active ? 'var(--brand)' : '#acacac;'};
+
   font-weight: bold;
   font-size: 1.3em;
   cursor: pointer;
   transition: transform 0.2s ease;
   :hover {
-    color: var(--brand);
     transform: scale(1.05);
   }
   
@@ -124,6 +121,7 @@ const NavButton = styled.div<{ $active: boolean }>`
     justify-content: center;
     align-items: center;
     margin-top: 0;
+    background-color: ${({ $active }) => $active ? 'none' : 'none'};
 
     svg {
       font-size: 2rem;

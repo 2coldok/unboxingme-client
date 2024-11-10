@@ -25,7 +25,7 @@ export default function Profile({ profile }: IProfileProps) {
       return alert('세션이 만료되었습니다.');
     }
     if (status === 'none') {
-      return alert('구글 로그인이 필요한 서비스 입니다.');
+      return alert('세션이 만료되었습니다.');
     }
     if (status === 'valid') {
       return navigate('/dashboard');
@@ -93,7 +93,7 @@ const Popper = styled.div`
   right: 20px;
   /* max-width: 400px; */
   /* background-color: #252932; */
-  background-color: var(--background);
+  background-color: var(--background-riddle);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0.5em;

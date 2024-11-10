@@ -17,7 +17,7 @@ export default function EditAndDeleteConfirm({ pandora, onEdit, onDelete, onCanc
       <AlertWrapper>
         <div className='close' onClick={onCancel}><BsX /> </div>
         <h3 className='title'>{pandora.title}</h3>
-        <span className='total-records'>(문제풀이 참여 인원: {pandora.totalRecords}명)</span>
+        <span className='total-records'>(총 {pandora.totalRecords}명의 참여자 기록이 삭제됩니다)</span>
         <ButtonWrapper>
           {pandora.action === 'edit' && (
             <button className='edit' onClick={() => onEdit(pandora.id)}>수정하기</button>
@@ -51,7 +51,7 @@ const AlertWrapper = styled.div`
   position: relative;
 
   width: 410px;
-  background-color: var(--background-color);
+  background-color: var(--background-riddle);
   border-radius: 0.5rem;
   border: 1px solid var(--dark-gray);
   margin-left: 1rem;
@@ -59,7 +59,6 @@ const AlertWrapper = styled.div`
   padding: 1rem;
 
   .title {
-    color: var(--light-white);
     /* margin-bottom: 2rem; */
     margin-bottom: 0.3em;
   }
@@ -67,7 +66,7 @@ const AlertWrapper = styled.div`
   .total-records {
     margin-top: 0;
     margin-bottom: 2em;
-    color: var(--light-gray);
+    color: var(--font-red);
   }
 
   .close {
@@ -76,7 +75,7 @@ const AlertWrapper = styled.div`
     right: 8px;
     font-size: 24px;
     cursor: pointer;
-    color: var(--light-gray);
+    color: var(--font-subtitle);
   }
 `;
 
@@ -89,12 +88,14 @@ const ButtonWrapper = styled.div`
   }
 
   .edit {
-    color: #a5b513;
-    border: 2px solid #a5b513;
+    border: 1px solid #808488;
+    background-color: #494f55;
+    color: #ffffff;
   }
 
   .delete {
-    color: #c95047;
-    border: 2px solid #c95047;
+    background-color: var(--background);
+    border: 1px solid var(--font-warning);
+    color: var(--font-warning);
   }
 `;

@@ -56,9 +56,9 @@ const Square = styled.div<{ isCurrent: boolean }>`
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  border: ${({ isCurrent }) => isCurrent ? '1px solid var(--font)' : '1px solid #3f4147'};
+  border: ${({ isCurrent }) => isCurrent ? '1px solid var(--font-main)' : '1px solid #525357'};
   /* background-color: ${({ isCurrent }) => isCurrent? '#ececec' : '#292e33'}; */
-  color: ${({ isCurrent }) => isCurrent ? 'var(--font)' : '#3f4147'};
+  color: ${({ isCurrent }) => isCurrent ? 'var(--font-main)' : '#525357'};
 `;
 
 const Line = styled.div<{ filled: boolean }>`

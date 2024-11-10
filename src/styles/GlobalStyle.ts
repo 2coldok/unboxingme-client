@@ -37,21 +37,28 @@ const GlobalStyle = createGlobalStyle`
     --gray500: #5c5c5c;
     --gray900: #333333;
 
+    /**기존 brand color #7eaaff */
 
-    /**DarkTheme */
-    --background: #202124;
-    --brand: #7eaaff;
+    /**확정**/
+    --background: #30343f;
+    --background-search: #262626;
+    --background-riddle: #252932;
+    --brand: #77aaff;
     --brand-light: #8ab4f8;
-    --font: #cdcdcd;
-    --list-title: #7eaaff;
-    --list-info: #6a737d;
-    --divide: #3b3d43;
-    --border: #3b3d43;
-    --search-background: #191b1d;
-    --sub-title: #6a737d;
+    --border: #43484e;
+    --font-main: #fafaff;
+    --font-info: #adb5bd;
+    --font-yellow: #ffd54f;
+    --font-red: #fb6376;
+    --font-pink: #f67eff;
+    --font-subtitle: #dcdcdc;
     --font-chore: #6a737d;
-    --font-explain: #999fa5; // form에서 가이드설명
-    --font-subtitle: #6a737d;
+    --font-explain: #999fa5;
+
+
+    
+    --sub-title: #6a737d;
+    
     --font-warning: #ff4d4d;
 
     --button-border: #485f88;
@@ -83,7 +90,7 @@ const GlobalStyle = createGlobalStyle`
     text-rendering: optimizeLegibility;
 
     background-color: var(--background);
-    color: var(--font);
+    color: var(--font-main);
   }
 
   // App StyledContainer
@@ -128,7 +135,7 @@ const GlobalStyle = createGlobalStyle`
     font-size: 1rem;
     border: 1px solid var(--font-chore);
     background-color: var(--background);
-    color: var(--font);
+    color: var(--font-main);
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
     font-family: 'Roboto', sans-serif;
     :focus {

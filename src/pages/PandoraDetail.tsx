@@ -17,7 +17,6 @@ import { IPandoraService } from "../service/PandoraService";
 import EditAndDeleteConfirm from "../components/EditAndDeleteConfirm";
 import { Copy } from "../util/Copy";
 import { LuEye } from "react-icons/lu";
-import { GoDotFill } from "react-icons/go";
 import { Helmet } from "react-helmet-async";
 
 
@@ -108,7 +107,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
             <Label><BsUpc /> {detail.pandora.label}</Label>
           </div>
           <div>
-            <State $open={detail.pandora.isCatUncovered}><GoDotFill/> {detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+            <State $open={detail.pandora.isCatUncovered}>{detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
           </div>
         </InfoWrapper>
         <Description>{detail.pandora.description}</Description>
@@ -184,13 +183,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
       <SubContentWrapper>
         <SubTitle>질문 풀이 현황</SubTitle>
         {detail.totalRecords === 0 && (
-          <>
-            <RiddleProgress
-              totalSteps={detail.pandora.totalProblems}
-              currentStep={0}
-            />
-            <p>기록 없음</p>
-          </>
+          <p>기록 없음</p>
         )}
         {detail.totalRecords >0 && detail.record && (
           <>
@@ -258,20 +251,16 @@ const InputReadOnly = styled.input.attrs({ readOnly: true })`
   border: 1px solid var(--border);
   margin-left: 0.2em;
   width: auto;
-  background-color: #1f2021;
+  background-color: #242628;
 `;
 
 //  검색 키워드, 질문, 게시글내용
 const HiddenDetail = styled.h4`
   display: flex;
-  background-color: #252932;
+  background-color: var(--background-riddle);
   padding: 1em;
   border-radius: 0.4rem;
   cursor: pointer;
-  :hover {
-    filter: brightness(125%);
-  }
-
   svg {
     margin-left: 0.4em;
   }
@@ -279,7 +268,7 @@ const HiddenDetail = styled.h4`
 
 /**pandora***/
 const Title = styled.h2`
-  color: var(--list-title);
+  color: var(--brand);
   font-weight: 700;
   font-size: 2.3em;
   margin: 0;
@@ -293,7 +282,8 @@ const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-itmes: center;
-  color: var(--list-info);
+  color: var(--font-info);
+  font-weight: 600;
 `;
 
 const Writer = styled.p`
@@ -330,10 +320,12 @@ const Label = styled.p`
 const State = styled.p<{ $open: boolean }>`
   display: flex;
   font-weight: 600;
-  svg {
-    margin-right: 0.3em;
-    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
-  }
+  font-size: 0.85rem;
+  padding: 3px 7px 3px 7px;
+  border-radius: 0.7rem;
+  border: ${({ $open }) => $open ? '1px solid #00FF7F' : '1px solid #445261'};
+  background: ${({ $open }) => $open ? '#334a46' : '#353d44'};
+  color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
 `;
 
 const Description = styled.pre`
@@ -372,7 +364,7 @@ const CopyButtonWrapper = styled.div`
   input {
     width: 60%;
     max-width: 500px;
-    font-weight: 600;
+    /* font-weight: 600; */
     color: var(--brand);
     padding: 0.3em;
     border-radius: 0.3em;
@@ -404,7 +396,7 @@ const RiddleIndex = styled.label`
   font-size: 1.2rem;
   font-weight: 500;
   background-color: var(--background);
-  color: var(--font-chore);
+  color: var(--font-subtitle);
 
   svg {
     margin-right: 0.4em;
@@ -425,7 +417,7 @@ const RiddleContent = styled.div`
 
   span {
     margin-right: 0.8em;
-    color: var(--font-chore);
+    color: var(--font-pink);
     font-weight: bold;
     white-space: nowrap;
   }
@@ -464,19 +456,19 @@ const ModifyButtonWrapper = styled.div`
 `;
 
 const EditButton = styled.button`
-  background-color: #2e363e;
-  color: #929aa2;
-  border: 2px solid #4c545c;
+  border: 1px solid #808488;
+  background-color: #494f55;
+  color: #ffffff;
   font-weight: bold;
   padding: 0.3em 2em 0.3em 2em;
   margin-left: 2rem;
 `;
 
 const DeleteButton = styled.button`
-  background-color: #341f24;
-    border: 2px solid #c95047;
+    background-color: var(--background);
+    border: 1px solid var(--font-warning);
     font-weight: bold;
-    color: #c95047;
+    color: var(--font-warning);
     padding: 0.3em 2em 0.3em 2em;
     margin-left: 2rem;
 `;

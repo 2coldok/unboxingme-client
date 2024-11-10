@@ -13,7 +13,6 @@ import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { formatTime, formatTimeAgo } from "../util/formatTimeAgo";
 import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
-import { GoDotFill } from "react-icons/go";
 import Search from "../components/Search";
 import Login from "../components/Login";
 import { Helmet } from "react-helmet-async";
@@ -106,7 +105,7 @@ export default function PandoraCover() {
             <Label><BsUpc /> {data.payload.label}</Label>
           </div>
           <div>
-            <State $open={data.payload.isCatUncovered}><GoDotFill/> {data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
+            <State $open={data.payload.isCatUncovered}>{data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
           </div>
         </InfoWrapper>
         <Description>{data.payload.description}</Description>
@@ -138,7 +137,7 @@ const CoverWrapper = styled.main`
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: 0.9rem;
   padding: 1.1em;
   @media (max-width: 768px) {
     border-style: none;
@@ -146,7 +145,7 @@ const CoverWrapper = styled.main`
 `;
 
 const Title = styled.h2`
-  color: var(--list-title);
+  color: var(--brand);
   font-weight: 800;
   font-size: 1.8em;
   margin: 0;
@@ -160,14 +159,12 @@ const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-itmes: center;
-  color: var(--list-info);
+  color: var(--font-info);
+  font-weight: 600;
 `;
 
 const Writer = styled.p`
   display: flex;
-  color: var(--font);
-  font-weight: 500;
-  font-size: 1em;
   margin: 0.9em 0 0.2em 0;
   svg {
     margin-right: 0.3em;
@@ -176,8 +173,6 @@ const Writer = styled.p`
 
 const MainInfo = styled.p`
   display: flex;
-  font-size: 0.9em;
-  font-weight: 500;
   margin: 0.3em 0 0.2em 0;
   svg {
     margin-right: 0.3em;
@@ -187,8 +182,6 @@ const MainInfo = styled.p`
 const Label = styled.p`
   display: flex;
   margin: 0.6em 0 0 0;
-  font-weight: 500;
-  font-size: 0.9em;
   svg {
     margin-right: 0.3em;
   }
@@ -197,13 +190,16 @@ const Label = styled.p`
 const State = styled.p<{ $open: boolean }>`
   display: flex;
   font-weight: 600;
-  svg {
-    margin-right: 0.3em;
-    color: ${({ $open }) => $open ? '#4caf50' : '#ffd54f '}
-  }
+  font-size: 0.85rem;
+  padding: 3px 7px 3px 7px;
+  border-radius: 0.7rem;
+  border: ${({ $open }) => $open ? '1px solid #00FF7F' : '1px solid #445261'};
+  background: ${({ $open }) => $open ? '#334a46' : '#353d44'};
+  color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
 `;
 
 const Description = styled.pre`
+  border-top: 1px solid var(--border);
   font-size: 1.1em;
   padding-top: 3em;
   padding-bottom: 5em;
@@ -217,7 +213,7 @@ const FirstRiddleWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #252932;
+  background-color: var(--background-riddle);
   padding: 1em;
   border-radius: 0.4rem;
 
