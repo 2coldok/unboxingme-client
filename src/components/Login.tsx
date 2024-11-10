@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components';
 import { BsX } from "react-icons/bs";
 import { useAuth } from '../hook/AuthHook';
@@ -21,6 +22,9 @@ export default function Login({ onClose }: LoginProps) {
 
   return (
     <StyledContainer>
+      <Helmet>
+        <link rel='prefetch' href='/google_logo.svg' as='image' />
+      </Helmet>
       <LoginContainer>
         <CloseButtonWrapper>
           <BsX onClick={handleCancel} />

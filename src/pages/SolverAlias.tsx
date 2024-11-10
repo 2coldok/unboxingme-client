@@ -33,7 +33,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
       } catch (error) {
         // solverAlias 페이지에 접근 자격이 없음
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state : { error: error, payload: error.payload }});
+          return navigate('/fallback/error', { state : { error: error }, replace: true});
         }
       } finally {
         setSolverAliasLoading(false);
@@ -66,7 +66,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
       
     } catch (error) {
       if (error instanceof HttpError) {
-        return navigate('/fallback/error', { state: { error: error } });
+        return navigate('/fallback/error', { state: { error: error }, replace: true });
       }
     }
   };

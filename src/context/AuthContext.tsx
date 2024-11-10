@@ -14,7 +14,7 @@ export interface IAuthContext {
   profile: IProfile | null | undefined;
   login: (redirectUri: string) => void;
   logout: () => Promise<void>;
-  getTokenStatus: () => Promise<'valid' | 'invalid' | 'none'>;
+  getTokenStatus: () => Promise<boolean>;
 }
 
 interface IAuthProviderProps {
@@ -68,15 +68,15 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
     try {
       const data = await authService.me();
       const isTokenValid = data.payload.isTokenValid;
-      if (!isTokenValid) {
+      if (isTokenValid) {
+        return true;
+      } else {
         setProfile(null);
-        return 'invalid';
+        return false;
       }
-      return 'valid';
     } catch (error) {
-      // 토큰이 존재하지 않음
       setProfile(null);
-      return 'none';
+      return false;
     }
   }, [authService]);
 

@@ -49,12 +49,10 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
     const fetchMyPandoraDetail = async () => {
       try {
         const data = await dashboardService.getMyPandoraDetail(id);
-        console.log(data.payload); //
-        console.log(data.payload.pandora.problems[0].hint);
         setDetail(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } });
+          return navigate('/fallback/error', { state: { error: error }, replace: true });
         }
       }
     }

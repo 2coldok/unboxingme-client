@@ -21,15 +21,10 @@ export default function Profile({ profile }: IProfileProps) {
   const handleMyPageClick = async () => {
     setShowPopper(false);
     const status = await getTokenStatus();
-    if (status === 'invalid') {
-      return alert('세션이 만료되었습니다.');
+    if (!status) {
+      return alert('로그인이 필요한 서비스입니다.');
     }
-    if (status === 'none') {
-      return alert('세션이 만료되었습니다.');
-    }
-    if (status === 'valid') {
-      return navigate('/dashboard');
-    }
+    return navigate('/dashboard');
   };
 
   const handleLogoutClick = async () => {

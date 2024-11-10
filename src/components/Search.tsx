@@ -68,7 +68,8 @@ const SearchFormWrapper = styled.form`
   justify-content: space-between;
   align-items: center;
   /* background-color: var(--background-search); */
-  background-color: #e5e5e5;
+  /* background-color: #e5e5e5; */
+  background-color: #FFFFFF;
   /* border: 1px solid var(--brand); */
   border: 1px solid #6d6e6e;
   color: black;
@@ -99,7 +100,8 @@ const SearchIcon = styled(IoSearch)`
 
 const SearchInput = styled.input`
   /* background-color: var(--background-search); */
-  background-color: #e5e5e5;
+  /* background-color: #e5e5e5; */
+  background-color: #FFFFFF;
   
   color: var(--font);
   outline: none;
@@ -125,8 +127,8 @@ const SearchInput = styled.input`
 const CancelButton = styled.button`
   padding-left: 0;
   border: none;
-  /* background-color: var(--background-search); */
-  background-color: #e5e5e5;
+  /* background-color: #e5e5e5; */
+  background-color: #FFFFFF;
 
   & > svg {
     color: var(--font-info);

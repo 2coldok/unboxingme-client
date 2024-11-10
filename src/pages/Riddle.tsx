@@ -54,7 +54,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error } })
+          return navigate('/fallback/error', { state: { error: error }, replace: true })
         }
       } finally {
         stopLoading();
@@ -109,7 +109,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         }
       } catch (error) {
         if (error instanceof HttpError) {
-          return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
+          return navigate('/fallback/error', { state: { error: error }, replace: true });
         }
       } finally {
         stopLoading();

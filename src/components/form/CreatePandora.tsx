@@ -51,7 +51,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
         return navigate('/dashboard');
       }
     } catch (error) {
-      return navigate('/fallback/error', { state: { error: error } });
+      return navigate('/fallback/error', { state: { error: error }, replace: true });
     }
   }
 

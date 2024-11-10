@@ -53,15 +53,12 @@ export default function PandoraCover() {
 
   const handleChallengeClick = async () => {
     try {
-      const tokenStatus = await getTokenStatus();
-
-      if (tokenStatus === 'valid') {
-        return navigate(`/pandora/${id}/riddle`);
-      }
-      
-      if (tokenStatus == 'none') {
+      const status = await getTokenStatus();
+      if (!status) {
         return setShowLoginPop(true);
       }
+
+      return navigate(`/pandora/${id}/riddle`);
     } catch (error) {
       if (error instanceof HttpError) {
         return navigate('/fallback/error', { state: { error: error } })

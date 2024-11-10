@@ -8,20 +8,20 @@ export default function PandoraListSkeleton() {
       </h2>
       <InfoWrapper>
         <div className="left-contents">
-          <p className="writer">
+          <div className="writer">
             <SkeletonBox width={100} height={20} />
-          </p>
-          <p className="view-createdat">
+          </div>
+          <div className="view-createdat">
             <SkeletonBox width={150} height={15} />
-          </p>
-          <p className="label">
+          </div>
+          <div className="label">
             <SkeletonBox width={80} height={15} />
-          </p>
+          </div>
         </div>
         <div className="right-contents">
-          <p className="state">
+          <div className="state">
             <SkeletonBox width={60} height={15} />
-          </p>
+          </div>
         </div>
       </InfoWrapper>
     </SkeletonList>
@@ -47,7 +47,7 @@ const SkeletonBox = styled.div<{ width: number, height: number }>`
 `;
 
 const SkeletonList = styled.li`
-  background-color: var(--gray300);
+  background-color: #30343f;
   border-bottom: 1px solid var(--gray200);
   padding: 1em 1.5em 1em 1em;
   border-radius: 0.3em;

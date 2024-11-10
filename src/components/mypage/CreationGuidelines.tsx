@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { useAuth } from "../../hook/AuthHook";
 
 export default function CreationGuidelines() {
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
+  const { getTokenStatus } = useAuth();
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    const status = await getTokenStatus();
+    if (!status) {
+      return navigate('/');
+    }
     return navigate('/pandora/form');
   };
 

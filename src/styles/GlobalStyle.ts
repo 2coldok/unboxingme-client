@@ -74,9 +74,6 @@ const GlobalStyle = createGlobalStyle`
     font-display: swap;
   }
 
-  // 본고딕 적용
-  @import url('//fonts.googleapis.com/earlyaccess/notosanskr.css');
-
   body {
     width: 100%;
     height: 100%;
