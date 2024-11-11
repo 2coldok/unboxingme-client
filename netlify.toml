@@ -1,4 +1,9 @@
 [[redirects]]
+  from = "/gate"
+  to = "https://api.riddlenote.com/gate"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
