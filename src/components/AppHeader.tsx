@@ -17,7 +17,7 @@ export default function AppHeader() {
     if (profile === null) {
       setReady(true);
     }
-  }, [profile])
+  }, [profile]);
 
   const handleLogoClick = () => {
     return navigate('/');

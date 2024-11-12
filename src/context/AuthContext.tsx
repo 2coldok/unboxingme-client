@@ -28,13 +28,13 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
   const [profile, setProfile] = useState<IProfile | null | undefined>(undefined);
   
   useEffect(() => {
-     
     const fetchProfile = async () => {
       console.log('*****AuthContext에서 fetchProfile 실행됨*****');
       try {
-        
         const data = await authService.getProfile();
-        console.log('프로필', data.payload);
+        if (!data.payload) {
+          return setProfile(null);
+        }
         setProfile(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
