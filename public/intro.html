@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <!--basic-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>리들노트</title>
+    <meta name="description" content="수수께끼로 잠긴 비밀 메세지 생성 플랫폼" />
+    
+    <!--favicons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/favicons/site.webmanifest">
+
+    <!--폰트-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grandstander:wght@400;600&family=Roboto:wght@400;700&display=swap">
+
+    <!--모바일 외각 배경색-->
+    <meta name="theme-color" content="#181d24">
+
+    <!--Canonical -->
+    <link rel="canonical" href="https://riddlenote.com/intro" />
+
+    <!--SNS SEO-->
+    <meta property="og:title" content="리들노트" />
+    <meta property="og:description" content="수수께끼로 잠긴 비밀 메세지 생성 플랫폼" />
+    <meta property="og:url" content="https://riddlenote.com/intro" />
+    <meta property="og:image" content="https://riddlenote.com/logo.png" />
+    <meta property="og:image:alt" content="리들노트 로고" />
+    <meta name="twitter:title" content="리들노트" />
+    <meta name="twitter:description" content="수수께끼로 잠긴 비밀 메세지 생성 플랫폼" />
+    <meta name="twitter:image" content="https://riddlenote.com/logo.png" />
+    <meta name="twitter:image:alt" content="리들노트 로고" />
+
+    <!--Google SEO-->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://riddlenote.com/intro#website",
+      "url": "https://riddlenote.com/intro",
+      "name": "리들노트",
+      "description": "수수께끼로 잠긴 나만의 비밀 메세지를 생성할 수 있습니다. 둘만이 공유하는 특별한 기억이나 사건을 기반으로 질문을 구성해 한 명만 열람할 수 있는 노트를 작성해보세요.",
+      "publisher": {
+          "@type": "Organization",
+          "name": "리들노트",
+          "url": "https://riddlenote.com/"
+      },
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://riddlenote.com/intro"
+      }
+    }
+    </script>
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            background-color: #30343f;
+            color: white;
+        }
+        ul, li {
+            list-style: none;
+            padding: 0;
+        }
+        .hero-section {
+            background-color: #181d24;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 70px 0.8rem;
+            font-weight: 500;
+        }
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .logo-wrapper img {
+            width: 4rem;
+            height: 4rem;
+            margin-right: 1rem;
+        }
+        .logo-wrapper span {
+            font-size: 4rem;
+            font-family: "Grandstander", cursive;
+            font-weight: 600;
+            margin-top: 0.3em;
+        }
+        .main-title {
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 0;
+            text-align: center;
+        }
+        .cta-button {
+            border: 1px solid #485f88;
+            background-color: #324055;
+            color: #8ab4f8;
+            padding: 0.4em 1.7em;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            font-size: 25px;
+            margin-top: 60px;
+            margin-bottom: 50px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .feature-section {
+            display: flex;
+            justify-content: center;
+            margin: 60px 0;
+            flex-wrap: wrap;
+        }
+        .feature-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            font-size: 1.1rem;
+            padding: 2rem;
+        }
+        .feature-title {
+            font-weight: 500;
+            font-size: 1.5rem;
+        }
+        .feature-description {
+            margin-top: 0;
+            max-width: 500px;
+        }
+        .riddle-image {
+            width: 90%;
+            max-width: 600px;
+            height: auto;
+            box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+            border-radius: 1rem;
+            border: 1px solid #3a3a3a;
+        }
+        .sns-image {
+            width: 70px;
+        }
+        @media (max-width: 600px) {
+            .sns-image {
+                width: 50px;
+            }
+        }
+        .keywords-wrapper {
+            display: flex;
+            background-color: #252932;
+            border: 1px solid #3a3a3a;
+            width: 90%;
+            max-width: 600px;
+            gap: 15px;
+            height: auto;
+            padding: 2rem;
+            box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+            border-radius: 1rem;
+            flex-wrap: wrap;
+        }
+        .keywords-wrapper li {
+            display: flex;
+            padding: 0.4em 0.8em;
+            align-items: center;
+            margin-bottom: 0.8em;
+            border: 1px solid #77aaff;
+            color: #77aaff;
+            border-radius: 1.2rem;
+            font-weight: bold;
+        }
+        .keywords-wrapper li svg {
+            margin-right: 0.4em;
+            font-size: 1.2rem;
+        }
+        .sns-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #252932;
+            border: 1px solid #3a3a3a;
+            gap: 30px;
+            width: 90%;
+            max-width: 600px;
+            height: auto;
+            border-radius: 1rem;
+            padding: 30px 0;
+            box-shadow: rgba(0, 0, 0, 0.45) 0px 25px 20px -20px;
+        }
+        @media (max-width: 600px) {
+            .logo-wrapper img {
+                width: 2rem;
+                height: 2rem;
+            }
+            .logo-wrapper span {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-section">
+        <div class="logo-wrapper">
+            <img src="/logo.png" alt="logo">
+            <span>RiddleNote</span>
+        </div>
+        <h2 class="main-title">리들노트는 수수께끼로 잠긴 노트를 작성할 수 있는 비공개 게시물 플랫폼입니다.</h2>
+        <h2 class="main-title">당신이 누군가와 공유하는 특별한 기억이나 사건들을 기반으로 질문을 구성하여</h2>
+        <h2 class="main-title">오직 한 사람만이 열람할 수 있는 노트를 작성해보세요.</h2>
+        <a class="cta-button" href="https://riddlenote.com/">시작하기</a>
+    </div>
+
+    <div class="feature-section">
+        <div class="feature-text-wrapper">
+            <h2 class="feature-title">수수께끼로 열리는 노트</h2>
+            <p class="feature-description">이전 질문을 해결해야 다음 질문을 확인할 수 있으며, 모든 질문을 해결한 후 노트 내용을 확인할 수 있습니다.</p>
+            <h2 class="feature-title">1회성 열람</h2>
+            <p class="feature-description">수수께끼 노트는 한 번 열람되면 비공개로 전환되어, 열람자와 생성자만 그 내용을 확인할 수 있습니다.</p>
+        </div>
+        <img class="riddle-image" src="/riddle-example.png" alt="riddle">
+    </div>
+
+    <div class="feature-section">
+        <div class="feature-text-wrapper">
+            <h2 class="feature-title">커스텀 검색어 등록</h2>
+            <p class="feature-description">만든 노트를 검색할 수 있는 검색어를 등록할 수 있습니다. 검색어를 등록하지 않을 경우 링크 공유를 통해서만 노트에 접근할 수 있습니다.</p>
+        </div>
+        <ul class="keywords-wrapper">
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>홍길동</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>물망초</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>햇살모아</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>한국대학교</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>철학과</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>독서동아리</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>한국전자</span>
+            </li>
+            <li>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1em" height="1em">
+                    <path d="M10 2a8 8 0 105.3 14.3l4.6 4.6 1.4-1.4-4.6-4.6A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/>
+                </svg>
+                <span>경영지원팀</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="feature-section">
+        <div class="feature-text-wrapper">
+            <h2 class="feature-title">노트 링크 공유</h2>
+            <p class="feature-description">등록한 수수께끼 노트를 웹 링크를 통해 공유할 수 있습니다. 사용자는 수수께끼를 모두 해결해야 노트 내용을 확인할 수 있습니다.</p>
+        </div>
+        <div class="sns-wrapper">
+            <img class="sns-image" src="/sns/x.png" alt="sns">
+            <img class="sns-image" src="/sns/facebook.png" alt="sns">
+            <img class="sns-image" src="/sns/kakao.png" alt="sns">
+            <img class="sns-image" src="/sns/instagram.png" alt="sns">
+        </div>
+    </div>
+</body>
+</html>
