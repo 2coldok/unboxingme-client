@@ -1,7 +1,7 @@
 [[redirects]]
   from = "/intro"
   to = "https://api.riddlenote.com/intro"
-  status = 200
+  status = 301
 
 [[redirects]]
   from = "/*"
