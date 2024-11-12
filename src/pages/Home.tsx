@@ -8,7 +8,6 @@ import { IPandoraService } from "../service/PandoraService";
 import { getInSession, saveInSession } from "../util/storage";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
-import DetailHelmet from "./helmets/DetailHelmet";
 import AppFooter from "../components/AppFooter";
 
 interface IHomeProps {
@@ -46,7 +45,6 @@ export default function Home({ pandoraService }: IHomeProps) {
 
   return (
     <StyledContainer>
-      <DetailHelmet title="리들노트" />
       {/* <Guide><IoHelpCircleOutline /> 가이드</Guide> */}
       <Search keyword={''} />
       <div className="nav">

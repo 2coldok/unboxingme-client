@@ -1,6 +1,6 @@
 [[redirects]]
-  from = "/gate"
-  to = "https://api.riddlenote.com/gate"
+  from = "/intro"
+  to = "https://api.riddlenote.com/intro"
   status = 200
 
 [[redirects]]

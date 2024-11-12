@@ -69,9 +69,12 @@ export default function Introduce() {
           <AddedKeywords>
             <li><AiOutlineSearch /><span>홍길동</span></li>
             <li><AiOutlineSearch /><span>웃음꽃</span></li>
-            <li><AiOutlineSearch /><span>한국초등학교</span></li>
+            <li><AiOutlineSearch /><span>햇살모아</span></li>
             <li><AiOutlineSearch /><span>한국대학교</span></li>
+            <li><AiOutlineSearch /><span>피아노과</span></li>
+            <li><AiOutlineSearch /><span>문예부</span></li>
             <li><AiOutlineSearch /><span>한국전자</span></li>
+            <li><AiOutlineSearch /><span>경영지원팀</span></li>
           </AddedKeywords>
           <p>* 설정한 키워드 목록은 게시물에 노출되지 않습니다.</p>
           <p>* 리들노트의 게시물은 설정된 키워드를 통해 검색할 수 있습니다.</p>
@@ -150,7 +153,7 @@ const Section = styled.section`
   padding: 0.5rem 1.5rem 1.5rem 1.5rem;
   border: 1px solid var(--border);
   border-radius: 0.7rem;
-  background-color: #2f3033;
+  /* background-color: #2f3033; */
   @media (max-width: 768px) {
     margin: 0 0.3rem 3rem 0.3rem;
     padding: 0.1rem 1rem 1rem 1rem;
@@ -172,11 +175,13 @@ const SectionIntroduce = styled.h3`
 // keyword
 const AddedKeywords = styled.ul`
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
+  gap: 15px;
   min-height: 5em;
   padding: 1em;
   border-radius: 0.4rem;
   border: 1px dashed var(--border);
+  flex-wrap: wrap;
 
   li {
     display: flex;
@@ -186,12 +191,18 @@ const AddedKeywords = styled.ul`
     
     border: 1px solid var(--brand);
     color: var(--brand);
-    border-radius: 0.9em;
+    border-radius: 1.2rem;
     width: fit-content;
     font-weight: bold;
 
     svg {
       margin-right: 0.4em;
+      font-size: 1.2rem;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 1.2rem;
     }
 
     

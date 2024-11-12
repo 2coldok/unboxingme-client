@@ -156,8 +156,11 @@ const Description = styled.pre`
 const NoteWrapper = styled.pre`
   display: flex;
   /* border: 1px solid #ffda48; */
-  background-color: #fef49c;
-  color: #000000;
+  /* background-color: #fef49c; */
+  /* color: #000000; */
+  border: 1px solid #e47a2c;
+  background-color: #fcb76d;
+  color: #592300;
   /* text-decoration: underline; */
   /* text-decoration-color: #f27373; */
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
