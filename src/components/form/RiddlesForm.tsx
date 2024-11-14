@@ -6,8 +6,8 @@ import { IoClose } from "react-icons/io5";
 import { IRiddle, TFormSubject } from "../../types/form";
 import { PANDORA_FORM } from "../../constant/constraints";
 import { FORM_LENGTH_ERROR_MESSAGE } from "../../constant/errorMessage";
-import { GrFormCheckmark } from "react-icons/gr";
 import { AiFillLock } from "react-icons/ai"; 
+import { BsCheckLg } from "react-icons/bs";
 
 export interface IRiddlesFormProps {
   setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
@@ -74,9 +74,9 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
   
   return (
     <>
-      <Guide>* 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</Guide>
-      <Guide>* 모든 질문을 최초로 해결한 한명의 사용자만 게시글의 내용을 확인할 수 있습니다.</Guide>
-      <Guide>* 모든 질문이 해결되면 게시글이 비공개로 전환됩니다.</Guide>
+      <Advice>* 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</Advice>
+      <Advice>* 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.</Advice>
+      <Advice>* 모든 질문이 해결되면 게시물이 비공개로 전환됩니다.</Advice>
       <ul>
         {riddles.map((riddle, index) => (
           <RiddleContainer>
@@ -90,7 +90,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
               </CloseWrapper>
               <SubTitle>
                 질문
-                {!riddle.isQuestionValid && <GrFormCheckmark />}
+                {!riddle.isQuestionValid && <BsCheckLg />}
               </SubTitle>
               <QuestionWrapper>
                 <textarea
@@ -114,7 +114,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
               </HintWrapper>
               <SubTitle>
                 정답
-                {!riddle.isAnswerValid && <GrFormCheckmark />}
+                {!riddle.isAnswerValid && <BsCheckLg />}
               </SubTitle>
               
               <AnswerWrapper>
@@ -149,9 +149,10 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
   );  
 }
 
-const Guide = styled.p`
-  color: var(--font-explain);
-`
+const Advice = styled.p`
+  margin: 0 0 0.8em 0;
+  color: var(--font-info);
+`;
 
 const RiddleContainer = styled.div`
   position: relative;
@@ -166,7 +167,7 @@ const RiddleIndex = styled.label`
   border-radius: 0.3em;
   padding: 0.3em;
   font-size: 1.4rem;
-  background-color: var(--background);
+  background-color: var(--background-block);
   color: var(--font-subtitle);
   font-weight: bold;
   svg {
@@ -202,7 +203,7 @@ const SubTitle = styled.p`
   font-weight: 500;
 
   svg {
-    color: var(--font-red);
+    color: var(--font-warning);
     margin-left: 0.3em;
     font-size: 1em;
   }

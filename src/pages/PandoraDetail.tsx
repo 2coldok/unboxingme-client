@@ -17,8 +17,7 @@ import { IPandoraService } from "../service/PandoraService";
 import EditAndDeleteConfirm from "../components/EditAndDeleteConfirm";
 import { Copy } from "../util/Copy";
 import { LuEye } from "react-icons/lu";
-import { Helmet } from "react-helmet-async";
-
+import AppFooter from "../components/AppFooter";
 
 interface IPandoraDetailProps {
   dashboardService: IDashboardService;
@@ -82,6 +81,10 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
     setSelectedPandora(null);
   };
 
+  const handleRiddleLink = () => {
+    window.open(`https://riddlenote.com/pandora/${id}`, "_blank", "noopener,noreferrer");
+  };
+
 
   if (!detail || !id) {
     return null // todo
@@ -89,142 +92,168 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
 
   return (
     <>
-      <Helmet>
-        <meta name="robots" content="noindex" />
-      </Helmet>
-      <SubContentWrapper>
-        <Title>{detail.pandora.title}</Title>
-        <InfoWrapper>
-          <div>
-            <Writer> <IoPerson /> {detail.pandora.writer}</Writer>                  
-            <MainInfo> 
-              <AiFillLock /> {detail.pandora.totalProblems} ·&nbsp;
-              <LuEye /> {detail.pandora.coverViewCount} ·&nbsp;
-              {formatTimeAgo(detail.pandora.createdAt)}
-            </MainInfo>
-            <Label><BsUpc /> {detail.pandora.label}</Label>
-          </div>
-          <div>
-            <State $open={detail.pandora.isCatUncovered}>{detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
-          </div>
-        </InfoWrapper>
-        <Description>{detail.pandora.description}</Description>
-        
-        <HiddenDetail onClick={() => setKeywordsView((prev) => !prev)}>검색 키워드  {keywordsView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
-        {keywordsView && (
-          <KeywordsWrapper>
-            {detail.pandora.keywords.length === 0 && (
-              <>
-                <p>검색 키워드가 설정되지 않았습니다.</p>
-                <p>게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
-              </>
-    
-            )}
-            {detail.pandora.keywords.map((keyword) => (
-              <Keyword key={uuidv4()}>
-                <AiOutlineSearch />
-                <span>{keyword}</span>
-              </Keyword>
-            ))}
-          </KeywordsWrapper>
-        )}
-        
-        <HiddenDetail onClick={() => setRiddlesView((prev) => !prev)}>질문{`(${detail.pandora.totalProblems})`} {riddlesView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>  
-        {riddlesView && (
-          <RiddleWrapper>
-            {detail.pandora.problems.map((riddle, index) => (
-              <RiddleBox>
-                <RiddleIndex><AiFillLock /> 문제 {index + 1}</RiddleIndex>
-                <Riddle key={uuidv4()}>             
-                  <RiddleContent>
-                    <span>질문</span>
-                    <p>{riddle.question}</p>
-                  </RiddleContent>
-                  <RiddleContent>
-                    <span>힌트</span>
-                    <p>{riddle.hint ? riddle.hint : '힌트 없음'}</p>
-                  </RiddleContent>
-                  <RiddleContent>
-                    <span>정답</span>
-                    <p className="answer">{riddle.answer}</p>
-                  </RiddleContent>
-                </Riddle>
-              </RiddleBox>
-            ))}
-          </RiddleWrapper>
-        )}
-        
-        <HiddenDetail onClick={() => setNoteView((prev) => !prev)}>게시글 내용 {noteView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
-        {noteView && (
-          <NoteWrapper>
-            {detail.pandora.cat}
-          </NoteWrapper>
-        )}
-      </SubContentWrapper>
-
+      <StyledContainer>
+        <SubContentWrapper>
+          <CoverWrapper>
+            <Title>{detail.pandora.title}</Title>
+            <InfoWrapper>
+              <div>
+                <Writer> <IoPerson /> {detail.pandora.writer}</Writer>                  
+                <MainInfo> 
+                  <AiFillLock /> {detail.pandora.totalProblems} ·&nbsp;
+                  <LuEye /> {detail.pandora.coverViewCount} ·&nbsp;
+                  {formatTimeAgo(detail.pandora.createdAt)}
+                </MainInfo>
+                <Label><BsUpc /> {detail.pandora.label}</Label>
+              </div>
+              <div>
+                <State $open={detail.pandora.isCatUncovered}>{detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+              </div>
+            </InfoWrapper>
+            <Description>{detail.pandora.description}</Description>
+         </CoverWrapper>
+          
+          <HiddenDetail onClick={() => setKeywordsView((prev) => !prev)}>검색 키워드  {keywordsView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
+          {keywordsView && (
+            <KeywordsWrapper>
+              {detail.pandora.keywords.length === 0 && (
+                <>
+                  <p>검색 키워드가 설정되지 않았습니다.</p>
+                  <p>게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
+                </>
       
-      <SubContentWrapper>
-        <SubTitle>게시물 링크</SubTitle>  
-        <CopyButtonWrapper>
-          <input type="text" value={`https://riddlenote.com/pandora/${id}`} readOnly />
-          <Copy text={`https://riddlenote.com/pandora/${id}`} />
-        </CopyButtonWrapper>
-      </SubContentWrapper>
-
-      <SubContentWrapper>
-        <SubTitle>게시물 상태</SubTitle>
-        <p>게시물 공개 상태: <InputReadOnly value={detail.pandora.active ? '공개중' : '비공개'} /></p>
-        <p>게시물 질문 상태: <InputReadOnly value={detail.pandora.solvedAt ? '완료' : '미완료'} /></p>
-        <p>게시물 열람 상태: <InputReadOnly value={detail.pandora.isCatUncovered ? '열람됨' : '미열람'} /></p>
-      </SubContentWrapper>
-      
-      <SubContentWrapper>
-        <SubTitle>질문 풀이 현황</SubTitle>
-        {detail.totalRecords === 0 && (
-          <p>기록 없음</p>
-        )}
-        {detail.totalRecords >0 && detail.record && (
-          <>
-            <RiddleProgress 
-            totalSteps={detail.pandora.totalProblems} 
-            currentStep={detail.record.unboxing ? detail.record.unsealedQuestionIndex + 1 : detail.record.unsealedQuestionIndex} 
-            />
-            <p>업데이트: <InputReadOnly value={formatTime(detail.record.updatedAt)} /></p>
-            <p>문제풀이 참여 인원: <InputReadOnly value={`${detail.totalRecords} 명`} /></p>
-            <p>게시물 열람자 별명: {detail.pandora.solverAlias && <InputReadOnly value={detail.pandora.solverAlias} />}</p>
-          </>
-        )}
-      </SubContentWrapper>
-
-      <SubContentWrapper>
-        <SubTitle>설정</SubTitle>
-        <ModifyButtonWrapper>
-          <span>
-            모든 질문을 해결한 사용자가 있을 경우 게시물을 수정할 수 없으며,<br/>
-            수정시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제됩니다.
-          </span>
-          <EditButton onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>수정</EditButton>
-        </ModifyButtonWrapper>
-        <ModifyButtonWrapper>
-          <span>
-            삭제시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제되며,<br/>
-            게시물이 영구적으로 삭제됩니다.
-          </span>
-          <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
-        </ModifyButtonWrapper>
-      </SubContentWrapper>
-      
-      {selectedPandora && (
-        <EditAndDeleteConfirm
-          pandora={selectedPandora}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onCancel={handleCancelModifyAction}
-        />
-      )}   
+              )}
+              {detail.pandora.keywords.map((keyword) => (
+                <Keyword key={uuidv4()}>
+                  <AiOutlineSearch />
+                  <span>{keyword}</span>
+                </Keyword>
+              ))}
+            </KeywordsWrapper>
+          )}
+          
+          <HiddenDetail onClick={() => setRiddlesView((prev) => !prev)}>수수께끼{`(${detail.pandora.totalProblems})`} {riddlesView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>  
+          {riddlesView && (
+            <RiddleWrapper>
+              {detail.pandora.problems.map((riddle, index) => (
+                <RiddleBox>
+                  <RiddleIndex><AiFillLock /> 문제 {index + 1}</RiddleIndex>
+                  <Riddle key={uuidv4()}>             
+                    <RiddleContent>
+                      <span>질문</span>
+                      <p>{riddle.question}</p>
+                    </RiddleContent>
+                    <RiddleContent>
+                      <span>힌트</span>
+                      <p>{riddle.hint ? riddle.hint : '힌트 없음'}</p>
+                    </RiddleContent>
+                    <RiddleContent>
+                      <span>정답</span>
+                      <p className="answer">{riddle.answer}</p>
+                    </RiddleContent>
+                  </Riddle>
+                </RiddleBox>
+              ))}
+            </RiddleWrapper>
+          )}
+          
+          <HiddenDetail onClick={() => setNoteView((prev) => !prev)}>노트 내용 {noteView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
+          {noteView && (
+            <NoteWrapper>
+              {detail.pandora.cat}
+            </NoteWrapper>
+          )}
+        </SubContentWrapper>
+  
+        <SubContentWrapper>
+          <SubTitle>기본 정보</SubTitle>
+          <DetailElement>생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
+          <DetailElement>조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
+          <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
+        </SubContentWrapper>
+  
+        
+        <SubContentWrapper>
+          <SubTitle>수수께끼 링크</SubTitle>  
+          <CopyButtonWrapper>
+            <input type="text" value={`https://riddlenote.com/pandora/${id}`} readOnly />
+            <Copy text={`https://riddlenote.com/pandora/${id}`} />
+          </CopyButtonWrapper>
+          <RiddleLinkButton onClick={handleRiddleLink}>이동하기</RiddleLinkButton>
+        </SubContentWrapper>
+  
+        <SubContentWrapper>
+          <SubTitle>게시물 상태</SubTitle>
+          <DetailElement>게시물 공개 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
+          <DetailElement>게시물 수수께끼 상태: <InputReadOnly value={detail.pandora.solvedAt ? '완료' : '미완료'} /></DetailElement>
+          <DetailElement>게시물 노트 열람 상태: <InputReadOnly value={detail.pandora.isCatUncovered ? '열람됨' : '미열람'} /></DetailElement>
+        </SubContentWrapper>
+        
+        <SubContentWrapper>
+          <SubTitle>수수께끼 풀이 현황</SubTitle>
+          {detail.totalRecords === 0 && (
+            <p>기록 없음</p>
+          )}
+          {detail.totalRecords > 0 && detail.record && (
+            <>
+              <RiddleProgressWrapper>
+                <RiddleProgress 
+                totalSteps={detail.pandora.totalProblems} 
+                currentStep={detail.record.unboxing ? detail.record.unsealedQuestionIndex + 1 : detail.record.unsealedQuestionIndex} 
+                />
+              </RiddleProgressWrapper>
+              {!detail.pandora.isCatUncovered && (
+                <DetailElement>수수께끼: <InputReadOnly value={`${detail.record.unsealedQuestionIndex + 1}번 풀이중`} /></DetailElement>
+              )}
+              {detail.pandora.isCatUncovered && (
+                <DetailElement>수수께끼: <InputReadOnly value={'풀이 완료'} /></DetailElement>
+              )}
+              
+              <DetailElement>업데이트: <InputReadOnly value={formatTime(detail.record.updatedAt)} /></DetailElement>
+              <DetailElement>수수께끼 참여 인원: <InputReadOnly value={`${detail.totalRecords} 명`} /></DetailElement>
+              <DetailElement>노트 열람자 별명: {detail.pandora.solverAlias && <InputReadOnly value={detail.pandora.solverAlias} />}</DetailElement>
+            </>
+          )}
+        </SubContentWrapper>
+  
+        <SubContentWrapper>
+          <SubTitle>설정</SubTitle>
+          <ModifyButtonWrapper>
+            <span>
+              모든 수수께끼를 해결한 사용자가 있을 경우 게시물을 수정할 수 없으며,<br/>
+              수정시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제됩니다.
+            </span>
+            <EditButton onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>수정</EditButton>
+          </ModifyButtonWrapper>
+          <ModifyButtonWrapper>
+            <span>
+              삭제시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제되며,<br/>
+              게시물이 영구적으로 삭제됩니다.
+            </span>
+            <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
+          </ModifyButtonWrapper>
+        </SubContentWrapper>
+        
+        {selectedPandora && (
+          <EditAndDeleteConfirm
+            pandora={selectedPandora}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onCancel={handleCancelModifyAction}
+          />
+        )}   
+      </StyledContainer>
+      <AppFooter />
     </>
   );
 }
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
 
 const SubTitle = styled.span`
   display: flex;
@@ -234,11 +263,22 @@ const SubTitle = styled.span`
 `;
 
 const SubContentWrapper = styled.div`
-  /* background-color: #181a1e; */
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  @media (max-width: 900px) {
+    width: 95%;
+  }
   border-radius: 0.7rem;
-  border: 1px solid var(--border);
+  /* border: 1px solid #62778c; */
   padding: 1rem;
   margin-bottom: 40px;
+  background-color: var(--background-block);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+`;
+
+const DetailElement = styled.label`
+  margin-bottom: 1rem;
 `;
 
 const InputReadOnly = styled.input.attrs({ readOnly: true })`
@@ -248,16 +288,17 @@ const InputReadOnly = styled.input.attrs({ readOnly: true })`
   border-radius: 0.3em;
   border: 1px solid var(--border);
   margin-left: 0.2em;
-  width: auto;
-  background-color: #242628;
+  width: 10em;
+  background-color: var(--background);
 `;
 
 //  검색 키워드, 질문, 게시글내용
 const HiddenDetail = styled.h4`
   display: flex;
-  background-color: var(--background-riddle);
+  background-color: #292d37;
   padding: 1em;
   border-radius: 0.4rem;
+  margin: 1em 0 1em 0;
   cursor: pointer;
   svg {
     margin-left: 0.4em;
@@ -265,10 +306,16 @@ const HiddenDetail = styled.h4`
 `;
 
 /**pandora***/
+const CoverWrapper = styled.div`
+  padding: 1em;
+  border-radius: 0.4rem;
+  border: 1px solid var(--border);
+`;
+
 const Title = styled.h2`
   color: var(--brand);
   font-weight: 700;
-  font-size: 2.3em;
+  font-size: 1.9em;
   margin: 0;
   cursor: pointer;
   :hover {
@@ -321,22 +368,26 @@ const State = styled.p<{ $open: boolean }>`
   font-size: 0.85rem;
   padding: 3px 7px 3px 7px;
   border-radius: 0.7rem;
-  border: ${({ $open }) => $open ? '1px solid #00FF7F' : '1px solid #445261'};
-  background: ${({ $open }) => $open ? '#334a46' : '#353d44'};
-  color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
+  border: ${({ $open }) => $open ? '1px solid #4c7a5e' : '1px solid #445261'};
+  background: ${({ $open }) => $open ? '#334b43' : '#353d44'};
+  color: ${({ $open }) => $open ? '#87e89f' : '#b7c9e1'};
 `;
 
 const Description = styled.pre`
   font-size: 1.1em;
   min-height: 10em;
   white-space: pre-wrap;
-  border: 1px solid var(--border);
+  border-radius: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 1em;
 `;
 
 /*****/
 
 // keywords
 const KeywordsWrapper = styled.ul`
+  margin-top: 0;
+  margin-bottom: 0;
   min-height: 5em;
   padding: 1em;
   border-radius: 0.4rem;
@@ -375,13 +426,15 @@ const CopyButtonWrapper = styled.div`
 `;
 
 // Riddles
+
 const RiddleWrapper = styled.ul`
-  margin-top: 2rem;
+  margin-top: 1em;
+  margin-bottom: 0;
 `;
 
 const RiddleBox = styled.div`
   position: relative;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.2em;
 `;
 
 const RiddleIndex = styled.label`
@@ -393,7 +446,7 @@ const RiddleIndex = styled.label`
   padding: 0.3em 0.5em 0.3em 0.5em;
   font-size: 1.2rem;
   font-weight: 500;
-  background-color: var(--background);
+  background-color: var(--background-block);
   color: var(--font-subtitle);
 
   svg {
@@ -436,12 +489,22 @@ const RiddleContent = styled.div`
 
 // Note
 const NoteWrapper = styled.pre`
+  margin-top: 0;
   height: 20rem;
   border: 1px solid var(--border);
   border-radius: 0.4rem;
 `;
 
 /******* */
+const RiddleProgressWrapper = styled.div`
+  margin-bottom: 1em;
+  
+`;
+
+const RiddleLinkButton = styled.button`
+  margin-top: 10px;
+  width: 10em;
+`;
 
 const ModifyButtonWrapper = styled.div`
   display: flex;
@@ -450,6 +513,7 @@ const ModifyButtonWrapper = styled.div`
   padding: 1em 1em 2em 1em;
   border-radius: 0.4em;
   border: 1px solid var(--border);
+  background-color: #292d37;
   margin-bottom: 20px;
 `;
 

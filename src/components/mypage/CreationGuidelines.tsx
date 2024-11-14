@@ -22,13 +22,13 @@ export default function CreationGuidelines() {
 
   return (
     <>
-      <Title>나의 게시물 만들기</Title>
+      <Title>나의 수수께끼 노트 만들기</Title>
       <CreateWrapper>
-        <p>게시물을 생성하기전 
-        <Link href="/about/caution" target="_blank" rel="noopener noreferrer"> 게시물 작성 주의사항</Link> 
-        을 확인해주세요.
+        <p>수수께끼 노트를 만들기 전
+        <Link href="/about/caution" target="_blank" rel="noopener noreferrer"> 노트 생성 가이드</Link> 
+          를 확인해주세요.
         </p>
-        <CreateButton onClick={handleClick}>게시물 만들기</CreateButton>
+        <CreateButton onClick={handleClick}>수수께끼 노트 만들기</CreateButton>
 
       </CreateWrapper>
       
@@ -44,8 +44,9 @@ const CreateWrapper = styled.div`
   /* display: flex;
   flex-direction: column;
   justify-content: center; */
-  display: inline-block;
+  /* display: inline-block; */
   border: 1px solid var(--border);
+  background-color: var(--background-block);
   margin: 1em;
   padding: 1em;
   border-radius: 0.7rem;
@@ -56,5 +57,5 @@ const CreateButton = styled.button`
 `;
 
 const Link = styled.a`
-  
+  color: #3787ff;
 `

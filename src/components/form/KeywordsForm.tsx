@@ -65,10 +65,10 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
 
   return (
     <>
-      <Guide>* 설정한 키워드를 통해 게시물을 검색할 수 있습니다.</Guide>
-      <Guide>* 상대방이 당신의 게시물을 찾을 수 있도록 그사람의 이름, 별명, 관련 프로젝트명 또는 기관 소속명을 키워드로 설정해보세요.</Guide>
-      <Guide>* 키워드를 설정하지 않을 경우 게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</Guide>
-      <Guide>* 설정한 키워드 목록은 사용자에게 노출되지 않습니다.</Guide>
+      <Advice>* 설정한 키워드를 통해 게시물을 검색할 수 있습니다.</Advice>
+      <Advice>* 상대방이 당신의 수수께끼를 찾을 수 있도록 그 사람의 별칭, 기관 및 소속명을 키워드로 설정해보세요.</Advice>
+      <Advice>* 키워드를 설정하지 않을 경우 링크 공유를 통해서만 수수께끼에 접근할 수 있습니다.</Advice>
+      <Advice>* 설정한 키워드 목록은 사용자에게 노출되지 않습니다.</Advice>
       <AddKeywordWrapper>
         <input
           type="text" 
@@ -104,8 +104,9 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
   );
 }
 
-const Guide = styled.p`
-  color: var(--font-explain);
+const Advice = styled.p`
+  margin: 0 0 0.8em 0;
+  color: var(--font-info);
 `;
 
 const ErrorMessage = styled.small`
@@ -181,7 +182,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
-  margin-bottom: 2rem;
   @media (max-width: 768px) {
     justify-content: center;
   }

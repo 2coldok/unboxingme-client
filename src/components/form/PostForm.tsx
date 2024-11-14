@@ -38,9 +38,9 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
 
   return (
     <>
-      <Guide>
-        * 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.
-      </Guide>
+      <Advice>
+        * 모든 수수께끼를 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.
+      </Advice>
 
       {showError && <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.note}</ErrorMessage>}
       <Note 
@@ -59,13 +59,13 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
   );
 }
 
-const Guide = styled.p`
-  color: var(--font-explain);
-  /* margin-bottom: 2rem; */
+const Advice = styled.p`
+  margin: 0 0 0.8em 0;
+  color: var(--font-info);
 `;
 
 const ErrorMessage = styled.small`
-  color: var(--red500);
+  color: var(--font-warning);
   margin-left: 0.2em;
 `;
 

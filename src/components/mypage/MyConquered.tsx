@@ -41,11 +41,10 @@ export default function MyConquered() {
   
   return (
     <>
-      <Title>내가 열람한 게시물 ({data.payload.total})</Title>
+      <Title>내가 열람한 수수께끼 노트 ({data.payload.total})</Title>
       <PandoraList 
         action="conquered"
         pandoras={data.payload.pandoras}
-        keyword=""
       />
       {data.payload.total > 0 && (
         <PaginationWrapper>

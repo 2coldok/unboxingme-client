@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
     --background: #30343f;
     --background-search: #262626;
     --background-riddle: #252932;
+    --background-block: #343945;
     --brand: #77aaff;
     --brand-light: #8ab4f8;
     --border: #43484e;

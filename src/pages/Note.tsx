@@ -12,6 +12,7 @@ import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
 import { formatTimeAgo } from "../util/formatTimeAgo";
 import { Helmet } from "react-helmet-async";
+import AppFooter from "../components/AppFooter";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -54,40 +55,55 @@ export default function Note({ unboxingService }: NoteProps) {
       <Helmet>
         <meta name="robots" content="noindex" />
       </Helmet>
-      <CoverWrapper>
-        <Title>{pandora.title}</Title>
-        <InfoWrapper>
-          <div>
-            <Writer> <IoPerson /> {pandora.writer}</Writer>                  
-            <MainInfo> 
-              <AiFillLock /> {pandora.totalProblems} ·&nbsp;
-              <LuEye /> {pandora.coverViewCount} ·&nbsp;
-              {formatTimeAgo(pandora.createdAt)}
-            </MainInfo>
-            <Label><BsUpc /> {pandora.label}</Label>
-          </div>
-          <div>
-            <State $open={pandora.isCatUncovered}>{pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
-          </div>
-        </InfoWrapper>
-        <Description>{pandora.description}</Description>
-      </CoverWrapper>  
-      <NoteWrapper>
+      <StyledContainer>
+        <CoverWrapper>
+          <Title>{pandora.title}</Title>
+          <InfoWrapper>
+            <div>
+              <Writer> <IoPerson /> {pandora.writer}</Writer>                  
+              <MainInfo> 
+                <AiFillLock /> {pandora.totalProblems} ·&nbsp;
+                <LuEye /> {pandora.coverViewCount} ·&nbsp;
+                {formatTimeAgo(pandora.createdAt)}
+              </MainInfo>
+              <Label><BsUpc /> {pandora.label}</Label>
+            </div>
+            <div>
+              <State $open={pandora.isCatUncovered}>{pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+            </div>
+          </InfoWrapper>
+          <Description>{pandora.description}</Description>
+        </CoverWrapper>
+
+        <NoteWrapper>
         {pandora.cat}
-      </NoteWrapper>
+        </NoteWrapper>
+      </StyledContainer>
+      <AppFooter />
     </>
   );
 }
 
+const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
 const CoverWrapper = styled.main`
   display: flex;
   flex-direction: column;
+  max-width: 950px;
+  width: 100%;
+  background-color: var(--background-block);
+  box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
   border: 1px solid var(--border);
   border-radius: 0.9rem;
-  padding: 1.1em;
-  /* @media (max-width: 768px) {
-    margin: 0.5em;
-  } */
+  padding: 1.2em;
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `;
 
 const Title = styled.h2`
@@ -139,13 +155,13 @@ const State = styled.p<{ $open: boolean }>`
   font-size: 0.85rem;
   padding: 3px 7px 3px 7px;
   border-radius: 0.7rem;
-  border: ${({ $open }) => $open ? '1px solid #00FF7F' : '1px solid #445261'};
-  background: ${({ $open }) => $open ? '#334a46' : '#353d44'};
-  color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
+  border: ${({ $open }) => $open ? '1px solid #4c7a5e' : '1px solid #445261'};
+  background: ${({ $open }) => $open ? '#334b43' : '#353d44'};
+  color: ${({ $open }) => $open ? '#87e89f' : '#b7c9e1'};
 `;
 
 const Description = styled.pre`
-  font-size: 1.1em;
+  font-size: 1.2rem;
   min-height: 10em;
   border-top: 1px solid var(--border);
   padding: 2em 0 0 0;
@@ -154,25 +170,26 @@ const Description = styled.pre`
 `;
 
 const NoteWrapper = styled.pre`
+  background-color: #24292f;
+  color: #79b8ff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   display: flex;
-  /* border: 1px solid #ffda48; */
-  /* background-color: #fef49c; */
-  /* color: #000000; */
-  border: 1px solid #e47a2c;
-  background-color: #fcb76d;
-  color: #592300;
-  /* text-decoration: underline; */
-  /* text-decoration-color: #f27373; */
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
-  /* box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px; */
-  padding: 1.1em;
+  flex-direction: column;
+  max-width: 950px;
+  width: 100%;
+  /* border: 1px solid var(--border); */
   border-radius: 0.9rem;
+  padding: 1.1em;
+  font-size: 1.2rem;
+  font-weight: 500;
+  
   margin-top: 30px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   
   min-height: 15em;
-  font-size: 1.2em;
-  /* font-family: 'DungGeunMo', sans-serif; */
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 `;
 
 // color: #a6b6e3;

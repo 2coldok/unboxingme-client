@@ -8,7 +8,7 @@ import { BsUpc } from "react-icons/bs"; // 라벨
 
 interface IPandoraListProps {
   action: 'glimpse' | 'cover' | 'conquered' | 'detail';
-  keyword: string;
+  keyword?: string;
   pandoras: {
     id: string;
     label: string;
@@ -30,7 +30,11 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
       return;
     }
     if (action === 'cover') {
-      return navigate(`/pandora/${id}?keyword=${keyword}`);
+      if (keyword) {
+        return navigate(`/pandora/${id}?keyword=${keyword}`);
+      } else {
+        return navigate(`/pandora/${id}`);
+      }
     }
     if (action === 'conquered') {
       console.log('solverAlias', solverAlias);
@@ -131,8 +135,9 @@ const State = styled.p<{ $open: boolean }>`
   font-size: 0.85rem;
   padding: 3px 7px 3px 7px;
   border-radius: 0.7rem;
-  border: ${({ $open }) => $open ? '1px solid #00FF7F' : '1px solid #445261'};
-  background: ${({ $open }) => $open ? '#334a46' : '#353d44'};
-  color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
+  border: ${({ $open }) => $open ? '1px solid #4c7a5e' : '1px solid #445261'};
+  background: ${({ $open }) => $open ? '#334b43' : '#353d44'};
+  color: ${({ $open }) => $open ? '#87e89f' : '#b7c9e1'};
+  
 `;
 // #ffd54f

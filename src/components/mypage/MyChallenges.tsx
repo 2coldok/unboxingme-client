@@ -39,10 +39,9 @@ export default function MyChallenges() {
 
   return (
     <>
-      <Title>진행중인 최근 10개의 게시물</Title>
+      <Title>내가 진행중인 수수께끼</Title>
       <PandoraList
         action="cover"
-        keyword=""
         pandoras={data.payload}
        />
     </>

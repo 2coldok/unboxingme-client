@@ -42,7 +42,7 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
 
   return (
     <>
-      <Advice>* 상대방이 당신의 질문을 해결하기 전, 게시물을 간단히 소개해주세요.</Advice>
+      <Advice>* 수수께끼를 간단히 소개해주세요.</Advice>
 
       <SubTitle>
         작성자명
@@ -112,8 +112,8 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
 }
 
 const Advice = styled.p`
-  color: var(--font-explain);
-  margin-bottom: 2em;
+  margin: 0 0 0.8em 0;
+  color: var(--font-info);
 `;
 
 const SubTitle = styled.p`
@@ -169,7 +169,6 @@ const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
-  margin-bottom: 2rem;
   @media (max-width: 768px) {
     justify-content: center;
   }

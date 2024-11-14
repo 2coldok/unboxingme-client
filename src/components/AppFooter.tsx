@@ -9,7 +9,7 @@ export default function AppFooter() {
   const [showEmail, setShowEmail] = useState(false);
 
   const handleIntroduce = () => {
-    return navigate('/about/introduce');
+    window.open("https://riddlenote.com/intro", "_blank", "noopener,noreferrer");
   };
 
   const handlePrivacyPolicy = () => {
@@ -39,7 +39,7 @@ export default function AppFooter() {
         <span onClick={handlePrivacyPolicy}>개인정보처리방침</span>
         <span onClick={handleTermsOfService}>이용약관</span>
         <span onClick={handleCaution}>게시물 작성 주의사항</span>
-        <span onClick={handleEmailClick}>문의/제보</span>
+        <span onClick={handleEmailClick}>오류/건의</span>
         {showEmail && (
           <PopEmailWrapper>
             <span className="mail-icon"><TbMail /></span>
@@ -75,8 +75,9 @@ const PopEmailWrapper = styled.div`
   background-color: var(--background-riddle);
   color: var(--brand);
   font-weight: bold;
-  /* padding: 0.7rem 1rem; */
+  padding: 0.7rem 1rem;
   border-radius: 0.5rem;
+  font-size: 1rem;
   z-index: 9000;
 
   span {
@@ -85,12 +86,13 @@ const PopEmailWrapper = styled.div`
 
   .mail-icon {
     font-size: 1.2em;
-    margin-right: 0;
+    margin-right: 0.5rem;
   }
 
   .cancel {
     svg {
-      font-size: 2em;
+      margin-left: 0.8rem;
+      font-size: 1.9rem;
     }
   }
 `;
@@ -98,15 +100,23 @@ const PopEmailWrapper = styled.div`
 const DocsLinkWrapper = styled.div`
   display: flex;
   font-size: 0.8rem;
+  flex-wrap: wrap;
+  gap: 25px;
+  padding: 1rem;
   span {
-    margin: 1em;
+    /* margin: 1em; */
     cursor: pointer;
     :hover {
       text-decoration: underline;
     }
   }
+  @media (max-width: 600px) {
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const CopyrightWrapper = styled.div`
   font-size: 0.8rem;
+  margin-bottom: 10px;
 `;

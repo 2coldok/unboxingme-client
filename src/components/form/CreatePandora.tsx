@@ -40,7 +40,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       if (!mode.id && mode.type === 'new') {
         const data = await pandoraService.createPandora(newPandoraForm);
         if (data.success) {
-          return navigate('/dashboard');
+          return navigate('/dashboard?tab=mines&page=1');
         }
       }
       // 판도라 수정 성공
@@ -63,7 +63,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       
       
       <FormSubjectWrapper>
-        <Subject>게시물 검색 키워드</Subject>
+        <Subject>1. 검색 키워드</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('keywords')}>
           수정
         </EditButton>
@@ -72,7 +72,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
         {keywords.length === 0 && (
           <>
             <p>검색 키워드가 설정되지 않았습니다.</p>
-            <p>게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
+            <p>수수께끼 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
           </>
 
         )}
@@ -87,7 +87,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <Divide></Divide>
 
       <FormSubjectWrapper>
-        <Subject>게시물 표지</Subject>
+        <Subject>2. 소개</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('cover')}>
           수정
         </EditButton>
@@ -104,7 +104,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <Divide></Divide>
 
       <FormSubjectWrapper>
-        <Subject>질문</Subject>
+        <Subject>3. 수수께끼</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('riddles')}>
           수정
         </EditButton>
@@ -134,7 +134,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <Divide></Divide>
 
       <FormSubjectWrapper>
-        <Subject>노트</Subject>
+        <Subject>4. 노트</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('post')}>
           수정
         </EditButton>
@@ -163,7 +163,7 @@ const FormSubjectWrapper = styled.div`
   align-items: center;
 `;
 
-const Subject = styled.h2`
+const Subject = styled.h3`
   color: var(--font);
   margin: 0;
   margin-right: 0.6em;
@@ -218,7 +218,7 @@ const Keyword = styled.li`
 
 // cover
 const CoverWrapper = styled.div`
-  margin-bottom: 3rem;
+  /* margin-bottom: 1rem; */
   margin-top: 2em;
 `;
 
@@ -257,6 +257,7 @@ const DescriptionWrapper = styled.pre`
 // Riddles
 const RiddleWrapper = styled.ul`
   margin-top: 2rem;
+  margin-bottom: 0;
 `;
 
 const RiddleBox = styled.div`
@@ -273,7 +274,7 @@ const RiddleIndex = styled.label`
   padding: 0.3em 0.5em 0.3em 0.5em;
   font-size: 1.2rem;
   font-weight: 500;
-  background-color: var(--background);
+  background-color: var(--background-block);
 
   svg {
     margin-right: 0.4em;

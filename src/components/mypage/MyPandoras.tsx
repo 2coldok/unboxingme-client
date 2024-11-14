@@ -42,10 +42,9 @@ export default function MyPandoras() {
   
   return (
     <>
-      <Title>나의 게시물 {data.payload.total}</Title>
+      <Title>나의 수수께끼 노트 ({data.payload.total})</Title>
       <PandoraList
         action="detail"
-        keyword=""
         pandoras={data.payload.pandoras}
       />
 

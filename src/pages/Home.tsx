@@ -45,11 +45,10 @@ export default function Home({ pandoraService }: IHomeProps) {
 
   return (
     <StyledContainer>
-      {/* <Guide><IoHelpCircleOutline /> 가이드</Guide> */}
       <Search keyword={''} />
       <div className="nav">
       </div>
-      <h2 className="today">최근 열람된 게시물</h2>
+      <h2 className="today">최근 열람된 노트</h2>
       <GlimpseWrapper>
         {glimpseLoading ? (
           <>
@@ -99,30 +98,6 @@ const StyledContainer = styled.main`
   }
 `;
 
-// const Guide = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 100%;
-//   position: absolute;
-//   left: 0;
-//   top: 70px; // 위에 nav bar의 높이가 70px임
-//   height: 40px;
-//   background-color: #1e2023;
-//   font-weight: bold;
-//   border-bottom: 1px solid var(--gray200);
-
-//   svg {
-//     font-size: 1.2em;
-//     margin-right: 0.3em;
-//   }
-
-//   :hover {
-//     filter: brightness(125%);
-//     cursor: pointer;
-//   }
-// `;
-
 /**
  * 흰색배경 shadow
  * 
@@ -131,10 +106,12 @@ const StyledContainer = styled.main`
 const GlimpseWrapper = styled.div`
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: 0.7rem;
   padding: 0.6em;
+  background-color: var(--background-block);
+  box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
 
   @media (max-width: 768px) {
-    width: 100%;
+    width: 95%;
   }
 `;

@@ -1,11 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { IUnboxingService } from "../service/UnboxingService";
-import { HttpError } from "../network/HttpClient";
-import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { SOLVERALIAS } from "../constant/constraints";
-import { Helmet } from "react-helmet-async";
+import { useNavigate, useParams } from "react-router-dom";
+import { HttpError } from "../network/HttpClient";
+import { IUnboxingService } from "../service/UnboxingService";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 interface ISolverAliasProps {
   unboxingService: IUnboxingService
@@ -13,10 +12,21 @@ interface ISolverAliasProps {
 
 export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const { id } = useParams<{ id: string }>();
-  const [solverAlias, setSolverAlias] = useState<string>('익명');
+  const [solverAlias, setSolverAlias] = useState('');
   const [solverAliasLoading, setSolverAliasLoading] = useState(true);
   const navigate = useNavigate();
-  
+
+  const asciiArrays = [
+    ' .d8888b.           888                        888',
+    'd88P  Y88b          888                        888',
+    'Y88b.               888                        888',
+    ' "Y888b.    .d88b.  888 888  888  .d88b.   .d88888',
+    '    "Y88b. d88""88b 888 888  888 d8P  Y8b d88" 888',
+    '      "888 888  888 888 Y88  88P 88888888 888  888',
+    'Y88b  d88P Y88..88P 888  Y8bd8P  Y8b.     Y88b 888',
+    ' "Y8888P"   "Y88P"  888   Y88P    "Y8888   "Y88888'
+  ];
+
   useEffect(() => {
     if (!id) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
@@ -28,7 +38,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
         const data = await unboxingService.getSolverAliasStatus(id);
         // 잘못된접근: 이미 solverAlias가 설정되어 있음
         if (data.payload.isSolverAlias) {
-          return navigate('/fallback/404', { state: { message: '잘못된 접근입니다.' } });
+          return navigate('/');
         }
       } catch (error) {
         // solverAlias 페이지에 접근 자격이 없음
@@ -76,96 +86,208 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   };
 
   if (solverAliasLoading) {
-    return (
-      <LoadingSpinner />
-    );
+    return <LoadingSpinner />
   }
 
   return (
     <StyledContainer>
-      <Helmet>
-        <meta name="robots" content="noindex" />
-      </Helmet>
-      <Head>게시물을 열람하기 위한 모든 질문이 해결되었습니다.</Head>
-      <GuideWrapper>
-        <p>* 모든 질문이 최초로 해결됨에 따라 본 게시물은 비공개로 전환됩니다.</p>
-        <p>* 게시물 작성자가 확인할 수 있는 '열람자 별명'을 설정할 수 있으며 이후 수정할 수 없습니다.</p>
-        <p>* 열람자 별명을 설정하지 않을 경우 게시물 작성자에게 익명으로 표시됩니다.</p>
-        <p>* 열람한 게시물은 마이페이지에서 다시 확인할 수 있으며, 게시물이 삭제될 경우 마이페이지 열람 내역에서 삭제됩니다.</p>
-      </GuideWrapper>
-      <FormContainer>
-        <InputWrapper>
-          <label className="floating-label">열람자 별명 입력</label>
-          <input 
-            className="alias"
-            type="text" 
-            placeholder="익명"
-            name="alias" 
-            value={solverAlias}
-            onChange={onChange}
-            autoComplete="off"
-            maxLength={SOLVERALIAS.maxLength}
-          />
-          <small> {solverAlias.length}/{SOLVERALIAS.maxLength}</small>
-        </InputWrapper> 
-      </FormContainer>
-      <ButtonWrapper>
-        <button onClick={handleClick}>게시물 열람하기</button>
-      </ButtonWrapper>
+      <SovlerAliasWrapper>
+        <TopWrapper>
+          <Logo>
+            <img src="/logo.png" alt="logo" />
+            <span>RiddleNote</span>
+          </Logo>
+        </TopWrapper>
+
+        <MiddleWrapper>
+          <LeftBody>
+            <Ascii>
+              {asciiArrays.join('\n')}
+            </Ascii>
+          </LeftBody>
+          <RightBody>
+            <Message>* 노트 작성자가 확인할 수 있는 '열람자 이름'을 입력해주세요. 열람자 이름은 이후 수정할 수 없습니다.</Message>
+            <InputWrapper>
+              <label className="floating-label">열람자 이름 입력</label>
+              <input 
+                className="alias"
+                type="text" 
+                placeholder="익명"
+                name="alias" 
+                value={solverAlias}
+                onChange={onChange}
+                autoComplete="off"
+                maxLength={SOLVERALIAS.maxLength}
+              />
+              <small> {solverAlias.length}/{SOLVERALIAS.maxLength}</small>
+            </InputWrapper>
+          </RightBody>
+        </MiddleWrapper>
+
+        <BottomWrapper>
+          <button onClick={handleClick}>노트 확인하기</button>
+        </BottomWrapper>
+        
+        
+        
+      </SovlerAliasWrapper>
+      
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  border: 1px solid var(--border);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+`;
+
+const SovlerAliasWrapper = styled.div`
   background-color: #252932;
-  padding: 1.5em;
-  border-radius: 0.4rem;
-  @media (max-width: 768px) {
-    border-style: none;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 50%;
+  max-width: 1000px;
+  border-radius: 1rem;
+  @media (max-width: 900px) {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
   }
 `;
 
-const Head = styled.h2`
+const TopWrapper = styled.div`
   display: flex;
-  /* color: var(--brand); */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  height: 60px;
+  border-bottom: 1px solid var(--border);
+  @media (max-width: 900px) {
+    flex-direction: column;
+    border-style: none;
+    /* margin-top: 1em; */
+    padding: 0;
+    height: 120px;
+  }
 `;
 
-const GuideWrapper = styled.div`
-  /* color: var(--font-chore); */
-`;
-
-const FormContainer = styled.div`
+const Logo = styled.p`
   display: flex;
   align-items: center;
+  flex-grow: 0;
+  font-weight: bold;
+  font-size: 1.3em;
+  cursor: pointer;
+
+  img {
+    width: 30px;
+    height: auto;
+    margin-right: 0.5em;
+  }
+
+  span {
+    margin-top: 0.2em;
+    font-family: "Grandstander", cursive;
+    font-weight: 600;
+  }
 `;
+
+
+const MiddleWrapper = styled.div`
+  display: flex;
+  height: 100%;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`;
+
+const LeftBody = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 100%;
+  padding: 1em 1.2em;
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 40%;
+  }
+`;
+
+const Ascii = styled.pre`
+  font-family: monospace;
+  white-space: pre-wrap;
+  background-color: var(--background-riddle);
+  color: #5699f8;
+  font-weight: 900;
+  font-size: 0.6rem;
+  @media (max-width: 900px) {
+    font-size: 0.5rem;
+  }
+`;
+
+const RightBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  padding: 1.5em;
+  @media (max-width: 900px) {
+    width: 100%;
+    height: 60%;
+  }
+
+  input {
+    width: 100%;
+    height: 2.5em;
+  }
+
+  // 남은 시도 횟수
+  span {
+    display: flex;
+    align-self: flex-start;
+    margin-top: 5px;
+    margin-left: 5px;
+    color: var(--font-warning);
+
+  }
+`;
+
+const Message = styled.p`
+  font-size: 1.1em;
+`
 
 const InputWrapper = styled.div`
   position: relative;
-  width: 20rem;
+  width: 22rem;
   margin-top: 2em;
-  @media (max-width: 768px) {
-    width: 100%;
+  @media (max-width: 950px) {
+    width: 90%;
   }
 
   .floating-label {
     position: absolute;
-    top: -5px;
+    top: -7px;
     left: 15px;
     padding: 0 7px;
     font-size: 12px;
-    /* color: var(--font-chore); */
+    font-weight: 600;
     pointer-events: none;
-    background-color: #252932;
+    background-color: var(--background-riddle);
   }
 
   .alias {
-    background-color: #252932;
+    background-color: var(--background-riddle);
     width: 100%;
-    border: 1px solid var(--font);
-    padding: 1.2em 1em 1em 1em;
+    border: 1px solid var(--font-main);
+    padding: 1.5em 1em 1.3em 1em;
     :focus {
       border-color: var(--brand);
     }
@@ -177,18 +299,51 @@ const InputWrapper = styled.div`
   }
 
   & > small {
-    color: var(--dark-gray);
+    color: var(--font-info);
     margin-left: 0.3em;
   }
 `;
 
-const ButtonWrapper = styled.div`
+const BottomWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-top: 1em;
-  font-size: 1.1em;
+  margin-bottom: 0;
+  width: 100%;
+  height: 60px;
+  padding-bottom: 20px;
+  padding-right: 25px;
+  @media (max-width: 900px) {
+    padding: 10px;
+  }
 
-  @media (max-width: 768px) {
-    justify-content: center;
+  button {
+    height: 40px;
+    @media (max-width: 900px) {
+      width: 100%;
+    
+    }
   }
 `;
+
+
+
+
+
+
+
+
+
+
+
+{/* <PreText>
+          {asciiArtWidthSolved.join('\n')}
+        </PreText>
+const PreText = styled.pre`
+  font-family: monospace;
+  white-space: pre-wrap;
+  background-color: #282a26;
+  color: #01f507;
+  color: var(--brand);
+  min-height: 10rem;
+  font-size: 0.7rem;
+`; */}

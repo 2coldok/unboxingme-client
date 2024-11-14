@@ -58,7 +58,6 @@ const router = createBrowserRouter([
       { index: true, element: <Home pandoraService={pandoraService} /> },
       { path: 'search', element: <SearchResult /> },
       { path: 'pandora/:id', element: <PandoraCover /> },
-      { path: 'pandora/:id/solveralias', element: <SolverAlias unboxingService={unboxingService} /> },
       { path: 'pandora/:id/note', element: <Note unboxingService={unboxingService} /> },
       { path: 'pandora/form', element: <PandoraForm pandoraService={pandoraService} /> },
       { path: 'pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
@@ -81,6 +80,10 @@ const router = createBrowserRouter([
         element: <Caution />
       }
     ]
+  },
+  {
+    path: 'pandora/:id/solveralias',
+    element: <SolverAlias unboxingService={unboxingService} />
   },
   {
     path: '/pandora/:id/riddle',

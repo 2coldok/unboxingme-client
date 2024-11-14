@@ -23,13 +23,13 @@ interface IPandoraFormProps {
   pandoraService: IPandoraService;
 }
 
-const PANDORA_FORM_SUBJECT_TITLE = {
-  keywords: '1. 게시물 검색 키워드 설정',
-  cover: '2. 게시물 표지 작성',
-  riddles: '3. 질문 설정',
-  post: '4. 노트 작성',
-  preview: '미리보기 및 등록'
-};
+// const PANDORA_FORM_SUBJECT_TITLE = {
+//   keywords: '1. 게시물 검색 키워드 설정',
+//   cover: '2. 게시물 표지 작성',
+//   riddles: '3. 질문 설정',
+//   post: '4. 노트 작성',
+//   preview: '미리보기 및 등록'
+// };
 
 export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const { id } = useParams<{ id: string }>();
@@ -88,51 +88,75 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
           <IconWrapper $active={formSubject === 'post'}><BsEnvelopePaper /></IconWrapper>
         </ProgressWrapper>
       )}
-      
-      {formSubject !== 'preview' && (
-        <FormSubjectWrapper>
-          {PANDORA_FORM_SUBJECT_TITLE[formSubject]}
-        </FormSubjectWrapper>
+
+      {formSubject === 'keywords' && (
+        <FormWrapper>
+          <FormSubject>1. 검색 키워드 설정</FormSubject>
+          <KeywordsForm
+            setFormSubject={setFormSubject}
+            keywords={keywords}
+            setKeywords={setKeywords}
+          />
+        </FormWrapper>
+      )}
+
+      {formSubject === 'cover' && (
+        <FormWrapper>
+          <FormSubject>2. 소개</FormSubject>
+          <CoverForm  
+            setFormSubject={setFormSubject}
+            cover={cover}
+            setCover={setCover}
+          />
+        </FormWrapper>
+      )}
+
+      {formSubject === 'riddles' && (
+        <FormWrapper>
+          <FormSubject>3. 수수께끼 만들기</FormSubject>
+          <RiddlesForm 
+            setFormSubject={setFormSubject} 
+            riddles={riddles}
+            setRiddles={setRiddles}
+          />
+        </FormWrapper>
+      )}
+
+      {formSubject === 'post' && (
+        <FormWrapper>
+          <FormSubject>4. 노트 작성</FormSubject>
+          <PostForm 
+            setFormSubject={setFormSubject} 
+            post={post}
+            setPost={setPost}
+          />
+        </FormWrapper>
+      )}
+
+      {formSubject === 'preview' && (
+        <FormWrapper>
+          <FormSubject>미리보기 및 제출</FormSubject>
+          <CreatePandora
+            mode={mode}
+            setFormSubject={setFormSubject}
+            cover={cover}
+            keywords={keywords}
+            riddles={riddles}
+            post={post}
+            pandoraService={pandoraService}
+          />
+        </FormWrapper>
       )}
       
-      {formSubject === 'keywords' && <KeywordsForm
-        setFormSubject={setFormSubject}
-        keywords={keywords}
-        setKeywords={setKeywords}
-      />}
-
-      {formSubject === 'cover' && <CoverForm  
-        setFormSubject={setFormSubject}
-        cover={cover}
-        setCover={setCover}
-      />}
-
-      {formSubject === 'riddles' && <RiddlesForm 
-        setFormSubject={setFormSubject} 
-        riddles={riddles}
-        setRiddles={setRiddles}
-      />}
-
-      {formSubject === 'post' && <PostForm 
-        setFormSubject={setFormSubject} 
-        post={post}
-        setPost={setPost}
-      />}
-
-      {formSubject === 'preview' && <CreatePandora
-        mode={mode}
-        setFormSubject={setFormSubject}
-        cover={cover}
-        keywords={keywords}
-        riddles={riddles}
-        post={post}
-        pandoraService={pandoraService}
-      />}
     </StyledContainer>
   );
 }
 
 const StyledContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   @media(max-width: 768px) {
     padding: 0.7rem;
@@ -146,18 +170,41 @@ const ProgressWrapper = styled.div`
   margin-bottom: 1.2em;
 `;
 
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--background-block);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  width: 80%;
+  border: 1px solid var(--border);
+  padding: 1em 1.4em 1.5em 1.4em;
+  border-radius: 0.7rem;
+  margin-bottom: 20px;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1em 1em 1.5em 1em;
+  }
+`;
+
+const FormSubject = styled.h1`
+  margin-top: 0.3em;
+  font-size: 1.5em;
+`;
+
 const IconWrapper = styled.p<{ $active: boolean }>`
   display: flex;
   padding: 0.3em;
   margin: 0;
-  border: 1px solid #353a3f;
+  /* border: 1px solid ${props => props.$active ? '#4f88b4' : '#484e54' }; */
+  border: 1px solid #484e54;
   border-radius: 1rem;
   font-size: 2em;
-  /* background-color: ${props => props.$active ? 'green' : 'none' }; */
+  background-color: ${props => props.$active ? '#3f66a5' : 'none' };
 
   & > svg {
     /* fill: ${props => props.$active ? 'green' : '' }; */
-    color: ${props => props.$active ? '#63ea6c' : '#484e54' };
+    color: ${props => props.$active ? 'white' : '#484e54' };
     
   }
 `;
@@ -167,19 +214,8 @@ const Road = styled.div`
   margin-top: 0;
   border-radius: 1rem;
   height: 1px;
-  border: 0.5px dashed #63ea6c;
+  border: 0.5px solid #484e54;
   /* background-color: #63ea6c; */
 `;
 
 /********************************************************/
-
-const FormSubjectWrapper = styled.h2`
-  display: flex;
-  align-items: center;
-  margin: 0;
-  margin-top: 3rem;
-  font-weight: 700;
-  & > svg {
-    margin-right: 0.7rem;
-  }
-`;

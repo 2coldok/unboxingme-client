@@ -15,8 +15,8 @@ import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
 import Search from "../components/Search";
 import Login from "../components/Login";
-import { Helmet } from "react-helmet-async";
 import { useCoverQuery } from "../hook/QueryHook";
+import AppFooter from "../components/AppFooter";
 
 export default function PandoraCover() {
   const navigate = useNavigate();
@@ -82,38 +82,42 @@ export default function PandoraCover() {
 
   return (
     <>
-      <Helmet>
-        <meta name="robots" content="noindex" />
-      </Helmet>
-      <SearchWrapper>
-        <Search keyword={keyword ? keyword : ''} />
-      </SearchWrapper>
+      {keyword && (
+        <SearchWrapper>
+          <Search keyword={keyword} />
+        </SearchWrapper>
+      )}
+      
      
-      <CoverWrapper>
-        <Title>{data.payload.title}</Title>
-        <InfoWrapper>
-          <div>
-            <Writer> <IoPerson /> {data.payload.writer}</Writer>                  
-            <MainInfo> 
-              <AiFillLock /> {data.payload.totalProblems} ·&nbsp;
-              <LuEye /> {data.payload.coverViewCount} ·&nbsp;
-              {formatTimeAgo(data.payload.createdAt)}
-            </MainInfo>
-            <Label><BsUpc /> {data.payload.label}</Label>
-          </div>
-          <div>
-            <State $open={data.payload.isCatUncovered}>{data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
-          </div>
-        </InfoWrapper>
-        <Description>{data.payload.description}</Description>
-        <FirstRiddleWrapper>
-          <div>
-            <p className="index">질문 1. &nbsp;</p>
-            <p>{data.payload.firstQuestion}</p>
-          </div>
-          <button onClick={handleChallengeClick}>게시물 열람하기</button>
-        </FirstRiddleWrapper>  
-      </CoverWrapper>
+      <CoverContainer>
+        <CoverWrapper>
+          <Title>{data.payload.title}</Title>
+          <InfoWrapper>
+            <div>
+              <Writer> <IoPerson /> {data.payload.writer}</Writer>                  
+              <MainInfo> 
+                <AiFillLock /> {data.payload.totalProblems} ·&nbsp;
+                <LuEye /> {data.payload.coverViewCount} ·&nbsp;
+                {formatTimeAgo(data.payload.createdAt)}
+              </MainInfo>
+              <Label><BsUpc /> {data.payload.label}</Label>
+            </div>
+            <div>
+              <State $open={data.payload.isCatUncovered}>{data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
+            </div>
+          </InfoWrapper>
+          <Description>{data.payload.description}</Description>
+          <FirstRiddleWrapper>
+            <div>
+              <p className="index">질문 1. &nbsp;</p>
+              <p>{data.payload.firstQuestion}</p>
+            </div>
+            <button onClick={handleChallengeClick}>노트 열람하기</button>
+          </FirstRiddleWrapper>  
+        </CoverWrapper>
+     </CoverContainer>
+
+      <AppFooter />
 
       {alertMessage && (
         <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />
@@ -130,20 +134,31 @@ const SearchWrapper = styled.div`
   margin-bottom: 30px;
 `;
 
-const CoverWrapper = styled.main`
+const CoverContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+`;
+
+const CoverWrapper = styled.main`
+  background-color: var(--background-block);
   border: 1px solid var(--border);
+  box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
+  display: flex;
+  flex-direction: column;
+  max-width: 950px;
+  width: 100%;
   border-radius: 0.9rem;
-  padding: 1.1em;
+  padding: 1.2em;
   @media (max-width: 768px) {
-    border-style: none;
+    width: 95%;
   }
 `;
 
 const Title = styled.h2`
   color: var(--brand);
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.8em;
   margin: 0;
   cursor: pointer;
