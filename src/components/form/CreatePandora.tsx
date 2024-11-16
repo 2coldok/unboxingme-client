@@ -40,7 +40,8 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       if (!mode.id && mode.type === 'new') {
         const data = await pandoraService.createPandora(newPandoraForm);
         if (data.success) {
-          return navigate('/dashboard?tab=mines&page=1');
+          sessionStorage.removeItem('tab');
+          window.location.href = '/dashboard';
         }
       }
       // 판도라 수정 성공
@@ -48,7 +49,8 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
         const data = await pandoraService.editMyPandora(mode.id, newPandoraForm);
         const totalDeletedRecords = data.payload.totalDeletedRecords;
         alert(`총 ${totalDeletedRecords}개의 도전자 기록이 삭제되었습니다.`);
-        return navigate('/dashboard');
+        sessionStorage.removeItem('tab');
+        window.location.href = '/dashboard';
       }
     } catch (error) {
       return navigate('/fallback/error', { state: { error: error }, replace: true });

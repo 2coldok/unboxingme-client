@@ -67,13 +67,22 @@ const GlobalStyle = createGlobalStyle`
     --button-font: #8ab4f8;
   }
   
-  @font-face {
+  // 둥군모꼴
+  /* @font-face {
     font-family: 'DungGeunMo';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-  }
+  } */
+
+  // 에스코어드림
+  /* @font-face {
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  } */
 
   body {
     width: 100%;
@@ -157,9 +166,10 @@ const GlobalStyle = createGlobalStyle`
   }
 
   pre {
-    /* font-family: 'DungGeunMo', sans-serif; */
-    white-space: pre-wrap;
+    /* font-family: 'DungGeunMo', sans-serif;
+    font-family: 'S-CoreDream-3Light', sans-serif; */
     font-family: 'Roboto', sans-serif;
+    white-space: pre-wrap;
     overflow-x: auto;
     font-size: 1em;
     border-radius: 0.4rem;
