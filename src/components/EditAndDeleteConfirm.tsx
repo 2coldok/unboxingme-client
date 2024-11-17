@@ -37,11 +37,11 @@ const ModalContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(43, 54, 61, 0.5);
+  background-color: rgba(93, 101, 112, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 9000;
 `;  
 
 const AlertWrapper = styled.div`
@@ -53,7 +53,7 @@ const AlertWrapper = styled.div`
   width: 410px;
   background-color: var(--background-riddle);
   border-radius: 0.5rem;
-  border: 1px solid var(--dark-gray);
+  border: 1px solid var(--border);
   margin-left: 1rem;
   margin-right: 1rem;
   padding: 1rem;

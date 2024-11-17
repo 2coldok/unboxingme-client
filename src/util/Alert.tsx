@@ -42,11 +42,11 @@ const AlertContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(93, 101, 112, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 9000;
 `;
 
 const MessageContainer = styled.div`
@@ -55,10 +55,11 @@ const MessageContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 2em;
-  border-radius: 0.7rem;
-  background-color: #252932;
+  border-radius: 0.5rem;
+  /* background-color: #252932; */
+  background-color: var(--background-riddle);
   border: 1px solid var(--border);
-  
+  font-weight: bold;
 
   width:  400px;
   @media (max-width: 768px) {

@@ -200,7 +200,6 @@ const Description = styled.pre`
 
 const NoteWrapper = styled.pre`
   background-color: var(--background-block);
-  /* background-color: var(--background-riddle); */
   color: var(--font-main);
   font-size: 1.2rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;

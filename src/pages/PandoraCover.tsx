@@ -37,7 +37,7 @@ export default function PandoraCover() {
       return setAlertMessage(`${formatTime(state.restrictedUntil)} 까지 접근이 제한됩니다.`);
     }
     if (state?.userColor === 'maker') {
-      return setAlertMessage('자신의 게시물은 "마이페이지"에서 열람할 수 있습니다.');
+      return setAlertMessage('나의 수수께끼는 마이페이지에서 확인할 수 있습니다.');
     }
   }, [state]);
 

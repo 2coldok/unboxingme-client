@@ -50,7 +50,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
         const totalDeletedRecords = data.payload.totalDeletedRecords;
         alert(`총 ${totalDeletedRecords}개의 도전자 기록이 삭제되었습니다.`);
         sessionStorage.removeItem('tab');
-        window.location.href = '/dashboard';
+        window.location.href = `/dashboard/pandora/${mode.id}`;
       }
     } catch (error) {
       return navigate('/fallback/error', { state: { error: error }, replace: true });

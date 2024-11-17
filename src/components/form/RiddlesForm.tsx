@@ -75,8 +75,6 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
   return (
     <>
       <Advice>* 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</Advice>
-      <Advice>* 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.</Advice>
-      <Advice>* 모든 질문이 해결되면 게시물이 비공개로 전환됩니다.</Advice>
       <ul>
         {riddles.map((riddle, index) => (
           <RiddleContainer>
@@ -98,6 +96,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
                   value={riddle.question}
                   onChange={(e) => handleChange(riddle.id, 'question', e.target.value)}
                   placeholder="질문 입력"
+                  autoComplete="off"
                 />
                 <LengthCount>{riddle.question.length}/{PANDORA_FORM.maxQuestionLength}</LengthCount>
               </QuestionWrapper>
@@ -109,6 +108,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
                   onChange={(e) => handleChange(riddle.id, 'hint', e.target.value)}
                   maxLength={PANDORA_FORM.maxHintLegnth}
                   placeholder="힌트 없음"
+                  autoComplete="off"
                 />
                 <LengthCount>{riddle.hint.length}/{PANDORA_FORM.maxHintLegnth}</LengthCount>
               </HintWrapper>
@@ -124,6 +124,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
                   onChange={(e) => handleChange(riddle.id, 'answer', e.target.value)}
                   maxLength={PANDORA_FORM.maxAnswerLength}
                   placeholder="정답 입력"
+                  autoComplete="off"
                 />
                 <LengthCount>{riddle.answer.length}/{PANDORA_FORM.maxAnswerLength}</LengthCount>
               </AnswerWrapper>

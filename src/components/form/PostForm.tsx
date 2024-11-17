@@ -49,6 +49,7 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
           placeholder="노트 입력" 
           value={post}
           onChange={onChange}
+          autoComplete="off"
       />
       <Count>{`${post.length}/${PANDORA_FORM.maxNoteLength}`}</Count>
       <ButtonWrapper>

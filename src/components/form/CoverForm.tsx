@@ -42,8 +42,6 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
 
   return (
     <>
-      <Advice>* 수수께끼를 간단히 소개해주세요.</Advice>
-
       <SubTitle>
         작성자명
         {showErrors && !isWriterValid && (
@@ -111,10 +109,10 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
   );
 }
 
-const Advice = styled.p`
-  margin: 0 0 0.8em 0;
-  color: var(--font-info);
-`;
+// const Advice = styled.p`
+//   margin: 0 0 0.8em 0;
+//   color: var(--font-info);
+// `;
 
 const SubTitle = styled.p`
   margin-bottom: 0.3em;

@@ -18,6 +18,7 @@ import RiddlesForm from "../components/form/RiddlesForm";
 import PostForm from "../components/form/PostForm";
 import { TFormSubject } from "../types/form";
 import { IRiddle } from "../types/form";
+import AppFooter from "../components/AppFooter";
 
 interface IPandoraFormProps {
   pandoraService: IPandoraService;
@@ -76,79 +77,82 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   }, [id, pandoraService, navigate]);
 
   return (
-    <StyledContainer>
-      {formSubject !== 'preview' && (
-        <ProgressWrapper>
-          <IconWrapper $active={formSubject === 'keywords'}><BsSearch /></IconWrapper>
-          <Road></Road>
-          <IconWrapper $active={formSubject === 'cover'}><BsCreditCard2Front /></IconWrapper>
-          <Road></Road>
-          <IconWrapper $active={formSubject === 'riddles'}><BsQuestionSquare /></IconWrapper>
-          <Road></Road>
-          <IconWrapper $active={formSubject === 'post'}><BsEnvelopePaper /></IconWrapper>
-        </ProgressWrapper>
-      )}
-
-      {formSubject === 'keywords' && (
-        <FormWrapper>
-          <FormSubject>1. 검색 키워드 설정</FormSubject>
-          <KeywordsForm
-            setFormSubject={setFormSubject}
-            keywords={keywords}
-            setKeywords={setKeywords}
-          />
-        </FormWrapper>
-      )}
-
-      {formSubject === 'cover' && (
-        <FormWrapper>
-          <FormSubject>2. 소개</FormSubject>
-          <CoverForm  
-            setFormSubject={setFormSubject}
-            cover={cover}
-            setCover={setCover}
-          />
-        </FormWrapper>
-      )}
-
-      {formSubject === 'riddles' && (
-        <FormWrapper>
-          <FormSubject>3. 수수께끼 만들기</FormSubject>
-          <RiddlesForm 
-            setFormSubject={setFormSubject} 
-            riddles={riddles}
-            setRiddles={setRiddles}
-          />
-        </FormWrapper>
-      )}
-
-      {formSubject === 'post' && (
-        <FormWrapper>
-          <FormSubject>4. 노트 작성</FormSubject>
-          <PostForm 
-            setFormSubject={setFormSubject} 
-            post={post}
-            setPost={setPost}
-          />
-        </FormWrapper>
-      )}
-
-      {formSubject === 'preview' && (
-        <FormWrapper>
-          <FormSubject>미리보기 및 제출</FormSubject>
-          <CreatePandora
-            mode={mode}
-            setFormSubject={setFormSubject}
-            cover={cover}
-            keywords={keywords}
-            riddles={riddles}
-            post={post}
-            pandoraService={pandoraService}
-          />
-        </FormWrapper>
-      )}
-      
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        {formSubject !== 'preview' && (
+          <ProgressWrapper>
+            <IconWrapper $active={formSubject === 'keywords'}><BsSearch /></IconWrapper>
+            <Road></Road>
+            <IconWrapper $active={formSubject === 'cover'}><BsCreditCard2Front /></IconWrapper>
+            <Road></Road>
+            <IconWrapper $active={formSubject === 'riddles'}><BsQuestionSquare /></IconWrapper>
+            <Road></Road>
+            <IconWrapper $active={formSubject === 'post'}><BsEnvelopePaper /></IconWrapper>
+          </ProgressWrapper>
+        )}
+  
+        {formSubject === 'keywords' && (
+          <FormWrapper>
+            <FormSubject>1. 검색 키워드 설정</FormSubject>
+            <KeywordsForm
+              setFormSubject={setFormSubject}
+              keywords={keywords}
+              setKeywords={setKeywords}
+            />
+          </FormWrapper>
+        )}
+  
+        {formSubject === 'cover' && (
+          <FormWrapper>
+            <FormSubject>2. 수수께끼 소개</FormSubject>
+            <CoverForm  
+              setFormSubject={setFormSubject}
+              cover={cover}
+              setCover={setCover}
+            />
+          </FormWrapper>
+        )}
+  
+        {formSubject === 'riddles' && (
+          <FormWrapper>
+            <FormSubject>3. 수수께끼 만들기</FormSubject>
+            <RiddlesForm 
+              setFormSubject={setFormSubject} 
+              riddles={riddles}
+              setRiddles={setRiddles}
+            />
+          </FormWrapper>
+        )}
+  
+        {formSubject === 'post' && (
+          <FormWrapper>
+            <FormSubject>4. 노트 작성</FormSubject>
+            <PostForm 
+              setFormSubject={setFormSubject} 
+              post={post}
+              setPost={setPost}
+            />
+          </FormWrapper>
+        )}
+  
+        {formSubject === 'preview' && (
+          <FormWrapper>
+            <FormSubject>미리보기 및 제출</FormSubject>
+            <CreatePandora
+              mode={mode}
+              setFormSubject={setFormSubject}
+              cover={cover}
+              keywords={keywords}
+              riddles={riddles}
+              post={post}
+              pandoraService={pandoraService}
+            />
+          </FormWrapper>
+        )}
+        
+      </StyledContainer>
+      <AppFooter />
+    </>
   );
 }
 

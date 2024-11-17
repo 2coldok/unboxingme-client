@@ -65,8 +65,7 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
 
   return (
     <>
-      <Advice>* 설정한 키워드를 통해 게시물을 검색할 수 있습니다.</Advice>
-      <Advice>* 상대방이 당신의 수수께끼를 찾을 수 있도록 그 사람의 별칭, 기관 및 소속명을 키워드로 설정해보세요.</Advice>
+      <Advice>* 설정한 키워드를 통해서만 수수께끼를 검색할 수 있습니다.</Advice>
       <Advice>* 키워드를 설정하지 않을 경우 링크 공유를 통해서만 수수께끼에 접근할 수 있습니다.</Advice>
       <Advice>* 설정한 키워드 목록은 사용자에게 노출되지 않습니다.</Advice>
       <AddKeywordWrapper>
@@ -122,16 +121,16 @@ const AddKeywordWrapper = styled.div`
       width: 100%;
     }
     
-    border: 1px solid var(--brand);
-    background-color: var(--background);
+    border: 2px solid var(--brand);
+    background-color: var(--background-block);
 
     border-right: none;
     border-radius: 0.5rem 0 0 0.5rem;
   }
  
   button {
-    background-color: var(--background);
-    border: 1px solid var(--brand);
+    background-color: var(--background-block);
+    border: 2px solid var(--brand);
     border-left: none;
     color: var(--brand);
     font-weight: bold;

@@ -60,7 +60,6 @@ export default function MyPage() {
         { tab === 'conquereds' && <MyConquered />}
         { tab === 'create' && <CreationGuidelines /> }
       </ContentWrapper>
-      
     </StyledContainer>
   );
 }

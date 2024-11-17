@@ -71,7 +71,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
     try {
       const data = await pandoraService.deleteMyPandora(id);
       alert(`총 ${data.payload.totalDeletedRecords} 개의 기록이 삭제되었습니다.`);
-      return navigate('/dashboard');
+      window.location.href = '/dashboard';
     } catch (error) {
       return navigate('/fallback/error', { state: { error: error } });
     }
@@ -439,6 +439,7 @@ const CopyButtonWrapper = styled.div`
     padding: 0.3em;
     border-radius: 0.3em;
     border: 1px solid var(--border);
+    background-color: #2a2f37;
   }
 
   svg {

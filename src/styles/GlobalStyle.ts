@@ -146,8 +146,10 @@ const GlobalStyle = createGlobalStyle`
     outline: none;
     border-radius: 0.4rem;
     font-size: 1rem;
-    border: 1px solid var(--font-chore);
-    background-color: var(--background);
+    border: 2px solid var(--font-chore);
+    /* background-color: var(--background); */
+    /* background-color: #2b303c; */
+    background-color: var(--background-block);
     color: var(--font-main);
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
     font-family: 'Roboto', sans-serif;
@@ -157,11 +159,13 @@ const GlobalStyle = createGlobalStyle`
   }
 
   textarea {
-    background-color: var(--background);
+    /* background-color: var(--background); */
+    /* background-color: #2b303c; */
+    background-color: var(--background-block);
     color: var(--font);
     outline: none;
     border-radius: 0.4rem;
-    border: 1px solid var(--font-chore);
+    border: 2px solid var(--font-chore);
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
     font-size: 1rem;
     resize: none;
