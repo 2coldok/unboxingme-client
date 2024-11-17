@@ -88,13 +88,13 @@ const ButtonWrapper = styled.div`
   }
 
   .edit {
-    border: 1px solid #808488;
-    background-color: #494f55;
-    color: #ffffff;
+    border: 1px solid #ffe177;
+  background-color: #2f3642;
+  color: #ffe177;
   }
 
   .delete {
-    background-color: var(--background);
+    background-color: #2f3642;
     border: 1px solid var(--font-warning);
     color: var(--font-warning);
   }

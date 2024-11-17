@@ -76,13 +76,19 @@ const GlobalStyle = createGlobalStyle`
     font-display: swap;
   } */
 
-  // 에스코어드림
-  /* @font-face {
-    font-family: 'S-CoreDream-3Light';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
-    font-weight: normal;
+  @font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
+    font-weight: 500;
     font-style: normal;
-  } */
+  }
+
+  @font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
 
   body {
     width: 100%;
@@ -166,8 +172,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   pre {
-    /* font-family: 'DungGeunMo', sans-serif;
-    font-family: 'S-CoreDream-3Light', sans-serif; */
+    /* font-family: 'DungGeunMo', sans-serif; */
     font-family: 'Roboto', sans-serif;
     white-space: pre-wrap;
     overflow-x: auto;

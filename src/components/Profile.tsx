@@ -88,8 +88,9 @@ const Popper = styled.div`
   right: 20px;
   /* max-width: 400px; */
   /* background-color: #252932; */
-  background-color: var(--background-riddle);
+  background-color: var(--background);
   border: 1px solid var(--border);
+  color: var(--brand);
   border-radius: 8px;
   padding: 0.5em;
   z-index: 10;
@@ -114,7 +115,7 @@ const Popper = styled.div`
     /* background-color: gray; */
     /* color: var(--button-font); */
     :hover {
-      filter: brightness(125%);
+      filter: brightness(110%);
       cursor: pointer;
     }
   }

@@ -93,6 +93,15 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   return (
     <>
       <StyledContainer>
+        {detail.pandora.solverAlias && (
+          <SolverAliasWrapper>
+            <p>
+              <SolverAlias>{detail.pandora.solverAlias}</SolverAlias> <br/>
+              님에 의해 수수께끼 노트가 열람되었습니다.
+            </p>
+          </SolverAliasWrapper> 
+        )}
+        
         <SubContentWrapper>
           <CoverWrapper>
             <Title>{detail.pandora.title}</Title>
@@ -167,6 +176,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   
         <SubContentWrapper>
           <SubTitle>기본 정보</SubTitle>
+          <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
           <DetailElement>생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
           <DetailElement>조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
           <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
@@ -180,13 +190,6 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
             <Copy text={`https://riddlenote.com/pandora/${id}`} />
           </CopyButtonWrapper>
           <RiddleLinkButton onClick={handleRiddleLink}>이동하기</RiddleLinkButton>
-        </SubContentWrapper>
-  
-        <SubContentWrapper>
-          <SubTitle>게시물 상태</SubTitle>
-          <DetailElement>게시물 공개 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
-          <DetailElement>게시물 수수께끼 상태: <InputReadOnly value={detail.pandora.solvedAt ? '완료' : '미완료'} /></DetailElement>
-          <DetailElement>게시물 노트 열람 상태: <InputReadOnly value={detail.pandora.isCatUncovered ? '열람됨' : '미열람'} /></DetailElement>
         </SubContentWrapper>
         
         <SubContentWrapper>
@@ -202,16 +205,15 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
                 currentStep={detail.record.unboxing ? detail.record.unsealedQuestionIndex + 1 : detail.record.unsealedQuestionIndex} 
                 />
               </RiddleProgressWrapper>
-              {!detail.pandora.isCatUncovered && (
-                <DetailElement>수수께끼: <InputReadOnly value={`${detail.record.unsealedQuestionIndex + 1}번 풀이중`} /></DetailElement>
+              {!detail.pandora.solvedAt && (
+                <DetailElement>진행 현황: <InputReadOnly value={`${detail.record.unsealedQuestionIndex + 1}번 풀이중`} /></DetailElement>
               )}
-              {detail.pandora.isCatUncovered && (
-                <DetailElement>수수께끼: <InputReadOnly value={'풀이 완료'} /></DetailElement>
+              {detail.pandora.solvedAt && (
+                <DetailElement>진행 현황: <InputReadOnly value={'풀이 완료'} /></DetailElement>
               )}
               
               <DetailElement>업데이트: <InputReadOnly value={formatTime(detail.record.updatedAt)} /></DetailElement>
               <DetailElement>수수께끼 참여 인원: <InputReadOnly value={`${detail.totalRecords} 명`} /></DetailElement>
-              <DetailElement>노트 열람자 별명: {detail.pandora.solverAlias && <InputReadOnly value={detail.pandora.solverAlias} />}</DetailElement>
             </>
           )}
         </SubContentWrapper>
@@ -262,6 +264,25 @@ const SubTitle = styled.span`
   margin-bottom: 50px;
 `;
 
+const SolverAliasWrapper = styled.div`
+  border: 1px solid #4c7a5e;
+  background-color: #334b43;
+  width: 80%;
+  @media (max-width: 900px) {
+    width: 95%;
+  }
+  border-radius: 0.7rem;
+  padding: 1rem;
+  margin-bottom: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+`;
+
+const SolverAlias = styled.span`
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #87e89f;
+`;
+
 const SubContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -272,30 +293,32 @@ const SubContentWrapper = styled.div`
   border-radius: 0.7rem;
   /* border: 1px solid #62778c; */
   padding: 1rem;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   background-color: var(--background-block);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
 const DetailElement = styled.label`
-  margin-bottom: 1rem;
+  margin-bottom: 1.3rem;
 `;
 
 const InputReadOnly = styled.input.attrs({ readOnly: true })`
-  font-weight: 600;
+  font-weight: 900;
   color: #ffffff;
   padding: 0.3em 0.8em 0.3em 0.8em;
   border-radius: 0.3em;
-  border: 1px solid var(--border);
   margin-left: 0.2em;
   width: 10em;
   background-color: var(--background);
+  border-color: #39394c;
+  /* background-color: #5d707e; */
 `;
 
 //  검색 키워드, 질문, 게시글내용
 const HiddenDetail = styled.h4`
   display: flex;
   background-color: #292d37;
+  background-color: #414b5d;
   padding: 1em;
   border-radius: 0.4rem;
   margin: 1em 0 1em 0;
@@ -309,11 +332,9 @@ const HiddenDetail = styled.h4`
 const CoverWrapper = styled.div`
   padding: 1em;
   border-radius: 0.4rem;
-  border: 1px solid var(--border);
 `;
 
 const Title = styled.h2`
-  color: var(--brand);
   font-weight: 700;
   font-size: 1.9em;
   margin: 0;
@@ -510,27 +531,30 @@ const ModifyButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  padding: 1em 1em 2em 1em;
+  padding: 2em 2em 3em 2em;
   border-radius: 0.4em;
-  border: 1px solid var(--border);
+  font-weight: 500;
+  /* border: 1px solid var(--border); */
   background-color: #292d37;
+  background-color: #303540;
   margin-bottom: 20px;
 `;
 
 const EditButton = styled.button`
-  border: 1px solid #808488;
-  background-color: #494f55;
-  color: #ffffff;
+  border: 1px solid #ffe177;
+  background-color: #2f3642;
+  color: #ffe177;
   font-weight: bold;
   padding: 0.3em 2em 0.3em 2em;
   margin-left: 2rem;
 `;
 
 const DeleteButton = styled.button`
-    background-color: var(--background);
+    background-color: #2f3642;
     border: 1px solid var(--font-warning);
-    font-weight: bold;
     color: var(--font-warning);
+    font-weight: bold;
+    
     padding: 0.3em 2em 0.3em 2em;
     margin-left: 2rem;
 `;

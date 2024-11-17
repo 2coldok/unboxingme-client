@@ -6,11 +6,11 @@ import React, { useState } from "react";
 import { SEARCH_KEYWORD } from "../constant/constraints";
 
 interface ISearchProps {
-  keyword: string;
+  keyword?: string | null | undefined;
 }
 
 export default function Search({ keyword }: ISearchProps) {
-  const [searchKeyword, setSearchKeyword] = useState(keyword);
+  const [searchKeyword, setSearchKeyword] = useState(keyword ? keyword : '');
   const navigate = useNavigate();
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {

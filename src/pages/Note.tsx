@@ -12,7 +12,6 @@ import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
 import { formatTimeAgo } from "../util/formatTimeAgo";
 import { Helmet } from "react-helmet-async";
-import AppFooter from "../components/AppFooter";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -56,6 +55,12 @@ export default function Note({ unboxingService }: NoteProps) {
         <meta name="robots" content="noindex" />
       </Helmet>
       <StyledContainer>
+        <SolverAliasWrapper>
+          <p>
+            <SolverAlias>{pandora.solverAlias}</SolverAlias> <br/>
+            님에 의해 수수께끼 노트가 열람되었습니다.
+          </p>
+        </SolverAliasWrapper>
         <CoverWrapper>
           <Title>{pandora.title}</Title>
           <InfoWrapper>
@@ -79,7 +84,6 @@ export default function Note({ unboxingService }: NoteProps) {
         {pandora.cat}
         </NoteWrapper>
       </StyledContainer>
-      <AppFooter />
     </>
   );
 }
@@ -89,6 +93,26 @@ const StyledContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+`;
+
+const SolverAliasWrapper = styled.div`
+  max-width: 950px;
+  width: 100%;
+  border: 1px solid #4c7a5e;
+  border-radius: 0.9rem;
+  padding: 1.2em;
+  background-color: #334b43;
+  box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
+`;
+
+const SolverAlias = styled.span`
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #87e89f;
 `;
 
 const CoverWrapper = styled.main`
@@ -101,6 +125,8 @@ const CoverWrapper = styled.main`
   border: 1px solid var(--border);
   border-radius: 0.9rem;
   padding: 1.2em;
+  margin-top: 18px;
+  margin-bottom: 18px;
   @media (max-width: 768px) {
     width: 95%;
   }
@@ -108,6 +134,7 @@ const CoverWrapper = styled.main`
 
 const Title = styled.h2`
   color: var(--brand);
+  color: #565e73;
   font-weight: 800;
   font-size: 1.8em;
   margin: 0;
@@ -123,6 +150,7 @@ const InfoWrapper = styled.div`
   align-itmes: center;
   color: var(--font-info);
   font-weight: 600;
+  color: #565e73;
 `;
 
 const Writer = styled.p`
@@ -167,26 +195,27 @@ const Description = styled.pre`
   padding: 2em 0 0 0;
   border-radius: 0;
   white-space: pre-wrap;
+  color: #565e73;
 `;
 
 const NoteWrapper = styled.pre`
-  background-color: #24292f;
-  color: #79b8ff;
+  background-color: var(--background-block);
+  /* background-color: var(--background-riddle); */
+  color: var(--font-main);
+  font-size: 1.2rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   display: flex;
   flex-direction: column;
   max-width: 950px;
   width: 100%;
-  /* border: 1px solid var(--border); */
+  border: 1px solid var(--border);
   border-radius: 0.9rem;
   padding: 1.1em;
-  font-size: 1.2rem;
-  font-weight: 500;
   
-  margin-top: 30px;
+  margin-top: 0;
   margin-bottom: 20px;
   
-  min-height: 15em;
+  min-height: 20em;
   @media (max-width: 768px) {
     width: 95%;
   }

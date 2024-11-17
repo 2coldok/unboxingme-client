@@ -106,9 +106,10 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
             </Ascii>
           </LeftBody>
           <RightBody>
-            <Message>* 노트 작성자가 확인할 수 있는 '열람자 이름'을 입력해주세요. 열람자 이름은 이후 수정할 수 없습니다.</Message>
+            <Message>* 모든 질문이 최초로 해결되어 수수께끼 노트가 비공개로 전환되었습니다.</Message>
+            <Message>* 노트 작성자가 확인할 수 있는 '열람자 별명'을 입력해주세요. 열람자 별명은 이후 수정할 수 없습니다.</Message>
             <InputWrapper>
-              <label className="floating-label">열람자 이름 입력</label>
+              <label className="floating-label">열람자 별명</label>
               <input 
                 className="alias"
                 type="text" 

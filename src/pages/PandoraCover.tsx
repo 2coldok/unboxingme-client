@@ -16,6 +16,7 @@ import { BsUpc } from "react-icons/bs";
 import Search from "../components/Search";
 import Login from "../components/Login";
 import { useCoverQuery } from "../hook/QueryHook";
+import AppFooter from "../components/AppFooter";
 
 export default function PandoraCover() {
   const navigate = useNavigate();
@@ -81,11 +82,11 @@ export default function PandoraCover() {
 
   return (
     <>
-      {keyword && (
-        <SearchWrapper>
-          <Search keyword={keyword} />
-        </SearchWrapper>
-      )}
+      
+      <SearchWrapper>
+        <Search keyword={keyword} />
+      </SearchWrapper>
+      
       
      
       <CoverContainer>
@@ -115,6 +116,7 @@ export default function PandoraCover() {
           </FirstRiddleWrapper>  
         </CoverWrapper>
      </CoverContainer>
+     <AppFooter />
       {alertMessage && (
         <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
