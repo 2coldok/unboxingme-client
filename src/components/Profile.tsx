@@ -90,7 +90,6 @@ const Popper = styled.div`
   /* background-color: #252932; */
   background-color: var(--background);
   border: 1px solid var(--border);
-  color: var(--brand);
   border-radius: 8px;
   padding: 0.5em;
   z-index: 10;

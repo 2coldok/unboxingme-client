@@ -60,12 +60,17 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
   }
 
   const handleNextButton = () => {
+    window.scrollTo({
+      top: 0, 
+      left: 0,
+      behavior: 'smooth',
+    });
     setFormSubject('cover');
   };
 
   return (
     <>
-      <Advice>* 설정한 키워드를 통해서만 수수께끼를 검색할 수 있습니다.</Advice>
+      <Advice>* 설정한 키워드를 통해서만 생성한 수수께끼를 검색할 수 있습니다.</Advice>
       <Advice>* 키워드를 설정하지 않을 경우 링크 공유를 통해서만 수수께끼에 접근할 수 있습니다.</Advice>
       <Advice>* 설정한 키워드 목록은 사용자에게 노출되지 않습니다.</Advice>
       <AddKeywordWrapper>
@@ -80,11 +85,11 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
           onCompositionEnd={() => setIsComposing(false)}
           onKeyDown={handleKeyDown}
           autoComplete="off"
-          autoFocus
+          tabIndex={-1}
         />
         <button onClick={handleAddKeyword} type='button'>추가</button>
       </AddKeywordWrapper>
-      <LengthCount>{text.length}/{PANDORA_FORM.maxKeywordLength}</LengthCount>
+      {!showError && <LengthCount>{text.length}/{PANDORA_FORM.maxKeywordLength}</LengthCount>}
       {showError && <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.keywords}</ErrorMessage>}
       <AddedKeywords>
        {keywords.map((keyword) => (
@@ -106,10 +111,6 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
 const Advice = styled.p`
   margin: 0 0 0.8em 0;
   color: var(--font-info);
-`;
-
-const ErrorMessage = styled.small`
-  color: var(--font-warning);
 `;
 
 const AddKeywordWrapper = styled.div`
@@ -173,9 +174,17 @@ const AddedKeywords = styled.ul`
 
 const LengthCount = styled.small`
   color: var(--font-chore);
-  margin-left: 0.6em;
-  margin-right: 0.5em;
-`
+  margin-left: 0.3em;
+  margin-top: 0.3em;
+`;
+
+const ErrorMessage = styled.small`
+  color: var(--font-warning);
+  font-size: 1em;
+  font-weight: 500;
+  margin-left: 0.3em;
+  margin-top: 0.3em;
+`;
 
 const ButtonWrapper = styled.div`
   display: flex;

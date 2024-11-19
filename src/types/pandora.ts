@@ -39,7 +39,7 @@ export interface IPandoraCover {
   label: string;
   writer: string;
   title: string;
-  description: string;
+  description: string | null;
   firstQuestion: string; 
   totalProblems: number;
   coverViewCount: number;
@@ -80,29 +80,27 @@ export interface IMyPandoras {
 // }
 
 export interface IMyPandoraEdit {
+  keywords: string[];
   writer: string;
   title: string;
-  description: string;
-  keywords: string[];
-  problems: { question: string, hint: string, answer: string }[];
+  description: string | null;
+  problems: { question: string, hint: string | null, answer: string }[];
   cat: string;
 }
 
 export interface INewPandoraForm {
-  writer: string;
+  keywords?: string[];
   title: string;
-  description: string;
-  keywords: string[];
-  problems: { question: string, hint: string, answer: string }[];
+  description?: string;
+  problems: { question: string, hint?: string, answer: string }[];
   cat: string;
 }
 
 export interface IEditPandoraForm {
-  writer: string;
+  keywords?: string[];
   title: string;
-  description: string;
-  keywords: string[];
-  problems: { question: string, hint: string, answer: string }[];
+  description?: string;
+  problems: { question: string, hint?: string, answer: string }[];
   cat: string;
 }
 

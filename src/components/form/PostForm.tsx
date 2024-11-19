@@ -33,6 +33,11 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
     }
   
     setPost((prev) => prev.trim());
+    window.scrollTo({
+      top: 0, 
+      left: 0,
+      behavior: 'smooth',
+    });
     setFormSubject('preview');
   };
 
@@ -67,12 +72,15 @@ const Advice = styled.p`
 
 const ErrorMessage = styled.small`
   color: var(--font-warning);
+  font-size: 1em;
+  font-weight: 500;
   margin-left: 0.2em;
 `;
 
 const Note = styled.textarea`
+  margin-top: 30px;
   width: 100%;
-  height: 20rem;
+  height: 25rem;
 `;
 
 const Count = styled.small`

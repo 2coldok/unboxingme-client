@@ -224,6 +224,7 @@ const FirstRiddleWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   background-color: var(--background-riddle);
+  
   padding: 1em;
   border-radius: 0.4rem;
 

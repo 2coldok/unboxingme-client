@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IPandoraService } from "../../service/PandoraService";
 import { useNavigate } from "react-router-dom";
-import { ICover, IRiddle, TFormSubject, TKeywords, TPost } from "../../types/form";
+import { ICover, IRiddle, TFormSubject, TKeywords, TNote } from "../../types/form";
 import { AiFillLock } from "react-icons/ai"; // lock;
+import { INewPandoraForm } from "../../types/pandora";
 
 
 interface ICreatePandoraProps {
@@ -14,7 +15,7 @@ interface ICreatePandoraProps {
   cover: ICover;
   keywords: TKeywords;
   riddles: IRiddle[];
-  post: TPost;
+  post: TNote;
   pandoraService: IPandoraService;
 }
 
@@ -22,19 +23,23 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    // form 유효성 검 사 TODO
-
-    const newPandoraForm = {
-      writer: cover.writer,
+    const newPandoraForm: INewPandoraForm = {
       title: cover.title,
-      description: cover.description,
-      keywords: keywords,
       /* eslint-disable @typescript-eslint/no-unused-vars */
-      problems: riddles.map(({ id, ...rest }) => rest),
+      problems: riddles.map(({ id, isAnswerValid, isHintValid, isQuestionValid, ...rest }) => {
+        const riddle: {question: string, hint?: string, answer: string} = { question: rest.question, answer: rest.answer };
+        if (rest.hint) riddle.hint = rest.hint;
+        return riddle;
+      }),
       /* eslint-enable @typescript-eslint/no-unused-vars */
       cat: post,
     };
 
+    // keyword가 있을 경우에만 제출
+    if (keywords.length > 0) newPandoraForm.keywords = keywords;
+    // description이 있을 경우에만 제출
+    if (cover.description) newPandoraForm.description = cover.description;
+     
     try {
       // 판도라 생성 성공
       if (!mode.id && mode.type === 'new') {
@@ -89,18 +94,16 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <Divide></Divide>
 
       <FormSubjectWrapper>
-        <Subject>2. 소개</Subject>
+        <Subject>2. 수수께끼 표지</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('cover')}>
           수정
         </EditButton>
       </FormSubjectWrapper>
       <CoverWrapper>
-        <SubTitle>작성자명</SubTitle>
-        <WriterWrapper>{cover.writer}</WriterWrapper>
         <SubTitle>제목</SubTitle>
         <TitleWrapper>{cover.title}</TitleWrapper>
-        <SubTitle>소개</SubTitle>
-        <DescriptionWrapper>{cover.description}</DescriptionWrapper>
+        <SubTitle>설명</SubTitle>
+        <DescriptionWrapper>{cover.description ? cover.description : '설명 없음'}</DescriptionWrapper>
       </CoverWrapper>
 
       <Divide></Divide>
@@ -113,9 +116,9 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       </FormSubjectWrapper>
       <RiddleWrapper>
         {riddles.map((riddle, index) => (
-          <RiddleBox>
+          <RiddleBox key={riddle.id}>
             <RiddleIndex><AiFillLock /> 문제 {index + 1}</RiddleIndex>
-            <Riddle key={riddle.id}>             
+            <Riddle>             
               <RiddleContent>
                 <span>질문</span>
                 <p>{riddle.question}</p>
@@ -231,15 +234,6 @@ const SubTitle = styled.p`
   font-weight: 500;
 `;
 
-const WriterWrapper = styled.p`
-  margin-top: 0;
-  width: 15rem;
-  border-radius: 0.4rem;
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.7rem 0.5rem 0.7rem;
-  margin-bottom: 2em;
-`;
-
 const TitleWrapper = styled.p`
   margin-top: 0;
   border-radius: 0.4rem;
@@ -277,6 +271,8 @@ const RiddleIndex = styled.label`
   font-size: 1.2rem;
   font-weight: 500;
   background-color: var(--background-block);
+  background-color: #282C36;
+  
 
   svg {
     margin-right: 0.4em;

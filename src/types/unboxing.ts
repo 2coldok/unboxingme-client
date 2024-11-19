@@ -11,7 +11,7 @@ export interface IInitialRiddleFailbyIneligible {
 export interface IInitialRiddleSuccess {
   status: 'riddle'
   question: string;
-  hint: string;
+  hint: string | null;
   unsealedQuestionIndex: number;
   totalProblems: number;
   failCount: number;
@@ -36,7 +36,7 @@ export interface INextRiddleEnd {
 export interface INextRiddleChallengeable {
   status: 'riddle';
   question: string;
-  hint: string;
+  hint: string | null;
   unsealedQuestionIndex: number;
   totalProblems: number;
   failCount: number;
@@ -49,7 +49,7 @@ export type TNextRiddle = INextRiddlePenalty | INextRiddleEnd | INextRiddleChall
 export interface IRiddle {
   status: 'riddle';
   question: string;
-  hint: string;
+  hint: string | null;
   unsealedQuestionIndex: number;
   totalProblems: number;
   failCount: number;
@@ -73,9 +73,9 @@ export interface INewSolverAliasForm {
 
 export interface INote {
   label: string;
-  writer: string;
-  title: string;
-  description: string;
+  writer: string | null;
+  title: string | null;
+  description: string | null;
   totalProblems: number;
   coverViewCount: number;
   isCatUncovered: boolean;

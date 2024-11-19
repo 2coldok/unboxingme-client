@@ -41,14 +41,14 @@ export default function Search({ keyword }: ISearchProps) {
       <SearchIcon />
       <SearchInput
         type="search"
-        placeholder="노트 키워드"
+        placeholder="keyword..."
         name="search"
         value={searchKeyword}
         maxLength={SEARCH_KEYWORD.maxLength}
         required
-        autoFocus
         onChange={onChange}
         autoComplete="off"
+        tabIndex={-1}
         enterKeyHint="search"
       />
       <SubmitButton className="submit" type="submit"></SubmitButton>

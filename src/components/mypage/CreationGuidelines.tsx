@@ -57,5 +57,6 @@ const CreateButton = styled.button`
 `;
 
 const Link = styled.a`
-  color: #3787ff;
+  color: var(--brand);
+  font-weight: 700;
 `

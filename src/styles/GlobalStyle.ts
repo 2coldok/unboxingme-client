@@ -41,6 +41,7 @@ const GlobalStyle = createGlobalStyle`
 
     /**확정**/
     --background: #30343f;
+    /* --background: #292C36; */
     --background-search: #262626;
     --background-riddle: #252932;
     --background-block: #343945;
@@ -150,6 +151,7 @@ const GlobalStyle = createGlobalStyle`
     /* background-color: var(--background); */
     /* background-color: #2b303c; */
     background-color: var(--background-block);
+    background-color: #282C36;
     color: var(--font-main);
     padding: 0.5rem 0.7rem 0.5rem 0.7rem;
     font-family: 'Roboto', sans-serif;
@@ -162,6 +164,7 @@ const GlobalStyle = createGlobalStyle`
     /* background-color: var(--background); */
     /* background-color: #2b303c; */
     background-color: var(--background-block);
+    background-color: #282C36;
     color: var(--font);
     outline: none;
     border-radius: 0.4rem;

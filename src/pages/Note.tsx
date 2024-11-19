@@ -9,7 +9,7 @@ import { IoPerson } from "react-icons/io5";
 import { useLoading } from "../hook/LoadingHook";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { AiFillLock } from "react-icons/ai";
-import { BsUpc } from "react-icons/bs";
+import { BsArrowDownRightSquare, BsUpc } from "react-icons/bs";
 import { formatTimeAgo } from "../util/formatTimeAgo";
 import { Helmet } from "react-helmet-async";
 
@@ -55,10 +55,14 @@ export default function Note({ unboxingService }: NoteProps) {
         <meta name="robots" content="noindex" />
       </Helmet>
       <StyledContainer>
+        <SubjectWrapper>
+          <BsArrowDownRightSquare />
+          <span>노트 내용</span>
+        </SubjectWrapper>
         <SolverAliasWrapper>
           <p>
             <SolverAlias>{pandora.solverAlias}</SolverAlias> <br/>
-            님에 의해 수수께끼 노트가 열람되었습니다.
+            님에 의해 노트가 열람되었습니다.
           </p>
         </SolverAliasWrapper>
         <CoverWrapper>
@@ -93,6 +97,24 @@ const StyledContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+`;
+
+const SubjectWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 950px;
+  @media (max-width: 900px) {
+    width: 95%;
+  }
+  margin-left: 0.3em;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  /* color: #cecece; */
+
+  svg {
+    margin-right: 0.4em;
+  }
 `;
 
 const SolverAliasWrapper = styled.div`
@@ -200,7 +222,10 @@ const Description = styled.pre`
 
 const NoteWrapper = styled.pre`
   background-color: var(--background-block);
+  background-color: #282C36;
+  background-color: var(--background-riddle);
   color: var(--font-main);
+  color: #2dd05b;
   font-size: 1.2rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   display: flex;

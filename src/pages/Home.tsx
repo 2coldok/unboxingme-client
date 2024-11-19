@@ -9,6 +9,8 @@ import { getInSession, saveInSession } from "../util/storage";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
 import AppFooter from "../components/AppFooter";
+import { PiClockClockwiseBold } from "react-icons/pi";
+
 
 interface IHomeProps {
   pandoraService: IPandoraService;
@@ -45,10 +47,14 @@ export default function Home({ pandoraService }: IHomeProps) {
 
   return (
     <StyledContainer>
-      <Search keyword={''} />
-      <div className="nav">
-      </div>
-      <h2 className="today">최근 열람된 노트</h2>
+      <SearchWrapper>
+        <Search />
+      </SearchWrapper>
+     
+      <SubjectWrapper>
+        <span>최근 열람된 노트</span>
+        <small><PiClockClockwiseBold />5m</small>
+      </SubjectWrapper>
       <GlimpseWrapper>
         {glimpseLoading ? (
           <>
@@ -77,25 +83,41 @@ const StyledContainer = styled.main`
   display: flex;
   align-items: center;
   flex-direction: column;
-  
-  margin-top: 50px;
-  @media (max-width: 768px) {
-    margin-top: 50px;
-  }
-
-  .today {
-    width: 100%;
-    font-weight: 900;
-    margin-bottom: 0.4em;
-    margin-top: 4rem;
-    padding-left: 0.4em;
-  }
-
   // PandoraList 의 제목 클레스 네임.
   // glimpse 임으로 클릭을 지양하는 메세지 전달
   .title {
     cursor: not-allowed;
   }
+`;
+
+const SubjectWrapper = styled.div`
+  width: 100%;
+  font-weight: 900;
+  font-size: 1.1em;
+  margin-bottom: 0.4em;
+  margin-top: 4rem;
+  padding-left: 0.4em;
+  color: #ececec;
+  @media (max-width: 768px) {
+  width: 95%;
+  }
+  
+  small {
+    color: var(--font-info);
+    margin-left: 0.5em;
+    svg {
+      margin-right: 0.1em;
+    }
+
+  }
+`
+
+const SearchWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  /* margin-bottom: 40px; */
+  /* background-color: var(--background-riddle); */
 `;
 
 /**
@@ -106,9 +128,9 @@ const StyledContainer = styled.main`
 const GlimpseWrapper = styled.div`
   width: 100%;
   border: 1px solid var(--border);
-  border-radius: 0.7rem;
+  border-radius: 1rem;
   padding: 0.6em;
-  background-color: var(--background-block);
+  /* background-color: var(--background-block); */
   box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
 
   @media (max-width: 768px) {

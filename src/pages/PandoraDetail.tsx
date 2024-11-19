@@ -18,6 +18,10 @@ import EditAndDeleteConfirm from "../components/EditAndDeleteConfirm";
 import { Copy } from "../util/Copy";
 import { LuEye } from "react-icons/lu";
 import AppFooter from "../components/AppFooter";
+import { useLoading } from "../hook/LoadingHook";
+import { BsArrowDownRightSquare } from "react-icons/bs";
+
+
 
 interface IPandoraDetailProps {
   dashboardService: IDashboardService;
@@ -39,6 +43,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   const [riddlesView, setRiddlesView] = useState(false);
   const [noteView, setNoteView] = useState(false);
   const [selectedPandora, setSelectedPandora] = useState<ISelectedPandora | null>(null);
+  const { startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     if (!id) {
@@ -47,17 +52,20 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
 
     const fetchMyPandoraDetail = async () => {
       try {
+        startLoading();
         const data = await dashboardService.getMyPandoraDetail(id);
         setDetail(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error }, replace: true });
         }
+      } finally {
+        stopLoading();
       }
     }
 
     fetchMyPandoraDetail();
-  }, [id, navigate, dashboardService]);
+  }, [id, navigate, dashboardService, startLoading, stopLoading]);
 
   const handleSelectedPandora = (action: 'edit' | 'delete', id: string, title: string, totalRecords: number) => {
     setSelectedPandora({ action: action, id: id, title: title, totalRecords: totalRecords });
@@ -93,6 +101,12 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   return (
     <>
       <StyledContainer>
+        <SubjectWrapper>
+          <BsArrowDownRightSquare />
+          <span>나의 수수께끼 세부정보</span>
+        </SubjectWrapper>
+        
+
         {detail.pandora.solverAlias && (
           <SolverAliasWrapper>
             <p>
@@ -257,6 +271,23 @@ const StyledContainer = styled.div`
   width: 100%;
 `;
 
+const SubjectWrapper = styled.div`
+  display: flex;
+  width: 90%;
+  @media (max-width: 900px) {
+    width: 95%;
+  }
+  margin-left: 0.3em;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  /* color: #cecece; */
+
+  svg {
+    margin-right: 0.4em;
+  }
+`;
+
 const SubTitle = styled.span`
   display: flex;
   font-size: 1.5rem;
@@ -267,7 +298,7 @@ const SubTitle = styled.span`
 const SolverAliasWrapper = styled.div`
   border: 1px solid #4c7a5e;
   background-color: #334b43;
-  width: 80%;
+  width: 90%;
   @media (max-width: 900px) {
     width: 95%;
   }
@@ -286,7 +317,7 @@ const SolverAlias = styled.span`
 const SubContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 90%;
   @media (max-width: 900px) {
     width: 95%;
   }
@@ -295,6 +326,7 @@ const SubContentWrapper = styled.div`
   padding: 1rem;
   margin-bottom: 20px;
   background-color: var(--background-block);
+  background-color: #282C36;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `;
 
@@ -469,6 +501,7 @@ const RiddleIndex = styled.label`
   font-size: 1.2rem;
   font-weight: 500;
   background-color: var(--background-block);
+  background-color: #282C36;
   color: var(--font-subtitle);
 
   svg {

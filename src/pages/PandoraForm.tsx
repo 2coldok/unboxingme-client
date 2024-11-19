@@ -5,7 +5,7 @@ import KeywordsForm from "../components/form/KeywordsForm";
 import { IPandoraService } from "../service/PandoraService";
 import styled from "styled-components";
 
-import { ICover, TKeywords, TPost } from "../types/form";
+import { ICover, TKeywords, TNote } from "../types/form";
 import CreatePandora from "../components/form/CreatePandora";
 import { useNavigate, useParams } from "react-router-dom";
 import { HttpError } from "../network/HttpClient";
@@ -24,14 +24,6 @@ interface IPandoraFormProps {
   pandoraService: IPandoraService;
 }
 
-// const PANDORA_FORM_SUBJECT_TITLE = {
-//   keywords: '1. 게시물 검색 키워드 설정',
-//   cover: '2. 게시물 표지 작성',
-//   riddles: '3. 질문 설정',
-//   post: '4. 노트 작성',
-//   preview: '미리보기 및 등록'
-// };
-
 export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -40,16 +32,17 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const [mode, setMode] = useState<{ id: string | null, type: 'new' | 'edit' }>({ id: null, type: 'new' });
 
   const [formSubject, setFormSubject] = useState<TFormSubject>('keywords');
-  const [cover, setCover] = useState<ICover>({ writer: '', title: '', description: '' });
   const [keywords, setKeywords] = useState<TKeywords>([]);
-  const [riddles, setRiddles] = useState<IRiddle[]>([{ id: uuidv4(), isQuestionValid: false, isAnswerValid: false, question: '', hint: '', answer: '' }]);
-  const [post, setPost] = useState<TPost>('');
+  const [cover, setCover] = useState<ICover>({ title: '', description: '' });
+  const [riddles, setRiddles] = useState<IRiddle[]>([{ id: uuidv4(), isQuestionValid: false, isHintValid: true, isAnswerValid: false, question: '', hint: '', answer: '' }]);
+  const [post, setPost] = useState<TNote>('');
 
   useEffect(() => {
     if (!id) {
       return setMode({ id: null, type: 'new' });
     }
 
+    // 수정하는 경우
     if (id) {
       setMode({ id: id, type: 'edit' });
       const fetchMyPandoraEdit = async () => {
@@ -57,9 +50,12 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
           const data = await pandoraService.getMyPandoraEdit(id);
           if (data.success && data.payload) {
             const pandora = data.payload;
-            setCover({ writer: pandora.writer, title: pandora.title, description: pandora.description });
+            setCover({
+              title: pandora.title,
+              description: pandora.description || ''
+            });
             setKeywords(pandora.keywords);
-            setRiddles(pandora.problems.map((problem) => ({ ...problem, id: uuidv4(), isQuestionValid: true, isAnswerValid: true })));
+            setRiddles(pandora.problems.map((problem) => ({ ... problem, hint: problem.hint || '', id: uuidv4(), isQuestionValid: true, isHintValid: true, isAnswerValid: true })));
             setPost(pandora.cat);
           }
           if (data.success && data.payload === null) {
@@ -93,7 +89,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   
         {formSubject === 'keywords' && (
           <FormWrapper>
-            <FormSubject>1. 검색 키워드 설정</FormSubject>
+            <FormSubject>1. 검색 키워드 (선택)</FormSubject>
             <KeywordsForm
               setFormSubject={setFormSubject}
               keywords={keywords}
@@ -104,7 +100,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   
         {formSubject === 'cover' && (
           <FormWrapper>
-            <FormSubject>2. 수수께끼 소개</FormSubject>
+            <FormSubject>2. 수수께끼 표지</FormSubject>
             <CoverForm  
               setFormSubject={setFormSubject}
               cover={cover}
@@ -179,10 +175,10 @@ const FormWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   background-color: var(--background-block);
+  background-color: #282C36;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  width: 80%;
-  border: 1px solid var(--border);
-  padding: 1em 1.4em 1.5em 1.4em;
+  width: 90%;
+  padding: 1.5em 2.3em 1.5em 2.3em;
   border-radius: 0.7rem;
   margin-bottom: 20px;
   @media (max-width: 768px) {

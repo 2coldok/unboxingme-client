@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import { ICover, TFormSubject } from "../../types/form";
 import { PANDORA_FORM } from "../../constant/constraints";
@@ -11,7 +11,18 @@ export interface ICoverFormProps {
 }
 
 export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFormProps) {
+  const [showRequiredStar, setShowRequiredStar] = useState(true);
   const [showErrors, setShowErrors] = useState(false);
+
+  useEffect(() => {
+    let timer: number;
+    if (showErrors) {
+      timer = setTimeout(() => {
+        setShowErrors(false);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [showErrors]);
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -19,21 +30,27 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
       ...prev,
       [name]: value
     }));
+
+    if (name === 'title' && value.length < PANDORA_FORM.minTitleLength) {
+      setShowRequiredStar(false);
+    }
+    if (name === 'title' && value.length >= PANDORA_FORM.minTitleLength) {
+      setShowRequiredStar(true);
+    }
   };
 
-  const isWriterValid = cover.writer.trim().length >= PANDORA_FORM.minWriterLength;
-  const isTitleValid = cover.title.trim().length >= PANDORA_FORM.minTitleLength;
-  const isDescriptionValid = cover.description.trim().length >= PANDORA_FORM.minDescriptionLength;
-  const isFormValid = isWriterValid && isTitleValid && isDescriptionValid;
-
   const handleNextButton = () => {
-    if (isFormValid) {
+    if (cover.title.trim().length >= PANDORA_FORM.minTitleLength) {
       setCover((prev) => ({
         ...prev,
-        writer: prev.writer.trim(),
         title: prev.title.trim(),
         description: prev.description.trim()
       }));
+      window.scrollTo({
+        top: 0, 
+        left: 0,
+        behavior: 'smooth',
+      });
       setFormSubject('riddles');
     } else {
       setShowErrors(true);
@@ -43,29 +60,9 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
   return (
     <>
       <SubTitle>
-        작성자명
-        {showErrors && !isWriterValid && (
-          <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.writer}</ErrorMessage>
-        )}
-      </SubTitle>
-      <WriterWrapper>
-        <input
-          type="text" 
-          name="writer" 
-          value={cover.writer}
-          onChange={onChange}
-          maxLength={PANDORA_FORM.maxWriterLength}
-          autoComplete="off"
-          autoFocus
-          placeholder="작성자명 입력"
-        />
-        <LengthCount>{cover.writer.length}/{PANDORA_FORM.maxWriterLength}</LengthCount>
-      </WriterWrapper>
-      
-      
-      <SubTitle>
         제목
-        {showErrors&& !isTitleValid && (
+        {!showRequiredStar && !showErrors && <RequiredStar>*</RequiredStar>}
+        {showErrors && (
           <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.title}</ErrorMessage>
         )}
       </SubTitle>
@@ -83,20 +80,17 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
       </TitleWrapper>
 
       <SubTitle>
-        소개
-        {showErrors && !isDescriptionValid && (
-          <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.description}</ErrorMessage>
-        )}
+        설명 (선택)
       </SubTitle>
       <DescriptionWrapper>
-        <textarea 
+        <textarea
           className="description"
           name="description"
           maxLength={PANDORA_FORM.maxDescriptionLength} 
           value={cover.description}
           onChange={onChange}
           autoComplete="off"
-          placeholder="설명 입력"
+          placeholder="설명 없음"
         />
         <LengthCount>{cover.description.length}/{PANDORA_FORM.maxDescriptionLength}</LengthCount>
       </DescriptionWrapper>
@@ -121,21 +115,16 @@ const SubTitle = styled.p`
   font-weight: 500;
 `;
 
+const RequiredStar = styled.span`
+  color: var(--font-warning);
+  font-weight: 900;
+`;
+
 const LengthCount = styled.small`
   align-self: flex-end; 
   margin-top: 0.2em;
   margin-right: 0.2em;
   color: var(--font-chore);
-`;
-
-const WriterWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 15rem;
-  input {
-    width: 100%;
-  }
 `;
 
 const TitleWrapper = styled.div`
@@ -153,14 +142,15 @@ const DescriptionWrapper = styled.div`
   align-items: flex-start;
   textarea {
     width: 100%;
-    height: 10rem;
+    height: 15rem;
   }
 `;
 
 const ErrorMessage = styled.small`
-  font-weight: normal;
-  margin-left: 0.4em;
   color: var(--font-warning);
+  font-size: 1em;
+  font-weight: 500;
+  margin-left: 0.4em;
 `;
 
 const ButtonWrapper = styled.div`

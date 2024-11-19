@@ -7,7 +7,6 @@ import { IRiddle, TFormSubject } from "../../types/form";
 import { PANDORA_FORM } from "../../constant/constraints";
 import { FORM_LENGTH_ERROR_MESSAGE } from "../../constant/errorMessage";
 import { AiFillLock } from "react-icons/ai"; 
-import { BsCheckLg } from "react-icons/bs";
 
 export interface IRiddlesFormProps {
   setFormSubject: React.Dispatch<React.SetStateAction<TFormSubject>>;
@@ -20,7 +19,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
     if (riddles.length >= PANDORA_FORM.maxTotalProblems) {
       return;
     }
-    setRiddles(prev => [...prev, { id: uuidv4(), isQuestionValid: false, isAnswerValid: false, question: '', hint: '', answer: '' }]);
+    setRiddles(prev => [...prev, { id: uuidv4(), isQuestionValid: false, isHintValid: true, isAnswerValid: false, question: '', hint: '', answer: '' }]);
   };
 
   const handleRemove = (id: string) => {
@@ -31,44 +30,51 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
     if (field === 'question') {
       return setRiddles(
         riddles.map((riddle) =>
-          riddle.id === id ? { ...riddle, [field]: value, isQuestionValid: value.trim().length >= PANDORA_FORM.minQuestionLength  } : riddle
+          riddle.id === id ? { ...riddle, [field]: value, isQuestionValid: value.trim().length >= PANDORA_FORM.minQuestionLength } : riddle
         )
       );
+    }
+
+    if (field === 'hint') {
+      return setRiddles(
+        riddles.map((riddle) => 
+          riddle.id === id ? { ...riddle, [field]: value, isHintValid: value.trim().length <= PANDORA_FORM.maxHintLegnth } : riddle
+        )
+      )
     }
 
     if (field === 'answer') {
       return setRiddles(
         riddles.map((riddle) =>
-          riddle.id === id ? { ...riddle, [field]: value, isAnswerValid: value.trim().length >= PANDORA_FORM.minAnswerLength  } : riddle
+          riddle.id === id ? { ...riddle, [field]: value, isAnswerValid: value.trim().length >= PANDORA_FORM.minAnswerLength } : riddle
         )
       );
-    } 
-
-    // 힌트는 유효성 검사를 하지 않음
-    setRiddles(
-      riddles.map((riddle) =>
-        riddle.id === id ? { ...riddle, [field]: value } : riddle
-      )
-    );
+    }
   };
 
   const handleNextButton = () => {
     const isValid = riddles.every((riddle) => {
-      return riddle.isQuestionValid && riddle.isAnswerValid
+      return riddle.isQuestionValid && riddle.isHintValid && riddle.isAnswerValid
     });
 
-    if (!isValid) {
+    if (!isValid || riddles.length === 0) {
       return;
     }
-
+  
     setRiddles((prevRiddles) =>
       prevRiddles.map((riddle) => ({
         ...riddle,
         question: riddle.question.trim(),
-        hint: riddle.hint ? riddle.hint.trim() : '',
+        hint: riddle.hint.trim(),
         answer: riddle.answer.trim()
       }))
     );
+
+    window.scrollTo({
+      top: 0, 
+      left: 0,
+      behavior: 'smooth',
+    });
     setFormSubject('post'); 
   };
   
@@ -77,18 +83,18 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
       <Advice>* 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</Advice>
       <ul>
         {riddles.map((riddle, index) => (
-          <RiddleContainer>
+          <RiddleContainer key={riddle.id}>
             <RiddleIndex>
               <AiFillLock />
               문제 {index + 1}
-              </RiddleIndex>
-            <RiddleWrapper key={riddle.id}>
+            </RiddleIndex>
+            <RiddleWrapper>
               <CloseWrapper>
                 <IoClose className="close" onClick={() => handleRemove(riddle.id)} />
               </CloseWrapper>
               <SubTitle>
                 질문
-                {!riddle.isQuestionValid && <BsCheckLg />}
+                {!riddle.isQuestionValid && <RequiredStar>*</RequiredStar>}
               </SubTitle>
               <QuestionWrapper>
                 <textarea
@@ -100,7 +106,9 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
                 />
                 <LengthCount>{riddle.question.length}/{PANDORA_FORM.maxQuestionLength}</LengthCount>
               </QuestionWrapper>
-              <SubTitle>힌트</SubTitle>
+              <SubTitle>
+                힌트 (선택)
+              </SubTitle>
               <HintWrapper>
                 <input 
                   type="text"
@@ -114,7 +122,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
               </HintWrapper>
               <SubTitle>
                 정답
-                {!riddle.isAnswerValid && <BsCheckLg />}
+                {!riddle.isAnswerValid && <RequiredStar>*</RequiredStar>}
               </SubTitle>
               
               <AnswerWrapper>
@@ -155,9 +163,15 @@ const Advice = styled.p`
   color: var(--font-info);
 `;
 
+const RequiredStar = styled.span`
+  color: var(--font-warning);
+  font-weight: 900;
+`;
+
 const RiddleContainer = styled.div`
   position: relative;
   margin-top: 3rem;
+  margin-bottom: 80px;
 `;
 
 const RiddleIndex = styled.label`
@@ -169,7 +183,7 @@ const RiddleIndex = styled.label`
   padding: 0.3em;
   font-size: 1.4rem;
   background-color: var(--background-block);
-  color: var(--font-subtitle);
+  background-color: #282C36;
   font-weight: bold;
   svg {
     margin-right: 0.3em;
@@ -177,9 +191,8 @@ const RiddleIndex = styled.label`
 `;
 
 const RiddleWrapper = styled.li`
-  border: 1px solid var(--border);
-  border-radius: 0.7rem;
-  padding: 0.8em;
+  border-top: 1px solid var(--border);
+  padding: 0.5em;
 `;
 
 const CloseWrapper = styled.h2`
@@ -193,6 +206,8 @@ const CloseWrapper = styled.h2`
     font-size: 1em;
     color: var(--font-subtitle);
     cursor: pointer;
+    border: 1px solid white;
+    border-radius: 0.3rem;
   }
 `;
 
@@ -258,20 +273,21 @@ const AddRiddle = styled.button`
   display: flex;
   width: 100%;
   justify-content: center;
-  background-color: var(--background-riddle);
+  /* background-color: var(--background-riddle); */
+  background-color: #324055;
   align-items: center;
   border-radius: 1rem
   margin-top: 0;
   padding: 0.3em;
-  border: 1px dashed var(--border);
+  border: 1px dashed #485f88;
 
   p {
-    color: var(--font-subtitle);
+    color: #8ab4f8;
     font-size: 1.1em;
   }
 
   svg {
-    color: var(--font-subtitle);
+    color: #8ab4f8;
     margin-left: 0.3em;
     font-size: 1.3em;
   }
