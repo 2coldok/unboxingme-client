@@ -8,6 +8,7 @@ export const SUBMIT_ANSWER = Object.freeze({
 });
 
 export const SOLVERALIAS = Object.freeze({
+  default: '익명',
   maxLength: 40,
 });
 
