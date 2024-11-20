@@ -37,7 +37,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchResult from './pages/SearchResult.tsx';
 import PrivacyPolicy from './pages/about/PrivacyPolicy.tsx';
 import TermsOfService from './pages/about/TermsOfService.tsx';
-import Caution from './pages/about/Caution.tsx';
+import Guide from './pages/about/Guide.tsx';
 
 
 // service
@@ -76,8 +76,8 @@ const router = createBrowserRouter([
         element: <TermsOfService />
       },
       {
-        path: '/about/caution',
-        element: <Caution />
+        path: '/about/guide',
+        element: <Guide />
       }
     ]
   },

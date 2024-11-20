@@ -43,11 +43,17 @@ export default function MyChallenges() {
       <PandoraList
         action="cover"
         pandoras={data.payload}
-       />
+      />
+      <BlankWrapper></BlankWrapper>
     </>
   );
 }
 
 const Title = styled.h3`
   margin-left: 1em;
+`;
+
+// 모바일 화면시 하단 네비게이션 바와 떨어뜨리기 위함
+const BlankWrapper = styled.div`
+  margin-bottom: 130px;
 `;

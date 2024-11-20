@@ -64,7 +64,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
     setRiddles((prevRiddles) =>
       prevRiddles.map((riddle) => ({
         ...riddle,
-        question: riddle.question.trim(),
+        question: riddle.question.trim().replace(/[\r\n]/g, ''),
         hint: riddle.hint.trim(),
         answer: riddle.answer.trim()
       }))
@@ -80,7 +80,7 @@ export default function RiddlesForm({ setFormSubject, riddles, setRiddles }: IRi
   
   return (
     <>
-      <Advice>* 이전 질문을 해결한 사용자만 다음 질문을 확인할 수 있습니다.</Advice>
+      <Advice>* 이전 질문을 해결한 사용자에게만 다음 질문이 공개됩니다.</Advice>
       <ul>
         {riddles.map((riddle, index) => (
           <RiddleContainer key={riddle.id}>

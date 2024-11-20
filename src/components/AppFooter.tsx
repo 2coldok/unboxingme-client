@@ -21,7 +21,7 @@ export default function AppFooter() {
   };
 
   const handleCaution = () => {
-    return navigate('/about/caution');
+    return navigate('/about/guide');
   }
 
   const handleEmailClick = () => {
@@ -38,7 +38,7 @@ export default function AppFooter() {
         <span onClick={handleIntroduce}>사이트 소개</span>
         <span onClick={handlePrivacyPolicy}>개인정보처리방침</span>
         <span onClick={handleTermsOfService}>이용약관</span>
-        <span onClick={handleCaution}>게시물 작성 주의사항</span>
+        <span onClick={handleCaution}>수수께끼 가이드</span>
         <span onClick={handleEmailClick}>오류/건의</span>
         {showEmail && (
           <PopEmailWrapper>

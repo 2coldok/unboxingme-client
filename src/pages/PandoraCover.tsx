@@ -17,6 +17,7 @@ import Search from "../components/Search";
 import Login from "../components/Login";
 import { useCoverQuery } from "../hook/QueryHook";
 import AppFooter from "../components/AppFooter";
+import NonPandoraCover from "../components/NonPandoraCover";
 
 export default function PandoraCover() {
   const navigate = useNavigate();
@@ -73,11 +74,7 @@ export default function PandoraCover() {
   }
 
   if (data.payload === null) {
-    return (
-      <h1>
-        열람 또는 삭제됨 또는 존재하지 않는 id
-      </h1>
-    )
+    return <NonPandoraCover />
   }
 
   return (
@@ -106,7 +103,7 @@ export default function PandoraCover() {
               <State $open={data.payload.isCatUncovered}>{data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
             </div>
           </InfoWrapper>
-          <Description>{data.payload.description}</Description>
+          <Description>{data.payload.description ? data.payload.description : '내용 없음'}</Description>
           <FirstRiddleWrapper>
             <div>
               <p className="index">질문 1. &nbsp;</p>

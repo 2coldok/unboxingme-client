@@ -6,7 +6,8 @@ import {
   DHead, 
   DTitle,
   DSubTitle,
-  DList
+  DList,
+  DEmail
 } from "../../styles/DocStyle";
 
 export default function PrivacyPolicy() {
@@ -72,9 +73,9 @@ export default function PrivacyPolicy() {
           <DTitle>6. 회원 탈퇴</DTitle>
           <DContent>
           리들노트는 사용자가 언제든지 회원 탈퇴를 요청할 권리를 보장합니다.<br></br>
-          회원 탈퇴를 원하는 경우, 제보/문의 메일 주소를 통해 요청해 주시면 사용자 인증 절차를 거친 후 탈퇴 처리를 진행합니다.<br></br>
-          회원 탈퇴가 완료되면, 관련 개인정보는 내부 방침 및 법령에 따라 안전하게 삭제됩니다.
-          다만, 부정행위 또는 제재 기록이 있는 경우, 회원 탈퇴 이후에도 사용자를 식별할 수 있는 최소한의 정보를 최대 1년간 보관할 수 있습니다.
+          회원 탈퇴를 원하는 경우, <DEmail>riddlenote321@gmail.com</DEmail> 을 통해 요청시 사용자 인증 절차를 거친 후 탈퇴 처리를 진행합니다.<br></br>
+          회원 탈퇴가 완료되면 관련 개인정보는 내부 방침 및 법령에 따라 안전하게 삭제됩니다.
+          부정행위 또는 제재 기록이 있는 경우, 회원 탈퇴 이후에도 사용자를 식별할 수 있는 최소한의 정보를 최대 1년간 보관할 수 있습니다.
           </DContent>
         </DSection>
         
@@ -82,7 +83,7 @@ export default function PrivacyPolicy() {
           <DTitle>7. 아동의 개인정보보호</DTitle>
           <DContent>
             리들노트는 만14세 미만 아동의 개인정보 보호를 위하여 만 14세 이상의 사용자에 한하여 회원가입을 허용합니다. 
-            만 14세 미만의 아동의 경우 리들노트 제보/문의 이메일을 통해 법정대리인의 동의를 받아야 하며, 
+            만 14세 미만의 아동의 <DEmail>riddlenote321@gmail.com</DEmail>을 통해 법정대리인의 동의를 받아야 하며, 
             이 경우 해당 법정 대리인의 추가 정보를 수집할 수 있습니다.
           </DContent>
         </DSection>
@@ -91,13 +92,13 @@ export default function PrivacyPolicy() {
           <DTitle>8. 이용자의 의무</DTitle>
           <ul>
             <DList>
-              <p>- 이용자는 자신의 개인정보를 최신의 상태로 유지해야 하며, 이용자의 부정확한 정보 입력으로 발생하는 문제의 책임은 이용자 자신에게 있습니다.</p>
+              <p>• 이용자는 자신의 개인정보를 최신의 상태로 유지해야 하며, 이용자의 부정확한 정보 입력으로 발생하는 문제의 책임은 이용자 자신에게 있습니다.</p>
             </DList>
             <DList>
-              <p>- 이용자는 개인정보와 관련한 계정의 보안을 유지할 책임이 있습니다. 특히 구성원 내의 PC가 아닌 외부 공공 PC에서 서비스에 로그인시 각별히 유의하셔야 합니다</p>
+              <p>• 이용자는 개인정보와 관련한 계정의 보안을 유지할 책임이 있습니다. 특히 구성원 내의 PC가 아닌 외부 공공 PC에서 서비스에 로그인시 각별히 유의하셔야 합니다</p>
             </DList>
             <DList>
-              <p>- 타인의 개인정보를 도용하여 서비스를 이용할 경우 관련 개인정보보호 법령에 의해 처벌받을 수 있습니다.</p>
+              <p>• 타인의 개인정보를 도용하여 서비스를 이용할 경우 관련 개인정보보호 법령에 의해 처벌받을 수 있습니다.</p>
             </DList>
           </ul>
         </DSection>
@@ -105,8 +106,8 @@ export default function PrivacyPolicy() {
         <DSection>
           <DTitle>9. 개인정보 보호 책임자</DTitle>
           <DContent>
-            <p>개인정보 보호책임자: 리들노트 개발자</p>
-            <p>이메일: riddlenote321@gmail.com</p>
+            <p>• 개인정보 보호책임자: 리들노트 운영자</p>
+            <p>• 이메일: <DEmail>riddlenote321@gmail.com</DEmail></p>
           </DContent>
         </DSection>
       </DContainer>

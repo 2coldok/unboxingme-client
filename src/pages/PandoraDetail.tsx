@@ -133,7 +133,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
                 <State $open={detail.pandora.isCatUncovered}>{detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
               </div>
             </InfoWrapper>
-            <Description>{detail.pandora.description}</Description>
+            <Description>{detail.pandora.description ? detail.pandora.description : '내용 없음'}</Description>
          </CoverWrapper>
           
           <HiddenDetail onClick={() => setKeywordsView((prev) => !prev)}>검색 키워드  {keywordsView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>

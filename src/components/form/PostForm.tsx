@@ -68,6 +68,7 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
 const Advice = styled.p`
   margin: 0 0 0.8em 0;
   color: var(--font-info);
+  margin-bottom: 30px;
 `;
 
 const ErrorMessage = styled.small`
@@ -78,7 +79,6 @@ const ErrorMessage = styled.small`
 `;
 
 const Note = styled.textarea`
-  margin-top: 30px;
   width: 100%;
   height: 25rem;
 `;

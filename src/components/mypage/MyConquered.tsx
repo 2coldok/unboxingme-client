@@ -6,6 +6,7 @@ import { LoadingSpinner } from "../../loading/LoadingSpinner";
 import PandoraList from "../PandoraList";
 import styled from "styled-components";
 import { useConqueredsQuery } from "../../hook/QueryHook";
+import { ITEMS_PER_PAGE } from "../../constant/pageItems";
 
 export default function MyConquered() {
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export default function MyConquered() {
           currentPage={currentPage}
           setCurrentPage={setCurrnetPage}
           totalItems={data.payload.total}
-          itemsPerPage={10}
+          itemsPerPage={ITEMS_PER_PAGE.conquered}
           maxVisibleTotalPages={5}
         />
         </PaginationWrapper>

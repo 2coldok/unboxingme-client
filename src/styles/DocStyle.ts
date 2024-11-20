@@ -37,6 +37,16 @@ export const DContent = styled.div`
   margin:0;
 `;
 
+export const DLink = styled.a`
+  color: #e767f5;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  :hover {
+    filter: brightness(125%);
+  }
+`;
+
 export const DList = styled.li`
   margin-left: 0.4rem;
 `;
@@ -52,5 +62,30 @@ export const DExample = styled.p`
   color: #f4d58d;
   font-weight: bold;
   border: 1px solid gray;
-  padding: 0.3rem;
-`
+  padding: 0.5em 1.2rem;
+  border-radius: 0.8em;
+  margin-right: 0.5em;
+`;
+
+export const DExampleWrong = styled.p`
+  display: inline-block;
+  color: #f97583;
+  font-weight: bold;
+  border: 1px solid gray;
+  padding: 0.5em 1.2rem;
+  border-radius: 0.8em;
+  margin-right: 0.5em;
+`;
+
+export const DEmail = styled.span`
+  color: #79b8ff;
+  font-weight: 600;
+`;
+
+export const DDivder = styled.div`
+  width: 100%;
+  height: 1px;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  background-color: var(--border);
+`;
