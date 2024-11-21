@@ -5,7 +5,7 @@ import PandoraList from "../components/PandoraList";
 import PandoraListSkeleton from "../loading/PandoraListSkeleton";
 import { IOpenedPandoraGlimpse } from "../types/pandora";
 import { IPandoraService } from "../service/PandoraService";
-import { getInSession, saveInSession } from "../util/storage";
+// import { getInSession, saveInSession } from "../util/storage";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
 import AppFooter from "../components/AppFooter";
@@ -26,7 +26,7 @@ export default function Home({ pandoraService }: IHomeProps) {
       try {
         setGlimpseLoading(true);
         const data = await pandoraService.getOpenedPandorasGlimpse();
-        saveInSession<IOpenedPandoraGlimpse[]>('glimpse', data.payload);
+        // saveInSession<IOpenedPandoraGlimpse[]>('glimpse', data.payload);
         setPandoras(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
@@ -37,12 +37,13 @@ export default function Home({ pandoraService }: IHomeProps) {
       }
     };
 
-    const cachedGlimpse = getInSession<IOpenedPandoraGlimpse[]>('glimpse');
-    if (cachedGlimpse) {
-      setPandoras(cachedGlimpse);
-    } else {
-      fetchPandoraPreview();
-    }
+    // const cachedGlimpse = getInSession<IOpenedPandoraGlimpse[]>('glimpse');
+    // if (cachedGlimpse) {
+    //   setPandoras(cachedGlimpse);
+    // } else {
+    //   fetchPandoraPreview();
+    // }
+    fetchPandoraPreview();
   }, [pandoraService, navigate]);
 
   return (

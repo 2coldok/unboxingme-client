@@ -43,7 +43,7 @@ export default function MyPage() {
         </AccountWrapper>
         <NicknameWrapper>
           <ProfileField><IoPerson /> 고정 닉네임</ProfileField>
-          <ProfileInfo>{profile?.email.slice(0, 3) + "***"}</ProfileInfo>
+          <ProfileInfo>{profile && profile.email && profile.email.slice(0, 3) + "***"}</ProfileInfo>
         </NicknameWrapper>
       </ProfileDetailWrapper>
       
