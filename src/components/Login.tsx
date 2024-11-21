@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components';
 import { BsX } from "react-icons/bs";
 import { useAuth } from '../hook/AuthHook';
@@ -21,33 +20,36 @@ export default function Login({ onClose }: LoginProps) {
   };
 
   return (
-    <StyledContainer>
-      <Helmet>
-        <link rel='prefetch' href='/google_logo.svg' as='image' />
-      </Helmet>
-      <LoginContainer>
-        <CloseButtonWrapper>
-          <BsX onClick={handleCancel} />
-        </CloseButtonWrapper>
-
-        <TitleWrapper>
-          <img src="/logo.png" alt="logo" />
-          <span>리들노트 앱 로그인</span>
-        </TitleWrapper>
-        
-        
-        <LoginButtonWrapper onClick={handleLogin}>
-          <img src='/google_logo.svg' alt='google logo' />
-          <span>Google 계정으로 계속하기</span>
-        </LoginButtonWrapper>
-        
-        <MessageWrapper>
-          계속 진행시 riddlenote의 
-          <Link href="/about/terms" target="_blank" rel="noopener noreferrer"> 이용약관</Link> 및
-          <Link href="/about/privacy" target="_blank" rel="noopener noreferrer"> 개인정보 처리방침</Link> 에 동의하게 됩니다.
-        </MessageWrapper>
-      </LoginContainer>
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        <LoginContainer>
+          <CloseButtonWrapper>
+            <BsX onClick={handleCancel} />
+          </CloseButtonWrapper>
+  
+          <TitleWrapper>
+            <img src="/logo.png" alt="logo" loading='eager' />
+            <span>리들노트 앱 로그인</span>
+          </TitleWrapper>
+          
+          <LoginButtonWrapper onClick={handleLogin}>
+            <img  
+              src='/google_logo.svg'
+              alt='google logo'
+              loading='eager'
+            />
+            <span>Google 계정으로 계속하기</span>
+          </LoginButtonWrapper>
+          
+         
+          <MessageWrapper>
+            계속 진행시 riddlenote의 
+            <Link href="/about/terms" target="_blank" rel="noopener noreferrer"> 이용약관</Link> 및
+            <Link href="/about/privacy" target="_blank" rel="noopener noreferrer"> 개인정보 처리방침</Link> 에 동의하게 됩니다.
+          </MessageWrapper>
+        </LoginContainer>
+      </StyledContainer>
+    </>
   );
 }
 

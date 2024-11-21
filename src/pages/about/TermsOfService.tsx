@@ -66,7 +66,7 @@ export default function TermsOfService() {
             <p>다음과 같은 행위가 감지될 시 리들노트는 사전 경고 없이 계정 사용 제한, 접속 차단 및 게시물 삭제 등의 제재를 가할 수 있습니다.</p>
             <ul>
               <DList>
-                <DWarning>• 다수의 계정을 이용하여 패널티를 우회하는 행위</DWarning>
+                <DWarning>• 다수의 계정을 이용하여 페널티를 우회하는 행위</DWarning>
                 <DWarning>• 같은 키워드에 대해 유사한 게시물을 다수 생성하여 사용자들에게 혼란을 야기하는 행위</DWarning>
                 <DWarning>• 다른 사용자 및 제 3자에 대한 개인정보를 동의 없이 공개하는 등의 개인정보를 침해 행위 및 명예훼손을 하는 행위</DWarning>
               </DList>

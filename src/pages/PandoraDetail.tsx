@@ -159,9 +159,9 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           {riddlesView && (
             <RiddleWrapper>
               {detail.pandora.problems.map((riddle, index) => (
-                <RiddleBox>
+                <RiddleBox key={uuidv4()}>
                   <RiddleIndex><AiFillLock /> 문제 {index + 1}</RiddleIndex>
-                  <Riddle key={uuidv4()}>             
+                  <Riddle>             
                     <RiddleContent>
                       <span>질문</span>
                       <p>{riddle.question}</p>
@@ -191,8 +191,8 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
         <SubContentWrapper>
           <SubTitle>기본 정보</SubTitle>
           <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
-          <DetailElement>생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
-          <DetailElement>조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
+          <DetailElement>게시물 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
+          <DetailElement>수수께끼 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
           <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
         </SubContentWrapper>
   
@@ -236,15 +236,15 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           <SubTitle>설정</SubTitle>
           <ModifyButtonWrapper>
             <span>
-              모든 수수께끼를 해결한 사용자가 있을 경우 게시물을 수정할 수 없으며,<br/>
+              모든 수수께끼가 해결되어 이미 열람된 게시물을 수정할 수 없으며,<br/>
               수정시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제됩니다.
             </span>
             <EditButton onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>수정</EditButton>
           </ModifyButtonWrapper>
           <ModifyButtonWrapper>
             <span>
-              삭제시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제되며,<br/>
-              게시물이 영구적으로 삭제됩니다.
+              삭제시 게시물이 영구적으로 삭제되며, 열람자가 있을 경우<br/>
+              열람자의 열람 목록에서 삭제되어 더이상 수수께끼 노트를 확인할 수 없습니다.
             </span>
             <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
           </ModifyButtonWrapper>
@@ -341,8 +341,8 @@ const InputReadOnly = styled.input.attrs({ readOnly: true })`
   border-radius: 0.3em;
   margin-left: 0.2em;
   width: 10em;
-  background-color: var(--background);
-  border-color: #39394c;
+  background-color: var(--background-riddle);
+  border: 1px solid var(--border);
   /* background-color: #5d707e; */
 `;
 
