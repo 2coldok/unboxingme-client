@@ -20,6 +20,7 @@ import { LuEye } from "react-icons/lu";
 import AppFooter from "../components/AppFooter";
 import { useLoading } from "../hook/LoadingHook";
 import { BsArrowDownRightSquare } from "react-icons/bs";
+import { useAuth } from "../hook/AuthHook";
 
 
 
@@ -45,15 +46,22 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   const [selectedPandora, setSelectedPandora] = useState<ISelectedPandora | null>(null);
   const { startLoading, stopLoading } = useLoading();
 
+  //csrf test
+  const { csrfToken } = useAuth();
+ 
   useEffect(() => {
     if (!id) {
       return navigate('fallback/404', { state: { message: '판도라 id가 존재하지 않습니다.' } });
     }
 
+    if (!csrfToken) {
+      return;
+    }
+
     const fetchMyPandoraDetail = async () => {
       try {
         startLoading();
-        const data = await dashboardService.getMyPandoraDetail(id);
+        const data = await dashboardService.getMyPandoraDetail(id, csrfToken);
         setDetail(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
@@ -65,7 +73,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
     }
 
     fetchMyPandoraDetail();
-  }, [id, navigate, dashboardService, startLoading, stopLoading]);
+  }, [id, csrfToken, navigate, dashboardService, startLoading, stopLoading]);
 
   const handleSelectedPandora = (action: 'edit' | 'delete', id: string, title: string, totalRecords: number) => {
     setSelectedPandora({ action: action, id: id, title: title, totalRecords: totalRecords });
@@ -76,8 +84,9 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   };
 
   const handleDelete = async (id: string) => {
+    if (!csrfToken) return;
     try {
-      const data = await pandoraService.deleteMyPandora(id);
+      const data = await pandoraService.deleteMyPandora(id, csrfToken);
       alert(`총 ${data.payload.totalDeletedRecords} 개의 기록이 삭제되었습니다.`);
       window.location.href = '/dashboard';
     } catch (error) {

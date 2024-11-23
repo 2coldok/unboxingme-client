@@ -44,7 +44,8 @@ export interface IMyConquereds {
     totalProblems: number;
     coverViewCount: number;
     createdAt: string;
+    solvedAt: boolean;
     isCatUncovered: boolean;
-    solverAlias: string | null;
+    solverAlias: boolean;
   }[];
 }

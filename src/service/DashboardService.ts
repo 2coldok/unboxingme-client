@@ -3,7 +3,7 @@ import { IMyChallenge, IMyConquereds, IMyPandoraDetail } from '../types/dashboar
 import { IHttpClient } from './../network/HttpClient';
 
 export interface IDashboardService {
-  getMyPandoraDetail(id: string): Promise<IApiResponse<IMyPandoraDetail>>;
+  getMyPandoraDetail(id: string, csrfToken: string): Promise<IApiResponse<IMyPandoraDetail>>;
   getMyChallenges(): Promise<IApiResponse<IMyChallenge[]>>;
   getMyConqueredPandoras(page: number): Promise<IApiResponse<IMyConquereds>>;
 }
@@ -11,9 +11,12 @@ export interface IDashboardService {
 export class DashboardService implements IDashboardService {
   constructor(private httpClient: IHttpClient) {}
 
-  async getMyPandoraDetail(id: string) {
+  async getMyPandoraDetail(id: string, csrfToken: string) {
     const data = await this.httpClient.fetch<IMyPandoraDetail, void>(`/dashboard/pandora/${id}`, {
-      method: 'GET'
+      method: 'GET',
+      headers: {
+        'Riddlenote-Csrf-Token': csrfToken
+      }
     });
 
     return data;

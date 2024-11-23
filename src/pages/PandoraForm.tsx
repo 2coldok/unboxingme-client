@@ -19,6 +19,7 @@ import PostForm from "../components/form/PostForm";
 import { TFormSubject } from "../types/form";
 import { IRiddle } from "../types/form";
 import AppFooter from "../components/AppFooter";
+import { useAuth } from "../hook/AuthHook";
 
 interface IPandoraFormProps {
   pandoraService: IPandoraService;
@@ -27,6 +28,7 @@ interface IPandoraFormProps {
 export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { csrfToken } = useAuth();
 
   // 새로운 판도라 만들기 또는 수정하기
   const [mode, setMode] = useState<{ id: string | null, type: 'new' | 'edit' }>({ id: null, type: 'new' });
@@ -44,10 +46,13 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
 
     // 수정하는 경우
     if (id) {
+      if (!csrfToken) {
+        return;
+      }
       setMode({ id: id, type: 'edit' });
       const fetchMyPandoraEdit = async () => {
         try {
-          const data = await pandoraService.getMyPandoraEdit(id);
+          const data = await pandoraService.getMyPandoraEdit(id, csrfToken);
           if (data.success && data.payload) {
             const pandora = data.payload;
             setCover({
@@ -63,14 +68,14 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
           }
         } catch (error) {
           if (error instanceof HttpError) {
-            return navigate('/fallback/error', { state: { error: error, payload: error.payload } });
+            return navigate('/fallback/error', { state: { error: error } });
           }
           
         }
       };
       fetchMyPandoraEdit();
     }
-  }, [id, pandoraService, navigate]);
+  }, [id, pandoraService, navigate, csrfToken]);
 
   return (
     <>

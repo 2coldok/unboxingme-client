@@ -16,8 +16,8 @@ export default function ErrorFallback() {
   //     </StyledContainer>
   //   )
   // }
-  const error: HttpError<null> = location.state.error;
-  const [message, setMessage] = useState('메세지 없음');
+  const error: HttpError = location.state.error;
+  const [message, setMessage] = useState('페이지 세션이 만료되었습니다.');
 
   useEffect(() => {
     if (error.statusCode === 400) {
@@ -26,20 +26,24 @@ export default function ErrorFallback() {
     }
   
     if (error.statusCode === 401) {
-      return setMessage('인증 오류');
+      return setMessage('인증되지 않은 사용자입니다.');
     }
   
     if (error.statusCode === 403) {
-      return setMessage('인증 만료');
+      // if (error.statusText === 'csrf') {
+      //   return setMessage('새로고침이 제한된 페이지입니다.');
+      // }
+
+      return setMessage('인증이 만료되었습니다.');
     }
   
     if (error.statusCode === 404) {
-      return setMessage('Not Found');
+      return setMessage('데이터를 찾을 수 없습니다.');
     }
   
     if (error.statusCode === 409) {
       // 이미 존재하는데, 리소스 충돌
-      return setMessage('Conflict!');
+      return setMessage('Conflict error');
     }
   
     if (error.statusCode === 429) {
@@ -52,10 +56,10 @@ export default function ErrorFallback() {
       return setMessage('서버 오류');
     }
 
-  }, [error.statusCode]);
+  }, [error.statusCode, error.statusText]);
 
   const handleClick= () => {
-    return navigate('/');
+    return navigate(-1);
   };
   
   if (error) {
@@ -64,13 +68,15 @@ export default function ErrorFallback() {
         <StyledWrapper>
           <Logo>
             <img src="/logo.png" alt="logo" />
-            <span>RiddleNote Error</span>
+            <span>RiddleNote: {error.statusText === 'csrf' ? 'Security' : error.statusCode}</span>
           </Logo>
-          <StatusCode>{error.statusCode}</StatusCode>
-          <Message>{message}</Message>
+          
+          <Message>
+            {message}
+          </Message>
           
           <FallbackButtonWrapper>
-            <button onClick={handleClick}>홈으로 이동</button>
+            <button onClick={handleClick}>돌아기기</button>
           </FallbackButtonWrapper>
           
           
@@ -98,15 +104,16 @@ const StyledContainer = styled.div`
 const StyledWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 80%;
-  height: 50%;
-  max-width: 800px;
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background-color: #181d24;
+  justify-content: space-between;
+  width: 600px;
   @media (max-width: 768px) {
     width: 95%;
   }
+  min-height: 300px;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background-color: #181d24;
+  
 `;
 
 const Logo = styled.h1`
@@ -117,12 +124,7 @@ const Logo = styled.h1`
   font-size: 1.3em;
   cursor: pointer;
   padding-top: 1em;
-  padding-bottom: 1em;
   margin: 0;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-  height: 20%;
-
 
   img {
     width: 30px;
@@ -138,25 +140,13 @@ const Logo = styled.h1`
   }
 `;
 
-const StatusCode = styled.div`
+const Message = styled.p`
+  width: 100%;
+  white-space: pre-wrap;
   text-align: center;
-  
-  font-size: 5em;
-  font-weight: 900;
-  /* background-color: blue; */
-  height: 30%;
-`;
-
-const Message = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  
-
-  height: 30%;
-  overflow-y: auto;
-  /* background-color: gray; */
+  font-size: 1.1em;
+  padding: 1em 2em;
+  color: #ececec;
 `;
 
 const FallbackButtonWrapper = styled.div`
@@ -164,7 +154,8 @@ const FallbackButtonWrapper = styled.div`
   /* background-color: green; */
   align-items: center;
   justify-content: center;
-  height: 20%;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  margin-bottom: 2em;
+  /* height: 20%; */
+  /* border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem; */
 `;

@@ -18,14 +18,15 @@ interface IPandoraListProps {
     coverViewCount: number;
     createdAt: string;
     isCatUncovered: boolean;
-    solverAlias?: string | null; // Only from MyConquered Component
+    solverAlias?: boolean; // Only from MyConquered Component
+    solvedAt?: boolean; // Only from MyConquered
   }[];
 }
 
 export default function PandoraList({ pandoras, action, keyword }: IPandoraListProps) {
   const navigate = useNavigate();
 
-  const handleClick = (id: string, solverAlias?: string | null) => {
+  const handleClick = (id: string, solverAlias?: boolean) => {
     if (action === 'glimpse') {
       return;
     }
@@ -37,8 +38,7 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
       }
     }
     if (action === 'conquered') {
-      console.log('solverAlias', solverAlias);
-      if (solverAlias === null) {
+      if (!solverAlias) {
         return navigate(`/pandora/${id}/solveralias`);  
       } 
         
@@ -67,13 +67,25 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
               <Label><BsUpc /> {pandora.label}</Label>
             </div>
             <div>
-              <State $open={pandora.isCatUncovered}>{pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
+              <State $state={getPandoraState(pandora.solvedAt, pandora.solverAlias, pandora.isCatUncovered)}>
+                {getPandoraState(pandora.solvedAt, pandora.solverAlias, pandora.isCatUncovered)}
+              </State>
             </div>
           </InfoWrapper>
         </PandoraWrapper>
       ))}
     </PandorasContainer>
   );
+}
+
+function getPandoraState(solvedAt = false, solverAlias = false, isCatUncovered: boolean) {
+  if (isCatUncovered) {
+    return '열람됨';
+  }
+  if (solvedAt && !solverAlias) {
+    return '열람대기';
+  }
+  return '미열람';
 }
 
 const PandorasContainer = styled.ul`
@@ -129,15 +141,33 @@ const Label = styled.p`
   }
 `;
 
-const State = styled.p<{ $open: boolean }>`
+const State = styled.p<{ $state: '열람됨' | '열람대기' | '미열람' }>`
   display: flex;
   font-weight: 600;
   font-size: 0.85rem;
   padding: 3px 7px 3px 7px;
   border-radius: 0.7rem;
-  border: ${({ $open }) => $open ? '1px solid #4c7a5e' : '1px solid #445261'};
-  background: ${({ $open }) => $open ? '#334b43' : '#353d44'};
-  color: ${({ $open }) => $open ? '#87e89f' : '#b7c9e1'};
+
+  border: ${({ $state }) =>
+    $state === '열람됨'
+      ? '1px solid #4c7a5e'
+      : $state === '열람대기'
+      ? '1px solid #444444'
+      : '1px solid #445261'};
+
+  background: ${({ $state }) =>
+    $state === '열람됨'
+      ? '#334b43'
+      : $state === '열람대기'
+      ? '#dde296'
+      : '#353d44'};
+
+  color: ${({ $state }) =>
+    $state === '열람됨'
+      ? '#87e89f'
+      : $state === '열람대기'
+      ? '#000000'
+      : '#b7c9e1'};
   
 `;
 // #ffd54f

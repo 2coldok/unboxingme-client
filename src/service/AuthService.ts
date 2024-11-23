@@ -1,3 +1,4 @@
+import { ICSRF } from './../types/auth';
 import { IHttpClient } from '../network/HttpClient';
 import { IApiResponse } from '../types/api';
 import { IMe, IProfile } from '../types/auth';
@@ -8,6 +9,7 @@ export interface IAuthService {
   logout(): Promise<IApiResponse<null>>;
   getProfile(): Promise<IApiResponse<IProfile>>;
   me(): Promise<IApiResponse<IMe>>;
+  csrfToken(): Promise<IApiResponse<ICSRF>>;
 }
 
 class AuthService {
@@ -35,6 +37,14 @@ class AuthService {
 
   async me() {
     const data = await this.httpClient.fetch<IMe, void>('/auth/me', {
+      method: 'GET'
+    });
+
+    return data;
+  }
+
+  async csrfToken() {
+    const data = await this.httpClient.fetch<ICSRF, void>('/auth/csrf', {
       method: 'GET'
     });
 

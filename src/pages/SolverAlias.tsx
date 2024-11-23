@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HttpError } from "../network/HttpClient";
 import { IUnboxingService } from "../service/UnboxingService";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
+import { useAuth } from "../hook/AuthHook";
 
 interface ISolverAliasProps {
   unboxingService: IUnboxingService
@@ -14,6 +15,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
   const { id } = useParams<{ id: string }>();
   const [solverAlias, setSolverAlias] = useState('');
   const [solverAliasLoading, setSolverAliasLoading] = useState(true);
+  const { csrfToken } = useAuth();
   const navigate = useNavigate();
 
   const asciiArrays = [
@@ -32,10 +34,14 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
       return navigate('/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
+    if (!csrfToken) {
+      return;
+    }
+
     const fetchSolverAliasStatus = async () => {
       try {
         setSolverAliasLoading(true);
-        const data = await unboxingService.getSolverAliasStatus(id);
+        const data = await unboxingService.getSolverAliasStatus(id, csrfToken);
         // 잘못된접근: 이미 solverAlias가 설정되어 있음
         if (data.payload.isSolverAlias) {
           return navigate('/');
@@ -51,11 +57,15 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
     }
 
     fetchSolverAliasStatus();
-  }, [id, navigate, unboxingService]);
+  }, [id, navigate, unboxingService, csrfToken]);
 
   const handleClick = async () => {
     if (!id) {
       return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
+    }
+    
+    if (!csrfToken) {
+      return;
     }
 
     const trimmedSolverAlias = solverAlias.trim();
@@ -69,7 +79,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
     }
 
     try {
-      const data = await unboxingService.registerSolverAlias(id, trimmedSolverAlias);
+      const data = await unboxingService.registerSolverAlias(id, trimmedSolverAlias, csrfToken);
       if (data.success) {
         return navigate(`/pandora/${id}/note`);
       }

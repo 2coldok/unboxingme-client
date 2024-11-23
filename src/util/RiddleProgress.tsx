@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { BsCheckSquare } from "react-icons/bs"; // 사각형
+import React from 'react';
 
 interface IRiddleProgressProps {
   totalSteps: number;
@@ -10,7 +11,7 @@ export function RiddleProgress({ totalSteps, currentStep }: IRiddleProgressProps
   return (
     <StyledContainer>
         {Array.from({ length: totalSteps }).map((_, index) => (
-          <>
+          <React.Fragment key={index}>
             {index < currentStep ? (
               <CheckedBox><BsCheckSquare color="#8ab4f8" /></CheckedBox>
             ) : (
@@ -21,7 +22,7 @@ export function RiddleProgress({ totalSteps, currentStep }: IRiddleProgressProps
             )}
             
             {index < totalSteps - 1 && <Line filled={index < currentStep} />}
-          </>
+          </React.Fragment>
         ))}
     </StyledContainer>
   );

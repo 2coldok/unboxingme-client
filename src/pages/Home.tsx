@@ -53,7 +53,7 @@ export default function Home({ pandoraService }: IHomeProps) {
       </SearchWrapper>
      
       <SubjectWrapper>
-        <span>최근 열람된 노트</span>
+        <span>최근 열람된 수수께끼</span>
         <small><PiClockClockwiseBold />5m</small>
       </SubjectWrapper>
       <GlimpseWrapper>

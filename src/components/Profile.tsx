@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IProfile } from "../types/auth";
 import { useAuth } from "../hook/AuthHook";
+import { FaChevronDown } from "react-icons/fa";
 
 interface IProfileProps {
   profile: IProfile;
@@ -36,8 +37,9 @@ export default function Profile({ profile }: IProfileProps) {
   return (
     <StyledContainer>
       <ProfileWrapper onClick={handleProfileClick}>
-        <img src={profile.photo} alt="avatar" />
         <span>{profile.displayName}</span>
+        <img src={profile.photo} alt="avatar" />
+        <FaChevronDown />
       </ProfileWrapper>
       {showPopper && (
         <Popper>
@@ -66,18 +68,28 @@ const ProfileWrapper = styled.div`
   margin-right: 1rem;
   cursor: pointer;
 
-  & > img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 0.4em;
-  }
-
   & > span {
     font-weight: bold;
     @media (max-width: 768px) {
       display: none;
     }
+  }
+
+  & > img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 0.7em;
+    margin-left: 0.6em;
+    border: 2px solid var(--brand);
+  }
+
+  svg {
+    color: #ffffff;
+  }
+
+  :hover {
+    background-color: #181d24;
   }
 `;
 
@@ -108,13 +120,13 @@ const Popper = styled.div`
     margin: 0;
     font-size: 1.1em;
     /* font-weight: bold; */
-    /* border-radius: 0.4em; */
-    padding: 0.2em;
+    border-radius: 0.4em;
+    padding: 0.5em;
     font-weight: 600;
     /* background-color: gray; */
     /* color: var(--button-font); */
     :hover {
-      filter: brightness(110%);
+      background-color: #181d24;
       cursor: pointer;
     }
   }

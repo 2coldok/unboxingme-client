@@ -10,6 +10,7 @@ import { PANDORA_FORM } from "../constant/constraints";
 import { getRemainingAttempts } from "../util/remainingAttempts";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { Helmet } from "react-helmet-async";
+import { useAuth } from "../hook/AuthHook";
 
 
 interface IRiddleProps {
@@ -24,16 +25,21 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
   const [riddle, setRiddle] = useState<IRiddle | null>(null);
   const [restrictedUntil, setRestrictedUntil] = useState<string | null>(null); // ISO string. format변환은 cover 컴포넌트에서.
   const [submitAnswer, setSubmitAnswer] = useState('');
+  const { csrfToken } = useAuth();
 
   useEffect(() => {
     if (!id) {
       return navigate('/fallback/404', { state: { message: '잘못된 접근: 판도라 아이디를 전달받지 못했습니다.' } });
     }
 
+    if (!csrfToken) {
+      return;
+    }
+
     const fetchInitialRiddle = async () => {
       try {
         startLoading();
-        const data = await unboxingService.getInitialRiddle(id);
+        const data = await unboxingService.getInitialRiddle(id, csrfToken);
         const status = data.payload.status;
         
         // 나의 판도라일 경우
@@ -62,7 +68,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     }
 
     fetchInitialRiddle();
-  }, [id, navigate, unboxingService, startLoading, stopLoading]);
+  }, [id, navigate, unboxingService, startLoading, stopLoading, csrfToken]);
 
   useEffect(() => {
     if (userColor === 'penalty' && restrictedUntil) {
@@ -91,10 +97,14 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
       return;
     }
 
+    if (!csrfToken) {
+      return;
+    }
+
     const fetchNextRiddle = async () => {
       try {
         startLoading();
-        const data = await unboxingService.getNextRiddle(id, submitAnswer.trim());
+        const data = await unboxingService.getNextRiddle(id, submitAnswer.trim(), csrfToken);
         const status = data.payload.status;
         if (status === 'penalty') {
           setRestrictedUntil(data.payload.restrictedUntil);

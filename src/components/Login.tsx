@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { BsX } from "react-icons/bs";
 import { useAuth } from '../hook/AuthHook';
+import { useEffect, useState } from 'react';
+import { LoadingSpinner } from '../loading/LoadingSpinner';
 
 interface LoginProps {
   onClose: () => void;
@@ -8,6 +10,15 @@ interface LoginProps {
 
 export default function Login({ onClose }: LoginProps) {
   const { login } = useAuth();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setVisible(true);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleCancel = () => {
     onClose();
@@ -28,11 +39,15 @@ export default function Login({ onClose }: LoginProps) {
           </CloseButtonWrapper>
   
           <TitleWrapper>
-            <img src="/logo.png" alt="logo" loading='eager' />
             <span>리들노트 앱 로그인</span>
           </TitleWrapper>
-          
-          <LoginButtonWrapper onClick={handleLogin}>
+
+          {!visible && (
+            <LoadingSpinnerWrapper>
+              <LoadingSpinner />
+            </LoadingSpinnerWrapper>
+          )}
+          <LoginButtonWrapper onClick={handleLogin} visible={visible}>
             <img  
               src='/google_logo.svg'
               alt='google logo'
@@ -102,11 +117,11 @@ const TitleWrapper = styled.div`
   margin-top: 10px;
   color: var(--font);
   
-  img {
+  /* img {
     width: 25px;
     height: 25px;
     margin-right: 0.5em;
-  }
+  } */
 
   span {
     font-size: 18px;
@@ -118,14 +133,25 @@ const TitleWrapper = styled.div`
 
 // color: #4285F4;
 
-const LoginButtonWrapper = styled.span`
+const LoadingSpinnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  width: auto;
+  height: 10px;
+  margin-top: 50px;
+  margin-bottom: 0;
+  /* margin-bottom: 50px; */
+`;
+
+const LoginButtonWrapper = styled.span<{ visible: boolean }>`
+  visibility: ${({ visible }) => visible ? 'visible' : 'hidden'};
   display: flex;
   align-items: center;
   background-color: #4285F4;
   border-radius: 4.2px;
   font-weight: 600;
   width: auto;
-  margin-top: 40px;
+  margin-top: 80px;
   margin-bottom: 50px;
   cursor: pointer;
 

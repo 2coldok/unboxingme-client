@@ -7,3 +7,7 @@ export interface IProfile {
 export interface IMe {
   isTokenValid: boolean;
 }
+
+export interface ICSRF {
+  csrfToken: string;
+}

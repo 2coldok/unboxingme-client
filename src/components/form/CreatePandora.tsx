@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ICover, IRiddle, TFormSubject, TKeywords, TNote } from "../../types/form";
 import { AiFillLock } from "react-icons/ai"; // lock;
 import { INewPandoraForm } from "../../types/pandora";
+import { useAuth } from "../../hook/AuthHook";
 
 
 interface ICreatePandoraProps {
@@ -21,8 +22,12 @@ interface ICreatePandoraProps {
 
 export default function CreatePandora({ mode, setFormSubject, cover, keywords, riddles, post, pandoraService }: ICreatePandoraProps) {
   const navigate = useNavigate();
+  const { csrfToken } = useAuth();
 
   const handleSubmit = async () => {
+    if (!csrfToken) {
+      return;
+    }
     const newPandoraForm: INewPandoraForm = {
       title: cover.title,
       /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -43,7 +48,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
     try {
       // 판도라 생성 성공
       if (!mode.id && mode.type === 'new') {
-        const data = await pandoraService.createPandora(newPandoraForm);
+        const data = await pandoraService.createPandora(newPandoraForm, csrfToken);
         if (data.success) {
           sessionStorage.removeItem('tab');
           window.location.href = '/dashboard';
@@ -51,7 +56,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       }
       // 판도라 수정 성공
       if (mode.id && mode.type === 'edit') {
-        const data = await pandoraService.editMyPandora(mode.id, newPandoraForm);
+        const data = await pandoraService.editMyPandora(mode.id, newPandoraForm, csrfToken);
         const totalDeletedRecords = data.payload.totalDeletedRecords;
         alert(`총 ${totalDeletedRecords}개의 도전자 기록이 삭제되었습니다.`);
         sessionStorage.removeItem('tab');

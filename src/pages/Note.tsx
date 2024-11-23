@@ -12,6 +12,7 @@ import { AiFillLock } from "react-icons/ai";
 import { BsArrowDownRightSquare, BsUpc } from "react-icons/bs";
 import { formatTimeAgo } from "../util/formatTimeAgo";
 import { Helmet } from "react-helmet-async";
+import { useAuth } from "../hook/AuthHook";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -21,17 +22,22 @@ export default function Note({ unboxingService }: NoteProps) {
   const { id } = useParams<{ id: string }>(); 
   const navigate = useNavigate();
   const [pandora, setPandora] = useState<INote | null>(null);
+  const { csrfToken } = useAuth();
   const { isLoading, startLoading, stopLoading } = useLoading();
 
   useEffect(() => {
     if (!id) {
       return navigate('/fallback/404', { state: { message: '판도라 id를 찾을 수 없습니다.' } });
     }
+
+    if (!csrfToken) {
+      return;
+    }
   
     const fetchNote = async () => {
       try {
         startLoading();
-        const data = await unboxingService.getNote(id);
+        const data = await unboxingService.getNote(id, csrfToken);
         setPandora(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
@@ -43,7 +49,7 @@ export default function Note({ unboxingService }: NoteProps) {
     }
 
     fetchNote();
-  }, [id, navigate, unboxingService, startLoading, stopLoading]);
+  }, [id, navigate, unboxingService, startLoading, stopLoading, csrfToken]);
 
   if (!pandora || isLoading) {
     return <LoadingSpinner />;
