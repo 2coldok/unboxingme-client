@@ -153,6 +153,7 @@ const CoverWrapper = styled.main`
 
 const Title = styled.h2`
   color: var(--brand);
+  color: white;
   font-weight: 700;
   font-size: 1.8em;
   margin: 0;

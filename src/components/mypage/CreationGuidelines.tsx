@@ -41,10 +41,6 @@ const Title = styled.h3`
 `;
 
 const CreateWrapper = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center; */
-  /* display: inline-block; */
   border: 1px solid var(--border);
   background-color: var(--background-riddle);
   margin: 1em;

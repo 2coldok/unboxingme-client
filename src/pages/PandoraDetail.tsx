@@ -76,6 +76,8 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
   }, [id, csrfToken, navigate, dashboardService, startLoading, stopLoading]);
 
   const handleSelectedPandora = (action: 'edit' | 'delete', id: string, title: string, totalRecords: number) => {
+    if (action === 'edit' && detail?.pandora.solvedAt) return;
+
     setSelectedPandora({ action: action, id: id, title: title, totalRecords: totalRecords });
   }
 
@@ -245,15 +247,17 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           <SubTitle>설정</SubTitle>
           <ModifyButtonWrapper>
             <span>
-              모든 수수께끼가 해결되어 이미 열람된 게시물을 수정할 수 없으며,<br/>
-              수정시 패널티 기록을 포함해 게시물에 접근한 모든 사용자들의 기록이 삭제됩니다.
+              {detail.pandora.solvedAt && '모든 수수께끼가 해결된 게시물은 수정할 수 없습니다.'}
+              {!detail.pandora.solvedAt && '수정시 패널티 기록을 포함해 모든 사용자들의 수수께끼 기록이 삭제됩니다.'}
             </span>
-            <EditButton onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>수정</EditButton>
+            <EditButton $isSolved={!!detail.pandora.solvedAt} onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>
+              {detail.pandora.solvedAt ? '수정 불가능' : '수정'}
+            </EditButton>
           </ModifyButtonWrapper>
           <ModifyButtonWrapper>
             <span>
               삭제시 게시물이 영구적으로 삭제되며, 열람자가 있을 경우<br/>
-              열람자의 열람 목록에서 삭제되어 더이상 수수께끼 노트를 확인할 수 없습니다.
+              열람자는 더이상 수수께끼 노트를 확인할 수 없습니다.
             </span>
             <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
           </ModifyButtonWrapper>
@@ -577,27 +581,39 @@ const ModifyButtonWrapper = styled.div`
   padding: 2em 2em 3em 2em;
   border-radius: 0.4em;
   font-weight: 500;
-  /* border: 1px solid var(--border); */
-  background-color: #292d37;
+  border: 1px solid var(--border);
   background-color: #303540;
+  /* background-color: #19204e; */
+  
   margin-bottom: 20px;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 20px;
+  }
 `;
 
-const EditButton = styled.button`
-  border: 1px solid #ffe177;
+const EditButton = styled.button<{ $isSolved: boolean }>`
+  border: ${({ $isSolved }) => $isSolved ? '2px solid #444444' : '2px solid #ffe177'};
   background-color: #2f3642;
-  color: #ffe177;
+  color: ${({ $isSolved }) => $isSolved ? '#5f5f5f' : '#ffe177' };
   font-weight: bold;
   padding: 0.3em 2em 0.3em 2em;
   margin-left: 2rem;
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 const DeleteButton = styled.button`
     background-color: #2f3642;
-    border: 1px solid var(--font-warning);
+    background-color: #402828;
+    border: 2px solid var(--font-warning);
     color: var(--font-warning);
     font-weight: bold;
     
     padding: 0.3em 2em 0.3em 2em;
     margin-left: 2rem;
+    @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
