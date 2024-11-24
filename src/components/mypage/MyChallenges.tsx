@@ -40,6 +40,10 @@ export default function MyChallenges() {
   return (
     <>
       <Title>내가 진행중인 수수께끼</Title>
+      {data.payload.length === 0 && (
+        <Empty>진행중인 수수께끼가 없습니다.</Empty>
+      )}
+
       <PandoraList
         action="cover"
         pandoras={data.payload}
@@ -56,4 +60,13 @@ const Title = styled.h3`
 // 모바일 화면시 하단 네비게이션 바와 떨어뜨리기 위함
 const BlankWrapper = styled.div`
   margin-bottom: 130px;
+`;
+
+const Empty = styled.div`
+  border: 1px dashed #676767;
+  background-color: var(--background-riddle);
+  margin: 1em;
+  padding: 1em;
+  border-radius: 0.7rem;
+  min-height: 100px;
 `;

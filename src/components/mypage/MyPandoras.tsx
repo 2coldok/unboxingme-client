@@ -43,6 +43,11 @@ export default function MyPandoras() {
   return (
     <>
       <Title>나의 수수께끼 노트 ({data.payload.total})</Title>
+      {data.payload.total === 0 && (
+        <Empty>
+          내가 만든 수수께끼가 없습니다.
+        </Empty>
+      )}
       <PandoraList
         action="detail"
         pandoras={data.payload.pandoras}
@@ -63,6 +68,15 @@ export default function MyPandoras() {
     </>
   );
 }
+
+const Empty = styled.div`
+  border: 1px dashed #676767;
+  background-color: var(--background-riddle);
+  margin: 1em;
+  padding: 1em;
+  border-radius: 0.7rem;
+  min-height: 100px;
+`;
 
 const Title = styled.h3`
   margin-left: 1em;

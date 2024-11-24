@@ -43,6 +43,11 @@ export default function MyConquered() {
   return (
     <>
       <Title>내가 열람한 수수께끼 노트 ({data.payload.total})</Title>
+      {data.payload.total === 0 && (
+        <Empty>
+          내가 열람한 수수께끼가 없습니다.
+        </Empty>
+      )}
       <PandoraList 
         action="conquered"
         pandoras={data.payload.pandoras}
@@ -65,6 +70,15 @@ export default function MyConquered() {
 
 const Title = styled.h3`
   margin-left: 1em;
+`;
+
+const Empty = styled.div`
+  border: 1px dashed #676767;
+  background-color: var(--background-riddle);
+  margin: 1em;
+  padding: 1em;
+  border-radius: 0.7rem;
+  min-height: 100px;
 `;
 
 // 모바일 화면시 하단 네비게이션 바와 떨어뜨리기 위함
