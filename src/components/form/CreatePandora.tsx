@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Dispatch } from "react";
+import { Dispatch, useState } from "react";
 import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { IPandoraService } from "../../service/PandoraService";
@@ -23,11 +23,14 @@ interface ICreatePandoraProps {
 export default function CreatePandora({ mode, setFormSubject, cover, keywords, riddles, post, pandoraService }: ICreatePandoraProps) {
   const navigate = useNavigate();
   const { csrfToken } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async () => {
-    if (!csrfToken) {
-      return;
-    }
+    if (isSubmitting) return;
+    if (!csrfToken) return
+    
+    setIsSubmitting(true);
+
     const newPandoraForm: INewPandoraForm = {
       title: cover.title,
       /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -155,7 +158,9 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
 
       <ButtonWrapper>
         <button className="previous" onClick={() => setFormSubject('post')}>이전</button>
-        <button onClick={handleSubmit}>{mode.type === 'edit' ? '수정 완료' : '게시물 등록하기'}</button>
+        <button onClick={handleSubmit}>
+          {isSubmitting ? '등록중...' : mode.type === 'edit' ? '수정 완료' : '게시물 등록하기'}
+        </button>
       </ButtonWrapper> 
       
     </>
