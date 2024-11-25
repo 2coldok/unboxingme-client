@@ -1,0 +1,11 @@
+User-agent: Yeti
+Disallow: /
+Allow: /$
+Allow: /about
+Sitemap: https://riddlenote.com/sitemap.xml
+
+User-agent: Googlebot
+Disallow: /
+Allow: /$
+Allow: /about
+Sitemap: https://riddlenote.com/sitemap.xml
