@@ -29,6 +29,7 @@ export default function PandoraCover() {
   const keyword = searchParams.get('keyword');
   const [showLoginPop, setShowLoginPop] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [checkTokenLoading, setCheckTokenLoading] = useState(false);
 
   // fallback from riddle page
   const location = useLocation();
@@ -53,6 +54,7 @@ export default function PandoraCover() {
   }, [navigate, error]);
 
   const handleChallengeClick = async () => {
+    setCheckTokenLoading(true);
     try {
       const status = await getTokenStatus();
       if (!status) {
@@ -64,6 +66,8 @@ export default function PandoraCover() {
       if (error instanceof HttpError) {
         return navigate('/fallback/error', { state: { error: error } })
       }
+    } finally {
+      setCheckTokenLoading(false);
     }
   };
 
@@ -109,7 +113,9 @@ export default function PandoraCover() {
               <p className="index">질문 1. &nbsp;</p>
               <p>{data.payload.firstQuestion}</p>
             </div>
-            <button onClick={handleChallengeClick}>노트 열람하기</button>
+            <button onClick={handleChallengeClick}>
+              {checkTokenLoading ? '자격 확인중...' : '노트 열람하기'}
+            </button>
           </FirstRiddleWrapper>  
         </CoverWrapper>
      </CoverContainer>

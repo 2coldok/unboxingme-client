@@ -14,18 +14,26 @@ export default function Profile({ profile }: IProfileProps) {
   const { logout, getTokenStatus } = useAuth();
   const navigate = useNavigate();
   const [showPopper, setShowPopper] = useState(false);
+  const [checkTokenLoading, setCheckTokenLoading] = useState(false);
 
   const handleProfileClick = () => {
     return setShowPopper(prev => !prev);
   };
 
   const handleMyPageClick = async () => {
-    setShowPopper(false);
-    const status = await getTokenStatus();
-    if (!status) {
-      return alert('로그인이 필요한 서비스입니다.');
+    setCheckTokenLoading(true);
+    try {
+      const status = await getTokenStatus();
+      if (status) {
+        return navigate('/dashboard');
+      }
+      window.location.href = 'https://riddlenote.com';
+    } catch (error) {
+      window.location.href = 'https://riddlenote.com';
+    } finally {
+      setShowPopper(false);
+      setCheckTokenLoading(false);
     }
-    return navigate('/dashboard');
   };
 
   const handleLogoutClick = async () => {
@@ -42,9 +50,13 @@ export default function Profile({ profile }: IProfileProps) {
         <FaChevronDown />
       </ProfileWrapper>
       {showPopper && (
-        <Popper>
-          <div className="mypage" onClick={handleMyPageClick}>마이페이지</div>
-          <div className="logout" onClick={handleLogoutClick}>로그아웃</div>
+        <Popper $isLoading={checkTokenLoading}>
+          <div className="mypage" onClick={handleMyPageClick}>
+            {checkTokenLoading ? '로딩중...' : '마이페이지'}
+          </div>
+          <div className="logout" onClick={handleLogoutClick}>
+            로그아웃
+          </div>
         </Popper>
       )}
     </StyledContainer>
@@ -93,7 +105,7 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const Popper = styled.div`
+const Popper = styled.div<{ $isLoading: boolean }>`
   position: absolute;
   top: 50px;
   /* left: calc(50% - 100px); */
@@ -132,6 +144,7 @@ const Popper = styled.div`
   }
 
   .mypage {
+    background-color: ${({ $isLoading }) => $isLoading ? '#181d24' : 'none'};
     margin-bottom: 0.5em;
   }
 `;
