@@ -38,6 +38,8 @@ export function Copy({ text }: ICopyProps) {
 
 const CopyIcon = styled(BsCopy)`
   cursor: pointer;
+  font-size: 1.2em;
+  color: #ececec;
 `
 
 const ModalContainer = styled.div<{ visible: boolean }>`

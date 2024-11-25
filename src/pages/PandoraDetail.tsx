@@ -153,7 +153,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
               {detail.pandora.keywords.length === 0 && (
                 <>
                   <p>검색 키워드가 설정되지 않았습니다.</p>
-                  <p>게시물 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
+                  <p>수수께끼 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
                 </>
       
               )}
@@ -248,7 +248,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           <ModifyButtonWrapper>
             <span>
               {detail.pandora.solvedAt && '모든 수수께끼가 해결된 게시물은 수정할 수 없습니다.'}
-              {!detail.pandora.solvedAt && '수정시 패널티 기록을 포함해 모든 사용자들의 수수께끼 기록이 삭제됩니다.'}
+              {!detail.pandora.solvedAt && '수정시 페널티 기록을 포함해 열람을 시도한 사용자들의 풀이 기록이 삭제됩니다.'}
             </span>
             <EditButton $isSolved={!!detail.pandora.solvedAt} onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>
               {detail.pandora.solvedAt ? '수정 불가능' : '수정'}
@@ -557,9 +557,11 @@ const RiddleContent = styled.div`
 
 // Note
 const NoteWrapper = styled.pre`
+  border: 1px solid var(--border);
+  background-color: var(--background-riddle);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   margin-top: 0;
   height: 20rem;
-  border: 1px solid var(--border);
   border-radius: 0.4rem;
 `;
 
@@ -593,7 +595,7 @@ const ModifyButtonWrapper = styled.div`
 `;
 
 const EditButton = styled.button<{ $isSolved: boolean }>`
-  border: ${({ $isSolved }) => $isSolved ? '2px solid #444444' : '2px solid #ffe177'};
+  border: ${({ $isSolved }) => $isSolved ? '1px solid #444444' : '1px solid #ffe177'};
   background-color: #2f3642;
   color: ${({ $isSolved }) => $isSolved ? '#5f5f5f' : '#ffe177' };
   font-weight: bold;
@@ -605,15 +607,14 @@ const EditButton = styled.button<{ $isSolved: boolean }>`
 `;
 
 const DeleteButton = styled.button`
-    background-color: #2f3642;
-    background-color: #402828;
-    border: 2px solid var(--font-warning);
-    color: var(--font-warning);
-    font-weight: bold;
-    
-    padding: 0.3em 2em 0.3em 2em;
-    margin-left: 2rem;
-    @media (max-width: 768px) {
+  background-color: #2f3642;
+  border: 1px solid var(--font-warning);
+  color: var(--font-warning);
+  font-weight: bold;
+  
+  padding: 0.3em 2em 0.3em 2em;
+  margin-left: 2rem;
+  @media (max-width: 768px) {
     margin-left: 0;
   }
 `;

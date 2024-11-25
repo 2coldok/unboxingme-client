@@ -152,14 +152,14 @@ const State = styled.p<{ $state: '열람됨' | '열람대기' | '미열람' }>`
     $state === '열람됨'
       ? '1px solid #4c7a5e'
       : $state === '열람대기'
-      ? '1px solid #444444'
+      ? '1px solid #a3974c'
       : '1px solid #445261'};
 
   background: ${({ $state }) =>
     $state === '열람됨'
       ? '#334b43'
       : $state === '열람대기'
-      ? '#dde296'
+      ? '#ffb703'
       : '#353d44'};
 
   color: ${({ $state }) =>

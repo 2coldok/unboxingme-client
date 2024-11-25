@@ -54,7 +54,7 @@ export default function Home({ pandoraService }: IHomeProps) {
      
       <SubjectWrapper>
         <span>최근 열람된 수수께끼</span>
-        <small><PiClockClockwiseBold />5m</small>
+        <small><PiClockClockwiseBold />5min</small>
       </SubjectWrapper>
       <GlimpseWrapper>
         {glimpseLoading ? (

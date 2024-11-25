@@ -105,9 +105,11 @@ const Direction = styled.div<{ $disabled: boolean }>`
 
 const PageButton = styled.span<{ $isActive: boolean }>`
   padding: 0.1em 0.4em 0.1em 0.4em;
-  border-radius: 0.1em;
+  border-radius: 0.4em;
+  
   color: var(--blue100);
   border: 1px solid ${({ $isActive }) => ($isActive ? 'var(--blue100)' : 'none')};
+  background-color: ${({ $isActive }) => ($isActive ? 'var(--background-riddle)' : 'none')};
   :hover {
     cursor: pointer;
   }

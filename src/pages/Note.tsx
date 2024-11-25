@@ -227,20 +227,17 @@ const Description = styled.pre`
 `;
 
 const NoteWrapper = styled.pre`
-  background-color: var(--background-block);
-  background-color: #282C36;
+  border: 1px solid var(--border);
   background-color: var(--background-riddle);
-  color: var(--font-main);
-  color: #2dd05b;
-  font-size: 1.2rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border-radius: 0.9rem;
+  padding: 1.1em;
+  font-size: 1.2rem;
+  
   display: flex;
   flex-direction: column;
   max-width: 950px;
   width: 100%;
-  border: 1px solid var(--border);
-  border-radius: 0.9rem;
-  padding: 1.1em;
   
   margin-top: 0;
   margin-bottom: 20px;
