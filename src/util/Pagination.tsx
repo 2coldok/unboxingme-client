@@ -109,7 +109,7 @@ const PageButton = styled.span<{ $isActive: boolean }>`
   
   color: var(--blue100);
   border: 1px solid ${({ $isActive }) => ($isActive ? 'var(--blue100)' : 'none')};
-  background-color: ${({ $isActive }) => ($isActive ? 'var(--background-riddle)' : 'none')};
+  /* background-color: ${({ $isActive }) => ($isActive ? 'var(--background-riddle)' : 'none')}; */
   :hover {
     cursor: pointer;
   }

@@ -1,33 +1,33 @@
 import styled from "styled-components";
 import Search from "../components/Search";
 import { useEffect, useState } from "react";
-import PandoraList from "../components/PandoraList";
 import PandoraListSkeleton from "../loading/PandoraListSkeleton";
-import { IOpenedPandoraGlimpse } from "../types/pandora";
-import { IPandoraService } from "../service/PandoraService";
 // import { getInSession, saveInSession } from "../util/storage";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
 import AppFooter from "../components/AppFooter";
 import { PiClockClockwiseBold } from "react-icons/pi";
-
+import GlimpseList from "../components/GlimpseList";
+import { IDashboardService } from "../service/DashboardService";
+import { IGlimpse } from "../types/dashboard";
 
 interface IHomeProps {
-  pandoraService: IPandoraService;
+  dashboardService: IDashboardService;
 }
 
-export default function Home({ pandoraService }: IHomeProps) {
+export default function Home({ dashboardService }: IHomeProps) {
   const navigate = useNavigate();
-  const [pandoras, setPandoras] = useState<IOpenedPandoraGlimpse[]>([]);
+  const [glimpses, setGlimpses] = useState<IGlimpse[]>([]);
   const [glimpseLoading, setGlimpseLoading] = useState(false);
 
   useEffect(() => {
     const fetchPandoraPreview = async () => {
       try {
         setGlimpseLoading(true);
-        const data = await pandoraService.getOpenedPandorasGlimpse();
+        const data = await dashboardService.getGlimpses();
+        
         // saveInSession<IOpenedPandoraGlimpse[]>('glimpse', data.payload);
-        setPandoras(data.payload);
+        setGlimpses(data.payload);
       } catch (error) {
         if (error instanceof HttpError) {
           return navigate('/fallback/error', { state: { error: error }, replace: true });
@@ -44,7 +44,7 @@ export default function Home({ pandoraService }: IHomeProps) {
     //   fetchPandoraPreview();
     // }
     fetchPandoraPreview();
-  }, [pandoraService, navigate]);
+  }, [dashboardService, navigate]);
 
   return (
     <StyledContainer>
@@ -53,8 +53,10 @@ export default function Home({ pandoraService }: IHomeProps) {
       </SearchWrapper>
      
       <SubjectWrapper>
-        <span>최근 열람된 수수께끼</span>
-        <small><PiClockClockwiseBold />5min</small>
+        <span>Today log</span>
+        <small>
+          <PiClockClockwiseBold /> 5 minute • 10 Items
+          </small>
       </SubjectWrapper>
       <GlimpseWrapper>
         {glimpseLoading ? (
@@ -64,13 +66,14 @@ export default function Home({ pandoraService }: IHomeProps) {
             <PandoraListSkeleton />
             <PandoraListSkeleton />
             <PandoraListSkeleton />
+            <PandoraListSkeleton />
+            <PandoraListSkeleton />
+            <PandoraListSkeleton />
+            <PandoraListSkeleton />
+            <PandoraListSkeleton />
           </>
         ) : (
-          <PandoraList
-            action="glimpse"
-            pandoras={pandoras}
-            keyword=""
-          />
+          <GlimpseList glimpses={glimpses} />
         )}
       </GlimpseWrapper>
       {!glimpseLoading && (
@@ -92,22 +95,34 @@ const StyledContainer = styled.main`
 `;
 
 const SubjectWrapper = styled.div`
-  width: 100%;
+  display: flex;
+  width: 85%;
   font-weight: 900;
   font-size: 1.1em;
   margin-bottom: 0.4em;
   margin-top: 4rem;
   padding-left: 0.4em;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--border);
   color: #ececec;
-  @media (max-width: 768px) {
-  width: 95%;
+  @media (max-width: 950px) {
+    width: 95%;
+  }
+
+  span {
+    font-size: 1.2em;
   }
   
   small {
+    display: flex;
     color: var(--font-info);
     margin-left: 0.5em;
+    border: 1px solid var(--border);
+    padding: 0.3em;
+    border-radius: 0.5rem;
     svg {
-      margin-right: 0.1em;
+      margin-right: 0.3em;
+      
     }
 
   }
@@ -117,8 +132,6 @@ const SearchWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  /* margin-bottom: 40px; */
-  /* background-color: var(--background-riddle); */
 `;
 
 /**
@@ -127,14 +140,14 @@ const SearchWrapper = styled.div`
  *box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px; 
  */
 const GlimpseWrapper = styled.div`
-  width: 100%;
-  border: 1px solid var(--border);
+  width: 85%;
+  /* border: 1px solid var(--border); */
   border-radius: 1rem;
-  padding: 0.6em;
+  /* padding: 0.6em; */
   /* background-color: var(--background-block); */
-  box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
+  /* box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px; */
 
-  @media (max-width: 768px) {
+  @media (max-width: 950px) {
     width: 95%;
   }
 `;

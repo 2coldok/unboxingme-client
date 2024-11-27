@@ -1,3 +1,12 @@
+export interface IGlimpse {
+  username: string;
+  label: string;
+  totalProblems: number;
+  unsealedQuestionIndex: number;
+  unboxing: boolean;
+  updatedAt: string;
+}
+
 export interface IMyPandoraDetail {
   pandora: {
     label: string,

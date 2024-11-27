@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
           <DTitle>6. 회원 탈퇴</DTitle>
           <DContent>
           리들노트는 사용자가 언제든지 회원 탈퇴를 요청할 권리를 보장합니다.<br></br>
-          회원 탈퇴를 원하는 경우, <DEmail>riddlenote321@gmail.com</DEmail> 을 통해 요청시 사용자 인증 절차를 거친 후 탈퇴 처리를 진행합니다.<br></br>
+          회원 탈퇴를 원하는 경우, 이메일을 통해 요청시 사용자 인증 절차를 거친 후 탈퇴 처리를 진행합니다.<br></br>
           회원 탈퇴가 완료되면 관련 개인정보는 내부 방침 및 법령에 따라 안전하게 삭제됩니다.
           부정행위 또는 제재 기록이 있는 경우, 회원 탈퇴 이후에도 사용자를 식별할 수 있는 최소한의 정보를 최대 1년간 보관할 수 있습니다.
           </DContent>
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
           <DTitle>7. 아동의 개인정보보호</DTitle>
           <DContent>
             리들노트는 만14세 미만 아동의 개인정보 보호를 위하여 만 14세 이상의 사용자에 한하여 회원가입을 허용합니다. 
-            만 14세 미만의 아동의 <DEmail>riddlenote321@gmail.com</DEmail>을 통해 법정대리인의 동의를 받아야 하며, 
+            만 14세 미만의 아동은 이메일을 통해 법정대리인의 동의를 받아야 하며, 
             이 경우 해당 법정 대리인의 추가 정보를 수집할 수 있습니다.
           </DContent>
         </DSection>

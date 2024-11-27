@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BsCopy } from "react-icons/bs";
+// import { BsCopy } from "react-icons/bs";
+import { BsFillStickiesFill } from "react-icons/bs";
 import styled from "styled-components";
 
 
@@ -36,10 +37,13 @@ export function Copy({ text }: ICopyProps) {
   )
 }
 
-const CopyIcon = styled(BsCopy)`
+const CopyIcon = styled(BsFillStickiesFill)`
   cursor: pointer;
   font-size: 1.2em;
-  color: #ececec;
+  color: var(--brand);
+  :hover {
+    filter: brightness(125%);
+  }
 `
 
 const ModalContainer = styled.div<{ visible: boolean }>`

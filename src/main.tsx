@@ -56,7 +56,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <App />,
     children: [
-      { index: true, element: <Home pandoraService={pandoraService} /> },
+      { index: true, element: <Home dashboardService={dashboardService} /> },
       { path: 'search', element: <SearchResult /> },
       { path: 'pandora/:id', element: <PandoraCover /> },
       { path: 'pandora/:id/note', element: <Note unboxingService={unboxingService} /> },

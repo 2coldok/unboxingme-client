@@ -205,6 +205,41 @@
                 font-size: 2rem;
             }
         }
+
+        footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding-bottom: 0;
+        }
+
+        .docs-link-wrapper {
+            display: flex;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+            gap: 25px;
+            padding: 1rem;
+        }
+
+        .docs-link-wrapper a {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .docs-link-wrapper a:hover {
+            text-decoration: underline;
+        }
+
+        .copyright-wrapper {
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -301,5 +336,17 @@
             <img class="sns-image" src="/sns/instagram.png" alt="sns">
         </div>
     </div>
+
+    <footer>
+        <div class="docs-link-wrapper">
+            <a href="https://riddlenote.com/about/privacy">개인정보처리방침</a>
+            <a href="https://riddlenote.com/about/terms">이용약관</a>
+            <a href="https://riddlenote.com/about/guide">수수께끼 가이드</a>
+        </div>
+
+        <div class="copyright-wrapper">
+            Copyright © 2024 RiddleNote. All rights reserved.
+        </div>
+    </footer>
 </body>
 </html>

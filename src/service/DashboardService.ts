@@ -1,8 +1,9 @@
 import { IApiResponse } from '../types/api';
-import { IMyChallenge, IMyConquereds, IMyPandoraDetail } from '../types/dashboard';
+import { IGlimpse, IMyChallenge, IMyConquereds, IMyPandoraDetail } from '../types/dashboard';
 import { IHttpClient } from './../network/HttpClient';
 
 export interface IDashboardService {
+  getGlimpses(): Promise<IApiResponse<IGlimpse[]>>;
   getMyPandoraDetail(id: string, csrfToken: string): Promise<IApiResponse<IMyPandoraDetail>>;
   getMyChallenges(): Promise<IApiResponse<IMyChallenge[]>>;
   getMyConqueredPandoras(page: number): Promise<IApiResponse<IMyConquereds>>;
@@ -10,6 +11,14 @@ export interface IDashboardService {
 
 export class DashboardService implements IDashboardService {
   constructor(private httpClient: IHttpClient) {}
+
+  async getGlimpses() {
+    const data = await this.httpClient.fetch<IGlimpse[], void>('/dashboard/glimpse', {
+      method: 'GET'
+    });
+
+    return data;
+  }
 
   async getMyPandoraDetail(id: string, csrfToken: string) {
     const data = await this.httpClient.fetch<IMyPandoraDetail, void>(`/dashboard/pandora/${id}`, {

@@ -1,14 +1,3 @@
-export interface IOpenedPandoraGlimpse {
-  id: string;
-  label: string;
-  writer: string;
-  title: string;
-  totalProblems: number;
-  coverViewCount: number;
-  createdAt: string;
-  isCatUncovered: boolean
-}
-
 export interface IPandoraSearchResults {
   total: number
   pandoras: {

@@ -476,6 +476,8 @@ const Keyword = styled.li`
   }
 `;
 const CopyButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
   input {
     width: 60%;
     max-width: 500px;
