@@ -104,10 +104,10 @@ export default function PrivacyPolicy() {
         </DSection>
   
         <DSection>
-          <DTitle>9. 개인정보 보호 책임자</DTitle>
+          <DTitle>9. 리들노트 이메일</DTitle>
           <DContent>
-            <p>• 개인정보 보호책임자: 리들노트 운영자</p>
-            <p>• 이메일: <DEmail>riddlenote321@gmail.com</DEmail></p>
+            {/* <p>• 개인정보 보호책임자: 리들노트 운영자</p> */}
+            <p>• 이메일: <DEmail>info@riddlenote.com</DEmail></p>
           </DContent>
         </DSection>
       </DContainer>

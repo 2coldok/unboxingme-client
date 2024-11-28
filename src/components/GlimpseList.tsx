@@ -10,7 +10,7 @@ interface IGlimpseListProps {
     totalProblems: number;
     unsealedQuestionIndex: number;
     unboxing: boolean;
-    updatedAt: string;
+    updatedAt: string; // 서버에서 이미 가공된 날짜. 시간 정보는 제외
   }[]
 }
 

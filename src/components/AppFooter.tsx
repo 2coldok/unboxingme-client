@@ -43,7 +43,7 @@ export default function AppFooter() {
         {showEmail && (
           <PopEmailWrapper>
             <span className="mail-icon"><TbMail /></span>
-            <span>riddlenote321@gmail.com</span>
+            <span>info@riddlenote.com</span>
             <span onClick={handleEmailCancelClick} className="cancel"><BsX /></span>
           </PopEmailWrapper>
         )}
