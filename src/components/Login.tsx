@@ -59,8 +59,8 @@ export default function Login({ onClose }: LoginProps) {
          
           <MessageWrapper>
             계속 진행시 riddlenote의 
-            <Link href="/about/terms" target="_blank" rel="noopener noreferrer"> 이용약관</Link> 및
-            <Link href="/about/privacy" target="_blank" rel="noopener noreferrer"> 개인정보 처리방침</Link> 에 동의하게 됩니다.
+            <Link href="/about/terms-of-service" target="_blank" rel="noopener noreferrer"> 이용약관</Link> 및
+            <Link href="/about/privacy-policy" target="_blank" rel="noopener noreferrer"> 개인정보처리방침</Link> 에 동의하게 됩니다.
           </MessageWrapper>
         </LoginContainer>
       </StyledContainer>

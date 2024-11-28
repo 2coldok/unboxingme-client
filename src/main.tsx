@@ -31,7 +31,7 @@ import { LoadingProvider } from './context/LoadingContext.tsx'
 import PandoraDetail from './pages/PandoraDetail.tsx'
 
 import { env } from './config/env.ts'
-import Introduce from './pages/about/Introduce.tsx'
+// import Introduce from './pages/about/Introduce.tsx'
 import Riddle from './pages/Riddle.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchResult from './pages/SearchResult.tsx';
@@ -64,16 +64,16 @@ const router = createBrowserRouter([
       { path: 'pandora/form/:id', element: <PandoraForm pandoraService={pandoraService} /> },
       { path: 'dashboard', element: <MyPage /> },
       { path: 'dashboard/pandora/:id', element: <PandoraDetail dashboardService={dashboardService} pandoraService={pandoraService} /> },
-      { 
-        path: '/about/introduce', 
-        element: <Introduce /> 
-      },
+      // { 
+      //   path: '/about/introduce', 
+      //   element: <Introduce /> 
+      // },
       {
-        path: '/about/privacy',
+        path: '/about/privacy-policy',
         element: <PrivacyPolicy />
       },
       {
-        path: '/about/terms',
+        path: '/about/terms-of-service',
         element: <TermsOfService />
       },
       {

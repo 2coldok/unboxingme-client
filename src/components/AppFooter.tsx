@@ -13,11 +13,11 @@ export default function AppFooter() {
   };
 
   const handlePrivacyPolicy = () => {
-    return navigate('/about/privacy');
+    return navigate('/about/privacy-policy');
   }
 
   const handleTermsOfService = () => {
-    return navigate('/about/terms');
+    return navigate('/about/terms-of-service');
   };
 
   const handleCaution = () => {
