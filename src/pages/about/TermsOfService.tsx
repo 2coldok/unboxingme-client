@@ -78,7 +78,7 @@ export default function TermsOfService() {
         <DSection>
           <DTitle>6. 게시물 작성자의 책임</DTitle>
           <DContent>
-            리들노트는 사용자가 게시물 작성시 
+            게시물 작성시 
             <DLink href="https://www.riddlenote.com/about/guide" target="_blank" rel="noopener noreferrer"> 수수께끼 가이드</DLink>를 참고하여 제3자 에게 개인정보가 노출되지 않도록 해야합니다. 
             게시물에 포함된 모든 정보는 사용자 스스로 작성한 자발적 콘텐츠로 간주되며, 특히 게시물에 의도하지 않은 제3자에 의해 특정될 수 있는 정보를 포함하지 않도록 각별히 주의해야 합니다. 
             사용자가 작성한 게시물로 인해 발생하는 모든 문제에 대한 책임은 게시물 작성자 본인에게 있으며, 

@@ -17,7 +17,7 @@ export default function Guide() {
   return (
     <>
       <DContainer>
-        <DHead>수수께끼 노트 작성 가이드</DHead>
+        <DHead>수수께끼 가이드</DHead>
         <DSection>
           <DTitle>1. 검색 키워드 설정</DTitle>
           <ul>
@@ -47,7 +47,7 @@ export default function Guide() {
               <DSubTitle>• 실명 사용 시 주의사항</DSubTitle>
               <DContent>
                 실명을 키워드로 사용할 경우 수수께끼 내의 다른 정보화 결합되어
-                열람 대상자가 타인에게 특정될 가능성이 있습니다. 
+                열람 대상자가 타인에게 특정될 가능성이 있습니다.<br/> 
                 이로 인해 개인정보 노출 위험이 생길 수 있으므로, 실명 사용시 민감한 정보와의 연관성을 최소화 하세요.
               </DContent>
             </DList>
@@ -67,13 +67,13 @@ export default function Guide() {
 
             <DList>
               <p>
-                • 모든 질문이 최초로 해결되면 해당 게시물이 비공개로 전환됩니다. 게시물이 비공개로 전환되면, 
+                • 모든 질문이 최초로 해결되면 해당 게시물이 비공개로 전환됩니다. 게시물이 비공개로 전환되면,<br></br>
                 모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 해당 수수께끼를 검색하거나 풀이를 진행할 수 없습니다.
               </p>
             </DList>
 
             <DList>
-              <p>• 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.</p>
+              <p>• 모든 질문을 최초로 해결한 한명의 사용자만 메세지 내용을 확인할 수 있습니다.</p>
             </DList>
           </ul>
         </DSection>
@@ -81,12 +81,13 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>3. 수수께끼 작성 팁</DTitle>
+          <DTitle>3. 열람 대상자가 분명할 경우 수수께끼 작성 팁</DTitle>
           <ul>
             <DList>
               <DSubTitle>• 기억이나 상징을 활용하기</DSubTitle>
               <DContent>
-                질문은 질문 작성자와 열람 대상자만 아는 기억, 상징, 은어 등을 바탕으로 작성하는 것을 권장합니다. 
+                열람 대상자가 분명히 정해져 있을 경우
+                질문 작성자와 열람 대상자만 아는 상징, 은어, 기억이나 사건들을 기반으로 수수께끼를 구성하는 것을 권장합니다. 
                 이는 제 3자가 질문에 대한 답을 유추하기 어렵게 만들어, 열람 대상자만 정답을 맞출 가능성을 높여줍니다.
               </DContent>
               <DExample>그날 대화 중에 우리가 계속 헷갈렸던 단어는? (O)</DExample>
@@ -151,10 +152,10 @@ export default function Guide() {
         <DDivder></DDivder>
        
         <DSection>
-          <DTitle>4. 게시물 수정 제한사항</DTitle>
+          <DTitle>4. 수수께끼 수정 제한사항</DTitle>
           <DContent>
-            이미 열람된 게시물의 내용이 변경될 경우, 열람자가 경험한 정보의 신뢰성과 고유성이 훼손될 수 있어 
-            이를 방지하기 위해  모든 질문이 해결되어 비공개로 전환된 게시물은 수정할 수 없습니다. 
+            이미 수수께끼 풀이가 완료된 게시물이 수정될 경우, 열람자가 경험한 정보의 신뢰성과 고유성이 훼손될 수 있어<br></br>
+            이를 방지하기 위해  모든 질문이 해결되어 비공개로 전환된 수수께끼 게시물은 수정할 수 없습니다. 
           </DContent>
         </DSection>
 
@@ -163,14 +164,15 @@ export default function Guide() {
         <DSection>
           <DTitle>5. 수수께끼 진행 상황 모니터링</DTitle>
           <DContent>
-            게시물 생성자는 자신이 작성한 게시물의 질문 풀이 진행 상황을 상세 페이지에서 확인할 수 있습니다. 
+            수수께끼 생성자는 자신이 만든 수수께끼의 다른 사용자들 풀이 진행 상황을 상세 페이지에서 확인할 수 있습니다. 
             상세 페이지에서 제공되는 정보는 다음과 같습니다.
           </DContent>
           <ul>
             <DList>
               <DSubTitle>• 질문 풀이 진행 상황</DSubTitle>
               <DContent>
-                자신의 수수께끼에 대해 가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)을 확인할 수 있습니다.
+                자신의 수수께끼에 대해 가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)을 확인할 수 있습니다.<br/>
+                진행률이 동일한 기록이 여러개라도 최근 업데이트된 하나의 기록만 확인할 수 있습니다.
               </DContent>
             </DList>
 
@@ -184,8 +186,8 @@ export default function Guide() {
             <DList>
               <DSubTitle>• 열람자 별명</DSubTitle>
               <DContent>
-                모든 질문을 해결한 사용자는 게시물 생성자가 확인할 수 있는 열람자 별명을 설정할 수 있습니다.<br></br>
-                게시물 생성자는 열람자 별명 이외 열람자의 정보는 알 수 없습니다. 
+                모든 질문을 해결한 사용자는 수수께끼 생성자가 확인할 수 있는 열람자 별명을 설정할 수 있습니다.<br></br>
+                수수께끼 생성자는 열람자 별명 이외 열람자의 정보는 알 수 없습니다. 
               </DContent>
             </DList>
           </ul>
@@ -194,30 +196,44 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>6. 열람 완료 게시물 정보 공개 안내</DTitle>
+          <DTitle>6. 수수께끼 풀이 진행상황 노출 안내</DTitle>
           <DContent>
             <DLink href="https://riddlenote.com" target="_blank" rel="noopener noreferrer">홈 화면</DLink>
-            에서 열람이 완료된 게시물의 일부 정보가 일시적으로 노출될 수 있습니다. 
-            최근 열람된 10개의 게시물을 리스트 형태로 보여주게 되며
-            노출되는 정보는 상세 내용을 알 수 없도록 최소한으로 제한하며, 게시물에 접근할 수 없습니다.<br></br>
-            공개되는 정보는 다음과 같습니다.
+            에서 최근 수수께끼 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 보여줍니다.<br/>
+            각각의 리스트에는 수수께끼 라벨, 음영 처리된 고정 닉네임, 문제풀이 진행상황, 업데이트 날짜가 보여집니다. 
           </DContent>
 
           <ul>
             <DList>
-              <DSubTitle>•수수께끼 제목</DSubTitle>
+              <DSubTitle>• 수수께끼 라벨</DSubTitle>
               <DContent>
-                게시물 제목은 처음 두 글자만 노출되며 나머지는 글자 수에 관계없이 3개의 별표(*)로 음영처리 됩니다
+                수수께끼를 생성시 발급되는 고유한 한글 문자열 입니다.<br></br>
+                게시물을 단순히 구분하는 용도로만 사용되며 라벨 정보를 통해 수수께끼를 검색하거나 접근할 수 없습니다.
               </DContent>
-              <DExample>매화꽃이 필 무렵 --{'>'} 매화***</DExample>
-              <DExample>매화꽃 --{'>'} 매화***</DExample>
             </DList>
 
             <DList>
-              <DSubTitle>• 작성자명, 조회수, 생성일, 라벨, 열람 여부</DSubTitle>
+              <DSubTitle>• 고정 닉네임</DSubTitle>
               <DContent>
-                해당 정보는 음영처리 없이 노출됩니다.<br></br>
-                작성자명은 이메일 계정 앞 3자리와 3개의 별표(*)로 음영처리된 문자열입니다.
+                리들노트 로그인시 사용된 구글 계정 앞 세자리와 세개의 별표(*)로 음영처리된 문자입니다.<br/>
+                <DExample>
+                  riddlenote@gmail.com -{'>'} rid***
+                </DExample>
+              </DContent>
+            </DList>
+
+            <DList>
+              <DSubTitle>• 문제풀이 진행상황</DSubTitle>
+              <DContent>
+                총 몆개의 질문중 몆번 질문까지 해결되었는지를 확인할 수 있습니다.
+              </DContent>
+            </DList>
+
+            <DList>
+              <DSubTitle>• 업데이트 날짜</DSubTitle>
+              <DContent>
+                해당 수수께끼 풀이 기록의 업데이트 날짜를 확인할 수 있습니다.<br></br>
+                날짜는 시간을 제외한 년, 월, 일만 노출됩니다.
               </DContent>
             </DList>
           </ul>
