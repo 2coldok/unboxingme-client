@@ -40,7 +40,7 @@ export default function GlimpseList({ glimpses }: IGlimpseListProps) {
   
               <RightWrapper>
                 <State $state={glimpse.unboxing}>
-                  {glimpse.unboxing ? '풀이완료' : '진행중'}
+                  {glimpse.unboxing ? '풀이 완료' : '진행중...'}
                 </State>
               </RightWrapper>
             </RiddleProgressWrapper>
@@ -137,12 +137,15 @@ const LeftWrapper = styled.div`
 const Label = styled.span`
   /* display: inline-flex; */
   /* background-color: #29323e; */
+  /* background-color: #2a313c; */
   color: var(--font-info);
+  color: #adb5bd;
+  /* box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px; */
   font-size: 1em;
   align-self: flex-start;
   padding: 0.2em 0.7em 0.2em 0.7em;
   border: 1px solid var(--border);
-  border-radius: 0.2rem;
+  border-radius: 0.4rem;
   margin-right: 0.3em;
   @media (max-width: 900px) {
     font-size: 1.5em;
@@ -154,7 +157,7 @@ const Label = styled.span`
   }
 
   span {
-    font-weight: 600;
+    font-weight: 700;
   }
 `;
 
@@ -173,24 +176,25 @@ const ProgressSizeControl = styled.div`
 const RightWrapper = styled.div`
   display: flex;
   position: absolute;
-  top: -0.6em;
-  right: 1em;
+  top: 0.5em;
+  right: 0.4em;
   z-index: 1;
 `;
 
 const State = styled.span<{ $state: boolean }>`
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1em;
   @media (max-width: 768px) {
     font-size: 0.8em;
   }
   padding: 5px 12px 5px 12px;
-  border-radius: 0.5rem;
+  /* border-radius: 0.5rem; */
+  border-radius: 0.4rem;
 
-  border: ${({ $state }) => $state ? '1px solid var(--border)' : '1px solid #445261'};
+  /* border: ${({ $state }) => $state ? '1px solid var(--border)' : '1px solid #3d444d'}; */
   /* background: ${({ $state }) => $state ? 'var(--background-riddle)' : '#353d44'}; */
-  background-color: var(--background-riddle);
-  color:  ${({ $state }) => $state ? '#34d058' : '#b7c9e1'};
+  /* background-color: ${({ $state }) => $state ? '#112733' : '#212830'}; */
+  color:  ${({ $state }) => $state ? '#34d058' : '#9198a1'};
 `;
 
 // 요소 3

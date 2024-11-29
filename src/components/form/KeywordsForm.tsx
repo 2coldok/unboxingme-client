@@ -7,6 +7,10 @@ import { TFormSubject } from '../../types/form';
 import { PANDORA_FORM } from '../../constant/constraints';
 import { FORM_LENGTH_ERROR_MESSAGE } from '../../constant/errorMessage';
 
+function normalizeKeyword(keyword: string) {
+  return keyword.replace(/\s+/g, '').toLowerCase(); // 모든 공백 제거 및 소문자 변환
+}
+
 export interface IKeywordsFormProps {
   setFormSubject: Dispatch<SetStateAction<TFormSubject>>;
   keywords: string[];
@@ -44,7 +48,10 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
     if (keywords.includes(text.trim())) {
       return setText('');
     }
-    setKeywords(prev => [...prev, text.trim()]);
+
+    const normalizedKeyword = normalizeKeyword(text);
+
+    setKeywords(prev => [...prev, normalizedKeyword]);
     setText('');
   };
 
@@ -70,9 +77,10 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
 
   return (
     <>
-      <Advice>* 설정한 키워드를 통해서만 생성한 수수께끼를 검색할 수 있습니다.</Advice>
-      <Advice>* 키워드를 설정하지 않을 경우 링크 공유를 통해서만 수수께끼에 접근할 수 있습니다.</Advice>
-      <Advice>* 설정한 키워드 목록은 사용자에게 노출되지 않습니다.</Advice>
+      <Advice>• 설정한 키워드를 통해서만 생성한 수수께끼를 검색할 수 있습니다.</Advice>
+      <Advice>• 키워드를 설정하지 않을 경우 링크 공유를 통해서만 수수께끼에 접근할 수 있습니다.</Advice>
+      <Advice>• 설정한 키워드 목록은 다른 사용자들에게 노출되지 않습니다.</Advice>
+      <Advice>• 키워드는 대소문자 및 띄어쓰기를 구분하지 않습니다.</Advice>
       <AddKeywordWrapper>
         <input
           type="text" 
