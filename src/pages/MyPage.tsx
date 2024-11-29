@@ -39,7 +39,7 @@ export default function MyPage() {
       <ProfileDetailWrapper>
         <AccountWrapper>
           <ProfileField><IoMdSync /> 연동중인 계정</ProfileField>
-          <ProfileInfo>{profile?.email}</ProfileInfo>
+          <ProfileInfo>{profile && profile.email && profile.email + '@gmail.com'}</ProfileInfo>
         </AccountWrapper>
         <NicknameWrapper>
           <ProfileField><IoPerson /> 고정 닉네임</ProfileField>
