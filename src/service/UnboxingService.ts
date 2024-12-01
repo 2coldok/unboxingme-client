@@ -78,7 +78,7 @@ export class UnboxingService implements IUnboxingService {
 
   async getNote(id: string, csrfToken: string) {
     const data = await this.httpClient.fetch<INote, void>(`/unboxing/pandora/${id}/note`, {
-      method: 'PATCH',
+      method: 'GET',
       headers: {
         'Riddlenote-Csrf-Token': csrfToken
       }

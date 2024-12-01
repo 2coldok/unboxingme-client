@@ -12,34 +12,37 @@ import {
   DLink,
   DDivder
 } from "../../styles/DocStyle";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 export default function Guide() {
   return (
     <>
       <DContainer>
-        <DHead>수수께끼 가이드</DHead>
+        <DHead>리들노트 가이드</DHead>
         <DSection>
-          <DTitle>1. 검색 키워드 설정</DTitle>
+          <DTitle>1. 검색 키워드</DTitle>
           <ul>
             <DList>
-              <DSubTitle>• 검색 키워드 용도</DSubTitle>
+              <DSubTitle>• 검색 키워드</DSubTitle>
               <DContent>
-                검색 키워드 등록시 리들노트 사이트 내에서 해당 키워드를 통해 등록된 수수께끼를 검색할 수 있습니다.
+                검색 키워드는 수수께끼 생성자가 설정한 키워드입니다.
+                검색 키워드 등록시 리들노트 사이트 내에서 해당 키워드를 통해 등록된 수수께끼를 검색할 수 있습니다.<br></br>
+                키워드는 대소문자 및 띄어쓰기를 구분하지 않습니다.
               </DContent>
             </DList>
 
             <DList>
               <DSubTitle>• 키워드 설정 시 권장 사항</DSubTitle>
               <DContent>
-                키워드는 가급적 실명 대신 열람 대상자의 별칭이나 특정 범위가 넓은 기관 및 소속명(학교, 동아리, 회사 이름 등)을 활용할 것을 권장합니다. 
+                키워드는 특정할 수 있는 개인정보 대신 열람 대상자의 별칭이나 특정 범위가 넓은 기관 및 소속명(학교, 동아리, 회사 이름 등)을 활용할 것을 권장합니다. 
               </DContent>
             </DList>
 
             <DList>
               <DSubTitle>• 키워드 설정을 생략하는 경우</DSubTitle>
               <DContent>
-                키워드를 설정하지 않을 경우 수수께끼 링크 공유를 통해서만 수수께끼에 접근할 수 있으며
-                이는 개인정보 노출을 최소화할 수 있는 가장 안전한 방법입니다.
+                키워드를 설정하지 않을 경우 수수께끼 생성자가 직접 수수께끼 링크를 공유해 줘야만
+                다른 사용자들이 수수께끼에 접근할 수 있습니다.
               </DContent>
             </DList>
   
@@ -67,13 +70,13 @@ export default function Guide() {
 
             <DList>
               <p>
-                • 모든 질문이 최초로 해결되면 해당 게시물이 비공개로 전환됩니다. 게시물이 비공개로 전환되면,<br></br>
-                모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 해당 수수께끼를 검색하거나 풀이를 진행할 수 없습니다.
+                • 모든 질문이 최초로 해결되면 해당 수수께끼 게시물이 비공개로 전환됩니다.<br></br>
+                게시물이 비공개로 전환되면, 모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 해당 수수께끼를 검색하거나 풀이를 진행할 수 없습니다.
               </p>
             </DList>
 
             <DList>
-              <p>• 모든 질문을 최초로 해결한 한명의 사용자만 메세지 내용을 확인할 수 있습니다.</p>
+              <p>• 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.</p>
             </DList>
           </ul>
         </DSection>
@@ -104,7 +107,7 @@ export default function Guide() {
             </DList>
 
             <DList>
-              <DSubTitle>• 질문을 여러개 만들기</DSubTitle>
+              <DSubTitle>• 질문 여러개 만들기</DSubTitle>
               <DContent>
                 이전 질문을 해결한 사용자에게만 다음 질문이 공개됨으로, 질문을 많이 만들수록 의도하지 않은 제 3자의 접근을 막을 수 있습니다.
               </DContent>
@@ -120,7 +123,7 @@ export default function Guide() {
             </DList>
 
             <DList>
-              <DSubTitle>• 논리적 질문은 피하기</DSubTitle>
+              <DSubTitle>• 논리적인 질문은 피하기</DSubTitle>
               <DContent>
                 누구나 쉽게 유추할 수 있는 정보나, 논리적으로 추론 가능한 질문은 피해주세요.
               </DContent>
@@ -169,15 +172,22 @@ export default function Guide() {
           </DContent>
           <ul>
             <DList>
-              <DSubTitle>• 질문 풀이 진행 상황</DSubTitle>
+              <DSubTitle>• 수수께끼 풀이 진행 상황</DSubTitle>
               <DContent>
                 자신의 수수께끼에 대해 가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)을 확인할 수 있습니다.<br/>
-                진행률이 동일한 기록이 여러개라도 최근 업데이트된 하나의 기록만 확인할 수 있습니다.
+                가장 높은 진행률 기록이 여러개일 경우 최근 문제풀이를 시도한 하나의 기록만 확인할 수 있습니다.
               </DContent>
             </DList>
 
             <DList>
-              <DSubTitle>• 진행 상황 업데이트 시간</DSubTitle>
+              <DSubTitle>• 수수께끼 참여 인원</DSubTitle>
+              <DContent>
+                자신의 수수께끼에 참여한 총 인원수를 확인할 수 있습니다.
+              </DContent>
+            </DList>
+
+            <DList>
+              <DSubTitle>• 업데이트 시간</DSubTitle>
               <DContent>
                 자신의 수수께끼에 대해 가장 높은 풀이 진행률의 최근 업데이트 시간을 확인할 수 있습니다.
               </DContent>
@@ -196,11 +206,11 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>6. 수수께끼 풀이 진행상황 노출 안내</DTitle>
+          <DTitle>6. 수수께끼 풀이 기록 공개 안내</DTitle>
           <DContent>
             <DLink href="https://riddlenote.com" target="_blank" rel="noopener noreferrer">홈 화면</DLink>
-            에서 최근 수수께끼 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 보여줍니다.<br/>
-            각각의 리스트에는 수수께끼 라벨, 음영 처리된 고정 닉네임, 문제풀이 진행상황, 업데이트 날짜가 보여집니다. 
+            에서 최근 수수께끼 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 표시됩니다.<br/>
+            각각의 기록에는 수수께끼 라벨, 음영 처리된 고정 닉네임, 문제풀이 진행상황, 업데이트 날짜 정보를 포함합니다.
           </DContent>
 
           <ul>
@@ -208,16 +218,16 @@ export default function Guide() {
               <DSubTitle>• 수수께끼 라벨</DSubTitle>
               <DContent>
                 수수께끼를 생성시 발급되는 고유한 한글 문자열 입니다.<br></br>
-                게시물을 단순히 구분하는 용도로만 사용되며 라벨 정보를 통해 수수께끼를 검색하거나 접근할 수 없습니다.
+                라벨 정보를 통해 수수께끼를 검색하거나 접근할 수 없습니다.
               </DContent>
             </DList>
 
             <DList>
               <DSubTitle>• 고정 닉네임</DSubTitle>
               <DContent>
-                리들노트 로그인시 사용된 구글 계정 앞 세자리와 세개의 별표(*)로 음영처리된 문자입니다.<br/>
+                리들노트 로그인시 사용된 구글 계정 앞 세자리와 세개의 별표(*)로 이루워진 문자입니다.<br/>
                 <DExample>
-                  riddlenote@gmail.com -{'>'} rid***
+                  riddlenote@gmail.com <AiOutlineArrowRight/> rid***
                 </DExample>
               </DContent>
             </DList>

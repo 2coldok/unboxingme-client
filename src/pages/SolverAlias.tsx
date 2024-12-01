@@ -116,8 +116,8 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
             </Ascii>
           </LeftBody>
           <RightBody>
-            <Message>* 모든 질문이 최초로 해결되어 수수께끼 노트가 비공개로 전환되었습니다.</Message>
-            <Message>* 노트 작성자가 확인할 수 있는 '열람자 별명'을 입력해주세요. 열람자 별명은 이후 수정할 수 없습니다.</Message>
+            <Message>* 모든 수수께끼가 최초로 해결되어 게시물이 비공개로 전환되었습니다.</Message>
+            <Message>* 게시물 작성자가 확인할 수 있는 '열람자 별명'을 입력해주세요. 열람자 별명은 이후 수정할 수 없습니다.</Message>
             <InputWrapper>
               <label className="floating-label">열람자 별명</label>
               <input 
@@ -297,7 +297,7 @@ const InputWrapper = styled.div`
   .alias {
     background-color: var(--background-riddle);
     width: 100%;
-    border: 1px solid var(--font-main);
+    border: 2px solid var(--font-main);
     padding: 1.5em 1em 1.3em 1em;
     :focus {
       border-color: var(--brand);

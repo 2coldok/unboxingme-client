@@ -35,7 +35,6 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
       try {
         const data = await authService.csrfToken();
         setCsrfToken(data.payload.csrfToken);
-        console.log(data.payload.csrfToken); /////////////////////////////////
       } catch (error) {
         setCsrfToken(null);
       }
@@ -47,7 +46,6 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
   // 프로필 가져오기
   useEffect(() => {
     const fetchProfile = async () => {
-      console.log('*****AuthContext에서 fetchProfile 실행됨*****');
       try {
         const data = await authService.getProfile();
         if (!data.payload) {

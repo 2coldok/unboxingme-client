@@ -87,7 +87,7 @@ export default function Note({ unboxingService }: NoteProps) {
               <State $open={pandora.isCatUncovered}>{pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
             </div>
           </InfoWrapper>
-          <Description>{pandora.description}</Description>
+          <Description>{pandora.description ? pandora.description : '내용 없음'}</Description>
         </CoverWrapper>
 
         <NoteWrapper>
@@ -229,7 +229,9 @@ const Description = styled.pre`
 const NoteWrapper = styled.pre`
   border: 1px solid var(--border);
   background-color: var(--background-riddle);
+  color: var(--brand);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  
   border-radius: 0.9rem;
   padding: 1.1em;
   font-size: 1.2rem;

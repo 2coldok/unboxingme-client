@@ -8,8 +8,6 @@ const EXPIRATION_TIME = 5 * 60 * 1000;
 
 export const saveInSession = <T>(key: string, data: T): void => {
   try {
-    console.log(key);
-    console.log(data);
     const now = Date.now();
     const storageData: IStorageData<T> = {
       value: data,
@@ -19,7 +17,6 @@ export const saveInSession = <T>(key: string, data: T): void => {
     sessionStorage.setItem(key, JSON.stringify(storageData));
   } catch (error) {
     if (error instanceof DOMException && error.name === 'QuotaExceededError') {
-      console.log('seesion error');
       sessionStorage.clear();
     }
     // 에러 다이렉트 만들기

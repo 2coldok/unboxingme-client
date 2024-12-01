@@ -36,9 +36,9 @@ export default function AppFooter() {
     <FooterContainer>
       <DocsLinkWrapper>
         <span onClick={handleIntroduce}>사이트 소개</span>
+        <span onClick={handleCaution}>리들노트 가이드</span>
         <span onClick={handlePrivacyPolicy}>개인정보처리방침</span>
         <span onClick={handleTermsOfService}>이용약관</span>
-        <span onClick={handleCaution}>수수께끼 가이드</span>
         <span onClick={handleEmailClick}>오류/건의</span>
         {showEmail && (
           <PopEmailWrapper>

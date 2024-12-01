@@ -1,11 +1,11 @@
 User-agent: Yeti
 Disallow: /
 Allow: /$
-Allow: /about
+Allow: /intro
 Sitemap: https://riddlenote.com/sitemap.xml
 
 User-agent: Googlebot
 Disallow: /
 Allow: /$
-Allow: /about
+Allow: /intro
 Sitemap: https://riddlenote.com/sitemap.xml
