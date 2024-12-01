@@ -1,11 +1,9 @@
-User-agent: Yeti
+User-agent: *
 Disallow: /
 Allow: /$
 Allow: /intro
-Sitemap: https://riddlenote.com/sitemap.xml
-
-User-agent: Googlebot
-Disallow: /
-Allow: /$
-Allow: /intro
+Allow: /logo.png
+Allow: preview.png
+Allow: /favicons/
+Allow: /sitemap.xml
 Sitemap: https://riddlenote.com/sitemap.xml
