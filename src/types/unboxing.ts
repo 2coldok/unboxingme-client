@@ -35,6 +35,7 @@ export interface INextRiddleEnd {
 // 2xx
 export interface INextRiddleChallengeable {
   status: 'riddle';
+  isCorrect: boolean;
   question: string;
   hint: string | null;
   unsealedQuestionIndex: number;
@@ -43,17 +44,6 @@ export interface INextRiddleChallengeable {
 }
 
 export type TNextRiddle = INextRiddlePenalty | INextRiddleEnd | INextRiddleChallengeable;
-
-/***********************************************/
-// IInitialRiddleSuccess 과 INextRiddleChallengeable 과 동일해서 별도의 간단한 이름으로 추가
-export interface IRiddle {
-  status: 'riddle';
-  question: string;
-  hint: string | null;
-  unsealedQuestionIndex: number;
-  totalProblems: number;
-  failCount: number;
-}
 
 /***********************************************/
 

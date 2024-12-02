@@ -2,17 +2,24 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IRiddle } from "../types/unboxing";  // types/unboxing에서 온거여야됨! 햇갈리지 않기
 import { HttpError } from "../network/HttpClient";
 import { useLoading } from "../hook/LoadingHook";
 import RiddleProgress from "../util/RiddleProgress";
 import { PANDORA_FORM } from "../constant/constraints"; 
 import { getRemainingAttempts } from "../util/remainingAttempts";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
-import { Helmet } from "react-helmet-async";
 import { useAuth } from "../hook/AuthHook";
 import Firework from "../components/Firework";
 
+interface IRiddle {
+  status: 'riddle';
+  question: string;
+  hint: string | null;
+  unsealedQuestionIndex: number;
+  totalProblems: number;
+  failCount: number;
+  isCorrect?: boolean; // next riddle을 불러온경우에는 isCorrect담겨있음
+}
 
 interface IRiddleProps {
   unboxingService: IUnboxingService;
@@ -30,6 +37,18 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
   /*****폭죽 */
   const [fireAction, setFireAction] = useState(false);
+
+  useEffect(() => {
+    if (fireAction) {
+      const timer = setTimeout(() => {
+        setFireAction(false);
+      }, 1000);
+  
+      return () => clearTimeout(timer);
+    }
+  }, [fireAction]);
+
+
 
   useEffect(() => {
     if (!id) {
@@ -118,7 +137,10 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
           return setUserColor('solver');
         }
         if (status === 'riddle') {
-          setFireAction(true);//////////////////////
+          if (data.payload.isCorrect) {
+            setFireAction(true);////////////////////// 폭죽
+          }
+          
           setUserColor('challenger');
           setRiddle(data.payload);
         }
@@ -141,9 +163,6 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
   return (
     <StyledContainer>
-      <Helmet>
-        <meta name="robots" content="noindex" />
-      </Helmet>
       <RiddleWrapper>
         <TopWrapper>
           <Logo onClick={handleLogoClick}>
@@ -188,8 +207,6 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
 
         <Firework action={fireAction} />
       </RiddleWrapper>
-
-      
     </StyledContainer>
   );
 }
@@ -204,6 +221,7 @@ const StyledContainer = styled.div`
 
 const RiddleWrapper = styled.div`
   position: relative; /////////////////////////////////// 폭죽을위해
+  overflow: hidden; /////////////////////////////////// 폭죽을위해
   background-color: #252932;
   display: flex;
   flex-direction: column;
@@ -261,6 +279,9 @@ const Logo = styled.p`
 const RiddleProgressWrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
+  @media (max-width: 768px) {
+    font-size: 0.7em;
+  }
 `;
 
 const MiddleWrapper = styled.div`
@@ -283,7 +304,7 @@ const QuestionWrapper = styled.div`
   overflow-y: auto;
   @media (max-width: 768px) {
     width: 100%;
-    height: 50%;
+    height: 70%;
   }
 `;
 
@@ -297,7 +318,7 @@ const InputAnswerWrapper = styled.div`
   padding: 1.5em;
   @media (max-width: 768px) {
     width: 100%;
-    height: 50%;
+    height: 30%;
   }
 
   input {

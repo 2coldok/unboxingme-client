@@ -205,8 +205,10 @@ const IconWrapper = styled.p<{ $active: boolean }>`
   border: 1px solid #484e54;
   border-radius: 1rem;
   font-size: 2em;
-  background-color: ${props => props.$active ? '#3f66a5' : 'none' };
-
+  background-color: ${props => props.$active ? '#3985ff' : 'none' };
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  
+  /* #3f66a5 */
   & > svg {
     /* fill: ${props => props.$active ? 'green' : '' }; */
     color: ${props => props.$active ? 'white' : '#484e54' };
