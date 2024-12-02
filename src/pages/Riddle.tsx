@@ -11,6 +11,7 @@ import { getRemainingAttempts } from "../util/remainingAttempts";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "../hook/AuthHook";
+import Firework from "../components/Firework";
 
 
 interface IRiddleProps {
@@ -26,6 +27,9 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
   const [restrictedUntil, setRestrictedUntil] = useState<string | null>(null); // ISO string. format변환은 cover 컴포넌트에서.
   const [submitAnswer, setSubmitAnswer] = useState('');
   const { csrfToken } = useAuth();
+
+  /*****폭죽 */
+  const [fireAction, setFireAction] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -114,6 +118,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
           return setUserColor('solver');
         }
         if (status === 'riddle') {
+          setFireAction(true);//////////////////////
           setUserColor('challenger');
           setRiddle(data.payload);
         }
@@ -179,7 +184,12 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
         <ButtonWrapper>
           <button onClick={handleSubmit}>정답 제출</button>
         </ButtonWrapper>
+
+
+        <Firework action={fireAction} />
       </RiddleWrapper>
+
+      
     </StyledContainer>
   );
 }
@@ -193,6 +203,7 @@ const StyledContainer = styled.div`
 `;
 
 const RiddleWrapper = styled.div`
+  position: relative; /////////////////////////////////// 폭죽을위해
   background-color: #252932;
   display: flex;
   flex-direction: column;

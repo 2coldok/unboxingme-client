@@ -2,8 +2,13 @@ User-agent: *
 Disallow: /
 Allow: /$
 Allow: /intro
+Allow: /android-chrome-192x192.png
+Allow: /android-chrome-512x512.png
+Allow: /apple-touch-icon.png
+Allow: /favicon-32x32.png
+Allow: /favicon.ico
 Allow: /logo.png
-Allow: preview.png
-Allow: /favicons/
+Allow: /preview.png
+Allow: /site.webmanifest
 Allow: /sitemap.xml
 Sitemap: https://riddlenote.com/sitemap.xml
