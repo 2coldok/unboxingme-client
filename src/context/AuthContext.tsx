@@ -36,10 +36,14 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
         const data = await authService.csrfToken();
         setCsrfToken(data.payload.csrfToken);
       } catch (error) {
-        setCsrfToken(null);
+        if (error instanceof HttpError) {
+          setCsrfToken(null);
+          if (error.statusCode === 429) {
+            window.location.replace('https://riddlenote.com/rate-limit-info');
+          }
+        }
       }
     };
-
     fetchCsrfToken();
   }, [authService]);
   
@@ -56,8 +60,8 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
         if (error instanceof HttpError) {
           setProfile(null);
           // 토큰이 유효하지 않는데, rate limit이 된경우 특별 페이지로 이동시킨다.
-          if (error.statusCode  === 429) {
-            console.log('todo')
+          if (error.statusCode === 429) {
+            window.location.replace('https://riddlenote.com/rate-limit-info');
           }
         }
       }
