@@ -3,19 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>리들노트 앱 로그인</title>
+   
+  <!--Main favicon-->
+  <link rel="shortcut icon" href="https://riddlenote.com/favicon.ico">
+  <!--favicon 기타-->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://riddlenote.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://riddlenote.com/favicon-32x32.png">
+  <link rel="manifest" href="https://riddlenote.com/site.webmanifest">
+  
+  <title>리들노트 로그인</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
   <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      background-color: rgba(0, 0, 0, 0.8);
       display: flex;
       justify-content: center;
       align-items: center;
+      margin: 0;
+      padding: 0;
       height: 100vh;
-      color: #fafaff;
+      font-family: 'Roboto', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      /* background-color: #181d24; */
+      background: rgb(48,52,63);
+      background: linear-gradient(0deg, rgba(48,52,63,1) 0%, rgba(32,58,99,1) 100%);
+      color: white;
+    }
+
+    ul, li {
+      list-style: none;
+      padding: 0;
     }
 
     .login-container {
@@ -24,7 +47,7 @@
       justify-content: center;
       align-items: center;
       padding: 16px;
-      border-radius: 0.4rem;
+      border-radius: 0.5rem;
       background-color: #252932;
       border: 1px solid #43484e;
       max-width: 500px;
@@ -34,8 +57,16 @@
     .title-wrapper {
       display: flex;
       justify-content: center;
+      align-items: center;
       width: 100%;
       margin-top: 10px;
+      gap: 12px;
+    }
+
+    .title-wrapper .brand-logo {
+      height: 24px;
+      width: auto;
+      margin-top: 0.2em;
     }
 
     .title-wrapper span {
@@ -102,6 +133,7 @@
 <body>
   <div class="login-container">
     <div class="title-wrapper">
+      <img src="https://riddlenote.com/logo.png" alt="리들노트 로고" class="brand-logo">
       <span>리들노트 앱 로그인</span>
     </div>
 

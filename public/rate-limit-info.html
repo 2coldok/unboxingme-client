@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--Main favicon-->
+  <link rel="shortcut icon" href="https://riddlenote.com/favicon.ico">
+  <!--favicon 기타-->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://riddlenote.com/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://riddlenote.com/favicon-32x32.png">
+  <link rel="manifest" href="https://riddlenote.com/site.webmanifest">
+
+  <title>리들노트 요청 한도 초과</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Roboto', sans-serif;
+      background-color: #30343f;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid #43484e;
+      border-radius: 0.5rem;
+      background-color: #252932;
+      max-width: 500px;
+      width: 90%;
+      padding: 1rem;
+    }
+
+    .title-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .title-wrapper span {
+      margin-left: 10px;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .logo {
+      height: 30px;
+      width: auto;
+    }
+
+    h4 {
+      font-weight: 400;
+    }
+
+    p {
+      color: #77aaff;
+      font-weight: 600;
+    }
+
+    .login-button {
+      margin-top: 30px;
+      border: 1px solid #485f88;
+      background-color: #324055;
+      color: #8ab4f8;
+      padding: 0.4em 1.5em;
+      border-radius: 0.5rem;
+      font-size: 1em;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title-wrapper">
+      <img src="https://riddlenote.com/logo.png" alt="리들노트 로고" class="logo">
+      <span>Too many request</span>
+    </div>
+    <h4>서버 요청 한도를 초과하였습니다. 잠시 후 다시 시도해주세요.</h4>
+    <p>- 공공 WiFi를 사용중인 경우 개인 WiFi 환경을 이용해주세요.</p>
+    <p>- 비회원일 경우 원활한 서비스 이용을 위해 로그인 후 이용해주세요.</p>
+    <a href="https://riddlenote.com/login" class="login-button">로그인 페이지로 이동하기</a>
+  </div>
+</body>
+</html>

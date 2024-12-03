@@ -55,8 +55,9 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
       } catch (error) {
         if (error instanceof HttpError) {
           setProfile(null);
+          // 토큰이 유효하지 않는데, rate limit이 된경우 특별 페이지로 이동시킨다.
           if (error.statusCode  === 429) {
-            console.log('새로운 페이지로 강제 이동');
+            console.log('todo')
           }
         }
       }
