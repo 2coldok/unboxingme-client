@@ -10,7 +10,7 @@ import Alert from "../util/Alert";
 import { IoPerson } from "react-icons/io5"; // writer
 import { LuEye } from "react-icons/lu"; // coverViewCount
 import { LoadingSpinner } from "../loading/LoadingSpinner";
-import { formatTime, formatTimeAgo } from "../util/formatTimeAgo";
+import { formatTime } from "../util/formatTimeAgo";
 import { AiFillLock } from "react-icons/ai";
 import { BsUpc } from "react-icons/bs";
 import Search from "../components/Search";
@@ -99,7 +99,7 @@ export default function PandoraCover() {
               <MainInfo> 
                 <AiFillLock /> {data.payload.totalProblems} ·&nbsp;
                 <LuEye /> {data.payload.coverViewCount} ·&nbsp;
-                {formatTimeAgo(data.payload.createdAt)}
+                {formatTime(data.payload.createdAt)}
               </MainInfo>
               <Label><BsUpc /> {data.payload.label}</Label>
             </div>
