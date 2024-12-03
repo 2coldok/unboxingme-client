@@ -5,6 +5,10 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { SEARCH_KEYWORD } from "../constant/constraints";
 
+function normalizeKeyword(keyword: string) {
+  return keyword.replace(/\s+/g, '').toLowerCase(); // 모든 공백 제거 및 소문자 변환
+}
+
 interface ISearchProps {
   keyword?: string | null | undefined;
 }
@@ -27,10 +31,10 @@ export default function Search({ keyword }: ISearchProps) {
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const trimmedSearchKeyword = searchKeyword.trim();
-    if (trimmedSearchKeyword.length > 0) {
+    const normalizedKeyword = normalizeKeyword(searchKeyword);
+    if (normalizedKeyword.length > 0) {
       sessionStorage.removeItem('search_currentPage');
-      return navigate(`/search?keyword=${encodeURIComponent(trimmedSearchKeyword)}`);
+      return navigate(`/search?keyword=${encodeURIComponent(normalizedKeyword)}`);
     } else {
       return setSearchKeyword('');
     }
