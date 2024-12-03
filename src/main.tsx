@@ -21,11 +21,9 @@ import { DashboardService } from './service/DashboardService.ts'
 import MyPage from './pages/MyPage.tsx'
 import PandoraForm from './pages/PandoraForm.tsx'
 import SolverAlias from './pages/SolverAlias.tsx'
-import NotFoundFallback from './pages/fallback/NotFoundFallback.tsx'
 import ErrorFallback from './pages/fallback/ErrorFallback.tsx'
 import Note from './pages/Note.tsx'
 import LoginFailureFallback from './pages/fallback/LoginFailureFallback.tsx'
-import PenaltyFallback from './pages/fallback/PenaltyFallback.tsx'
 import SessionFallback from './pages/fallback/SessionFallback.tsx'
 import { LoadingProvider } from './context/LoadingContext.tsx'
 import PandoraDetail from './pages/PandoraDetail.tsx'
@@ -39,6 +37,7 @@ import PrivacyPolicy from './pages/about/PrivacyPolicy.tsx';
 import TermsOfService from './pages/about/TermsOfService.tsx';
 import Guide from './pages/about/Guide.tsx';
 import Preview from './pages/Preview.tsx';
+import VisitorRateLimit from './pages/fallback/VisitorRateLimit.tsx';
 
 
 // service
@@ -91,20 +90,12 @@ const router = createBrowserRouter([
     element: <Riddle unboxingService={unboxingService} />
   },
   {
-    path: '/fallback/404',
-    element: <NotFoundFallback />
-  },
-  {
     path: '/fallback/error',
     element: <ErrorFallback />
   },
   {
     path: '/fallback/login-failed',
     element: <LoginFailureFallback />
-  },
-  {
-    path: '/fallback/penalty',
-    element: <PenaltyFallback />
   },
   {
     path: '/fallback/session',
@@ -114,6 +105,10 @@ const router = createBrowserRouter([
   {
     path: '/preview',
     element: <Preview />
+  },
+  {
+    path: '/visitor-rate-limit',
+    element: <VisitorRateLimit />
   }
 ]);
 

@@ -48,7 +48,7 @@ export default function ErrorFallback() {
   
     if (error.statusCode === 429) {
       // ratelimit 
-      return setMessage('요청 한도를 초과하였습니다. 잠시후 다시 시도해주세요.');
+      return setMessage('요청 한도를 초과하였습니다. 공공 WiFi를 사용자일 경우 로그인 후 이용해주세요.');
     }
     
     if (error.statusCode === 500) {

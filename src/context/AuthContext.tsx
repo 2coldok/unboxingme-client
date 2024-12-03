@@ -55,7 +55,9 @@ export function AuthProvider({ authService, children }: IAuthProviderProps) {
       } catch (error) {
         if (error instanceof HttpError) {
           setProfile(null);
-          console.error(error);
+          if (error.statusCode  === 429) {
+            console.log('새로운 페이지로 강제 이동');
+          }
         }
       }
     }
