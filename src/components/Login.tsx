@@ -56,6 +56,9 @@ export default function Login({ onClose }: LoginProps) {
             <span>Google 계정으로 계속하기</span>
           </LoginButtonWrapper>
           
+          <MessageWrapper>
+            크롬, 사파리, 또는 인터넷 익스플로러 브라우저 환경에서 로그인 해주세요.
+          </MessageWrapper>
          
           <MessageWrapper>
             계속 진행시 riddlenote의 
