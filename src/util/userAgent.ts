@@ -20,11 +20,10 @@ function openInExternalBrowserForIOS(googleLoginUrl: string) {
 }
 
 export function startLogin(googleLoginUrl: string) {
+  console.log(`webview? : ${isWebView()}`);
   if (isAndroid() && isWebView()) {
-    alert('안전한 Google 로그인을 위해 외부 브라우저로 이동합니다.');
     openInExternalBrowserForAndroid(googleLoginUrl);
   } else if (isIOS() && isWebView()) {
-    alert('안전한 Google 로그인을 위해 외부 브라우저로 이동합니다.');
     openInExternalBrowserForIOS(googleLoginUrl);
   } else {
     window.location.href = googleLoginUrl;
