@@ -3,7 +3,6 @@ import { IHttpClient } from '../network/HttpClient';
 import { IApiResponse } from '../types/api';
 import { IMe, IProfile } from '../types/auth';
 import { env } from '../config/env';
-import { startLogin } from '../util/userAgent';
 
 export interface IAuthService {
   login(redirectUri: string): void // 동작 디테일 체크해보기
@@ -17,9 +16,9 @@ class AuthService {
   constructor(private httpClient: IHttpClient) {}
 
   login(redirectUri: string) {
-    const googleLoginUrl = `${env.url.googleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
-    startLogin(googleLoginUrl);
-    // window.location.href = `${env.url.googleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+    // const googleLoginUrl = `${env.url.googleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+    // startLogin(googleLoginUrl);
+    window.location.href = `${env.url.googleSignIn}?redirect_uri=${encodeURIComponent(redirectUri)}`;
   }
 
   async logout() {
