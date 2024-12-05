@@ -45,7 +45,7 @@ export default function Search({ keyword }: ISearchProps) {
       <SearchIcon />
       <SearchInput
         type="search"
-        placeholder="수수께끼 검색"
+        placeholder="수수께끼 조회"
         name="search"
         value={searchKeyword}
         maxLength={SEARCH_KEYWORD.maxLength}

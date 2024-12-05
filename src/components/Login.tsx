@@ -57,11 +57,15 @@ export default function Login({ onClose }: LoginProps) {
           </LoginButtonWrapper>
           
           <MessageWrapper>
+            구글은 보안을 위해 웹뷰(Webview) 내에서의 사용자 인증을 허용하지 않습니다.
+          </MessageWrapper>
+
+          <MessageWrapper>
             크롬, 사파리, 또는 인터넷 익스플로러 브라우저 환경에서 로그인 해주세요.
           </MessageWrapper>
          
           <MessageWrapper>
-            계속 진행시 riddlenote의 
+            계속 진행시 RiddleNote의 
             <Link href="/about/terms-of-service" target="_blank" rel="noopener noreferrer"> 이용약관</Link> 및
             <Link href="/about/privacy-policy" target="_blank" rel="noopener noreferrer"> 개인정보처리방침</Link> 에 동의하게 됩니다.
           </MessageWrapper>
