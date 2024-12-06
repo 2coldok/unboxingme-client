@@ -147,6 +147,35 @@
     a:hover {
       filter: brightness(125%);
     }
+
+    
+
+
+    .hidden {
+      display: none;
+    }
+    #ios-inapp-message {
+      text-align: center;
+      margin: 20px;
+    }
+    .alert-message {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .copy-button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .copy-button:hover {
+      background-color: #45a049;
+    }
+
   </style>
 </head>
 <body>
@@ -177,6 +206,15 @@
     </div>
   </div>
 
+  <!-- 아이폰 자꾸 힘들게하네.. -->
+  <div id="ios-inapp-message" class="hidden">
+    <p class="alert-message">
+      보안을 위해 어플리케이션 내장 브라우저를 지원하지 않습니다.<br />
+      크롬 또는 사파리 브라우저를 이용해주세요.
+    </p>
+    <button id="copy-link-button" class="copy-button">링크 복사하기</button>
+  </div>
+
 
   <script type='text/javascript' charset='UTF-8'>
     var inappdeny_exec_vanillajs = (callback) => {
@@ -187,7 +225,6 @@
       } 
     }
     inappdeny_exec_vanillajs(() => { 
-      /* Do things after DOM has fully loaded */ 
       function copytoclipboard(val){
         var t = document.createElement("textarea");
         document.body.appendChild(t);
@@ -220,15 +257,19 @@
       
         if(useragt.match(/iphone|ipad|ipod/i)){
           
-          var mobile = document.createElement('meta');
-          mobile.name = 'viewport';
-          mobile.content = "width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui";
-          document.getElementsByTagName('head')[0].appendChild(mobile);
-      
-          var fonts = document.createElement('link');
-          fonts.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap';
-          document.getElementsByTagName('head')[0].appendChild(fonts);
-          document.body.innerHTML = "<style>body{margin:0;padding:0;font-family: 'Noto Sans KR', sans-serif;overflow: hidden;height: 100%;}</style><h2 style='padding-top:50px; text-align:center;font-family: 'Noto Sans KR', sans-serif;'>인앱브라우저 호환문제로 인해<br />Safari로 접속해야합니다.</h2><article style='text-align:center; font-size:17px; word-break:keep-all;color:#999;'>아래 버튼을 눌러 Safari를 실행해주세요<br />Safari가 열리면, 주소창을 길게 터치한 뒤,<br />'붙여놓기 및 이동'을 누르면<br />정상적으로 이용할 수 있습니다.<br /><br /><button onclick='inappbrowserout();' style='min-width:180px;margin-top:10px;height:54px;font-weight: 700;background-color:#31408E;color:#fff;border-radius: 4px;font-size:17px;border:0;'>Safari로 열기</button></article><img style='width:70%;margin:50px 15% 0 15%' src='https://tistory3.daumcdn.net/tistory/1893869/skin/images/inappbrowserout.jpeg' />";
+          const iosMessage = document.getElementById("ios-inapp-message");
+          const loginContainer = document.querySelector(".login-container");
+
+          // Hide the login container and show the message
+          loginContainer.style.display = "none";
+          iosMessage.style.display = "block";
+
+          // Copy Link Button functionality
+          const copyButton = document.getElementById("copy-link-button");
+          copyButton.onclick = function () {
+            copytoclipboard(redirectUri);
+            alert("링크가 복사되었습니다. Safari 또는 Chrome 브라우저에 붙여넣어 이동해주세요.");
+          };
         
         }else{
           location.href='intent://'+target_url.replace(/https?:\/\//i,'')+'#Intent;scheme=http;package=com.android.chrome;end';
