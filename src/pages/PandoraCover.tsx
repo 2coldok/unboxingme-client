@@ -59,7 +59,7 @@ export default function PandoraCover() {
       const status = await getTokenStatus();
       if (!status) {
         // return setShowLoginPop(true);
-        return navigate(`/login?redirect=${window.location.href}`);
+        return navigate(`/login?redirect=${encodeURIComponent(window.location.href)}`);
       }
 
       return navigate(`/pandora/${id}/riddle`);
