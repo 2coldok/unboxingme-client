@@ -45,6 +45,10 @@ export default function SearchResult() {
           <Search keyword={keyword} />
         </SearchWrapper>
         <PandoraListSkeleton />
+        <PandoraListSkeleton />
+        <PandoraListSkeleton />
+        <PandoraListSkeleton />
+        <PandoraListSkeleton />
       </>
     )
   }

@@ -49,6 +49,9 @@ export default function AppFooter() {
         )}
       </DocsLinkWrapper>
       <CopyrightWrapper>Copyright © 2024 RiddleNote. All rights reserved.</CopyrightWrapper>
+      <a href="https://riddlenote.com/login" target="_blank" rel="noopener noreferrer">
+        .
+      </a>
     </FooterContainer>
   );
 }
