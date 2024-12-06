@@ -24,7 +24,8 @@ export default function AppHeader() {
   };
   
   const handleLoginClick = () => {
-    setShowLoginPop(true);
+    window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
+    // setShowLoginPop(true);
   };
   
   return (
