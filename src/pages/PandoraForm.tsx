@@ -138,7 +138,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   
         {formSubject === 'preview' && (
           <FormWrapper>
-            <FormSubject>미리보기 및 제출</FormSubject>
+            <FormSubject>미리보기 및 생성</FormSubject>
             <CreatePandora
               mode={mode}
               setFormSubject={setFormSubject}
