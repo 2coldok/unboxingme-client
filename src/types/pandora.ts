@@ -78,18 +78,18 @@ export interface IMyPandoraEdit {
 }
 
 export interface INewPandoraForm {
-  keywords?: string[];
+  keywords: string[];
   title: string;
-  description?: string;
-  problems: { question: string, hint?: string, answer: string }[];
+  description: string | null;
+  problems: { question: string, hint: string | null, answer: string }[];
   cat: string;
 }
 
 export interface IEditPandoraForm {
-  keywords?: string[];
+  keywords: string[];
   title: string;
-  description?: string;
-  problems: { question: string, hint?: string, answer: string }[];
+  description: string | null;
+  problems: { question: string, hint: string | null, answer: string }[];
   cat: string;
 }
 

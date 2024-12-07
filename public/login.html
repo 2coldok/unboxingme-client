@@ -48,6 +48,10 @@
       /* background-color: #181d24; */
       background-color: #30343f;
       color: white;
+
+      overflow: hidden;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     ul, li {
@@ -226,8 +230,8 @@
       </div>
     </div>
     <div class="message-wrapper">
-      보안을 위해 어플리케이션 내장 브라우저를 지원하지 않습니다.<br />
-      정식 브라우저(Safari 또는 Chrome)을 이용해주세요.
+      보안을 위해 어플리케이션 내부 브라우저를 지원하지 않습니다.<br />
+      외부 브라우저(Safari 또는 Chrome)을 이용해주세요.
     </div>
     <button id="copy-link-button" class="copy-button">링크 복사하기</button>
   </div>
@@ -281,13 +285,14 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
+      cosole.log(urlParams);
       const redirectUri = urlParams.get("redirect") || "https://riddlenote.com";
 
       // ios 인앱일 경우 링크 복사 버튼
       const copyButton = document.getElementById("copy-link-button");
       copyButton.onclick = function () {
         copytoclipboard(redirectUri);
-        alert("링크가 복사되었습니다. Safari 또는 Chrome 브라우저에 붙여넣어 이동해주세요.");
+        alert("링크가 복사되었습니다. Safari 또는 Chrome 브라우저 환경에서 링크를 붙여넣어 이동해주세요.");
       };
 
       // ios 인앱이 아닐경우 로그인 버튼.(외부 브라우저 환경인 경우)

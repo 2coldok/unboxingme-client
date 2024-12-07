@@ -32,21 +32,18 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
     setIsSubmitting(true);
 
     const newPandoraForm: INewPandoraForm = {
+      keywords: keywords,
       title: cover.title,
-      /* eslint-disable @typescript-eslint/no-unused-vars */
-      problems: riddles.map(({ id, isAnswerValid, isHintValid, isQuestionValid, ...rest }) => {
-        const riddle: {question: string, hint?: string, answer: string} = { question: rest.question, answer: rest.answer };
-        if (rest.hint) riddle.hint = rest.hint;
-        return riddle;
+      description: cover.description ? cover.description : null,
+      problems: riddles.map(({ question, hint, answer }) => {
+        return {
+          question,
+          answer,
+          hint: hint ? hint : null
+        }
       }),
-      /* eslint-enable @typescript-eslint/no-unused-vars */
       cat: post,
     };
-
-    // keyword가 있을 경우에만 제출
-    if (keywords.length > 0) newPandoraForm.keywords = keywords;
-    // description이 있을 경우에만 제출
-    if (cover.description) newPandoraForm.description = cover.description;
      
     try {
       // 판도라 생성 성공
