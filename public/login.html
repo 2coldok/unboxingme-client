@@ -50,7 +50,6 @@
       color: white;
 
       overflow: hidden;
-      overscroll-behavior: none;
     }
 
     ul, li {
@@ -284,7 +283,6 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      cosole.log(urlParams);
       const redirectUri = urlParams.get("redirect") || "https://riddlenote.com";
 
       // ios 인앱일 경우 링크 복사 버튼
