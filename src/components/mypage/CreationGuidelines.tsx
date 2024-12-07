@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useAuth } from "../../hook/AuthHook";
+import AppFooter from "../AppFooter";
 
 export default function CreationGuidelines() {
   const navigate = useNavigate();
@@ -29,9 +30,9 @@ export default function CreationGuidelines() {
           내용을 확인해주세요.
         </p>
         <CreateButton onClick={handleClick}>수수께끼 노트 만들기</CreateButton>
-
       </CreateWrapper>
       
+      <AppFooter />
     </>
   );
 }

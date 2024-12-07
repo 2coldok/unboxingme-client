@@ -156,8 +156,27 @@
       filter: brightness(125%);
     }
 
-    
 
+    .spinner {
+      display: none;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgb(156, 192, 255);
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      padding: 18px;
+      margin-bottom: 8px;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     .ios-inapp-message-container {
       display: none;
@@ -219,6 +238,11 @@
       />
       <span>Google 계정으로 계속하기</span>
     </div>
+
+    <div>
+      <div class="spinner"></div>
+    </div>
+
   </div>
 
   <!-- 아이폰 자꾸 힘들게하네.. -->
@@ -294,6 +318,13 @@
       // ios 인앱이 아닐경우 로그인 버튼.(외부 브라우저 환경인 경우)
       const loginButton = document.getElementById("login-button");
       loginButton.onclick = function () {
+        const googleText = document.querySelector(".login-button-wrapper");
+        googleText.style.display = "none";
+
+        const spinner = document.querySelector(".spinner");
+        spinner.style.display = "inline-block";
+
+
         window.location.replace(`https://api.riddlenote.com/auth/google?redirect_uri=${encodeURIComponent(redirectUri)}`);
       };
     });
