@@ -58,7 +58,10 @@ export default function PandoraCover() {
     try {
       const status = await getTokenStatus();
       if (!status) {
-        // return setShowLoginPop(true);
+        if (window.location.href.startsWith('http://localhost:5173')) {
+          return setShowLoginPop(true);
+        }
+
         window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
       }
 

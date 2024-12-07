@@ -23,9 +23,16 @@ export default function AppHeader() {
     return navigate('/');
   };
   
+  // 개발환경 또는 서비스환경 구분
   const handleLoginClick = () => {
+    const currentUrl = window.location.href;
+
+    if (currentUrl.startsWith("http://localhost:5173")) {
+      return setShowLoginPop(true);
+    }
+    
     window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
-    // setShowLoginPop(true);
+
   };
   
   return (

@@ -44,6 +44,8 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       }),
       cat: post,
     };
+
+    console.log(newPandoraForm);
      
     try {
       // 판도라 생성 성공
