@@ -51,7 +51,7 @@ export default function MyPage() {
         <NavigateWrapper>
           <NavButton onClick={() => handleNavigation('mines')} $active={tab === 'mines'}>
             <BsPersonCircle />
-            <span>나의 수수께끼</span>
+            <span>나의 메시지</span>
           </NavButton>
           <NavButton onClick={() => handleNavigation('challenges')} $active={tab === 'challenges'}>
             <BsActivity />

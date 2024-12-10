@@ -114,7 +114,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
       <StyledContainer>
         <SubjectWrapper>
           <BsArrowDownRightSquare />
-          <span>나의 수수께끼 세부정보</span>
+          <span>나의 메시지 세부정보</span>
         </SubjectWrapper>
         
 
@@ -122,7 +122,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           <SolverAliasWrapper>
             <p>
               <SolverAlias>{detail.pandora.solverAlias}</SolverAlias> <br/>
-              님에 의해 수수께끼 노트가 열람되었습니다.
+              님에 의해 메시지가 열람되었습니다.
             </p>
           </SolverAliasWrapper> 
         )}
@@ -153,7 +153,6 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
               {detail.pandora.keywords.length === 0 && (
                 <>
                   <p>검색 키워드가 설정되지 않았습니다.</p>
-                  <p>수수께끼 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
                 </>
       
               )}
@@ -166,7 +165,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
             </KeywordsWrapper>
           )}
           
-          <HiddenDetail onClick={() => setRiddlesView((prev) => !prev)}>수수께끼{`(${detail.pandora.totalProblems})`} {riddlesView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>  
+          <HiddenDetail onClick={() => setRiddlesView((prev) => !prev)}>질문{`(${detail.pandora.totalProblems})`} {riddlesView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>  
           {riddlesView && (
             <RiddleWrapper>
               {detail.pandora.problems.map((riddle, index) => (
@@ -191,7 +190,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
             </RiddleWrapper>
           )}
           
-          <HiddenDetail onClick={() => setNoteView((prev) => !prev)}>노트 내용 {noteView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
+          <HiddenDetail onClick={() => setNoteView((prev) => !prev)}>메시지 내용 {noteView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
           {noteView && (
             <NoteWrapper>
               {detail.pandora.cat}
@@ -199,17 +198,17 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           )}
         </SubContentWrapper>
   
-        <SubContentWrapper>
+        {/* <SubContentWrapper>
           <SubTitle>기본 정보</SubTitle>
           <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
           <DetailElement>게시물 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
-          <DetailElement>수수께끼 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
+          <DetailElement>메시지 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
           <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
-        </SubContentWrapper>
+        </SubContentWrapper> */}
   
         
         <SubContentWrapper>
-          <SubTitle>수수께끼 링크</SubTitle>  
+          <SubTitle>메시지 공유 링크</SubTitle>  
           <CopyButtonWrapper>
             <input type="text" value={`https://riddlenote.com/pandora/${id}`} readOnly />
             <Copy text={`https://riddlenote.com/pandora/${id}`} />
@@ -218,7 +217,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
         </SubContentWrapper>
         
         <SubContentWrapper>
-          <SubTitle>수수께끼 풀이 현황</SubTitle>
+          <SubTitle>질문 풀이 현황</SubTitle>
           {detail.totalRecords === 0 && (
             <p>기록 없음</p>
           )}
@@ -238,17 +237,25 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
               )}
               
               <DetailElement>업데이트: <InputReadOnly value={formatTime(detail.record.updatedAt)} /></DetailElement>
-              <DetailElement>수수께끼 참여 인원: <InputReadOnly value={`${detail.totalRecords} 명`} /></DetailElement>
+              <DetailElement>풀이 참여 인원: <InputReadOnly value={`${detail.totalRecords} 명`} /></DetailElement>
             </>
           )}
+        </SubContentWrapper>
+
+        <SubContentWrapper>
+          <SubTitle>기본 정보</SubTitle>
+          <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
+          <DetailElement>게시물 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
+          <DetailElement>메시지 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
+          <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
         </SubContentWrapper>
   
         <SubContentWrapper>
           <SubTitle>설정</SubTitle>
           <ModifyButtonWrapper>
             <span>
-              {detail.pandora.solvedAt && '모든 수수께끼가 해결된 게시물은 수정할 수 없습니다.'}
-              {!detail.pandora.solvedAt && '수정시 페널티 기록을 포함해 열람을 시도한 사용자들의 풀이 기록이 삭제됩니다.'}
+              {detail.pandora.solvedAt && '열람된 메시지는 수정할 수 없습니다.'}
+              {!detail.pandora.solvedAt && '수정시 페널티 기록을 포함해 열람을 시도한 사용자들의 풀이 기록이 모두 삭제됩니다.'}
             </span>
             <EditButton $isSolved={!!detail.pandora.solvedAt} onClick={() => handleSelectedPandora('edit', id, detail.pandora.title, detail.totalRecords)}>
               {detail.pandora.solvedAt ? '수정 불가능' : '수정'}
@@ -256,8 +263,8 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           </ModifyButtonWrapper>
           <ModifyButtonWrapper>
             <span>
-              삭제시 게시물이 영구적으로 삭제되며, 열람자가 있을 경우<br/>
-              열람자는 더이상 수수께끼 노트를 확인할 수 없습니다.
+              삭제시 메시지가 영구적으로 삭제되며, 열람자가 있을 경우<br/>
+              열람자는 더이상 메시지 내용을 확인할 수 없습니다.
             </span>
             <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
           </ModifyButtonWrapper>

@@ -39,9 +39,9 @@ export default function MyChallenges() {
 
   return (
     <>
-      <Title>내가 진행중인 수수께끼</Title>
+      <Title>내가 진행중인 메시지</Title>
       {data.payload.length === 0 && (
-        <Empty>진행중인 수수께끼가 없습니다.</Empty>
+        <Empty>진행중인 메시지가 없습니다.</Empty>
       )}
 
       <PandoraList

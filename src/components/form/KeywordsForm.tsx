@@ -72,13 +72,12 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
       left: 0,
       behavior: 'smooth',
     });
-    setFormSubject('cover');
+    setFormSubject('preview');
   };
 
   return (
     <>
-      <Advice>• 설정한 키워드를 통해서만 생성한 수수께끼를 검색할 수 있습니다.</Advice>
-      <Advice>• 키워드를 설정하지 않을 경우 링크 공유를 통해서만 수수께끼에 접근할 수 있습니다.</Advice>
+      <Advice>• 검색어 설정시 해당 키워드를 통해서 사이트 내에서 메시지를 검색할 수 있습니다.</Advice>
       <Advice>• 설정한 키워드 목록은 다른 사용자들에게 노출되지 않습니다.</Advice>
       <Advice>• 키워드는 대소문자 및 띄어쓰기를 구분하지 않습니다.</Advice>
       <AddKeywordWrapper>
@@ -110,6 +109,7 @@ export default function KeywordsForm({ setFormSubject, keywords, setKeywords }: 
        {keywords.length === 0 && '설정된 키워드가 없습니다.'}
       </AddedKeywords>
       <ButtonWrapper>
+        <button className='previous' type='button' onClick={() => setFormSubject('post')}>이전</button>
         <button type='button' onClick={handleNextButton}>다음</button>
       </ButtonWrapper>
     </>
@@ -206,5 +206,9 @@ const ButtonWrapper = styled.div`
     @media (max-width: 768px) {
       width: 100%;
     }
+  }
+
+  .previous {
+    margin-right: 1em;
   }
 `;

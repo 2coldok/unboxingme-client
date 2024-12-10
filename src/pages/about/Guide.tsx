@@ -18,51 +18,10 @@ export default function Guide() {
   return (
     <>
       <DContainer>
-        <DHead>리들노트 가이드</DHead>
-        <DSection>
-          <DTitle>1. 검색 키워드</DTitle>
-          <ul>
-            <DList>
-              <DSubTitle>• 검색 키워드</DSubTitle>
-              <DContent>
-                검색 키워드는 수수께끼 생성자가 설정한 키워드입니다.
-                검색 키워드 등록시 리들노트 사이트 내에서 해당 키워드를 통해 등록된 수수께끼를 검색할 수 있습니다.<br></br>
-                키워드는 대소문자 및 띄어쓰기를 구분하지 않습니다.
-              </DContent>
-            </DList>
-
-            <DList>
-              <DSubTitle>• 키워드 설정 시 권장 사항</DSubTitle>
-              <DContent>
-                키워드는 특정할 수 있는 개인정보 대신 열람 대상자의 별칭이나 특정 범위가 넓은 기관 및 소속명(학교, 동아리, 회사 이름 등)을 활용할 것을 권장합니다. 
-              </DContent>
-            </DList>
-
-            <DList>
-              <DSubTitle>• 키워드 설정을 생략하는 경우</DSubTitle>
-              <DContent>
-                키워드를 설정하지 않을 경우 수수께끼 생성자가 직접 수수께끼 링크를 공유해 줘야만
-                다른 사용자들이 수수께끼에 접근할 수 있습니다.
-              </DContent>
-            </DList>
-  
-            <DList>
-              <DSubTitle>• 실명 사용 시 주의사항</DSubTitle>
-              <DContent>
-                실명을 키워드로 사용할 경우 수수께끼 내의 다른 정보와 결합되어
-                열람 대상자가 타인에게 특정될 가능성이 있습니다.<br/> 
-                이로 인해 개인정보 노출 위험이 생길 수 있으므로, 실명 사용시 민감한 정보와의 연관성을 최소화 하세요.
-              </DContent>
-            </DList>
-
-            
-          </ul>
-        </DSection>
-
-        <DDivder></DDivder>
+        <DHead>메시지 생성 가이드</DHead>
 
         <DSection>
-          <DTitle>2. 수수께끼 규칙</DTitle>
+          <DTitle>1. 메시지 질문 규칙</DTitle>
           <ul>
             <DList>
               <p>• 이전 질문을 해결한 사용자에게만 다음 질문이 공개됩니다.</p>
@@ -70,13 +29,13 @@ export default function Guide() {
 
             <DList>
               <p>
-                • 모든 질문이 최초로 해결되면 해당 수수께끼 게시물이 비공개로 전환됩니다.<br></br>
-                게시물이 비공개로 전환되면, 모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 해당 수수께끼를 검색하거나 풀이를 진행할 수 없습니다.
+                • 모든 질문이 최초로 해결되면 해당 메시지가 비공개로 전환되어 메시지 링크가 비활성화 됩니다.<br></br>
+                메시지가 비공개로 전환되면, 모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 메시지에 접근하거나 문제 풀이를 진행할 수 없습니다.
               </p>
             </DList>
 
             <DList>
-              <p>• 모든 질문을 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.</p>
+              <p>• 모든 질문을 최초로 해결한 단 한명의 사용자만 메시지 내용을 확인할 수 있습니다.</p>
             </DList>
           </ul>
         </DSection>
@@ -84,13 +43,13 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>3. 열람 대상자가 분명할 경우 수수께끼 작성 팁</DTitle>
+          <DTitle>2. 메시지 질문 작성 팁</DTitle>
           <ul>
             <DList>
               <DSubTitle>• 기억이나 상징을 활용하기</DSubTitle>
               <DContent>
                 열람 대상자가 분명히 정해져 있을 경우
-                질문 작성자와 열람 대상자만 아는 상징, 은어, 기억이나 사건들을 기반으로 수수께끼를 구성하는 것을 권장합니다. 
+                질문 작성자와 열람 대상자만 아는 상징, 은어, 기억이나 사건들을 기반으로 질문을 구성하는 것을 권장합니다. 
                 이는 제 3자가 질문에 대한 답을 유추하기 어렵게 만들어, 열람 대상자만 정답을 맞출 가능성을 높여줍니다.
               </DContent>
               <DExample>그날 대화 중에 우리가 계속 헷갈렸던 단어는? (O)</DExample>
@@ -153,51 +112,92 @@ export default function Guide() {
         </DSection>
 
         <DDivder></DDivder>
+
+
+        <DSection>
+          <DTitle>3. 검색 키워드</DTitle>
+          <ul>
+            <DList>
+              <DSubTitle>• 검색 키워드</DSubTitle>
+              <DContent>
+                검색 키워드는 메시지 생성자가 설정하는 키워드입니다.
+                검색 키워드 등록시 리들노트 사이트 내에서 해당 키워드를 통해 등록된 메시지를 검색할 수 있습니다.<br></br>
+                키워드는 대소문자 및 띄어쓰기를 구분하지 않습니다.
+              </DContent>
+            </DList>
+
+            <DList>
+              <DSubTitle>• 키워드 설정 시 권장 사항</DSubTitle>
+              <DContent>
+                키워드는 특정할 수 있는 개인정보 대신 열람 대상자의 별칭이나 특정 범위가 넓은 기관 및 소속명(학교, 동아리, 회사 이름 등)을 활용할 것을 권장합니다. 
+              </DContent>
+            </DList>
+
+            <DList>
+              <DSubTitle>• 키워드 설정을 생략하는 경우</DSubTitle>
+              <DContent>
+                키워드를 설정하지 않을 경우 메시지 생성자가 직접 링크를 공유해 줘야만
+                다른 사용자들이 메시지에 접근할 수 있습니다.
+              </DContent>
+            </DList>
+  
+            <DList>
+              <DSubTitle>• 실명 사용 시 주의사항</DSubTitle>
+              <DContent>
+                실명을 키워드로 사용할 경우 질문 내의 다른 정보와 결합되어
+                열람 대상자가 타인에게 특정될 가능성이 있습니다.<br/> 
+                이로 인해 개인정보 노출 위험이 생길 수 있으므로, 실명 사용시 민감한 정보와의 연관성을 최소화 하세요.
+              </DContent>
+            </DList>    
+          </ul>
+        </DSection>
+
+        <DDivder></DDivder>
        
         <DSection>
-          <DTitle>4. 수수께끼 수정 제한사항</DTitle>
+          <DTitle>4. 메시지 수정 제한사항</DTitle>
           <DContent>
-            이미 수수께끼 풀이가 완료된 게시물이 수정될 경우, 열람자가 경험한 정보의 신뢰성과 고유성이 훼손될 수 있어<br></br>
-            이를 방지하기 위해  모든 질문이 해결되어 비공개로 전환된 수수께끼 게시물은 수정할 수 없습니다. 
+            이미 열람된 메시지가 수정될 경우, 열람자가 경험한 정보의 신뢰성과 고유성이 훼손될 수 있어<br></br>
+            이를 방지하기 위해  모든 질문이 해결되어 비공개로 전환된 메시지는 수정할 수 없습니다. 
           </DContent>
         </DSection>
 
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>5. 수수께끼 진행 상황 모니터링</DTitle>
+          <DTitle>5. 질문 풀이 진행 상황 모니터링</DTitle>
           <DContent>
-            수수께끼 생성자는 자신이 만든 수수께끼의 다른 사용자들 풀이 진행 상황을 상세 페이지에서 확인할 수 있습니다. 
+            메시지 생성자는 자신이 만든 질문에 대한 다른 사용자들 풀이 진행 상황을 상세 페이지에서 확인할 수 있습니다. 
             상세 페이지에서 제공되는 정보는 다음과 같습니다.
           </DContent>
           <ul>
             <DList>
-              <DSubTitle>• 수수께끼 풀이 진행 상황</DSubTitle>
+              <DSubTitle>• 문제풀이 진행 상황</DSubTitle>
               <DContent>
-                자신의 수수께끼에 대해 가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)을 확인할 수 있습니다.<br/>
-                가장 높은 진행률 기록이 여러개일 경우 최근 문제풀이를 시도한 하나의 기록만 확인할 수 있습니다.
+                가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)만 확인할 수 있습니다.<br/>
+                가장 높은 진행률 기록이 여러개일 경우 최근 질문 풀이를 시도한 하나의 기록만 확인할 수 있습니다.
               </DContent>
             </DList>
 
             <DList>
-              <DSubTitle>• 수수께끼 참여 인원</DSubTitle>
+              <DSubTitle>• 질문 참여 인원</DSubTitle>
               <DContent>
-                자신의 수수께끼에 참여한 총 인원수를 확인할 수 있습니다.
+                자신의 메시지를 열람하기 위해 질문에 참여한 총 인원수를 확인할 수 있습니다.
               </DContent>
             </DList>
 
             <DList>
               <DSubTitle>• 업데이트 시간</DSubTitle>
               <DContent>
-                자신의 수수께끼에 대해 가장 높은 풀이 진행률의 최근 업데이트 시간을 확인할 수 있습니다.
+                가장 높은 풀이 진행률의 최근 업데이트 시간을 확인할 수 있습니다.
               </DContent>
             </DList>
 
             <DList>
               <DSubTitle>• 열람자 별명</DSubTitle>
               <DContent>
-                모든 질문을 해결한 사용자는 수수께끼 생성자가 확인할 수 있는 열람자 별명을 설정할 수 있습니다.<br></br>
-                수수께끼 생성자는 열람자 별명 이외 열람자의 정보는 알 수 없습니다. 
+                모든 질문을 해결한 사용자는 메시지 생성자가 확인할 수 있는 열람자 별명을 설정할 수 있습니다.<br></br>
+                메시지 생성자는 열람자 별명 이외 열람자의 정보는 알 수 없습니다. 
               </DContent>
             </DList>
           </ul>
@@ -206,19 +206,19 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>6. 수수께끼 풀이 기록 공개 안내</DTitle>
+          <DTitle>6. 질문 풀이 기록 일시적 공개 안내</DTitle>
           <DContent>
             <DLink href="https://riddlenote.com" target="_blank" rel="noopener noreferrer">홈 화면</DLink>
-            에서 최근 수수께끼 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 표시됩니다.<br/>
-            각각의 기록에는 수수께끼 라벨, 음영 처리된 고정 닉네임, 문제풀이 진행상황, 업데이트 날짜 정보를 포함합니다.
+            에서 최근 질문 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 표시됩니다.<br/>
+            각각의 기록에는 메시지 라벨, 음영 처리된 고정 닉네임, 문제풀이 진행상황, 업데이트 날짜 정보를 포함합니다.
           </DContent>
 
           <ul>
             <DList>
-              <DSubTitle>• 수수께끼 라벨</DSubTitle>
+              <DSubTitle>• 메시지 라벨</DSubTitle>
               <DContent>
-                수수께끼를 생성시 발급되는 고유한 한글 문자열 입니다.<br></br>
-                라벨 정보를 통해 수수께끼를 검색하거나 접근할 수 없습니다.
+                메시지 생성시 발급되는 고유한 한글 문자열 입니다.<br></br>
+                라벨 정보를 통해 메시지를 검색하거나 접근할 수 없습니다.
               </DContent>
             </DList>
 
@@ -233,7 +233,7 @@ export default function Guide() {
             </DList>
 
             <DList>
-              <DSubTitle>• 문제풀이 진행상황</DSubTitle>
+              <DSubTitle>• 질문 풀이 진행상황</DSubTitle>
               <DContent>
                 총 몆개의 질문중 몆번 질문까지 해결되었는지를 확인할 수 있습니다.
               </DContent>
@@ -242,7 +242,7 @@ export default function Guide() {
             <DList>
               <DSubTitle>• 업데이트 날짜</DSubTitle>
               <DContent>
-                해당 수수께끼 풀이 기록의 업데이트 날짜를 확인할 수 있습니다.<br></br>
+                질문 풀이 기록의 업데이트 날짜를 확인할 수 있습니다.<br></br>
                 날짜는 시간을 제외한 년, 월, 일만 노출됩니다.
               </DContent>
             </DList>

@@ -42,10 +42,10 @@ export default function MyConquered() {
   
   return (
     <>
-      <Title>내가 열람한 수수께끼 노트 ({data.payload.total})</Title>
+      <Title>내가 열람한 메시지 ({data.payload.total})</Title>
       {data.payload.total === 0 && (
         <Empty>
-          내가 열람한 수수께끼가 없습니다.
+          내가 열람한 메시지가 없습니다.
         </Empty>
       )}
       <PandoraList 

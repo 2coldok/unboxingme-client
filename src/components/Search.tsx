@@ -45,7 +45,7 @@ export default function Search({ keyword }: ISearchProps) {
       <SearchIcon />
       <SearchInput
         type="search"
-        placeholder="수수께끼 조회"
+        placeholder="메시지 검색"
         name="search"
         value={searchKeyword}
         maxLength={SEARCH_KEYWORD.maxLength}
@@ -80,7 +80,7 @@ const SearchFormWrapper = styled.form`
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   
-  width: 700px;
+  width: 600px;
   @media (max-width: 768px) {
     width: 85%;
   }

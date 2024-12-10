@@ -33,7 +33,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   // 새로운 판도라 만들기 또는 수정하기
   const [mode, setMode] = useState<{ id: string | null, type: 'new' | 'edit' }>({ id: null, type: 'new' });
 
-  const [formSubject, setFormSubject] = useState<TFormSubject>('keywords');
+  const [formSubject, setFormSubject] = useState<TFormSubject>('cover');
   const [keywords, setKeywords] = useState<TKeywords>([]);
   const [cover, setCover] = useState<ICover>({ title: '', description: '' });
   const [riddles, setRiddles] = useState<IRiddle[]>([{ id: uuidv4(), isQuestionValid: false, isHintValid: true, isAnswerValid: false, question: '', hint: '', answer: '' }]);
@@ -82,30 +82,19 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
       <StyledContainer>
         {formSubject !== 'preview' && (
           <ProgressWrapper>
-            <IconWrapper $active={formSubject === 'keywords'}><BsSearch /></IconWrapper>
-            <Road></Road>
             <IconWrapper $active={formSubject === 'cover'}><BsCreditCard2Front /></IconWrapper>
             <Road></Road>
             <IconWrapper $active={formSubject === 'riddles'}><BsQuestionSquare /></IconWrapper>
             <Road></Road>
             <IconWrapper $active={formSubject === 'post'}><BsEnvelopePaper /></IconWrapper>
+            <Road></Road>
+            <IconWrapper $active={formSubject === 'keywords'}><BsSearch /></IconWrapper>
           </ProgressWrapper>
-        )}
-  
-        {formSubject === 'keywords' && (
-          <FormWrapper>
-            <FormSubject>1. 검색 키워드 (선택)</FormSubject>
-            <KeywordsForm
-              setFormSubject={setFormSubject}
-              keywords={keywords}
-              setKeywords={setKeywords}
-            />
-          </FormWrapper>
         )}
   
         {formSubject === 'cover' && (
           <FormWrapper>
-            <FormSubject>2. 수수께끼 표지</FormSubject>
+            <FormSubject>1. 메시지 표지</FormSubject>
             <CoverForm  
               setFormSubject={setFormSubject}
               cover={cover}
@@ -116,7 +105,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   
         {formSubject === 'riddles' && (
           <FormWrapper>
-            <FormSubject>3. 수수께끼 만들기</FormSubject>
+            <FormSubject>2. 질문 만들기</FormSubject>
             <RiddlesForm 
               setFormSubject={setFormSubject} 
               riddles={riddles}
@@ -127,11 +116,22 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   
         {formSubject === 'post' && (
           <FormWrapper>
-            <FormSubject>4. 노트 작성</FormSubject>
+            <FormSubject>3. 메시지 작성</FormSubject>
             <PostForm 
               setFormSubject={setFormSubject} 
               post={post}
               setPost={setPost}
+            />
+          </FormWrapper>
+        )}
+
+        {formSubject === 'keywords' && (
+          <FormWrapper>
+            <FormSubject>4. 검색어 등록 (선택)</FormSubject>
+            <KeywordsForm
+              setFormSubject={setFormSubject}
+              keywords={keywords}
+              setKeywords={setKeywords}
             />
           </FormWrapper>
         )}

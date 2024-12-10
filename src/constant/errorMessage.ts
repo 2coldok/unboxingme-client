@@ -6,5 +6,5 @@ export const FORM_LENGTH_ERROR_MESSAGE = Object.freeze({
   question: `질문을 입력해주세요`,
   answer: `정답을 입력해주세요`,
   totalProblems: `질문은 최대 ${PANDORA_FORM.maxTotalProblems}개 까지 등록할 수 있습니다.`,
-  note: `노트 내용을 입력해주세요`
+  note: `메시지 내용을 입력해주세요`
 });

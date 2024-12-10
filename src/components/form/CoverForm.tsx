@@ -96,7 +96,6 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
       </DescriptionWrapper>
 
       <ButtonWrapper>
-        <button className='previous' type='button' onClick={() => setFormSubject('keywords')}>이전</button>
         <button className="next" type="button" onClick={handleNextButton}>다음</button>
       </ButtonWrapper>
     </>

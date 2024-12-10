@@ -38,20 +38,20 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
       left: 0,
       behavior: 'smooth',
     });
-    setFormSubject('preview');
+    setFormSubject('keywords');
   };
 
   return (
     <>
       <Advice>
-        * 모든 수수께끼를 최초로 해결한 한명의 사용자만 노트 내용을 확인할 수 있습니다.
+        * 모든 질문을 최초로 해결한 단 한명의 사용자만 메시지 내용을 확인할 수 있습니다.
       </Advice>
 
       {showError && <ErrorMessage>{FORM_LENGTH_ERROR_MESSAGE.note}</ErrorMessage>}
       <Note 
           name='post'
           maxLength={PANDORA_FORM.maxNoteLength} 
-          placeholder="노트 입력" 
+          placeholder="메시지 입력" 
           value={post}
           onChange={onChange}
           autoComplete="off"
@@ -59,7 +59,7 @@ export default function PostForm({ setFormSubject, post, setPost }: IPostFormPro
       <Count>{`${post.length}/${PANDORA_FORM.maxNoteLength}`}</Count>
       <ButtonWrapper>
         <button className='previous' onClick={() => setFormSubject('riddles')}>이전</button>
-        <button className='next' onClick={handleNextButton}>미리보기/생성</button>
+        <button className='next' onClick={handleNextButton}>다음</button>
       </ButtonWrapper>
     </>
   );

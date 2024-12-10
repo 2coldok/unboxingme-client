@@ -45,7 +45,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       cat: post,
     };
 
-    console.log(newPandoraForm);
+    // console.log(newPandoraForm);
      
     try {
       // 판도라 생성 성공
@@ -76,32 +76,10 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       </GuideWrapper>
       
       
-      <FormSubjectWrapper>
-        <Subject>1. 검색 키워드</Subject>
-        <EditButton className="edit" onClick={() => setFormSubject('keywords')}>
-          수정
-        </EditButton>
-      </FormSubjectWrapper>
-      <KeywordsWrapper>
-        {keywords.length === 0 && (
-          <>
-            <p>검색 키워드가 설정되지 않았습니다.</p>
-            <p>수수께끼 링크 공유를 통해서만 게시물에 접근할 수 있습니다.</p>
-          </>
-
-        )}
-        {keywords.map((keyword) => (
-          <Keyword key={uuidv4()}>
-            <AiOutlineSearch />
-            <span>{keyword}</span>
-          </Keyword>
-        ))}
-      </KeywordsWrapper>
-
-      <Divide></Divide>
+      
 
       <FormSubjectWrapper>
-        <Subject>2. 수수께끼 표지</Subject>
+        <Subject>1. 메시지 표지</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('cover')}>
           수정
         </EditButton>
@@ -116,7 +94,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <Divide></Divide>
 
       <FormSubjectWrapper>
-        <Subject>3. 수수께끼</Subject>
+        <Subject>2. 질문</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('riddles')}>
           수정
         </EditButton>
@@ -146,7 +124,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <Divide></Divide>
 
       <FormSubjectWrapper>
-        <Subject>4. 노트</Subject>
+        <Subject>3. 메시지 내용</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('post')}>
           수정
         </EditButton>
@@ -155,10 +133,37 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
         {post}
       </NoteWrapper>
 
+      <Divide></Divide>
+
+      <FormSubjectWrapper>
+        <Subject>4. 검색 키워드</Subject>
+        <EditButton className="edit" onClick={() => setFormSubject('keywords')}>
+          수정
+        </EditButton>
+      </FormSubjectWrapper>
+      <KeywordsWrapper>
+        {keywords.length === 0 && (
+          <>
+            <p>검색 키워드가 설정되지 않았습니다. 사이트 내에서 메시지를 검색할 수 없으며,</p>
+            <p>링크를 공유를 통해서만 메시지에 접근할 수 있습니다.</p>
+          </>
+
+        )}
+        {keywords.map((keyword) => (
+          <Keyword key={uuidv4()}>
+            <AiOutlineSearch />
+            <span>{keyword}</span>
+          </Keyword>
+        ))}
+      </KeywordsWrapper>
+
+
+
+
       <ButtonWrapper>
-        <button className="previous" onClick={() => setFormSubject('post')}>이전</button>
+        <button className="previous" onClick={() => setFormSubject('keywords')}>이전</button>
         <button onClick={handleSubmit}>
-          {isSubmitting ? '등록중...' : mode.type === 'edit' ? '수정 완료' : '게시물 등록하기'}
+          {isSubmitting ? '생성중...' : mode.type === 'edit' ? '수정 완료' : '메시지 생성하기'}
         </button>
       </ButtonWrapper> 
       

@@ -40,7 +40,7 @@ export default function PandoraCover() {
     }
     if (state?.userColor === 'maker') {
       // return setAlertMessage('나의 수수께끼는 마이페이지에서 확인할 수 있습니다.');
-      return setAlertMessage('수수께끼 생성자는 직접 문제를 풀 수 없습니다. 나의 수수께끼는 마이페이지에서 확인할 수 있습니다.');
+      return setAlertMessage('나의 메시지는 풀이할 수 없습니다.');
     }
   }, [state]);
 
@@ -119,7 +119,7 @@ export default function PandoraCover() {
               <p>{data.payload.firstQuestion}</p>
             </div>
             <button onClick={handleChallengeClick}>
-              {checkTokenLoading ? '자격 확인중...' : '노트 열람하기'}
+              {checkTokenLoading ? '자격 확인중...' : '메시지 열람하기'}
             </button>
           </FirstRiddleWrapper>  
         </CoverWrapper>

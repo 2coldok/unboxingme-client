@@ -29,7 +29,7 @@ export function Copy({ text }: ICopyProps) {
       <CopyIcon onClick={handleCopy} />
       {copied && (
         <ModalContainer visible={copied}>
-          <span>수수께끼 링크를 복사하였습니다.</span>
+          <span>메시지 링크를 복사하였습니다.</span>
         </ModalContainer>
       )}
       

@@ -10,6 +10,12 @@ import { PiClockClockwiseBold } from "react-icons/pi";
 import GlimpseList from "../components/GlimpseList";
 import { IDashboardService } from "../service/DashboardService";
 import { IGlimpse } from "../types/dashboard";
+import { BsEnvelope } from "react-icons/bs"; // 메시지 아이콘
+import { BsQuestionCircle } from "react-icons/bs"; // 물음표
+import { BsBook } from "react-icons/bs";// 사이트 소개
+import { useAuth } from "../hook/AuthHook";
+
+
 
 interface IHomeProps {
   dashboardService: IDashboardService;
@@ -19,6 +25,7 @@ export default function Home({ dashboardService }: IHomeProps) {
   const navigate = useNavigate();
   const [glimpses, setGlimpses] = useState<IGlimpse[]>([]);
   const [glimpseLoading, setGlimpseLoading] = useState(false);
+  const { getTokenStatus } = useAuth();
 
   useEffect(() => {
     const fetchPandoraPreview = async () => {
@@ -46,8 +53,46 @@ export default function Home({ dashboardService }: IHomeProps) {
     fetchPandoraPreview();
   }, [dashboardService, navigate]);
 
+  const handleIntro = () => {
+    window.open("https://riddlenote.com/intro", "_blank", "noopener,noreferrer");
+  };
+
+  const handleGuide = () => {
+    return navigate('/about/guide');
+  };
+
+  const handleCreateMessage = async () => {
+    try {
+      const status = await getTokenStatus();
+      if (!status) {
+        return window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
+      }
+      return navigate('/pandora/form');
+    } catch (error) {
+      if (error instanceof HttpError) {
+        return navigate('/fallback/error', { state: { error: error } })
+      }
+    }
+  };
+
   return (
     <StyledContainer>
+      <CreateMessageWrapper>
+        <Button onClick={handleIntro}>
+          <BsBook/> 
+          사이트 소개
+        </Button>
+        
+        <Button onClick={handleGuide}>
+          <BsQuestionCircle />
+          메시지 가이드
+        </Button>
+        <Button onClick={handleCreateMessage}>
+          <BsEnvelope />
+          메시지 만들기
+        </Button>
+      </CreateMessageWrapper>
+
       <SearchWrapper>
         <Search />
       </SearchWrapper>
@@ -125,6 +170,52 @@ const SubjectWrapper = styled.div`
       
     }
 
+  }
+`;
+
+const CreateMessageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 70%;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 3em;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding-bottom: 1.1em;
+    border-bottom: 1px solid var(--border);
+  }
+`;
+
+const Button = styled.button`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.7em;
+  font-size: 1em;
+  color: var(--brand);
+  flex-shrink: 0;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  
+  
+
+  &:hover {
+    filter: brightness(125%);
+  }
+
+  svg {
+    font-size: 1.6em;
+    margin-bottom: 5px;
+  }
+
+  padding-left: 3em;
+  padding-right: 3em;
+  @media (max-width: 900px) {
+    font-size: 0.7em;
+    padding-left: 1.1em;
+    padding-right: 1.1em;
   }
 `
 

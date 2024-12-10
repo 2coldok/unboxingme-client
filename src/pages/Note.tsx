@@ -63,12 +63,12 @@ export default function Note({ unboxingService }: NoteProps) {
       <StyledContainer>
         <SubjectWrapper>
           <BsArrowDownRightSquare />
-          <span>노트 내용</span>
+          <span>메시지 내용</span>
         </SubjectWrapper>
         <SolverAliasWrapper>
           <p>
             <SolverAlias>{pandora.solverAlias}</SolverAlias> <br/>
-            님에 의해 노트가 열람되었습니다.
+            님에 의해 메시지가 열람되었습니다.
           </p>
         </SolverAliasWrapper>
         <CoverWrapper>

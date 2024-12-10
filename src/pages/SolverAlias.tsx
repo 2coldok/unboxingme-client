@@ -116,8 +116,8 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
             </Ascii>
           </LeftBody>
           <RightBody>
-            <Message>* 모든 수수께끼가 최초로 해결되어 게시물이 비공개로 전환되었습니다.</Message>
-            <Message>* 게시물 작성자가 확인할 수 있는 '열람자 별명'을 입력해주세요. 열람자 별명은 이후 수정할 수 없습니다.</Message>
+            <Message>* 모든 질문이 최초로 해결되어 메시지 링크가 비공개로 전환되었습니다.</Message>
+            <Message>* 메시지 작성자가 확인할 수 있는 '열람자 별명'을 입력해주세요. 열람자 별명은 이후 수정할 수 없습니다.</Message>
             <InputWrapper>
               <label className="floating-label">열람자 별명</label>
               <input 
@@ -136,7 +136,7 @@ export default function SolverAlias({ unboxingService }: ISolverAliasProps) {
         </MiddleWrapper>
 
         <BottomWrapper>
-          <button onClick={handleClick}>노트 확인하기</button>
+          <button onClick={handleClick}>메시지 확인하기</button>
         </BottomWrapper>
         
         

@@ -40,7 +40,7 @@ export default function GlimpseList({ glimpses }: IGlimpseListProps) {
   
               <RightWrapper>
                 <State $state={glimpse.unboxing}>
-                  {glimpse.unboxing ? '풀이 완료' : '진행중...'}
+                  {glimpse.unboxing ? '메시지 열람' : '진행중...'}
                 </State>
               </RightWrapper>
             </RiddleProgressWrapper>

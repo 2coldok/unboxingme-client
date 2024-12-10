@@ -42,10 +42,10 @@ export default function MyPandoras() {
   
   return (
     <>
-      <Title>나의 수수께끼 노트 ({data.payload.total})</Title>
+      <Title>나의 메시지 ({data.payload.total})</Title>
       {data.payload.total === 0 && (
         <Empty>
-          내가 만든 수수께끼가 없습니다.
+          내가 만든 메시지가 없습니다.
         </Empty>
       )}
       <PandoraList
