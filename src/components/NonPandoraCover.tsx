@@ -5,8 +5,8 @@ export default function NonPandoraCover() {
   return (
     <StyledContainer>
       <StyledWrapper>
-        <h3>수수께끼 정보를 불러올 수 없습니다.</h3>
-        <p>이미 열람되어 비공개로 전환되었거나 존재하지 않는 수수께끼 입니다.</p>
+        <h3>메시지 정보를 불러올 수 없습니다.</h3>
+        <p>이미 열람되어 비공개로 전환되었거나 존재하지 않는 메시지입니다.</p>
       </StyledWrapper>
     </StyledContainer>
   );
