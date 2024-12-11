@@ -34,7 +34,7 @@ export const useMinesQuery = (page: number) => {
   return useQuery({
     queryKey: ['mines', { page }],
     queryFn: () => pandoraService.getMyPandoras(page),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
     enabled: page > 0
   });
 };
@@ -47,7 +47,7 @@ export const useChallengesQuery = () => {
   return useQuery({
     queryKey: ['challenges'],
     queryFn: () => dashboardService.getMyChallenges(),
-    staleTime: 5 * 60 * 1000
+    staleTime: 1 * 60 * 1000
   });
 };
 
@@ -55,7 +55,7 @@ export const useConqueredsQuery = (page: number) => {
   return useQuery({
     queryKey: ['conquereds', { page }],
     queryFn: () => dashboardService.getMyConqueredPandoras(page),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
     enabled: page > 0
   });
 }
