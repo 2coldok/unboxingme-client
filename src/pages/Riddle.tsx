@@ -29,7 +29,7 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isLoading, startLoading, stopLoading } = useLoading();
-  const [userColor, setUserColor] = useState<'challenger' | 'maker' | 'penalty' | 'solver'| null>(null);
+  const [userColor, setUserColor] = useState<'challenger' | 'penalty' | 'solver'| null>(null);
   const [riddle, setRiddle] = useState<IRiddle | null>(null);
   const [restrictedUntil, setRestrictedUntil] = useState<string | null>(null); // ISO string. format변환은 cover 컴포넌트에서.
   const [submitAnswer, setSubmitAnswer] = useState('');
@@ -62,13 +62,8 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
     const fetchInitialRiddle = async () => {
       try {
         startLoading();
-        const data = await unboxingService.getInitialRiddle(id, csrfToken);
+        const data = await unboxingService.setInitialRiddle(id, csrfToken);
         const status = data.payload.status;
-        
-        // 나의 판도라일 경우
-        if (status === 'ineligible' && data.payload.reason === 'MINE') {
-          return setUserColor('maker');
-        }
 
         // 페널티 기간일 경우
         if (status === 'penalty') {
@@ -96,10 +91,6 @@ export default function Riddle({ unboxingService }: IRiddleProps) {
   useEffect(() => {
     if (userColor === 'penalty' && restrictedUntil) {
       return navigate(`/pandora/${id}`, { state: { userColor: 'penalty', restrictedUntil: restrictedUntil }, replace: true });
-    }
-
-    if (userColor === 'maker') {
-      return navigate(`/pandora/${id}`, { state: { userColor: 'maker' }, replace: true });
     }
 
     if (userColor === 'solver') {

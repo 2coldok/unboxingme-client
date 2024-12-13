@@ -3,11 +3,6 @@ export interface IInitialRiddleFailByPenalty {
   restrictedUntil: string;
 }
 
-export interface IInitialRiddleFailbyIneligible {
-  status: 'ineligible';
-  reason: 'NOT_FOUND_RECORD' | 'MINE';
-}
-
 export interface IInitialRiddleSuccess {
   status: 'riddle'
   question: string;
@@ -16,7 +11,7 @@ export interface IInitialRiddleSuccess {
   totalProblems: number;
   failCount: number;
 }
-export type TInitialRiddle = IInitialRiddleFailByPenalty | IInitialRiddleFailbyIneligible | IInitialRiddleSuccess;
+export type TInitialRiddle = IInitialRiddleFailByPenalty | IInitialRiddleSuccess;
 
 /***********************************************/
 

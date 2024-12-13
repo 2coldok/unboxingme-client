@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { useAuth } from "../hook/AuthHook";
+// import { useAuth } from "../hook/AuthHook";
 import { HttpError } from "../network/HttpClient";
 
 import { useLoading } from "../hook/LoadingHook";
@@ -23,7 +23,7 @@ export default function PandoraCover() {
   const navigate = useNavigate();
   const { id } = useParams() as { id: string };
   const { isLoading, data = { payload: null }, error } = useCoverQuery(id);
-  const { getTokenStatus } = useAuth();
+  // const { getTokenStatus } = useAuth();
   const { startLoading, stopLoading} = useLoading();
   const [searchParams] = useSearchParams();
   const keyword = searchParams.get('keyword');
@@ -57,14 +57,14 @@ export default function PandoraCover() {
   const handleChallengeClick = async () => {
     setCheckTokenLoading(true);
     try {
-      const status = await getTokenStatus();
-      if (!status) {
-        if (window.location.href.startsWith('http://localhost:5173')) {
-          return setShowLoginPop(true);
-        }
+      // const status = await getTokenStatus();
+      // if (!status) {
+      //   if (window.location.href.startsWith('http://localhost:5173')) {
+      //     return setShowLoginPop(true);
+      //   }
 
-        window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
-      }
+      //   window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
+      // }
 
       return navigate(`/pandora/${id}/riddle`);
     } catch (error) {
