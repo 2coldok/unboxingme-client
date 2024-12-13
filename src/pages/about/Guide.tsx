@@ -21,7 +21,7 @@ export default function Guide() {
         <DHead>메시지 생성 가이드</DHead>
 
         <DSection>
-          <DTitle>1. 메시지 질문 규칙</DTitle>
+          <DTitle>1. 메시지 규칙</DTitle>
           <ul>
             <DList>
               <p>• 이전 질문을 해결한 사용자에게만 다음 질문이 공개됩니다.</p>
@@ -29,13 +29,17 @@ export default function Guide() {
 
             <DList>
               <p>
-                • 모든 질문이 최초로 해결되면 해당 메시지가 비공개로 전환되어 메시지 링크가 비활성화 됩니다.<br></br>
-                메시지가 비공개로 전환되면, 모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 메시지에 접근하거나 문제 풀이를 진행할 수 없습니다.
+                • 모든 질문이 최초로 해결되면 해당 메시지 링크가 비활성화 됩니다.<br></br>
+                또한 모든 질문을 해결한 사용자 이외의 모든 사용자들은 더이상 메시지에 접근하거나 문제 풀이를 진행할 수 없습니다.
               </p>
             </DList>
 
             <DList>
               <p>• 모든 질문을 최초로 해결한 단 한명의 사용자만 메시지 내용을 확인할 수 있습니다.</p>
+            </DList>
+
+            <DList>
+              <p>• 메시지는 내용은 한 번만 열람할 수 있으며 메시지 내용 페이지를 벗어날 경우 다시 내용을 확인할 수 없습니다.</p>
             </DList>
           </ul>
         </DSection>
@@ -153,29 +157,19 @@ export default function Guide() {
         </DSection>
 
         <DDivder></DDivder>
-       
-        <DSection>
-          <DTitle>4. 메시지 수정 제한사항</DTitle>
-          <DContent>
-            이미 열람된 메시지가 수정될 경우, 열람자가 경험한 정보의 신뢰성과 고유성이 훼손될 수 있어<br></br>
-            이를 방지하기 위해  모든 질문이 해결되어 비공개로 전환된 메시지는 수정할 수 없습니다. 
-          </DContent>
-        </DSection>
-
-        <DDivder></DDivder>
 
         <DSection>
-          <DTitle>5. 질문 풀이 진행 상황 모니터링</DTitle>
+          <DTitle>4. 마이페이지 대시보드</DTitle>
           <DContent>
-            메시지 생성자는 자신이 만든 질문에 대한 다른 사용자들 풀이 진행 상황을 상세 페이지에서 확인할 수 있습니다. 
-            상세 페이지에서 제공되는 정보는 다음과 같습니다.
+            메시지 생성자는 자신이 만든 질문에 대한 다른 사용자들 풀이 진행 상황을 마이페이지에서 확인할 수 있습니다. 
+            제공되는 정보는 다음과 같습니다.
           </DContent>
           <ul>
             <DList>
               <DSubTitle>• 문제풀이 진행 상황</DSubTitle>
               <DContent>
-                가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)만 확인할 수 있습니다.<br/>
-                가장 높은 진행률 기록이 여러개일 경우 최근 질문 풀이를 시도한 하나의 기록만 확인할 수 있습니다.
+                가장 높은 풀이 진행률(최대 몆 번째 질문까지 해결되었는지)을 확인할 수 있습니다.<br/>
+                동일한 풀이 진행률이 여러개일 경우 최근 질문 풀이를 시도한 하나의 기록만 확인할 수 있습니다.
               </DContent>
             </DList>
 
@@ -206,22 +200,14 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>6. 질문 풀이 기록 일시적 공개 안내</DTitle>
+          <DTitle>5. 질문 풀이 기록 일시 공유</DTitle>
           <DContent>
             <DLink href="https://riddlenote.com" target="_blank" rel="noopener noreferrer">홈 화면</DLink>
             에서 최근 질문 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 표시됩니다.<br/>
-            각각의 기록에는 메시지 라벨, 음영 처리된 고정 닉네임, 문제풀이 진행상황, 업데이트 날짜 정보를 포함합니다.
+            각각의 기록에는 음영 처리된 고정 닉네임 또는 아이피 주소 일부, 문제풀이 진행상황, 업데이트 날짜 정보를 포함합니다.
           </DContent>
 
           <ul>
-            <DList>
-              <DSubTitle>• 메시지 라벨</DSubTitle>
-              <DContent>
-                메시지 생성시 발급되는 고유한 한글 문자열 입니다.<br></br>
-                라벨 정보를 통해 메시지를 검색하거나 접근할 수 없습니다.
-              </DContent>
-            </DList>
-
             <DList>
               <DSubTitle>• 고정 닉네임</DSubTitle>
               <DContent>
@@ -229,6 +215,13 @@ export default function Guide() {
                 <DExample>
                   riddlenote@gmail.com <AiOutlineArrowRight/> rid***
                 </DExample>
+              </DContent>
+            </DList>
+
+            <DList>
+              <DSubTitle>• 아이피 주소</DSubTitle>
+              <DContent>
+                접속한 네트워크의 아이피 주소 일부분입니다.
               </DContent>
             </DList>
 

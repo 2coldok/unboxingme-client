@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { HttpError } from "../network/HttpClient";
 import { formatTime, formatTimeAgo } from "../util/formatTimeAgo";
-import { BsFillCaretDownFill, BsUpc } from "react-icons/bs"; // 펼치기
+import { BsFillCaretDownFill } from "react-icons/bs"; // 펼치기
 import { BsFillCaretUpFill } from "react-icons/bs"; // 접기
 
 import RiddleProgress from "../util/RiddleProgress";
@@ -16,12 +16,12 @@ import { AiFillLock, AiOutlineSearch } from "react-icons/ai";
 import { IPandoraService } from "../service/PandoraService";
 import EditAndDeleteConfirm from "../components/EditAndDeleteConfirm";
 import { Copy } from "../util/Copy";
-import { LuEye } from "react-icons/lu";
+// import { LuEye } from "react-icons/lu"; 조회수
 import AppFooter from "../components/AppFooter";
 import { useLoading } from "../hook/LoadingHook";
 import { BsArrowDownRightSquare } from "react-icons/bs";
 import { useAuth } from "../hook/AuthHook";
-
+import { FiSend } from "react-icons/fi"; // 생성일
 
 
 interface IPandoraDetailProps {
@@ -135,10 +135,10 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
                 <Writer> <IoPerson /> {detail.pandora.writer}</Writer>                  
                 <MainInfo> 
                   <AiFillLock /> {detail.pandora.totalProblems} ·&nbsp;
-                  <LuEye /> {detail.pandora.coverViewCount} ·&nbsp;
-                  {formatTimeAgo(detail.pandora.createdAt)}
+                  {/* <LuEye /> {detail.pandora.coverViewCount} ·&nbsp; */}
+                  <FiSend /> {formatTimeAgo(detail.pandora.createdAt)}
                 </MainInfo>
-                <Label><BsUpc /> {detail.pandora.label}</Label>
+                {/* <Label><BsUpc /> {detail.pandora.label}</Label> */}
               </div>
               <div>
                 <State $open={detail.pandora.isCatUncovered}>{detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
@@ -245,9 +245,9 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
         <SubContentWrapper>
           <SubTitle>기본 정보</SubTitle>
           <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
-          <DetailElement>게시물 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
-          <DetailElement>메시지 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
-          <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
+          <DetailElement>메시지 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
+          {/* <DetailElement>메시지 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement> */}
+          {/* <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement> */}
         </SubContentWrapper>
   
         <SubContentWrapper>
@@ -263,8 +263,7 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           </ModifyButtonWrapper>
           <ModifyButtonWrapper>
             <span>
-              삭제시 메시지가 영구적으로 삭제되며, 열람자가 있을 경우<br/>
-              열람자는 더이상 메시지 내용을 확인할 수 없습니다.
+              메시지를 영구적으로 삭제합니다.
             </span>
             <DeleteButton onClick={() => handleSelectedPandora('delete', id, detail.pandora.title, detail.totalRecords)}>삭제</DeleteButton>
           </ModifyButtonWrapper>
@@ -407,7 +406,6 @@ const InfoWrapper = styled.div`
 const Writer = styled.p`
   display: flex;
   color: var(--font);
-  font-weight: 500;
   font-size: 1em;
   margin: 0.9em 0 0.2em 0;
   svg {
@@ -418,22 +416,21 @@ const Writer = styled.p`
 const MainInfo = styled.p`
   display: flex;
   font-size: 0.9em;
-  font-weight: 500;
   margin: 0.3em 0 0.2em 0;
   svg {
     margin-right: 0.3em;
   }
 `;
 
-const Label = styled.p`
-  display: flex;
-  margin: 0.6em 0 0 0;
-  font-weight: 500;
-  font-size: 0.9em;
-  svg {
-    margin-right: 0.3em;
-  }
-`;
+// const Label = styled.p`
+//   display: flex;
+//   margin: 0.6em 0 0 0;
+//   font-weight: 500;
+//   font-size: 0.9em;
+//   svg {
+//     margin-right: 0.3em;
+//   }
+// `;
 
 const State = styled.p<{ $open: boolean }>`
   display: flex;

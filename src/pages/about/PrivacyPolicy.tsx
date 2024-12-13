@@ -42,14 +42,15 @@ export default function PrivacyPolicy() {
             <DList>
               <DSubTitle>(1) Google 계정의 표시 이름, 프로필 아바타, 이메일 주소, 고유 식별자</DSubTitle>
               <DContent>
-                Google OAuth 인증 과정을 통해 정보를 수집하며 리들노트 서비스를 이용하기 위한 필수 수집 항목 입니다.
-                각각은 웹 화면에 표시, 사용자 경험 개선, 사용자 인증 및 식별 용도로 사용됩니다.
+                Google OAuth 인증 과정을 통해 정보를 수집하며 
+                각각은 웹 화면에 표시, 대시보드 기능, 사용자 인증 및 식별 용도로 사용됩니다.
               </DContent>
             </DList>
   
             <DList>
               <DSubTitle>(2) IP주소, 운영 체제 버전, 웹 브라우저 정보</DSubTitle>
               <DContent>
+                비로그인으로 메시지 질문 풀이시 사용자 식별 및
                 비정상적인 접근 및 서비스 악용을 방지하기 위해 서비스 이용 중 선택적으로 수집될 수 있습니다.
               </DContent>
             </DList>

@@ -9,7 +9,7 @@ import { getInSession, saveInSession } from "../util/storage";
 
 import { BsPersonCircle } from "react-icons/bs"; // 나의 게시물 2
 import { BsPlusCircle } from "react-icons/bs"; // 생성
-import { AiFillUnlock } from "react-icons/ai";
+// import { AiFillUnlock } from "react-icons/ai";
 import { BsActivity } from "react-icons/bs";
 import { useAuth } from "../hook/AuthHook";
 import { IoMdSync } from "react-icons/io"; // 연동
@@ -57,10 +57,10 @@ export default function MyPage() {
             <BsActivity />
             <span>진행중</span>
           </NavButton>
-          <NavButton onClick={() => handleNavigation('conquereds')} $active={tab === 'conquereds'}>
+          {/* <NavButton onClick={() => handleNavigation('conquereds')} $active={tab === 'conquereds'}>
             <AiFillUnlock />
             <span>열람</span>
-          </NavButton>
+          </NavButton> */}
           <NavButton onClick={() => handleNavigation('create')} $active={tab === 'create'}>
             <BsPlusCircle />
             <span>만들기</span>

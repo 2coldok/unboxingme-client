@@ -40,7 +40,9 @@ export interface IMyChallenge {
   totalProblems: number;
   coverViewCount: number;
   createdAt: string;
+  solvedAt: boolean;
   isCatUncovered: boolean;
+  solverAlias: boolean;
 }
 
 export interface IMyConquereds {

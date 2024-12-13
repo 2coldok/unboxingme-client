@@ -45,7 +45,7 @@ export default function MyChallenges() {
       )}
 
       <PandoraList
-        action="cover"
+        action="challenger"
         pandoras={data.payload}
       />
       <BlankWrapper></BlankWrapper>

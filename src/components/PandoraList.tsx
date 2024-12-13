@@ -1,13 +1,15 @@
 import { AiFillLock } from "react-icons/ai"; // 자물쇠
 import { IoPerson } from "react-icons/io5"; // writer
-import { LuEye } from "react-icons/lu"; // coverViewCount
+// import { LuEye } from "react-icons/lu"; coverViewCount
 import styled from "styled-components";
 import { formatTimeAgo } from "../util/formatTimeAgo";
 import { useNavigate } from "react-router-dom";
-import { BsUpc } from "react-icons/bs"; // 라벨
+// import { BsUpc } from "react-icons/bs"; 라벨
+import { FiSend } from "react-icons/fi";
+
 
 interface IPandoraListProps {
-  action: 'glimpse' | 'cover' | 'conquered' | 'detail';
+  action: 'glimpse' | 'cover' | 'conquered' | 'detail' | 'challenger';
   keyword?: string;
   pandoras: {
     id: string;
@@ -26,7 +28,7 @@ interface IPandoraListProps {
 export default function PandoraList({ pandoras, action, keyword }: IPandoraListProps) {
   const navigate = useNavigate();
 
-  const handleClick = (id: string, solverAlias?: boolean) => {
+  const handleClick = (id: string, solverAlias?: boolean, solvedAt?: boolean) => {
     if (action === 'glimpse') {
       return;
     }
@@ -37,6 +39,16 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
         return navigate(`/pandora/${id}`);
       }
     }
+
+    if (action === 'challenger') {
+      if (!solvedAt) {
+        return navigate(`/pandora/${id}`);
+      }
+      if (!solverAlias && solvedAt) {
+        return navigate(`/pandora/${id}/solveralias`);  
+      }
+    }
+
     if (action === 'conquered') {
       if (!solverAlias) {
         return navigate(`/pandora/${id}/solveralias`);  
@@ -55,16 +67,16 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
     <PandorasContainer>
       {pandoras.map((pandora) => (
         <PandoraWrapper key={pandora.id}>
-          <Title onClick={() => handleClick(pandora.id, pandora?.solverAlias)}>{pandora.title}</Title>
+          <Title onClick={() => handleClick(pandora.id, pandora?.solverAlias, pandora?.solvedAt)}>{pandora.title}</Title>
           <InfoWrapper>
             <div>
               <Writer> <IoPerson /> {pandora.writer}</Writer>                  
               <MainInfo> 
                 <AiFillLock /> {pandora.totalProblems} ·&nbsp;
-                <LuEye /> {pandora.coverViewCount} ·&nbsp;
-                {formatTimeAgo(pandora.createdAt)}
+                {/* <LuEye /> {pandora.coverViewCount} ·&nbsp; */}
+                <FiSend /> {formatTimeAgo(pandora.createdAt)}
               </MainInfo>
-              <Label><BsUpc /> {pandora.label}</Label>
+              {/* <Label><BsUpc /> {pandora.label}</Label> */}
             </div>
             <div>
               <State $state={getPandoraState(pandora.solvedAt, pandora.solverAlias, pandora.isCatUncovered)}>
@@ -131,15 +143,15 @@ const MainInfo = styled.p`
   }
 `;
 
-const Label = styled.p`
-  display: flex;
-  margin: 0.6em 0 0 0;
-  font-weight: 500;
-  font-size: 0.9em;
-  svg {
-    margin-right: 0.3em;
-  }
-`;
+// const Label = styled.p`
+//   display: flex;
+//   margin: 0.6em 0 0 0;
+//   font-weight: 500;
+//   font-size: 0.9em;
+//   svg {
+//     margin-right: 0.3em;
+//   }
+// `;
 
 const State = styled.p<{ $state: '열람됨' | '열람대기' | '미열람' }>`
   display: flex;

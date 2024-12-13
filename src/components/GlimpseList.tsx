@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { BsUpc } from "react-icons/bs"; // 라벨
+// import { BsUpc } from "react-icons/bs"; 
 import RiddleProgress from "../util/RiddleProgress";
 import { BiSolidUser } from "react-icons/bi"; // person
 
@@ -26,10 +26,10 @@ export default function GlimpseList({ glimpses }: IGlimpseListProps) {
 
             <RiddleProgressWrapper>
               <LeftWrapper>
-                <Label>
+                {/* <Label>
                   <BsUpc />
                   <span>{glimpse.label}</span>
-                </Label>
+                </Label> */}
                 <ProgressSizeControl>
                   <RiddleProgress 
                     totalSteps={glimpse.totalProblems} 
@@ -134,32 +134,28 @@ const LeftWrapper = styled.div`
   }
 `;
 
-const Label = styled.span`
-  /* display: inline-flex; */
-  /* background-color: #29323e; */
-  /* background-color: #2a313c; */
-  color: var(--font-info);
-  color: #adb5bd;
-  /* box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px; */
-  font-size: 1em;
-  align-self: flex-start;
-  padding: 0.2em 0.7em 0.2em 0.7em;
-  border: 1px solid var(--border);
-  border-radius: 0.4rem;
-  margin-right: 0.3em;
-  @media (max-width: 900px) {
-    font-size: 1.5em;
-    margin-bottom: 0.9em;
-  }
+// const Label = styled.span`
+//   color: var(--font-info);
+//   color: #adb5bd;
+//   font-size: 1em;
+//   align-self: flex-start;
+//   padding: 0.2em 0.7em 0.2em 0.7em;
+//   border: 1px solid var(--border);
+//   border-radius: 0.4rem;
+//   margin-right: 0.3em;
+//   @media (max-width: 900px) {
+//     font-size: 1.5em;
+//     margin-bottom: 0.9em;
+//   }
 
-  svg {
-    margin-right: 0.3em;
-  }
+//   svg {
+//     margin-right: 0.3em;
+//   }
 
-  span {
-    font-weight: 700;
-  }
-`;
+//   span {
+//     font-weight: 700;
+//   }
+// `;
 
 const ProgressSizeControl = styled.div`
   @media (max-width: 900px) {

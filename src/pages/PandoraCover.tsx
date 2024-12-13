@@ -8,16 +8,17 @@ import { useLoading } from "../hook/LoadingHook";
 import Alert from "../util/Alert";
 
 import { IoPerson } from "react-icons/io5"; // writer
-import { LuEye } from "react-icons/lu"; // coverViewCount
+// import { LuEye } from "react-icons/lu"; 조회수
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { formatTime } from "../util/formatTimeAgo";
 import { AiFillLock } from "react-icons/ai";
-import { BsUpc } from "react-icons/bs";
+// import { BsUpc } from "react-icons/bs"; 라벨
 import Search from "../components/Search";
 import Login from "../components/Login";
 import { useCoverQuery } from "../hook/QueryHook";
 import AppFooter from "../components/AppFooter";
 import NonPandoraCover from "../components/NonPandoraCover";
+import { FiSend } from "react-icons/fi";
 
 export default function PandoraCover() {
   const navigate = useNavigate();
@@ -103,10 +104,10 @@ export default function PandoraCover() {
               <Writer> <IoPerson /> {data.payload.writer}</Writer>                  
               <MainInfo> 
                 <AiFillLock /> {data.payload.totalProblems} ·&nbsp;
-                <LuEye /> {data.payload.coverViewCount} ·&nbsp;
-                {formatTime(data.payload.createdAt)}
+                {/* <LuEye /> {data.payload.coverViewCount} ·&nbsp; */}
+                <FiSend /> {formatTime(data.payload.createdAt)}
               </MainInfo>
-              <Label><BsUpc /> {data.payload.label}</Label>
+              {/* <Label><BsUpc /> {data.payload.label}</Label> */}
             </div>
             <div>
               <State $open={data.payload.isCatUncovered}>{data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
@@ -198,13 +199,13 @@ const MainInfo = styled.p`
   }
 `;
 
-const Label = styled.p`
-  display: flex;
-  margin: 0.6em 0 0 0;
-  svg {
-    margin-right: 0.3em;
-  }
-`;
+// const Label = styled.p`
+//   display: flex;
+//   margin: 0.6em 0 0 0;
+//   svg {
+//     margin-right: 0.3em;
+//   }
+// `;
 
 const State = styled.p<{ $open: boolean }>`
   display: flex;
