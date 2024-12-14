@@ -13,6 +13,8 @@ import { BsArrowDownRightSquare, BsUpc } from "react-icons/bs";
 import { formatTimeAgo } from "../util/formatTimeAgo";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "../hook/AuthHook";
+import { ImWarning } from "react-icons/im";
+
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -61,10 +63,17 @@ export default function Note({ unboxingService }: NoteProps) {
         <meta name="robots" content="noindex" />
       </Helmet>
       <StyledContainer>
-        <SubjectWrapper>
+        <WarningWrapper>
+          <ImWarning />
+          이 페이지를 벗어나거나 새로고침시 다시 내용을 확인할 수 없습니다.
+        </WarningWrapper>
+
+
+        {/* <SubjectWrapper>
           <BsArrowDownRightSquare />
           <span>메시지 내용</span>
-        </SubjectWrapper>
+        </SubjectWrapper> */}
+
         <SolverAliasWrapper>
           <p>
             <SolverAlias>{pandora.solverAlias}</SolverAlias> <br/>
@@ -89,6 +98,10 @@ export default function Note({ unboxingService }: NoteProps) {
           </InfoWrapper>
           <Description>{pandora.description ? pandora.description : '내용 없음'}</Description>
         </CoverWrapper>
+        <SubjectWrapper>
+          <BsArrowDownRightSquare />
+          <span>메시지 내용</span>
+        </SubjectWrapper>
 
         <NoteWrapper>
         {pandora.cat}
@@ -113,13 +126,38 @@ const SubjectWrapper = styled.div`
     width: 95%;
   }
   margin-left: 0.3em;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 20px;
   font-weight: bold;
   font-size: 1.2rem;
   /* color: #cecece; */
 
   svg {
     margin-right: 0.4em;
+  }
+`;
+
+const WarningWrapper = styled.div`
+  display: flex;
+  max-width: 950px;
+  width: 100%;
+  border-radius: 0.9rem;
+  padding: 1.2em;
+  font-size: 1.1em;
+  background-color: #ffdddd;
+  border: 1px solid #ff8080;
+  /* box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px; */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  color: #ff5152;
+  margin-bottom: 20px;
+  font-weight: bold;
+
+  svg {
+    margin-right: 0.4em;
+  }
+
+  @media (max-width: 768px) {
+    width: 95%;
   }
 `;
 
