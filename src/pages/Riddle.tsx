@@ -292,7 +292,8 @@ const QuestionWrapper = styled.div`
   height: 100%;
   padding: 1em 1.2em;
   font-size: 1.1em;
-  overflow-y: auto;
+  /* overflow-y: auto; */
+  overflow: hidden;
   @media (max-width: 768px) {
     width: 100%;
     height: 70%;
