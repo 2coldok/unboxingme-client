@@ -61,6 +61,7 @@ export default class HttpClient implements IHttpClient {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         // 서버에서 응답이 온 경우(2xx 이외의 status code)
+        console.log(error);
         if (error.response) {
           const statusCode = error.response.status;
           const statusText = error.response.statusText;

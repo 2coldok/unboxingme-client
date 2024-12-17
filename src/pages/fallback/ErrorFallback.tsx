@@ -30,9 +30,10 @@ export default function ErrorFallback() {
     }
   
     if (error.statusCode === 403) {
-      // if (error.statusText === 'csrf') {
-      //   return setMessage('새로고침이 제한된 페이지입니다.');
-      // }
+      // 티켓 발급 거부
+      if (error.statusText === 'TICKET_ISSUANCE_DENIED') {
+        return setMessage('현재 네트워크에서 이미 사용중인 기기가 있습니다.');
+      }
 
       return setMessage('인증이 만료되었습니다.');
     }
