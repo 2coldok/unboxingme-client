@@ -6,7 +6,6 @@ import { BiSolidUser } from "react-icons/bi"; // person
 interface IGlimpseListProps {
   glimpses: {
     username: string;
-    label: string;
     totalProblems: number;
     unsealedQuestionIndex: number;
     unboxing: boolean;
@@ -26,10 +25,6 @@ export default function GlimpseList({ glimpses }: IGlimpseListProps) {
 
             <RiddleProgressWrapper>
               <LeftWrapper>
-                {/* <Label>
-                  <BsUpc />
-                  <span>{glimpse.label}</span>
-                </Label> */}
                 <ProgressSizeControl>
                   <RiddleProgress 
                     totalSteps={glimpse.totalProblems} 
@@ -133,29 +128,6 @@ const LeftWrapper = styled.div`
     font-size: 0.6em;
   }
 `;
-
-// const Label = styled.span`
-//   color: var(--font-info);
-//   color: #adb5bd;
-//   font-size: 1em;
-//   align-self: flex-start;
-//   padding: 0.2em 0.7em 0.2em 0.7em;
-//   border: 1px solid var(--border);
-//   border-radius: 0.4rem;
-//   margin-right: 0.3em;
-//   @media (max-width: 900px) {
-//     font-size: 1.5em;
-//     margin-bottom: 0.9em;
-//   }
-
-//   svg {
-//     margin-right: 0.3em;
-//   }
-
-//   span {
-//     font-weight: 700;
-//   }
-// `;
 
 const ProgressSizeControl = styled.div`
   @media (max-width: 900px) {

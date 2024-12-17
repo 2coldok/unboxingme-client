@@ -57,10 +57,8 @@ export interface INewSolverAliasForm {
 /***********************************************/
 
 export interface INote {
-  label: string;
   writer: string | null;
   title: string | null;
-  description: string | null;
   totalProblems: number;
   coverViewCount: number;
   isCatUncovered: boolean;

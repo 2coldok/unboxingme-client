@@ -135,16 +135,14 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
                 <Writer> <IoPerson /> {detail.pandora.writer}</Writer>                  
                 <MainInfo> 
                   <AiFillLock /> {detail.pandora.totalProblems} ·&nbsp;
-                  {/* <LuEye /> {detail.pandora.coverViewCount} ·&nbsp; */}
                   <FiSend /> {formatTimeAgo(detail.pandora.createdAt)}
                 </MainInfo>
-                {/* <Label><BsUpc /> {detail.pandora.label}</Label> */}
               </div>
               <div>
                 <State $open={detail.pandora.isCatUncovered}>{detail.pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
               </div>
             </InfoWrapper>
-            <Description>{detail.pandora.description ? detail.pandora.description : '내용 없음'}</Description>
+            {/* <Description>{detail.pandora.description ? detail.pandora.description : '내용 없음'}</Description> */}
          </CoverWrapper>
           
           <HiddenDetail onClick={() => setKeywordsView((prev) => !prev)}>검색 키워드  {keywordsView ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}</HiddenDetail>
@@ -197,15 +195,6 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
             </NoteWrapper>
           )}
         </SubContentWrapper>
-  
-        {/* <SubContentWrapper>
-          <SubTitle>기본 정보</SubTitle>
-          <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
-          <DetailElement>게시물 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
-          <DetailElement>메시지 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement>
-          <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement>
-        </SubContentWrapper> */}
-  
         
         <SubContentWrapper>
           <SubTitle>메시지 공유 링크</SubTitle>  
@@ -246,8 +235,6 @@ export default function PandoraDetail({ dashboardService, pandoraService }: IPan
           <SubTitle>기본 정보</SubTitle>
           <DetailElement>게시 상태: <InputReadOnly value={detail.pandora.active ? '게시중' : '비공개'} /></DetailElement>
           <DetailElement>메시지 생성일: <InputReadOnly value={formatTime(detail.pandora.createdAt)} /></DetailElement>
-          {/* <DetailElement>메시지 표지 조회수: <InputReadOnly value={detail.pandora.coverViewCount} /></DetailElement> */}
-          {/* <DetailElement>라벨: <InputReadOnly value={detail.pandora.label} /></DetailElement> */}
         </SubContentWrapper>
   
         <SubContentWrapper>
@@ -422,16 +409,6 @@ const MainInfo = styled.p`
   }
 `;
 
-// const Label = styled.p`
-//   display: flex;
-//   margin: 0.6em 0 0 0;
-//   font-weight: 500;
-//   font-size: 0.9em;
-//   svg {
-//     margin-right: 0.3em;
-//   }
-// `;
-
 const State = styled.p<{ $open: boolean }>`
   display: flex;
   font-weight: 600;
@@ -443,14 +420,14 @@ const State = styled.p<{ $open: boolean }>`
   color: ${({ $open }) => $open ? '#87e89f' : '#b7c9e1'};
 `;
 
-const Description = styled.pre`
-  font-size: 1.1em;
-  min-height: 10em;
-  white-space: pre-wrap;
-  border-radius: 0;
-  border-top: 1px solid var(--border);
-  padding-top: 1em;
-`;
+// const Description = styled.pre`
+//   font-size: 1.1em;
+//   min-height: 10em;
+//   white-space: pre-wrap;
+//   border-radius: 0;
+//   border-top: 1px solid var(--border);
+//   padding-top: 1em;
+// `;
 
 /*****/
 

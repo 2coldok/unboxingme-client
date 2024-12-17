@@ -34,7 +34,6 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
     const newPandoraForm: INewPandoraForm = {
       keywords: keywords,
       title: cover.title,
-      description: cover.description ? cover.description : null,
       problems: riddles.map(({ question, hint, answer }) => {
         return {
           question,
@@ -79,7 +78,7 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       
 
       <FormSubjectWrapper>
-        <Subject>1. 메시지 표지</Subject>
+        <Subject>1. 메시지 표지 제목</Subject>
         <EditButton className="edit" onClick={() => setFormSubject('cover')}>
           수정
         </EditButton>
@@ -87,8 +86,6 @@ export default function CreatePandora({ mode, setFormSubject, cover, keywords, r
       <CoverWrapper>
         <SubTitle>제목</SubTitle>
         <TitleWrapper>{cover.title}</TitleWrapper>
-        <SubTitle>설명</SubTitle>
-        <DescriptionWrapper>{cover.description ? cover.description : '설명 없음'}</DescriptionWrapper>
       </CoverWrapper>
 
       <Divide></Divide>
@@ -255,14 +252,6 @@ const TitleWrapper = styled.p`
   padding: 0.5rem 0.7rem 0.5rem 0.7rem;
   margin-bottom: 2em;
 `;
-
-const DescriptionWrapper = styled.pre`
-  margin-top: 0; 
-  border-radius: 0.4rem;
-  border: 1px solid var(--border);
-  height: 10rem;
-`;
-
 
 // Riddles
 const RiddleWrapper = styled.ul`

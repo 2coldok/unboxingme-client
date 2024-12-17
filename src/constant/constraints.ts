@@ -21,9 +21,6 @@ export const PANDORA_FORM = Object.freeze({
   minTitleLength: 5,
   maxTitleLength: 60,
 
-  // 설명
-  maxDescriptionLength: 300,
-
   // 수수께끼
   minQuestionLength: 1,
   minAnswerLength: 1,

@@ -36,8 +36,6 @@ import SearchResult from './pages/SearchResult.tsx';
 import PrivacyPolicy from './pages/about/PrivacyPolicy.tsx';
 import TermsOfService from './pages/about/TermsOfService.tsx';
 import Guide from './pages/about/Guide.tsx';
-import Preview from './pages/Preview.tsx';
-import VisitorRateLimit from './pages/fallback/VisitorRateLimit.tsx';
 
 
 // service
@@ -100,15 +98,6 @@ const router = createBrowserRouter([
   {
     path: '/fallback/session',
     element: <SessionFallback />
-  },
-  // 이미지 생성
-  {
-    path: '/preview',
-    element: <Preview />
-  },
-  {
-    path: '/visitor-rate-limit',
-    element: <VisitorRateLimit />
   }
 ]);
 

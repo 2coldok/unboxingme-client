@@ -13,7 +13,6 @@ interface IPandoraListProps {
   keyword?: string;
   pandoras: {
     id: string;
-    label: string;
     writer: string;
     title: string;
     totalProblems: number;
@@ -73,10 +72,8 @@ export default function PandoraList({ pandoras, action, keyword }: IPandoraListP
               <Writer> <IoPerson /> {pandora.writer}</Writer>                  
               <MainInfo> 
                 <AiFillLock /> {pandora.totalProblems} ·&nbsp;
-                {/* <LuEye /> {pandora.coverViewCount} ·&nbsp; */}
                 <FiSend /> {formatTimeAgo(pandora.createdAt)}
               </MainInfo>
-              {/* <Label><BsUpc /> {pandora.label}</Label> */}
             </div>
             <div>
               <State $state={getPandoraState(pandora.solvedAt, pandora.solverAlias, pandora.isCatUncovered)}>
@@ -142,16 +139,6 @@ const MainInfo = styled.p`
     margin-right: 0.3em;
   }
 `;
-
-// const Label = styled.p`
-//   display: flex;
-//   margin: 0.6em 0 0 0;
-//   font-weight: 500;
-//   font-size: 0.9em;
-//   svg {
-//     margin-right: 0.3em;
-//   }
-// `;
 
 const State = styled.p<{ $state: '열람됨' | '열람대기' | '미열람' }>`
   display: flex;

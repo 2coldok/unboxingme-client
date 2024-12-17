@@ -35,7 +35,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
 
   const [formSubject, setFormSubject] = useState<TFormSubject>('cover');
   const [keywords, setKeywords] = useState<TKeywords>([]);
-  const [cover, setCover] = useState<ICover>({ title: '', description: '' });
+  const [cover, setCover] = useState<ICover>({ title: '' });
   const [riddles, setRiddles] = useState<IRiddle[]>([{ id: uuidv4(), isQuestionValid: false, isHintValid: true, isAnswerValid: false, question: '', hint: '', answer: '' }]);
   const [post, setPost] = useState<TNote>('');
 
@@ -57,7 +57,6 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
             const pandora = data.payload;
             setCover({
               title: pandora.title,
-              description: pandora.description || ''
             });
             setKeywords(pandora.keywords);
             setRiddles(pandora.problems.map((problem) => ({ ... problem, hint: problem.hint || '', id: uuidv4(), isQuestionValid: true, isHintValid: true, isAnswerValid: true })));
@@ -94,7 +93,7 @@ export default function PandoraForm({ pandoraService }: IPandoraFormProps) {
   
         {formSubject === 'cover' && (
           <FormWrapper>
-            <FormSubject>1. 메시지 표지</FormSubject>
+            <FormSubject>1. 메시지 표지 제목</FormSubject>
             <CoverForm  
               setFormSubject={setFormSubject}
               cover={cover}

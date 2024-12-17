@@ -2,7 +2,6 @@ export interface IPandoraSearchResults {
   total: number
   pandoras: {
     id: string;
-    label: string;
     writer: string;
     title: string;
     totalProblems: number;
@@ -14,7 +13,6 @@ export interface IPandoraSearchResults {
 
 export interface IPandoraList {
   id: string;
-  label: string;
   writer: string;
   title: string;
   totalProblems: number;
@@ -25,10 +23,9 @@ export interface IPandoraList {
 
 export interface IPandoraCover {
   id: string;
-  label: string;
   writer: string;
   title: string;
-  description: string | null;
+  obfuscatedCat: string;
   firstQuestion: string; 
   totalProblems: number;
   coverViewCount: number;
@@ -40,7 +37,6 @@ export interface IMyPandoras {
   total: number;
   pandoras: {
     id: string;
-    label: string;
     writer: string;
     title: string;
     totalProblems: number;
@@ -52,10 +48,8 @@ export interface IMyPandoras {
 
 // export interface IMyPandoraDetail {
 //   id: string;
-//   label: string;
 //   writer: string;
 //   title: string;
-//   description: string;
 //   keywords: string[];
 //   problems: { question: string, hint: string, answer: string }[];
 //   totalProblems: number;
@@ -72,7 +66,6 @@ export interface IMyPandoraEdit {
   keywords: string[];
   writer: string;
   title: string;
-  description: string | null;
   problems: { question: string, hint: string | null, answer: string }[];
   cat: string;
 }
@@ -80,7 +73,6 @@ export interface IMyPandoraEdit {
 export interface INewPandoraForm {
   keywords: string[];
   title: string;
-  description: string | null;
   problems: { question: string, hint: string | null, answer: string }[];
   cat: string;
 }
@@ -88,7 +80,6 @@ export interface INewPandoraForm {
 export interface IEditPandoraForm {
   keywords: string[];
   title: string;
-  description: string | null;
   problems: { question: string, hint: string | null, answer: string }[];
   cat: string;
 }

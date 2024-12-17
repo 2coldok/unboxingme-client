@@ -43,8 +43,7 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
     if (cover.title.trim().length >= PANDORA_FORM.minTitleLength) {
       setCover((prev) => ({
         ...prev,
-        title: prev.title.trim(),
-        description: prev.description.trim()
+        title: prev.title.trim()
       }));
       window.scrollTo({
         top: 0, 
@@ -78,22 +77,6 @@ export default function CoverForm({ setFormSubject, cover, setCover }: ICoverFor
         />
         <LengthCount>{cover.title.length}/{PANDORA_FORM.maxTitleLength}</LengthCount>
       </TitleWrapper>
-
-      <SubTitle>
-        설명 (선택)
-      </SubTitle>
-      <DescriptionWrapper>
-        <textarea
-          className="description"
-          name="description"
-          maxLength={PANDORA_FORM.maxDescriptionLength} 
-          value={cover.description}
-          onChange={onChange}
-          autoComplete="off"
-          placeholder="설명 없음"
-        />
-        <LengthCount>{cover.description.length}/{PANDORA_FORM.maxDescriptionLength}</LengthCount>
-      </DescriptionWrapper>
 
       <ButtonWrapper>
         <button className="next" type="button" onClick={handleNextButton}>다음</button>
@@ -132,16 +115,6 @@ const TitleWrapper = styled.div`
   align-items: flex-start;
   input {
     width: 100%;
-  }
-`;
-
-const DescriptionWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  textarea {
-    width: 100%;
-    height: 15rem;
   }
 `;
 

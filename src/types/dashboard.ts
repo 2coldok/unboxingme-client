@@ -1,6 +1,5 @@
 export interface IGlimpse {
   username: string;
-  label: string;
   totalProblems: number;
   unsealedQuestionIndex: number;
   unboxing: boolean;
@@ -9,10 +8,8 @@ export interface IGlimpse {
 
 export interface IMyPandoraDetail {
   pandora: {
-    label: string,
     writer: string,
     title: string,
-    description: string,
     keywords: string[],
     problems: { question: string, hint: string, answer: string }[],
     totalProblems: number,
@@ -34,7 +31,6 @@ export interface IMyPandoraDetail {
 
 export interface IMyChallenge {
   id: string;
-  label: string;
   writer: string;
   title: string;
   totalProblems: number;
@@ -49,7 +45,6 @@ export interface IMyConquereds {
   total: number;
   pandoras: {
     id: string;
-    label: string;
     writer: string;
     title: string;
     totalProblems: number;

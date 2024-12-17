@@ -4,17 +4,18 @@ import styled from "styled-components";
 import { IUnboxingService } from "../service/UnboxingService";
 import { HttpError } from "../network/HttpClient";
 import { INote } from "../types/unboxing";
-import { LuEye } from "react-icons/lu";
+// import { LuEye } from "react-icons/lu";
 import { IoPerson } from "react-icons/io5";
 import { useLoading } from "../hook/LoadingHook";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { AiFillLock } from "react-icons/ai";
-import { BsArrowDownRightSquare, BsUpc } from "react-icons/bs";
-import { formatTimeAgo } from "../util/formatTimeAgo";
+// import { BsArrowDownRightSquare, BsUpc } from "react-icons/bs";
+import { formatTime } from "../util/formatTimeAgo";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "../hook/AuthHook";
 import { ImWarning } from "react-icons/im";
-
+import { FiSend } from "react-icons/fi"; // 메시지생성일
+import AppFooter from "../components/AppFooter";
 
 interface NoteProps {
   unboxingService: IUnboxingService;
@@ -65,7 +66,7 @@ export default function Note({ unboxingService }: NoteProps) {
       <StyledContainer>
         <WarningWrapper>
           <ImWarning />
-          이 페이지를 벗어나거나 새로고침시 다시 내용을 확인할 수 없습니다.
+          이 페이지를 벗어나거나 새로고침시 메시지 내용을 다시 내용을 확인할 수 없습니다.
         </WarningWrapper>
 
 
@@ -74,12 +75,22 @@ export default function Note({ unboxingService }: NoteProps) {
           <span>메시지 내용</span>
         </SubjectWrapper> */}
 
-        <SolverAliasWrapper>
+        {/* <SolverAliasWrapper>
           <p>
             <SolverAlias>{pandora.solverAlias}</SolverAlias> <br/>
             님에 의해 메시지가 열람되었습니다.
           </p>
-        </SolverAliasWrapper>
+        </SolverAliasWrapper> */}
+        
+        {/* <SubjectWrapper>
+          <BsArrowDownRightSquare />
+          <span>메시지 내용</span>
+        </SubjectWrapper> */}
+
+        {/* <NoteWrapper>
+        {pandora.cat}
+        </NoteWrapper> */}
+
         <CoverWrapper>
           <Title>{pandora.title}</Title>
           <InfoWrapper>
@@ -87,26 +98,17 @@ export default function Note({ unboxingService }: NoteProps) {
               <Writer> <IoPerson /> {pandora.writer}</Writer>                  
               <MainInfo> 
                 <AiFillLock /> {pandora.totalProblems} ·&nbsp;
-                <LuEye /> {pandora.coverViewCount} ·&nbsp;
-                {formatTimeAgo(pandora.createdAt)}
+                <FiSend /> {formatTime(pandora.createdAt)}
               </MainInfo>
-              <Label><BsUpc /> {pandora.label}</Label>
             </div>
             <div>
               <State $open={pandora.isCatUncovered}>{pandora.isCatUncovered ? '열람됨' : '미열람'}</State>
             </div>
           </InfoWrapper>
-          <Description>{pandora.description ? pandora.description : '내용 없음'}</Description>
+          <Cat>{pandora.cat}</Cat>
         </CoverWrapper>
-        <SubjectWrapper>
-          <BsArrowDownRightSquare />
-          <span>메시지 내용</span>
-        </SubjectWrapper>
-
-        <NoteWrapper>
-        {pandora.cat}
-        </NoteWrapper>
       </StyledContainer>
+      <AppFooter />
     </>
   );
 }
@@ -118,24 +120,24 @@ const StyledContainer = styled.div`
   width: 100%;
 `;
 
-const SubjectWrapper = styled.div`
-  display: flex;
-  width: 100%;
-  max-width: 950px;
-  @media (max-width: 900px) {
-    width: 95%;
-  }
-  margin-left: 0.3em;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 1.2rem;
-  /* color: #cecece; */
+// const SubjectWrapper = styled.div`
+//   display: flex;
+//   width: 100%;
+//   max-width: 950px;
+//   @media (max-width: 900px) {
+//     width: 95%;
+//   }
+//   margin-left: 0.3em;
+//   margin-bottom: 10px;
+//   margin-top: 20px;
+//   font-weight: bold;
+//   font-size: 1.2rem;
+//   /* color: #cecece; */
 
-  svg {
-    margin-right: 0.4em;
-  }
-`;
+//   svg {
+//     margin-right: 0.4em;
+//   }
+// `;
 
 const WarningWrapper = styled.div`
   display: flex;
@@ -143,7 +145,7 @@ const WarningWrapper = styled.div`
   width: 100%;
   border-radius: 0.9rem;
   padding: 1.2em;
-  font-size: 1.1em;
+  font-size: 1em;
   background-color: #ffdddd;
   border: 1px solid #ff8080;
   /* box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px; */
@@ -161,25 +163,26 @@ const WarningWrapper = styled.div`
   }
 `;
 
-const SolverAliasWrapper = styled.div`
-  max-width: 950px;
-  width: 100%;
-  border: 1px solid #4c7a5e;
-  border-radius: 0.9rem;
-  padding: 1.2em;
-  background-color: #334b43;
-  box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
+// const SolverAliasWrapper = styled.div`
+//   max-width: 950px;
+//   width: 100%;
+//   border: 1px solid #4c7a5e;
+//   border-radius: 0.9rem;
+//   padding: 1.2em;
+//   background-color: #334b43;
+//   box-shadow: rgba(2, 2, 2, 0.1) 0px 4px 12px;
+//   margin-bottom: 20px;
 
-  @media (max-width: 768px) {
-    width: 95%;
-  }
-`;
+//   @media (max-width: 768px) {
+//     width: 95%;
+//   }
+// `;
 
-const SolverAlias = styled.span`
-  font-weight: 700;
-  font-size: 1.1em;
-  color: #87e89f;
-`;
+// const SolverAlias = styled.span`
+//   font-weight: 700;
+//   font-size: 1.1em;
+//   color: #87e89f;
+// `;
 
 const CoverWrapper = styled.main`
   display: flex;
@@ -191,7 +194,7 @@ const CoverWrapper = styled.main`
   border: 1px solid var(--border);
   border-radius: 0.9rem;
   padding: 1.2em;
-  margin-top: 18px;
+  /* margin-top: 18px; */
   margin-bottom: 18px;
   @media (max-width: 768px) {
     width: 95%;
@@ -235,14 +238,6 @@ const MainInfo = styled.p`
   }
 `;
 
-const Label = styled.p`
-  display: flex;
-  margin: 0.6em 0 0 0;
-  svg {
-    margin-right: 0.3em;
-  }
-`;
-
 const State = styled.p<{ $open: boolean }>`
   display: flex;
   font-weight: 600;
@@ -254,38 +249,40 @@ const State = styled.p<{ $open: boolean }>`
   color: ${({ $open }) => $open ? '#87e89f' : '#b7c9e1'};
 `;
 
-const Description = styled.pre`
+const Cat = styled.pre`
   font-size: 1.2rem;
-  min-height: 10em;
+  min-height: 20em;
   border-top: 1px solid var(--border);
   padding: 2em 0 0 0;
   border-radius: 0;
   white-space: pre-wrap;
-  color: #565e73;
+  ov
+  /* color: #565e73; */
+  color: white;
 `;
 
-const NoteWrapper = styled.pre`
-  border: 1px solid var(--border);
-  background-color: var(--background-riddle);
-  color: var(--brand);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+// const NoteWrapper = styled.pre`
+//   border: 1px solid var(--border);
+//   background-color: var(--background-riddle);
+//   color: var(--brand);
+//   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   
-  border-radius: 0.9rem;
-  padding: 1.1em;
-  font-size: 1.2rem;
+//   border-radius: 0.9rem;
+//   padding: 1.1em;
+//   font-size: 1.2rem;
   
-  display: flex;
-  flex-direction: column;
-  max-width: 950px;
-  width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   max-width: 950px;
+//   width: 100%;
   
-  margin-top: 0;
-  margin-bottom: 20px;
+//   margin-top: 0;
+//   margin-bottom: 20px;
   
-  min-height: 20em;
-  @media (max-width: 768px) {
-    width: 95%;
-  }
-`;
+//   min-height: 20em;
+//   @media (max-width: 768px) {
+//     width: 95%;
+//   }
+// `;
 
 // color: #a6b6e3;

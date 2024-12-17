@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 // import { useAuth } from "../hook/AuthHook";
@@ -13,7 +13,7 @@ import { LoadingSpinner } from "../loading/LoadingSpinner";
 import { formatTime } from "../util/formatTimeAgo";
 import { AiFillLock } from "react-icons/ai";
 // import { BsUpc } from "react-icons/bs"; 라벨
-import Search from "../components/Search";
+// import Search from "../components/Search";
 import Login from "../components/Login";
 import { useCoverQuery } from "../hook/QueryHook";
 import AppFooter from "../components/AppFooter";
@@ -26,8 +26,8 @@ export default function PandoraCover() {
   const { isLoading, data = { payload: null }, error } = useCoverQuery(id);
   // const { getTokenStatus } = useAuth();
   const { startLoading, stopLoading} = useLoading();
-  const [searchParams] = useSearchParams();
-  const keyword = searchParams.get('keyword');
+  // const [searchParams] = useSearchParams();
+  // const keyword = searchParams.get('keyword');
   const [showLoginPop, setShowLoginPop] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [checkTokenLoading, setCheckTokenLoading] = useState(false);
@@ -88,14 +88,7 @@ export default function PandoraCover() {
   }
 
   return (
-    <>
-      
-      <SearchWrapper>
-        <Search keyword={keyword} />
-      </SearchWrapper>
-      
-      
-     
+    <>   
       <CoverContainer>
         <CoverWrapper>
           <Title>{data.payload.title}</Title>
@@ -104,23 +97,27 @@ export default function PandoraCover() {
               <Writer> <IoPerson /> {data.payload.writer}</Writer>                  
               <MainInfo> 
                 <AiFillLock /> {data.payload.totalProblems} ·&nbsp;
-                {/* <LuEye /> {data.payload.coverViewCount} ·&nbsp; */}
                 <FiSend /> {formatTime(data.payload.createdAt)}
-              </MainInfo>
-              {/* <Label><BsUpc /> {data.payload.label}</Label> */}
+              </MainInfo>              
             </div>
             <div>
               <State $open={data.payload.isCatUncovered}>{data.payload.isCatUncovered ? '열람됨' : '미열람'}</State>
             </div>
           </InfoWrapper>
-          <Description>{data.payload.description ? data.payload.description : '내용 없음'}</Description>
+
+          <Divider></Divider>
+
+          <ObfuscatedMessage>{data.payload.obfuscatedCat}</ObfuscatedMessage>
           <FirstRiddleWrapper>
             <div>
-              <p className="index">질문 1. &nbsp;</p>
+              <p className="index">
+                질문 1. 
+                &nbsp;
+              </p>
               <p>{data.payload.firstQuestion}</p>
             </div>
             <button onClick={handleChallengeClick}>
-              {checkTokenLoading ? '자격 확인중...' : '메시지 열람하기'}
+              {checkTokenLoading ? '자격 확인중...' : '메시지 내용 확인하기'}
             </button>
           </FirstRiddleWrapper>  
         </CoverWrapper>
@@ -135,11 +132,11 @@ export default function PandoraCover() {
   );
 }
 
-const SearchWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-`;
+// const SearchWrapper = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   margin-bottom: 30px;
+// `;
 
 const CoverContainer = styled.div`
   display: flex;
@@ -157,7 +154,8 @@ const CoverWrapper = styled.main`
   max-width: 950px;
   width: 100%;
   border-radius: 0.9rem;
-  padding: 1.2em;
+  padding: 1.5em;
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
   @media (max-width: 768px) {
     width: 95%;
   }
@@ -165,9 +163,8 @@ const CoverWrapper = styled.main`
 
 const Title = styled.h2`
   color: var(--brand);
-  color: white;
   font-weight: 700;
-  font-size: 1.8em;
+  font-size: 1.6em;
   margin: 0;
   cursor: pointer;
   :hover {
@@ -199,14 +196,6 @@ const MainInfo = styled.p`
   }
 `;
 
-// const Label = styled.p`
-//   display: flex;
-//   margin: 0.6em 0 0 0;
-//   svg {
-//     margin-right: 0.3em;
-//   }
-// `;
-
 const State = styled.p<{ $open: boolean }>`
   display: flex;
   font-weight: 600;
@@ -218,8 +207,13 @@ const State = styled.p<{ $open: boolean }>`
   color: ${({ $open }) => $open ? '#80e5aa' : '#b7c9e1'};
 `;
 
-const Description = styled.pre`
-  border-top: 1px solid var(--border);
+const Divider = styled.div`
+  height: 1px;
+  background-color: var(--border);
+  margin-top: 20px;
+`
+
+const ObfuscatedMessage = styled.pre`
   font-size: 1.1em;
   padding-top: 3em;
   padding-bottom: 5em;
@@ -227,13 +221,21 @@ const Description = styled.pre`
   border-radius: 0;
   min-height: 10em;
   white-space: pre-wrap;
+  overflow: hidden;
+
+  filter: blur(7px);
 `;
 
 const FirstRiddleWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
+  /* border-top: 1px solid var(--border); */
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
   background-color: var(--background-riddle);
+  /* margin-top: 4em; */
+  /* color: #6988e3; */
   
   padding: 1em;
   border-radius: 0.4rem;
@@ -243,8 +245,10 @@ const FirstRiddleWrapper = styled.div`
     margin-bottom: 0;
     font-size: 1.1rem;
     .index {
+      /* display: flex; */
       font-weight: bold;
       white-space: nowrap;
+      /* color: #394365; */
     }
   }
 
