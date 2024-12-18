@@ -67,25 +67,7 @@ export default function Login({ onClose }: LoginProps) {
             />
             <span>Google 계정으로 계속하기</span>
           </LoginButtonWrapper>
-
-          <LoginButtonWrapper onClick={() => handleLogin('naver')} visible={visible}>
-            <img  
-              src='/google_logo.svg'
-              alt='google logo'
-              loading='eager'
-            />
-            <span>네이버 계정으로 계속하기</span>
-          </LoginButtonWrapper>
-
-          <LoginButtonWrapper onClick={() => handleLogin('kakao')} visible={visible}>
-            <img  
-              src='/google_logo.svg'
-              alt='google logo'
-              loading='eager'
-            />
-            <span>카카오 계정으로 계속하기</span>
-          </LoginButtonWrapper>
-          
+                    
           <MessageWrapper>
             구글은 보안을 위해 웹뷰(Webview) 내에서의 사용자 인증을 허용하지 않습니다.
           </MessageWrapper>

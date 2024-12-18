@@ -203,8 +203,9 @@ const ObfuscatedMessage = styled.pre`
   min-height: 10em;
   white-space: pre-wrap;
   overflow: hidden;
-
-  filter: blur(7px);
+  user-select: none;
+  pointer-events: none;
+  filter: blur(6px);
 `;
 
 const FirstRiddleWrapper = styled.div`

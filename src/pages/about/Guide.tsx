@@ -12,7 +12,7 @@ import {
   DLink,
   DDivder
 } from "../../styles/DocStyle";
-import { AiOutlineArrowRight } from "react-icons/ai";
+// import { AiOutlineArrowRight } from "react-icons/ai";
 
 export default function Guide() {
   return (
@@ -200,7 +200,7 @@ export default function Guide() {
         <DDivder></DDivder>
 
         <DSection>
-          <DTitle>5. 질문 풀이 기록 일시 공유</DTitle>
+          <DTitle>5. 질문 풀이 기록 홈 화면 랜덤 노출</DTitle>
           <DContent>
             <DLink href="https://riddlenote.com" target="_blank" rel="noopener noreferrer">홈 화면</DLink>
             에서 최근 질문 풀이 기록들중 일정 시간마다 랜덤하게 10개를 뽑아 리스트 형태로 표시됩니다.<br/>
@@ -211,10 +211,9 @@ export default function Guide() {
             <DList>
               <DSubTitle>• 고정 닉네임</DSubTitle>
               <DContent>
-                리들노트 로그인시 사용된 구글 계정 앞 세자리와 세개의 별표(*)로 이루워진 문자입니다.<br/>
-                <DExample>
-                  riddlenote@gmail.com <AiOutlineArrowRight/> rid***
-                </DExample>
+                리들노트 로그인시 사용된 소셜 계정 앞 세자리와 세개의 별표(*)로 이루워진 문자입니다.<br/>
+                비로그인 사용자의 경우 IP주소 앞자리 일부분이 노출됩니다.<br/>
+                카카오 계정 로그인시 이메일이 등록되지 않았을 경우 kakao로 노출됩니다.
               </DContent>
             </DList>
 

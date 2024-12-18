@@ -16,8 +16,10 @@ const LoadingContainer = styled.div`
 `;
 
 const Spinner = styled.div`
-  border: 4px solid #262d3b;
-  border-top: 4px solid var(--light-blue);
+  /* border: 4px solid #262d3b; */
+  border: 4px solid #464b58;
+  /* border-top: 4px solid var(--light-blue); */
+  border-top: 4px solid #738ac2;
   border-radius: 50%;
   width: 40px;
   height: 40px;

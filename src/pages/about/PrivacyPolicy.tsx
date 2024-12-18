@@ -40,9 +40,9 @@ export default function PrivacyPolicy() {
           <DTitle>3. 개인정보 수집 항목, 방법 및 목적</DTitle>
           <ul>
             <DList>
-              <DSubTitle>(1) Google 계정의 표시 이름, 프로필 아바타, 이메일 주소, 고유 식별자</DSubTitle>
+              <DSubTitle>(1) 소셜 계정의 표시 이름, 프로필 아바타, 이메일 주소, 고유 식별자</DSubTitle>
               <DContent>
-                Google OAuth 인증 과정을 통해 정보를 수집하며 
+                소셜 계정 인증 과정을 통해 정보를 수집하며 
                 각각은 웹 화면에 표시, 대시보드 기능, 사용자 인증 및 식별 용도로 사용됩니다.
               </DContent>
             </DList>

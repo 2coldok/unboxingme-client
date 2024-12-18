@@ -1,12 +1,34 @@
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { env } from "../config/env";
+import { useEffect, useState } from "react";
+import { LoadingSpinner } from "../loading/LoadingSpinner";
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
   const currentUrl = searchParams.get('current') || env.url.clientBaseURL;
   
+  const [imageLoadDelay, setImageLoadDelay] = useState(false);
+  const [startLoginLoading, setStartLoginLoading] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = '';
+    }
+  }, []);
+
+  useEffect(() => {
+    const imageLoadDelay = setTimeout(() => {
+      setImageLoadDelay(true);
+    }, 1500);
+
+    return () => clearTimeout(imageLoadDelay);
+  }, []);
+
   const handleLoginButton = (provider: 'google' | 'naver' | 'kakao') => {
+    setStartLoginLoading(true);
     const serverBaseUrl = env.url.serverBaseURL;
 
     if (provider === 'google') {
@@ -19,10 +41,24 @@ export default function Auth() {
       return window.location.href = `${serverBaseUrl}/auth/kakao?redirect_uri=${encodeURIComponent(currentUrl)}`;
     }
   }
+
+  if (startLoginLoading) {
+    return (
+      <StyledContainer>
+        <LoadingSpinner />
+      </StyledContainer>
+    );
+  }
+
   return (
     <StyledContainer>
-      <LoginContainer>
+      {!imageLoadDelay && (
+        <LoadingSpinnerWrapper>
+          <LoadingSpinner />
+        </LoadingSpinnerWrapper>
+      )}
 
+      <LoginContainer visible={imageLoadDelay}>
         <TitleWrapper>
           <RiddleNoteLogoWrapper>
             <img src="/logo.png" alt="riddlenote logo" />
@@ -65,6 +101,7 @@ export default function Auth() {
 }
 
 const StyledContainer = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,7 +109,12 @@ const StyledContainer = styled.div`
   height: 100vh;
 `;
 
-const LoginContainer = styled.div`
+const LoadingSpinnerWrapper = styled.div`
+  position: absolute;
+`;
+
+const LoginContainer = styled.div<{ visible: boolean }>`
+  visibility: ${({ visible }) => visible ? 'visible' : 'hidden'};
   border: 1px solid #353535;
   border-radius: 0.4em;
   width: auto;
@@ -134,8 +176,9 @@ const LoginButton = styled.div`
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   margin-bottom: 11px;
   border-radius: 6px;
-  cursor: pointer;
+  
   :hover {
+    cursor: pointer;
     filter: brightness(111%);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
@@ -170,8 +213,9 @@ const LogoText = styled.span`
 const KakaoLoginButtonImage = styled.img`
   width: auto;
   height: 50px;
-  cursor: pointer;
+  
   :hover {
+    cursor: pointer;
     filter: brightness(111%);
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }

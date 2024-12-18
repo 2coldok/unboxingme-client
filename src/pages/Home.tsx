@@ -15,8 +15,6 @@ import { BsQuestionCircle } from "react-icons/bs"; // 물음표
 import { BsBook } from "react-icons/bs";// 사이트 소개
 import { useAuth } from "../hook/AuthHook";
 
-
-
 interface IHomeProps {
   dashboardService: IDashboardService;
 }
@@ -26,6 +24,7 @@ export default function Home({ dashboardService }: IHomeProps) {
   const [glimpses, setGlimpses] = useState<IGlimpse[]>([]);
   const [glimpseLoading, setGlimpseLoading] = useState(false);
   const { getTokenStatus } = useAuth();
+  const [createMessageLoading, setCreateMessageLoading] = useState(false);
 
   useEffect(() => {
     const fetchPandoraPreview = async () => {
@@ -63,15 +62,23 @@ export default function Home({ dashboardService }: IHomeProps) {
 
   const handleCreateMessage = async () => {
     try {
+      setCreateMessageLoading(true);
       const status = await getTokenStatus();
       if (!status) {
-        return window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
+        const confirm = window.confirm('로그인이 필요한 서비스 입니다. 로그인 하시겠습니까?');
+        if (confirm) {
+          return navigate('/auth');
+        }
+        return;
+        // return window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
       }
       return navigate('/pandora/form');
     } catch (error) {
       if (error instanceof HttpError) {
         return navigate('/fallback/error', { state: { error: error } })
       }
+    } finally {
+      setCreateMessageLoading(false);
     }
   };
 
@@ -87,9 +94,9 @@ export default function Home({ dashboardService }: IHomeProps) {
           <BsQuestionCircle />
           메시지 가이드
         </Button>
-        <Button onClick={handleCreateMessage}>
+        <Button onClick={handleCreateMessage} style={{ color: '#448cff' }}>
           <BsEnvelope />
-          메시지 만들기
+          {createMessageLoading ? '권한 확인중...' : '메시지 만들기'}
         </Button>
       </CreateMessageWrapper>
 
@@ -149,7 +156,7 @@ const SubjectWrapper = styled.div`
   padding-left: 0.4em;
   padding-bottom: 0.5em;
   border-bottom: 1px solid var(--border);
-  color: #ececec;
+  color: #e3e3e3;
   @media (max-width: 950px) {
     width: 95%;
   }
@@ -189,14 +196,17 @@ const CreateMessageWrapper = styled.div`
 `;
 
 const Button = styled.button`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 0.7em;
+  border-radius: 0.3em;
   font-size: 1em;
-  color: var(--brand);
+  color: #9da8b7;
   flex-shrink: 0;
+  background-color: var(--background);
+  border: 1px solid var(--border);
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   
   
@@ -217,7 +227,7 @@ const Button = styled.button`
     padding-left: 1.1em;
     padding-right: 1.1em;
   }
-`
+`;
 
 const SearchWrapper = styled.div`
   display: flex;
