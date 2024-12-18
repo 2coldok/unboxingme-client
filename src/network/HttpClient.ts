@@ -64,7 +64,7 @@ export default class HttpClient implements IHttpClient {
         console.log(error);
         if (error.response) {
           const statusCode = error.response.status;
-          const statusText = error.response.statusText;
+          const statusText = error.response.data?.statusText || '';
           const message = error.message;
           
           throw new HttpError(statusCode, statusText, message); 
