@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { useAuth } from "../hook/AuthHook";
 import Profile from "./Profile";
 import { useEffect, useState } from "react";
-import Login from "./Login";
+// import Login from "./Login";
 export default function AppHeader() {
   const { profile } = useAuth();
   const [ready, setReady] = useState(false);
-  const [showLoginPop, setShowLoginPop] = useState(false);
+  // const [showLoginPop, setShowLoginPop] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,15 +23,16 @@ export default function AppHeader() {
     return navigate('/');
   };
   
-  // 개발환경 또는 서비스환경 구분
+
   const handleLoginClick = () => {
     const currentUrl = window.location.href;
+    return navigate(`/auth?current=${currentUrl}`);
 
-    if (currentUrl.startsWith("http://localhost:5173")) {
-      return setShowLoginPop(true);
-    }
+    // if (currentUrl.startsWith("http://localhost:5173")) {
+    //   return setShowLoginPop(true);
+    // }
     
-    window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
+    // window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
 
   };
   
@@ -42,7 +43,7 @@ export default function AppHeader() {
         <span>RiddleNote</span>
       </LogoWrapper>
 
-      {showLoginPop && <Login onClose={() => setShowLoginPop(false)} />}      
+      {/* {showLoginPop && <Login onClose={() => setShowLoginPop(false)} />}       */}
 
       {profile === undefined && (
         <LoginWrapper $ready={ready}>

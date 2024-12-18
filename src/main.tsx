@@ -36,6 +36,7 @@ import SearchResult from './pages/SearchResult.tsx';
 import PrivacyPolicy from './pages/about/PrivacyPolicy.tsx';
 import TermsOfService from './pages/about/TermsOfService.tsx';
 import Guide from './pages/about/Guide.tsx';
+import Auth from './pages/Auth.tsx';
 
 
 // service
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
   {
     path: '/fallback/session',
     element: <SessionFallback />
+  },
+  {
+    path: '/auth',
+    element: <Auth />
   }
 ]);
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { BsX } from "react-icons/bs";
-import { useAuth } from '../hook/AuthHook';
+// import { useAuth } from '../hook/AuthHook';
 import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '../loading/LoadingSpinner';
 
@@ -9,7 +9,7 @@ interface LoginProps {
 }
 
 export default function Login({ onClose }: LoginProps) {
-  const { login } = useAuth();
+  // const { login } = useAuth();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -24,10 +24,22 @@ export default function Login({ onClose }: LoginProps) {
     onClose();
   };
 
-  const handleLogin = () => {
-    onClose();
-    const currentUrl = window.location.href;
-    login(currentUrl);
+  const handleLogin = (provider: 'google' | 'naver' | 'kakao') => {
+    onClose(); //기존1
+    const currentUrl = window.location.href; // 기존2
+
+    if (provider === 'google') {
+      window.location.href = `http://localhost:8080/auth/google?redirect_uri=${encodeURIComponent(currentUrl)}`;
+    }
+    if (provider === 'naver') {
+      window.location.href = `http://localhost:8080/auth/naver?redirect_uri=${encodeURIComponent(currentUrl)}`;
+    }
+    if (provider === 'kakao') {
+      window.location.href = `http://localhost:8080/auth/kakao?redirect_uri=${encodeURIComponent(currentUrl)}`;
+    }
+ 
+    // login(currentUrl); // 기존3
+    // window.location.href = 'http://localhost:8080/auth/kakao/callback?http://localhost:5173'
   };
 
   return (
@@ -47,13 +59,31 @@ export default function Login({ onClose }: LoginProps) {
               <LoadingSpinner />
             </LoadingSpinnerWrapper>
           )}
-          <LoginButtonWrapper onClick={handleLogin} visible={visible}>
+          <LoginButtonWrapper onClick={() => handleLogin('google')} visible={visible}>
             <img  
               src='/google_logo.svg'
               alt='google logo'
               loading='eager'
             />
             <span>Google 계정으로 계속하기</span>
+          </LoginButtonWrapper>
+
+          <LoginButtonWrapper onClick={() => handleLogin('naver')} visible={visible}>
+            <img  
+              src='/google_logo.svg'
+              alt='google logo'
+              loading='eager'
+            />
+            <span>네이버 계정으로 계속하기</span>
+          </LoginButtonWrapper>
+
+          <LoginButtonWrapper onClick={() => handleLogin('kakao')} visible={visible}>
+            <img  
+              src='/google_logo.svg'
+              alt='google logo'
+              loading='eager'
+            />
+            <span>카카오 계정으로 계속하기</span>
           </LoginButtonWrapper>
           
           <MessageWrapper>
@@ -143,8 +173,8 @@ const LoginButtonWrapper = styled.span<{ visible: boolean }>`
   display: flex;
   align-items: center;
   background-color: #4285F4;
-  border-radius: 4.2px;
   font-weight: 600;
+  border-radius: 4.2px;
   width: auto;
   margin-top: 80px;
   margin-bottom: 50px;

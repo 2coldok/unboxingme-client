@@ -2,7 +2,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 // import { useAuth } from "../hook/AuthHook";
-import { HttpError } from "../network/HttpClient";
 
 import { useLoading } from "../hook/LoadingHook";
 import Alert from "../util/Alert";
@@ -14,7 +13,7 @@ import { formatTime } from "../util/formatTimeAgo";
 import { AiFillLock } from "react-icons/ai";
 // import { BsUpc } from "react-icons/bs"; 라벨
 // import Search from "../components/Search";
-import Login from "../components/Login";
+// import Login from "../components/Login";
 import { useCoverQuery } from "../hook/QueryHook";
 import AppFooter from "../components/AppFooter";
 import NonPandoraCover from "../components/NonPandoraCover";
@@ -28,9 +27,9 @@ export default function PandoraCover() {
   const { startLoading, stopLoading} = useLoading();
   // const [searchParams] = useSearchParams();
   // const keyword = searchParams.get('keyword');
-  const [showLoginPop, setShowLoginPop] = useState(false);
+  // const [showLoginPop, setShowLoginPop] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [checkTokenLoading, setCheckTokenLoading] = useState(false);
+  // const [checkTokenLoading, setCheckTokenLoading] = useState(false);
 
   // fallback from riddle page
   const location = useLocation();
@@ -56,25 +55,7 @@ export default function PandoraCover() {
   }, [navigate, error]);
 
   const handleChallengeClick = async () => {
-    setCheckTokenLoading(true);
-    try {
-      // const status = await getTokenStatus();
-      // if (!status) {
-      //   if (window.location.href.startsWith('http://localhost:5173')) {
-      //     return setShowLoginPop(true);
-      //   }
-
-      //   window.location.href = `https://riddlenote.com/login?redirect=${encodeURIComponent(window.location.href)}`;
-      // }
-
-      return navigate(`/pandora/${id}/riddle`);
-    } catch (error) {
-      if (error instanceof HttpError) {
-        return navigate('/fallback/error', { state: { error: error } })
-      }
-    } finally {
-      setCheckTokenLoading(false);
-    }
+    return navigate(`/pandora/${id}/riddle`);
   };
 
   if (isLoading) {
@@ -117,7 +98,7 @@ export default function PandoraCover() {
               <p>{data.payload.firstQuestion}</p>
             </div>
             <button onClick={handleChallengeClick}>
-              {checkTokenLoading ? '자격 확인중...' : '메시지 내용 확인하기'}
+              메시지 내용 확인하기
             </button>
           </FirstRiddleWrapper>  
         </CoverWrapper>
@@ -127,7 +108,7 @@ export default function PandoraCover() {
         <Alert message={alertMessage} onClose={() => setAlertMessage(null)} />
       )}
 
-      {showLoginPop && <Login onClose={() => setShowLoginPop(false)} />}
+      {/* {showLoginPop && <Login onClose={() => setShowLoginPop(false)} />} */}
     </>
   );
 }
