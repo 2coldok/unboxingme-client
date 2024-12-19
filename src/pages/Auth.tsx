@@ -4,12 +4,14 @@ import { env } from "../config/env";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 
+type TsocialLogin = 'google' | 'naver' | 'kakao' | '';
+
 export default function Auth() {
   const [searchParams] = useSearchParams();
   const currentUrl = searchParams.get('current') || env.url.clientBaseURL;
   
   const [imageLoadDelay, setImageLoadDelay] = useState(false);
-  const [startLoginLoading, setStartLoginLoading] = useState(false);
+  const [selectedSocialLoginButton, setSelectedSocialLoginButton] = useState<TsocialLogin>('');
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -27,8 +29,9 @@ export default function Auth() {
     return () => clearTimeout(imageLoadDelay);
   }, []);
 
-  const handleLoginButton = (provider: 'google' | 'naver' | 'kakao') => {
-    setStartLoginLoading(true);
+  const handleLoginButton = (provider: TsocialLogin) => {
+    setSelectedSocialLoginButton(provider);
+
     const serverBaseUrl = env.url.serverBaseURL;
 
     if (provider === 'google') {
@@ -42,19 +45,11 @@ export default function Auth() {
     }
   }
 
-  if (startLoginLoading) {
-    return (
-      <StyledContainer>
-        <LoadingSpinner />
-      </StyledContainer>
-    );
-  }
-
   return (
     <StyledContainer>
       {!imageLoadDelay && (
         <LoadingSpinnerWrapper>
-          <LoadingSpinner />
+          <LoadingSpinner/>
         </LoadingSpinnerWrapper>
       )}
 
@@ -70,24 +65,43 @@ export default function Auth() {
         <LoginButton 
           style={{ backgroundColor: '#FFFFFF', color: 'rgba(0, 0, 0, 0.54)' }}
           onClick={() => handleLoginButton('google')}
+          visible={selectedSocialLoginButton !== 'google'}
         >
           <LogoImage src="/google_logo.svg" alt="google logo" />
           <LogoText>Google 계정으로 계속하기</LogoText>
         </LoginButton>
+        {selectedSocialLoginButton === 'google' && (
+          <MockLoginButton>
+            <LoadingSpinner absolute={true} border="#ea4335" bordertop="#4285f4" />
+          </MockLoginButton>
+        )}
         
         <LoginButton 
           style={{ backgroundColor: '#03c75a', border: 'none'}}
           onClick={() => handleLoginButton('naver')}
+          visible={selectedSocialLoginButton !== 'naver'}
         >
           <LogoImage src="/naver_logo.png" alt="naver logo" />
           <LogoText>네이버 로그인</LogoText>
         </LoginButton>
+        {selectedSocialLoginButton === 'naver' && (
+          <MockLoginButton>
+            <LoadingSpinner absolute={true} border="#03c75a" bordertop="#ffffff" />
+          </MockLoginButton>
+        )}
 
         <KakaoLoginButtonImage 
           src="/kakao_login_button.png" 
           alt="kakao"
-          onClick={() => handleLoginButton('kakao')} 
+          onClick={() => handleLoginButton('kakao')}
+          visible={selectedSocialLoginButton !== 'kakao'} 
         />
+        {selectedSocialLoginButton === 'kakao' && (
+          <MockLoginButton>
+            <LoadingSpinner absolute={true} border="#391e1d" bordertop="#f2dc01" />
+          </MockLoginButton>
+        )}
+
 
         <MessageWrapper>
           계속 진행시 리들노트의
@@ -167,8 +181,8 @@ const RiddleNoteLogoWrapper = styled.div`
 `;
 
 
-const LoginButton = styled.div`
-  display: flex;
+const LoginButton = styled.div<{ visible: boolean }>`
+  display: ${({ visible }) => visible ? 'flex' : 'none'};
   align-items: center;
   justify-content: center;
   width: 332px;
@@ -183,6 +197,19 @@ const LoginButton = styled.div`
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
 
+  @media (max-width: 600px) {
+    width: 268px;
+    height: 40px;
+  }
+`;
+
+const MockLoginButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 50px;
+  margin-bottom: 11px;
   @media (max-width: 600px) {
     width: 268px;
     height: 40px;
@@ -210,7 +237,8 @@ const LogoText = styled.span`
   }
 `;
 
-const KakaoLoginButtonImage = styled.img`
+const KakaoLoginButtonImage = styled.img<{ visible: boolean }>`
+  display: ${({ visible }) => visible ? 'inline' : 'none'};
   width: auto;
   height: 50px;
   

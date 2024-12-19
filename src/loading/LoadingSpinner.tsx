@@ -1,11 +1,17 @@
 import styled, { keyframes } from 'styled-components';
 
 const spin = keyframes`
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% { 
+    transform: rotate(0deg); 
+  }
+
+  100% { 
+    transform: rotate(360deg); 
+  }
 `;
 
-const LoadingContainer = styled.div`
+const LoadingContainer = styled.div<{ absolute: boolean }>`
+  position: ${({ absolute }) => absolute ? 'absolute' : 'static'};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,21 +21,25 @@ const LoadingContainer = styled.div`
   padding: 20px;
 `;
 
-const Spinner = styled.div`
-  /* border: 4px solid #262d3b; */
-  border: 4px solid #464b58;
-  /* border-top: 4px solid var(--light-blue); */
-  border-top: 4px solid #738ac2;
+const Spinner = styled.div<{ border: string | undefined, bordertop: string | undefined }>`
+  border: ${({ border }) => border ? `4px solid ${border}` : '4px solid #252932'};
+  border-top: ${({ bordertop }) => bordertop ? `4px solid ${bordertop}` : '4px solid #77aaff'};
   border-radius: 50%;
   width: 40px;
   height: 40px;
   animation: ${spin} 1s linear infinite;
 `;
 
-export function LoadingSpinner() {
+interface ILoadingSpinnerProps {
+  absolute?: boolean; 
+  border?: string;
+  bordertop?: string;
+}
+
+export function LoadingSpinner({ absolute, border, bordertop }: ILoadingSpinnerProps) {
   return (
-    <LoadingContainer>
-      <Spinner />
+    <LoadingContainer absolute={!!absolute}>
+      <Spinner border={border} bordertop={bordertop} />
     </LoadingContainer>
   );
 }
