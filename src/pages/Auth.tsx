@@ -29,6 +29,14 @@ export default function Auth() {
     return () => clearTimeout(imageLoadDelay);
   }, []);
 
+  useEffect(() => {
+    const loginRedirectDelay = setTimeout(() => {
+      setSelectedSocialLoginButton('');
+    }, 3500);
+
+    return () => clearTimeout(loginRedirectDelay);
+  }, [selectedSocialLoginButton]);
+
   const handleLoginButton = (provider: TsocialLogin) => {
     setSelectedSocialLoginButton(provider);
 
@@ -102,13 +110,11 @@ export default function Auth() {
           </MockLoginButton>
         )}
 
-
         <MessageWrapper>
           계속 진행시 리들노트의
           <a href="https://riddlenote.com/about/terms-of-service" target="_blank" rel="noopener noreferrer"> 이용약관</a> 및
           <a href="https://riddlenote.com/about/privacy-policy" target="_blank" rel="noopener noreferrer"> 개인정보처리방침</a>에 동의하게 됩니다.
-        </MessageWrapper>
-      
+        </MessageWrapper>      
       </LoginContainer>
     </StyledContainer>
   );
