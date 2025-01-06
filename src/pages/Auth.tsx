@@ -4,14 +4,14 @@ import { env } from "../config/env";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "../loading/LoadingSpinner";
 
-type TsocialLogin = 'google' | 'naver' | 'kakao' | '';
+type TSocialLogin = 'google' | 'naver' | 'kakao' | '';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
   const currentUrl = searchParams.get('current') || env.url.clientBaseURL;
   
   const [imageLoadDelay, setImageLoadDelay] = useState(false);
-  const [selectedSocialLoginButton, setSelectedSocialLoginButton] = useState<TsocialLogin>('');
+  const [selectedSocialLoginButton, setSelectedSocialLoginButton] = useState<TSocialLogin>('');
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -37,7 +37,7 @@ export default function Auth() {
     return () => clearTimeout(loginRedirectDelay);
   }, [selectedSocialLoginButton]);
 
-  const handleLoginButton = (provider: TsocialLogin) => {
+  const handleLoginButton = (provider: TSocialLogin) => {
     setSelectedSocialLoginButton(provider);
 
     const serverBaseUrl = env.url.serverBaseURL;

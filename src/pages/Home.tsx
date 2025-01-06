@@ -6,7 +6,7 @@ import PandoraListSkeleton from "../loading/PandoraListSkeleton";
 import { HttpError } from "../network/HttpClient";
 import { useNavigate } from "react-router-dom";
 import AppFooter from "../components/AppFooter";
-import { PiClockClockwiseBold } from "react-icons/pi";
+// import { PiClockClockwiseBold } from "react-icons/pi";
 import GlimpseList from "../components/GlimpseList";
 import { IDashboardService } from "../service/DashboardService";
 import { IGlimpse } from "../types/dashboard";
@@ -106,9 +106,9 @@ export default function Home({ dashboardService }: IHomeProps) {
      
       <SubjectWrapper>
         <span>Today log</span>
-        <small>
+        {/* <small>
           <PiClockClockwiseBold /> 5 minute • 10 Items
-          </small>
+          </small> */}
       </SubjectWrapper>
       <GlimpseWrapper>
         {glimpseLoading ? (
